@@ -1,0 +1,11 @@
+c:\users\user\source\repos\AspergillosisEPR\AspergillosisEPR\bin\Debug\netcoreapp2.0\AspergillosisEPR.deps.json
+c:\users\user\source\repos\AspergillosisEPR\AspergillosisEPR\bin\Debug\netcoreapp2.0\AspergillosisEPR.runtimeconfig.json
+c:\users\user\source\repos\AspergillosisEPR\AspergillosisEPR\bin\Debug\netcoreapp2.0\AspergillosisEPR.runtimeconfig.dev.json
+c:\users\user\source\repos\AspergillosisEPR\AspergillosisEPR\bin\Debug\netcoreapp2.0\AspergillosisEPR.dll
+c:\users\user\source\repos\AspergillosisEPR\AspergillosisEPR\bin\Debug\netcoreapp2.0\AspergillosisEPR.pdb
+c:\users\user\source\repos\AspergillosisEPR\AspergillosisEPR\obj\Debug\netcoreapp2.0\AspergillosisEPR.csprojResolveAssemblyReference.cache
+c:\users\user\source\repos\AspergillosisEPR\AspergillosisEPR\obj\Debug\netcoreapp2.0\AspergillosisEPR.csproj.CoreCompileInputs.cache
+c:\users\user\source\repos\AspergillosisEPR\AspergillosisEPR\obj\Debug\netcoreapp2.0\AspergillosisEPR.AssemblyInfoInputs.cache
+c:\users\user\source\repos\AspergillosisEPR\AspergillosisEPR\obj\Debug\netcoreapp2.0\AspergillosisEPR.AssemblyInfo.cs
+c:\users\user\source\repos\AspergillosisEPR\AspergillosisEPR\obj\Debug\netcoreapp2.0\AspergillosisEPR.dll
+c:\users\user\source\repos\AspergillosisEPR\AspergillosisEPR\obj\Debug\netcoreapp2.0\AspergillosisEPR.pdb
