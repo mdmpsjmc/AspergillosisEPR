@@ -12542,11 +12542,11 @@
       "hideWarningsAndErrors": true
     },
     "restore": {
-      "projectUniqueName": "c:\\users\\user\\source\\repos\\AspergillosisEPR\\AspergillosisEPR\\AspergillosisEPR.csproj",
+      "projectUniqueName": "C:\\Users\\user\\source\\repos\\AspergillosisEPR\\AspergillosisEPR\\AspergillosisEPR.csproj",
       "projectName": "AspergillosisEPR",
-      "projectPath": "c:\\users\\user\\source\\repos\\AspergillosisEPR\\AspergillosisEPR\\AspergillosisEPR.csproj",
+      "projectPath": "C:\\Users\\user\\source\\repos\\AspergillosisEPR\\AspergillosisEPR\\AspergillosisEPR.csproj",
       "packagesPath": "C:\\Users\\user\\.nuget\\packages\\",
-      "outputPath": "c:\\users\\user\\source\\repos\\AspergillosisEPR\\AspergillosisEPR\\obj\\",
+      "outputPath": "C:\\Users\\user\\source\\repos\\AspergillosisEPR\\AspergillosisEPR\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
