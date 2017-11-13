@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using AspergillosisEPR.Data;
 using System.Linq.Dynamic;
+using System.Linq.Dynamic.Core;
 using Microsoft.EntityFrameworkCore;
 using AspergillosisEPR.Data;
 using AspergillosisEPR.Models;
@@ -63,7 +64,7 @@ namespace AspergillosisEPR.Controllers
                 if (!(string.IsNullOrEmpty(sortColumn) && string.IsNullOrEmpty(sortColumnDirection)))
                 {
                     string sorting = sortColumn + " " + sortColumnDirection;
-                    //patientData = patientData.OrderBy(sorting);
+                    patientData = patientData.OrderBy(sorting);
                 }
                 //Search  
                 if (!string.IsNullOrEmpty(searchValue))

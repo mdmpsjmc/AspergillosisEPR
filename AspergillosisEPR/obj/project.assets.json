@@ -3649,6 +3649,33 @@
           "ref/netstandard1.0/System.Diagnostics.Tools.dll": {}
         }
       },
+      "System.Diagnostics.TraceSource/4.3.0": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.NETCore.Platforms": "1.1.0",
+          "System.Collections": "4.3.0",
+          "System.Diagnostics.Debug": "4.3.0",
+          "System.Globalization": "4.3.0",
+          "System.Resources.ResourceManager": "4.3.0",
+          "System.Runtime": "4.3.0",
+          "System.Runtime.Extensions": "4.3.0",
+          "System.Threading": "4.3.0",
+          "runtime.native.System": "4.3.0"
+        },
+        "compile": {
+          "ref/netstandard1.3/System.Diagnostics.TraceSource.dll": {}
+        },
+        "runtimeTargets": {
+          "runtimes/unix/lib/netstandard1.3/System.Diagnostics.TraceSource.dll": {
+            "assetType": "runtime",
+            "rid": "unix"
+          },
+          "runtimes/win/lib/netstandard1.3/System.Diagnostics.TraceSource.dll": {
+            "assetType": "runtime",
+            "rid": "win"
+          }
+        }
+      },
       "System.Diagnostics.Tracing/4.3.0": {
         "type": "package",
         "dependencies": {
@@ -3846,13 +3873,22 @@
           "lib/netstandard1.6/System.Linq.dll": {}
         }
       },
-      "System.Linq.Dynamic/1.0.7": {
+      "System.Linq.Dynamic.Core/1.0.7.12": {
         "type": "package",
+        "dependencies": {
+          "System.Collections.Concurrent": "4.3.0",
+          "System.ComponentModel.TypeConverter": "4.3.0",
+          "System.Diagnostics.TraceSource": "4.3.0",
+          "System.Dynamic.Runtime": "4.3.0",
+          "System.Linq.Queryable": "4.3.0",
+          "System.Reflection.Emit": "4.3.0",
+          "System.Reflection.TypeExtensions": "4.3.0"
+        },
         "compile": {
-          "lib/net40/System.Linq.Dynamic.dll": {}
+          "lib/netstandard2.0/System.Linq.Dynamic.Core.dll": {}
         },
         "runtime": {
-          "lib/net40/System.Linq.Dynamic.dll": {}
+          "lib/netstandard2.0/System.Linq.Dynamic.Core.dll": {}
         }
       },
       "System.Linq.Expressions/4.3.0": {
@@ -3904,17 +3940,17 @@
           "lib/netstandard1.3/System.Linq.Parallel.dll": {}
         }
       },
-      "System.Linq.Queryable/4.0.1": {
+      "System.Linq.Queryable/4.3.0": {
         "type": "package",
         "dependencies": {
-          "System.Collections": "4.0.11",
-          "System.Diagnostics.Debug": "4.0.11",
-          "System.Linq": "4.1.0",
-          "System.Linq.Expressions": "4.1.0",
-          "System.Reflection": "4.1.0",
-          "System.Reflection.Extensions": "4.0.1",
-          "System.Resources.ResourceManager": "4.0.1",
-          "System.Runtime": "4.1.0"
+          "System.Collections": "4.3.0",
+          "System.Diagnostics.Debug": "4.3.0",
+          "System.Linq": "4.3.0",
+          "System.Linq.Expressions": "4.3.0",
+          "System.Reflection": "4.3.0",
+          "System.Reflection.Extensions": "4.3.0",
+          "System.Resources.ResourceManager": "4.3.0",
+          "System.Runtime": "4.3.0"
         },
         "compile": {
           "ref/netstandard1.0/System.Linq.Queryable.dll": {}
@@ -9425,6 +9461,45 @@
         "system.diagnostics.tools.nuspec"
       ]
     },
+    "System.Diagnostics.TraceSource/4.3.0": {
+      "sha512": "VnYp1NxGx8Ww731y2LJ1vpfb/DKVNKEZ8Jsh5SgQTZREL/YpWRArgh9pI8CDLmgHspZmLL697CaLvH85qQpRiw==",
+      "type": "package",
+      "path": "system.diagnostics.tracesource/4.3.0",
+      "files": [
+        "ThirdPartyNotices.txt",
+        "dotnet_library_license.txt",
+        "lib/MonoAndroid10/_._",
+        "lib/MonoTouch10/_._",
+        "lib/net46/System.Diagnostics.TraceSource.dll",
+        "lib/xamarinios10/_._",
+        "lib/xamarinmac20/_._",
+        "lib/xamarintvos10/_._",
+        "lib/xamarinwatchos10/_._",
+        "ref/MonoAndroid10/_._",
+        "ref/MonoTouch10/_._",
+        "ref/net46/System.Diagnostics.TraceSource.dll",
+        "ref/netstandard1.3/System.Diagnostics.TraceSource.dll",
+        "ref/netstandard1.3/System.Diagnostics.TraceSource.xml",
+        "ref/netstandard1.3/de/System.Diagnostics.TraceSource.xml",
+        "ref/netstandard1.3/es/System.Diagnostics.TraceSource.xml",
+        "ref/netstandard1.3/fr/System.Diagnostics.TraceSource.xml",
+        "ref/netstandard1.3/it/System.Diagnostics.TraceSource.xml",
+        "ref/netstandard1.3/ja/System.Diagnostics.TraceSource.xml",
+        "ref/netstandard1.3/ko/System.Diagnostics.TraceSource.xml",
+        "ref/netstandard1.3/ru/System.Diagnostics.TraceSource.xml",
+        "ref/netstandard1.3/zh-hans/System.Diagnostics.TraceSource.xml",
+        "ref/netstandard1.3/zh-hant/System.Diagnostics.TraceSource.xml",
+        "ref/xamarinios10/_._",
+        "ref/xamarinmac20/_._",
+        "ref/xamarintvos10/_._",
+        "ref/xamarinwatchos10/_._",
+        "runtimes/unix/lib/netstandard1.3/System.Diagnostics.TraceSource.dll",
+        "runtimes/win/lib/net46/System.Diagnostics.TraceSource.dll",
+        "runtimes/win/lib/netstandard1.3/System.Diagnostics.TraceSource.dll",
+        "system.diagnostics.tracesource.4.3.0.nupkg.sha512",
+        "system.diagnostics.tracesource.nuspec"
+      ]
+    },
     "System.Diagnostics.Tracing/4.3.0": {
       "sha512": "s7CcwNAoHVHmdTgzMZleYJjNHmt4zxmRYD4jZ/1O8GVVUWePhdEHztIvy4zxp/nZ61kGhisDmp9gyKGsWdo79g==",
       "type": "package",
@@ -10046,15 +10121,71 @@
         "system.linq.nuspec"
       ]
     },
-    "System.Linq.Dynamic/1.0.7": {
-      "sha512": "BxEYab1SCgaqElLv57DrfPyi3ksK1Pbk5eXfwkXRZOdlC4aFT03QRkPEbYFBnFPnxhoLlc/Rg2b8vL0ffYSYWA==",
+    "System.Linq.Dynamic.Core/1.0.7.12": {
+      "sha512": "gbgrmpRVYM0sErt/+TBve/USkAWOWnhQMV97woJvkOTnsMTzt2RX5T8ec/mZsQzUmIKbo63660Qr9cMvkini6Q==",
       "type": "package",
-      "path": "system.linq.dynamic/1.0.7",
+      "path": "system.linq.dynamic.core/1.0.7.12",
       "files": [
-        "NuGet.exe",
-        "lib/net40/System.Linq.Dynamic.dll",
-        "system.linq.dynamic.1.0.7.nupkg.sha512",
-        "system.linq.dynamic.nuspec"
+        "lib/net35/System.Linq.Dynamic.Core.dll",
+        "lib/net35/System.Linq.Dynamic.Core.pdb",
+        "lib/net35/System.Linq.Dynamic.Core.xml",
+        "lib/net40/System.Linq.Dynamic.Core.dll",
+        "lib/net40/System.Linq.Dynamic.Core.pdb",
+        "lib/net40/System.Linq.Dynamic.Core.xml",
+        "lib/net45/System.Linq.Dynamic.Core.dll",
+        "lib/net45/System.Linq.Dynamic.Core.pdb",
+        "lib/net45/System.Linq.Dynamic.Core.xml",
+        "lib/net46/System.Linq.Dynamic.Core.dll",
+        "lib/net46/System.Linq.Dynamic.Core.pdb",
+        "lib/net46/System.Linq.Dynamic.Core.xml",
+        "lib/netstandard1.3/System.Linq.Dynamic.Core.dll",
+        "lib/netstandard1.3/System.Linq.Dynamic.Core.pdb",
+        "lib/netstandard1.3/System.Linq.Dynamic.Core.xml",
+        "lib/netstandard2.0/System.Linq.Dynamic.Core.dll",
+        "lib/netstandard2.0/System.Linq.Dynamic.Core.pdb",
+        "lib/netstandard2.0/System.Linq.Dynamic.Core.xml",
+        "lib/uap10.0/System.Linq.Dynamic.Core.dll",
+        "lib/uap10.0/System.Linq.Dynamic.Core.pdb",
+        "lib/uap10.0/System.Linq.Dynamic.Core.pri",
+        "lib/uap10.0/System.Linq.Dynamic.Core.xml",
+        "src/System.Linq.Dynamic.Core/AssemblyBuilderFactory.cs",
+        "src/System.Linq.Dynamic.Core/Compatibility/CustomIntrospectionExtensions.cs",
+        "src/System.Linq.Dynamic.Core/Compatibility/CustomTypeBuilderExtensions.cs",
+        "src/System.Linq.Dynamic.Core/Compatibility/CustomTypeConverterExtensions.cs",
+        "src/System.Linq.Dynamic.Core/CustomTypeProviders/AbstractDynamicLinqCustomTypeProvider.cs",
+        "src/System.Linq.Dynamic.Core/CustomTypeProviders/DefaultDynamicLinqCustomTypeProvider.cs",
+        "src/System.Linq.Dynamic.Core/CustomTypeProviders/DynamicLinqTypeAttribute.cs",
+        "src/System.Linq.Dynamic.Core/CustomTypeProviders/IDynamicLinkTypeProvider.cs",
+        "src/System.Linq.Dynamic.Core/DefaultAssemblyHelper.cs",
+        "src/System.Linq.Dynamic.Core/DynamicClass.cs",
+        "src/System.Linq.Dynamic.Core/DynamicClassFactory.cs",
+        "src/System.Linq.Dynamic.Core/DynamicEnumerableAsyncExtensions.cs",
+        "src/System.Linq.Dynamic.Core/DynamicEnumerableExtensions.cs",
+        "src/System.Linq.Dynamic.Core/DynamicExpressionArgument.cs",
+        "src/System.Linq.Dynamic.Core/DynamicExpressionParser.cs",
+        "src/System.Linq.Dynamic.Core/DynamicOrdering.cs",
+        "src/System.Linq.Dynamic.Core/DynamicProperty.cs",
+        "src/System.Linq.Dynamic.Core/DynamicQueryableExtensions.cs",
+        "src/System.Linq.Dynamic.Core/Exceptions/ParseException.cs",
+        "src/System.Linq.Dynamic.Core/ExpressionParser.cs",
+        "src/System.Linq.Dynamic.Core/ExtensibilityPoint.cs",
+        "src/System.Linq.Dynamic.Core/Extensions/ExpandObjectExtensions.cs",
+        "src/System.Linq.Dynamic.Core/Extensions/LinqProviderExtensions.cs",
+        "src/System.Linq.Dynamic.Core/GlobalConfig.cs",
+        "src/System.Linq.Dynamic.Core/GroupResult.cs",
+        "src/System.Linq.Dynamic.Core/IAssemblyHelper.cs",
+        "src/System.Linq.Dynamic.Core/PagedResult.cs",
+        "src/System.Linq.Dynamic.Core/Properties/AssemblyInfo.cs",
+        "src/System.Linq.Dynamic.Core/Res.cs",
+        "src/System.Linq.Dynamic.Core/System.Linq.Dynamic.Core.csproj",
+        "src/System.Linq.Dynamic.Core/Tokenizer/TextParser.cs",
+        "src/System.Linq.Dynamic.Core/Tokenizer/Token.cs",
+        "src/System.Linq.Dynamic.Core/Tokenizer/TokenId.cs",
+        "src/System.Linq.Dynamic.Core/TypeConverterFactory.cs",
+        "src/System.Linq.Dynamic.Core/Validation/Check.cs",
+        "src/System.Linq.Dynamic.Core/Validation/CoreStrings.cs",
+        "system.linq.dynamic.core.1.0.7.12.nupkg.sha512",
+        "system.linq.dynamic.core.nuspec"
       ]
     },
     "System.Linq.Expressions/4.3.0": {
@@ -10194,10 +10325,10 @@
         "system.linq.parallel.nuspec"
       ]
     },
-    "System.Linq.Queryable/4.0.1": {
-      "sha512": "C/DfhP/eaHrQUTHWFPS90Uc65ceKjHD9SAYOKYsdDIUk9Sy/CqNX3qsA9PC8p/L5CD4IMnk2ExL1yIbgwKY4mA==",
+    "System.Linq.Queryable/4.3.0": {
+      "sha512": "In1Bmmvl/j52yPu3xgakQSI0YIckPUr870w4K5+Lak3JCCa8hl+my65lABOuKfYs4ugmZy25ScFerC4nz8+b6g==",
       "type": "package",
-      "path": "system.linq.queryable/4.0.1",
+      "path": "system.linq.queryable/4.3.0",
       "files": [
         "ThirdPartyNotices.txt",
         "dotnet_library_license.txt",
@@ -10247,7 +10378,7 @@
         "ref/xamarinmac20/_._",
         "ref/xamarintvos10/_._",
         "ref/xamarinwatchos10/_._",
-        "system.linq.queryable.4.0.1.nupkg.sha512",
+        "system.linq.queryable.4.3.0.nupkg.sha512",
         "system.linq.queryable.nuspec"
       ]
     },
@@ -13132,7 +13263,7 @@
       "Microsoft.AspNetCore.All >= 2.0.0",
       "Microsoft.NETCore.App >= 2.0.0",
       "Microsoft.VisualStudio.Web.CodeGeneration.Design >= 2.0.0",
-      "System.Linq.Dynamic >= 1.0.7"
+      "System.Linq.Dynamic.Core >= 1.0.7.12"
     ]
   },
   "packageFolders": {
@@ -13183,6 +13314,10 @@
             "target": "Package",
             "version": "2.0.0"
           },
+          "System.Linq.Dynamic.Core": {
+            "target": "Package",
+            "version": "1.0.7.12"
+          },
           "Microsoft.NETCore.App": {
             "target": "Package",
             "version": "2.0.0",
@@ -13191,10 +13326,6 @@
           "Microsoft.AspNetCore.All": {
             "target": "Package",
             "version": "2.0.0"
-          },
-          "System.Linq.Dynamic": {
-            "target": "Package",
-            "version": "1.0.7"
           }
         },
         "imports": [
@@ -13204,17 +13335,5 @@
         "warn": true
       }
     }
-  },
-  "logs": [
-    {
-      "code": "NU1701",
-      "level": "Warning",
-      "warningLevel": 1,
-      "message": "Package 'System.Linq.Dynamic 1.0.7' was restored using '.NETFramework,Version=v4.6.1' instead of the project target framework '.NETCoreApp,Version=v2.0'. This package may not be fully compatible with your project.",
-      "libraryId": "System.Linq.Dynamic",
-      "targetGraphs": [
-        ".NETCoreApp,Version=v2.0"
-      ]
-    }
-  ]
+  }
 }

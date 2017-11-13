@@ -13,11 +13,11 @@
                     "datatype": "json"
                 },
                 "columns": [
-                    { "data": "rM2Number", "name": "RM2 Number", "autoWidth": true },
-                    { "data": "firstName", "name": "RM2 Number", "autoWidth": true },
-                    { "data": "lastName", "name": "Full Name", "autoWidth": true },
+                    { "data": "rM2Number", "name": "RM2Number", "autoWidth": true },
+                    { "data": "firstName", "name": "FirstName", "autoWidth": true },
+                    { "data": "lastName", "name": "LastName", "autoWidth": true },
                     { "data": "gender", "name": "Gender", "autoWidth": true },
-                    { "data": "dob", "name": "Date of Birth", "autoWidth": true },
+                    { "data": "dob", "name": "DOB", "autoWidth": true },
                     {
                         "render": function (data, type, patient, meta) {
                             return '<a class="btn btn-info btn-xs" href="javascript:void(0)" onclick=\'$(\"#patient-modal\").modal(\"show\")\'"><i class=\'fa fa-edit\'></i>&nbsp;Edit</a>&nbsp;' +
