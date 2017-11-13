@@ -89,3 +89,6 @@
 #extr-page .smart-form div + fieldset {
     padding-top: 15px;
 }
+body.smart-style-6 #logo-group > span#logo:before {
+    content: "Aspergillosis" !important;
+}

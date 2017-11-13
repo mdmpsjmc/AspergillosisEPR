@@ -1,0 +1,39 @@
+﻿<section id="widget-grid" class="">
+    <div class="row">
+        <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <div class="jarviswidget jarviswidget-color-darken" id="wid-id-0" data-widget-editbutton="false">
+                <header>
+                    <span class="widget-icon"> <i class="fa fa-table"></i> </span>
+                    <h2>Patients</h2>
+                </header>
+                <p>
+                    <a href="javascript:void(0)" class="btn btn-success btn-lg" onclick="$('#new-patient-modal').modal('show')">
+                    <i class="fa fa-user-plus"></i>&nbsp;Add new Patient
+                    </a>
+                </p>
+                <div>
+                    <div class="jarviswidget-editbox">
+                    </div>
+                    <div class="widget-body no-padding">
+                        <table id="patients_datatable" class="table table-striped table-bordered table-hover" width="100%">
+                            <thead>
+                                <tr>
+                                    <th data-hide="phone"><i class="fa fa-fw fa-id-card text-muted hidden-md hidden-sm hidden-xs"></i>RM2 Number</th>
+                                    <th data-hide="phone"><i class="fa fa-fw fa-user text-muted hidden-md hidden-sm hidden-xs"></i> Last Name</th>
+                                    <th data-class="expand"><i class="fa fa-fw fa-user text-muted hidden-md hidden-sm hidden-xs"></i> First Name</th>
+                                    <th data-hide="phone"><i class="fa fa-fw fa fa-venus-mars text-muted hidden-md hidden-sm hidden-xs"></i> Gender</th>
+                                    <th data-hide="phone,tablet"><i class="fa fa-fw fa-birthday-cake txt-color-blue hidden-md hidden-sm hidden-xs"></i> Date of Birth</th>
+                                    <th data-hide="phone,tablet"><i class="fa fa-fw fa-pencil txt-color-blue hidden-md hidden-sm hidden-xs"></i> Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+    </article>
+ </div>
+@Html.Partial("~/Views/Patients/Modal.cshtml")
+@Html.Partial("~/Views/Patients/_New.cshtml")
+
+</section>
