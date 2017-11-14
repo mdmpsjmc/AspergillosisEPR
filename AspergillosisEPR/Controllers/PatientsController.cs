@@ -32,7 +32,7 @@ namespace AspergillosisEPR.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("LastName,FirstName,DOB,Gender, RM2Number")] Patient patient)
+        public async Task<IActionResult> Create([Bind("LastName,FirstName,DOB,Gender, RM2Number")] Patient patient, PatientDiagnosis[] diagnoses)
         {
             try
             {

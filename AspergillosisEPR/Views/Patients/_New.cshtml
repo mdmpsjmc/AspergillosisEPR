@@ -1,4 +1,5 @@
-﻿<div class="modal fade" tabindex="-1" role="dialog" id="new-patient-modal">
+﻿@model AspergillosisEPR.Models.Patient
+<div class="modal fade" tabindex="-1" role="dialog" id="new-patient-modal">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -22,20 +23,21 @@
                             <a href="#drugs" data-toggle="tab"><i class="fa fa-fw fa-lg fa-medkit"></i> Drugs</a>
                         </li>
                     </ul>
+                    <form asp-controller="Patients" asp-action="Create" class="smart-form" data-ajax="true" data-ajax-method="POST" id="new-patient-form">
+                        <div id="new-patient-tab-content" class="tab-content padding-10">
+                            <div class="tab-pane fade in active" id="details">
+                                @{ await Html.RenderPartialAsync("/Views/Patients/_DetailsTab.cshtml"); }
+                            </div>
+                            <div class="tab-pane fade" id="diagnosis">
+                                @{ await Html.RenderPartialAsync("/Views/Patients/_DiagnosisTab.cshtml"); }
+                            </div>
+                            <div class="tab-pane fade" id="drugs">
+                                @{ await Html.RenderPartialAsync("/Views/Patients/_DiagnosisTab.cshtml"); }
+                            </div>
+                        </div>
+                       </form>
 
-                    <div id="new-patient-tab-content" class="tab-content padding-10">
-                        <div class="tab-pane fade in active" id="details">
-                            @{ await Html.RenderPartialAsync("/Views/Patients/_DetailsTab.cshtml"); }      
-                        </div>
-                        <div class="tab-pane fade" id="diagnosis">
-                            @{ await Html.RenderPartialAsync("/Views/Patients/_DiagnosisTab.cshtml"); }      
-                        </div>
-                        <div class="tab-pane fade" id="drugs">
-                            @{ await Html.RenderPartialAsync("/Views/Patients/_DiagnosisTab.cshtml"); }                            
-                        </div>
-                    </div>
-
-                </div>
+</div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>

@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using AspergillosisEPR.Data;
+using AspergillosisEPR.Models.AspergillosisViewModels;
+
 namespace AspergillosisEPR
 {
     public class Startup
@@ -21,6 +23,7 @@ namespace AspergillosisEPR
             services.AddDbContext<AspergillosisContext>(options =>
                         options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"))
             );
+            services.AddTransient<PatientViewModel>();
             services.AddMvc();
         }
 
