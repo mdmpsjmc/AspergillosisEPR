@@ -29,6 +29,7 @@
 </head>
 <body class="pace-done smart-style-6">
     <header id="header">
+        <span class="AntiForge"> @Html.AntiForgeryToken() </span>
         @{ await Html.RenderPartialAsync("_Header"); }
         <section id="top-right">
             @(IsSectionDefined("topright") ? RenderSection("topright", false) : Html.Partial("_TopRight"))

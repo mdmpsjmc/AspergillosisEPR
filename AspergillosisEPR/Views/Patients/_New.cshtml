@@ -2,172 +2,48 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
                 <h4 class="modal-title">Add New Patient</h4>
             </div>
             <div class="modal-body">
                 <div class="widget-body">
-
                     Add new patient to database
                     <hr class="simple">
-                    <ul id="myTab1" class="nav nav-tabs bordered">
+                    <ul id="new-patient-tabs" class="nav nav-tabs bordered">
                         <li class="active">
                             <a href="#details" data-toggle="tab"><i class="fa fa-fw fa-lg fa-info-circle"></i> Details </a>
                         </li>
                         <li>
-                            <a href="#diagnosis" data-toggle="tab"><i class="fa fa-fw fa-lg fa-medkit"></i> Diagnosis</a>
+                            <a href="#diagnosis" data-toggle="tab"><i class="fa fa-fw fa-lg fa-heartbeat"></i> Diagnosis</a>
                         </li>
                         <li>
-                            <a href="#drugs" data-toggle="tab"><i class="fa fa-fw fa-lg fa-heartbeat"></i> Drugs</a>
+                            <a href="#drugs" data-toggle="tab"><i class="fa fa-fw fa-lg fa-medkit"></i> Drugs</a>
                         </li>
                     </ul>
 
-                    <div id="myTabContent1" class="tab-content padding-10">
+                    <div id="new-patient-tab-content" class="tab-content padding-10">
                         <div class="tab-pane fade in active" id="details">
-                                <form id="order-form" class="smart-form" novalidate="novalidate">
-                                    <header>
-                                        Patient Details
-                                    </header>
-                                    <fieldset>
-                                        <div class="row">
-                                            <section class="col col-6">
-                                                <label class="input">
-                                                    <i class="icon-append fa fa-briefcase"></i>
-                                                    <input type="text" name="startdate" id="startdate" placeholder="RM2 Number" class="hasDatepicker">
-                                                </label>
-                                            </section>
-                                        </div>
-                                    </fieldset>
-                                    <fieldset>
-                                        <div class="row">
-                                            <section class="col col-6">
-                                                <label class="input">
-                                                    <i class="icon-append fa fa-user"></i>
-                                                    <input type="text" name="name" placeholder="First Name">
-                                                </label>
-                                            </section>
-                                            <section class="col col-6">
-                                                <label class="input">
-                                                    <i class="icon-append fa fa-user"></i>
-                                                    <input type="text" name="company" placeholder="Last Name">
-                                                </label>
-                                            </section>
-                                        </div>
-                                        <div class="row">
-                                            <section class="col col-6">
-                                                <label class="input">
-                                                    <i class="icon-append fa fa-birthday-cake"></i>
-                                                    <input type="email" name="email" placeholder="Date of Birth">
-                                                </label>
-                                            </section>
-                                            <section class="col col-6">
-                                                <label class="select state-success">
-                                                    <select name="interested" aria-required="true" aria-invalid="false">
-                                                        <option value="0" selected="" disabled="">Please select gender</option>
-                                                        <option value="1">male</option>
-                                                        <option value="1">female</option>
-                                                    </select> 
-                                                    <i class="icon-append fa fa-venus-mars"></i>
-                                                </label>
-                                            </section>
-                                        </div>
-                                    </fieldset>
-                                </form>
+                            @{ await Html.RenderPartialAsync("/Views/Patients/_DetailsTab.cshtml"); }      
                         </div>
                         <div class="tab-pane fade" id="diagnosis">
-                            <p>
-                                <a href="javascript:void(0)" class="btn btn-success">Add diagnosis</a>
-                            </p>
-                            <form class="smart-form" novalidate="novalidate">
-                                <fieldset>
-                                    <div class="row">
-                                        <section class="col col-12">
-                                            <label class="select state-success">
-                                                <i class="icon-append fa fa-medkit"></i>
-
-                                                <select name="interested" aria-required="true" aria-invalid="false">
-                                                    <option value="0" selected="" disabled="">Please select diagnosis category</option>
-                                                    <option value="1">Primary</option>
-                                                    <option value="2">Secondary</option>
-                                                    <option value="3">Other</option>
-                                                </select>
-                                            </label>
-                                        </section>
-                                    </div>
-                                </fieldset>
-                                <fieldset>
-                                    <div class="row">
-                                        <section class="col col-12">
-                                            <label class="select state-success">
-                                                <i class="icon-append fa fa-medkit"></i>
-
-                                                <select name="interested" aria-required="true" aria-invalid="false">
-                                                    <option value="0" selected="" disabled="">Please select diagnosis type</option>
-                                                    <option value="1">Allergic bronchopulmonary aspergillosis (ABPA)</option>
-                                                    <option value="2">Chronic pulmonary aspergillosis (CPA)</option>
-                                                    <option value="3">Aspergilloma</option>
-                                                </select>
-                                            </label>
-                                        </section>
-                                        </div>
-                                    <div class="row">
-                                        <label class="textarea">
-                                            <i class="icon-append fa fa-comment"></i>
-                                            <textarea rows="5" name="comment" placeholder="Diagnosis Comment" style="width: 100%"></textarea>
-                                        </label>
-
-                                    </div>
-                                </fieldset>
-                            </form>
+                            @{ await Html.RenderPartialAsync("/Views/Patients/_DiagnosisTab.cshtml"); }      
                         </div>
                         <div class="tab-pane fade" id="drugs">
-                            <p>
-                                <a href="javascript:void(0)" class="btn btn-success">Add drug</a>
-                            </p>
-                            <form class="smart-form" novalidate="novalidate">
-                                
-                                <fieldset>
-                                    <div class="row">
-                                        <section class="col col-12">
-                                            <label class="select">
-                                                <select name="interested">
-                                                    <option value="0" selected="" disabled="">Please select drug</option>
-                                                    <option value="1">Drug 1</option>
-                                                    <option value="1">Drug 2</option>
-                                                    <option value="2">Drug 3</option>
-                                                    <option value="2">Drug 4</option>
-                                                    <option value="3">Drug 5</option>
-                                                </select> <i></i>
-                                            </label>
-                                        </section>
-
-                                    </div>
-
-                                    <div class="row">
-                                        <section class="col col-6">
-                                            <label class="input">
-                                                <i class="icon-append fa fa-calendar"></i>
-                                                <input type="text" name="startdate" id="startdate" placeholder="Start date" class="hasDatepicker">
-                                            </label>
-                                        </section>
-                                        <section class="col col-6">
-                                            <label class="input">
-                                                <i class="icon-append fa fa-calendar"></i>
-                                                <input type="text" name="finishdate" id="finishdate" placeholder="Finish date" class="hasDatepicker">
-                                            </label>
-                                        </section>
-                                    </div>
-                                </fieldset>
-                                </form>
-</div>
+                            @{ await Html.RenderPartialAsync("/Views/Patients/_DiagnosisTab.cshtml"); }                            
+                        </div>
                     </div>
 
                 </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-success">SAVE</button>
+                <button type="button" class="btn btn-success submit-new-patient">SAVE</button>
             </div>
-        </div><!-- /.modal-content -->
-    </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
+        </div>
+    </div>
+</div>
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

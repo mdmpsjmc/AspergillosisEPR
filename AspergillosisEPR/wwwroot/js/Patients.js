@@ -1,8 +1,8 @@
-﻿var Patients = function() {
+﻿var Patients = function () {
 
     var initPatientsDataTable = function () {
         $(document).ready(function () {
-            $("#patients_datatable").DataTable({
+            window.patientsTable = $("#patients_datatable").DataTable({
                 "processing": true, // for show progress bar
                 "serverSide": true, // for process server side
                 "filter": true, // this is for disable filter (search box)
@@ -31,9 +31,62 @@
         });
     }
 
+    var submitNewPatient = function () {
+        $(document).off("click.save-patient").on("click.save-patient", "button.submit-new-patient", function () {
+            $("label.text-danger").remove();
+            $.ajax({
+                url: $("form#new-patient-form").attr("action"),
+                type: "POST",
+                data: $("form#new-patient-form").serialize(),
+                contentType: "application/x-www-form-urlencoded",
+                dataType: 'json'
+            }).done(function (data, textStatus) {
+                if (textStatus === "success") {
+                    if (data.errors) {
+                        displayErrors(data.errors);
+                    } else {
+                        $("form#new-patient-form")[0].reset();
+                        $("div#new-patient-modal").modal("hide");
+                        window.patientsTable.ajax.reload();
+                    }
+                 }
+                }).fail(function (data) {
+                    $("form#new-patient-form")[0].reset();
+                    $("div#new-patient-modal").modal("hide");
+                    alert("There was a problem saving this patient. Please contact administrator");
+            });
+
+        });
+    }
+
+    var displayErrors = function(errors) {
+        for (var i = 0; i < Object.keys(errors).length; i++) {
+            var field = Object.keys(errors)[i];
+            var htmlCode = "<label for='" + field + "' class='text-danger'></label>";
+            var fieldError = errors[Object.keys(errors)[i]];
+            $(htmlCode).html(fieldError).appendTo($("input#" + field + ", select#" + field).parent());
+        }
+    }
+
+    var enableAntiForgeryProtectionWithAjax = function () {
+        $(document)
+            .ajaxSend(function (event, jqxhr, settings) {
+                if (settings.type.toUpperCase() !== "POST") return;
+                jqxhr.setRequestHeader('RequestVerificationToken', $(".AntiForge" + " input").val())
+            })
+    };
+
     return {
+
+        setupForm: function () {
+            submitNewPatient();
+            enableAntiForgeryProtectionWithAjax();
+        },
+
         init: function () {
             initPatientsDataTable();
+            submitNewPatient();
+            enableAntiForgeryProtectionWithAjax();
         }
     }
 

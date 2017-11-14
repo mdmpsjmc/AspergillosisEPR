@@ -7,8 +7,10 @@ using AspergillosisEPR.Data;
 using System.Linq.Dynamic;
 using System.Linq.Dynamic.Core;
 using Microsoft.EntityFrameworkCore;
-using AspergillosisEPR.Data;
 using AspergillosisEPR.Models;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using System.Collections;
+using AspergillosisEPR.Helpers;
 
 namespace AspergillosisEPR.Controllers
 {
@@ -24,7 +26,31 @@ namespace AspergillosisEPR.Controllers
 
         public IActionResult Index()
         {
+
             return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create([Bind("LastName,FirstName,DOB,Gender, RM2Number")] Patient patient)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                   _context.Add(patient);
+                   await _context.SaveChangesAsync();
+                   return Json(new { result = "ok" });
+                }else
+                  {
+                   Hashtable errors = ModelStateHelper.Errors(ModelState);
+                   return Json(new { success = false, errors });
+                  }
+            }
+            catch (DbUpdateException)
+            {
+                return null;
+            }        
         }
 
         public async Task<IActionResult> Details(int? id)
@@ -46,6 +72,20 @@ namespace AspergillosisEPR.Controllers
             return View(patient);
         }
 
+        public JsonResult hasRMNumber(string RM2Number, int? Id)
+        {
+            var validateName = _context.Patients.FirstOrDefault(x => x.RM2Number == RM2Number && x.ID != Id);
+
+            if (validateName != null)
+            {
+                return Json(false);
+            }
+            else
+            {
+                return Json(true);
+            }
+        }
+
         public IActionResult LoadData()
         {
             try
@@ -60,7 +100,14 @@ namespace AspergillosisEPR.Controllers
                 int skip = start != null ? Convert.ToInt32(start) : 0;
                 int recordsTotal = 0;
                 var patientData = (from patient in _context.Patients
-                                    select new { patient.ID, patient.RM2Number, patient.LastName, patient.FirstName, patient.Gender, patient.DOB });
+                                    select new {
+                                        ID = patient.ID,
+                                        RM2Number = patient.RM2Number,
+                                        LastName = patient.LastName,
+                                        FirstName = patient.FirstName,
+                                        Gender = patient.Gender,
+                                        DOB = patient.DOB.ToString("dd/MM/yyyy")
+                                    });
                 if (!(string.IsNullOrEmpty(sortColumn) && string.IsNullOrEmpty(sortColumnDirection)))
                 {
                     string sorting = sortColumn + " " + sortColumnDirection;
