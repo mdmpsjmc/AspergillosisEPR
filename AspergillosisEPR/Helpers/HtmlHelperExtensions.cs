@@ -25,20 +25,6 @@ namespace AspergillosisEPR.Helpers
             _settings = helper.ViewContext.HttpContext.RequestServices.GetRequiredService<IOptions<Settings>>().Value;
         }
 
-        /// <summary>
-        ///     Retrieves a non-HTML encoded string containing the assembly version as a formatted string.
-        ///     <para>If a project name is specified in the application configuration settings it will be prefixed to this value.</para>
-        ///     <para>
-        ///         e.g.
-        ///         <code>1.0 (build 100)</code>
-        ///     </para>
-        ///     <para>
-        ///         e.g.
-        ///         <code>ProjectName 1.0 (build 100)</code>
-        ///     </para>
-        /// </summary>
-        /// <param name="helper"></param>
-        /// <returns></returns>
         public static IHtmlContent AssemblyVersion(this IHtmlHelper helper)
         {
             if (_displayVersion.IsEmpty())
@@ -47,14 +33,6 @@ namespace AspergillosisEPR.Helpers
             return helper.Raw(_displayVersion);
         }
 
-        /// <summary>
-        ///     Compares the requested route with the given <paramref name="value" /> value, if a match is found the
-        ///     <paramref name="attribute" /> value is returned.
-        /// </summary>
-        /// <param name="helper"></param>
-        /// <param name="value">The action value to compare to the requested route action.</param>
-        /// <param name="attribute">The attribute value to return in the current action matches the given action value.</param>
-        /// <returns>A HtmlString containing the given attribute value; otherwise an empty string.</returns>
         public static IHtmlContent RouteIf(this IHtmlHelper helper, string value, string attribute)
         {
             var currentController = (helper.ViewContext.RouteData.Values["controller"] ?? string.Empty).ToString().UnDash();
@@ -66,13 +44,6 @@ namespace AspergillosisEPR.Helpers
             return hasAction || hasController ? new HtmlString(attribute) : new HtmlString(string.Empty);
         }
 
-        /// <summary>
-        ///     Renders the specified partial view with the parent's view data and model if the given setting entry is found and
-        ///     represents the equivalent of true.
-        /// </summary>
-        /// <param name="htmlHelper"></param>
-        /// <param name="partialViewName">The name of the partial view.</param>
-        /// <param name="condition">The boolean value that determines if the partial view should be rendered.</param>
         public static void RenderPartialIf(this IHtmlHelper htmlHelper, string partialViewName, bool condition)
         {
             if (!condition)
@@ -81,21 +52,6 @@ namespace AspergillosisEPR.Helpers
             htmlHelper.RenderPartialAsync(partialViewName).GetAwaiter().GetResult();
         }
 
-        /// <summary>
-        ///     Retrieves a non-HTML encoded string containing the assembly version and the application copyright as a formatted
-        ///     string.
-        ///     <para>If a company name is specified in the application configuration settings it will be suffixed to this value.</para>
-        ///     <para>
-        ///         e.g.
-        ///         <code>1.0 (build 100) © 2015</code>
-        ///     </para>
-        ///     <para>
-        ///         e.g.
-        ///         <code>1.0 (build 100) © 2015 CompanyName</code>
-        ///     </para>
-        /// </summary>
-        /// <param name="helper"></param>
-        /// <returns></returns>
         public static IHtmlContent Copyright(this IHtmlHelper helper)
         {
             helper.EnsureSettings();

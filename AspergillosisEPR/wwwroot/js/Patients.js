@@ -3,10 +3,13 @@
     var initPatientsDataTable = function () {
         $(document).ready(function () {
             window.patientsTable = $("#patients_datatable").DataTable({
-                "processing": true, // for show progress bar
-                "serverSide": true, // for process server side
-                "filter": true, // this is for disable filter (search box)
-                "orderMulti": false, // for disable multiple column at once
+                "processing": true, 
+                "serverSide": true,
+                "filter": true,
+                "orderMulti": false, 
+                "initComplete": function (settings, json) {
+                    newPatientsModalShow();
+                },
                 "ajax": {
                     "url": "/Patients/LoadData",
                     "type": "POST",
@@ -76,7 +79,30 @@
             })
     };
 
+    var newPatientsModalShow = function () {
+        $(document).off("click.launch-new-patient-modal").on("click.launch-new-patient-modal", "a.new-patient-modal-show", function () {
+            $.get("/Patients/New", function (responseHtml){
+                $("div#modal-container").html(responseHtml);
+                $("div#new-patient-modal").modal("show");
+            });
+        });
+    }
+
+    var addDiagnosisForm = function () {
+        $(document).off("click.add-diagnosis").on("click.add-diagnosis", "a.add-diagnosis", function (e) {
+            e.preventDefault();
+            $.get($(this).attr("href"), function (responseHtml) {
+                $("div.diagnosis-form").append(responseHtml);
+            });
+         })
+    }
+
     return {
+
+        bindShowPatientsModal: function () {
+            newPatientsModalShow();
+            addDiagnosisForm();
+        },
 
         setupForm: function () {
             submitNewPatient();

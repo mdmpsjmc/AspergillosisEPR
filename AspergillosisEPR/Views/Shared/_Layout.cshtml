@@ -39,6 +39,7 @@
     <div id="main" role="main">
         @{await Html.RenderPartialAsync("_Ribbon"); }
         @RenderBody()
+        <div id="modal-container"></div>
     </div>
     @if (User.Identity.IsAuthenticated)
     {

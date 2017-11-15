@@ -1,40 +1,40 @@
-﻿<p><a href="javascript:void(0)" class="btn btn-success">Add diagnosis</a></p>
-<fieldset>
-    <div class="row">
-        <section class="col col-12">
-            <label class="select state-success">
-                <i class="icon-append fa fa-medkit"></i>
+﻿@model AspergillosisEPR.Models.PatientDiagnosis
+<div class="col-12 row diagnosis-form state-success" style="margin: 0px !important">
+    <fieldset>
+        <div class="row">
+            <label class="select">
+                <label asp-for="DiagnosisCategoryId" class="select">
+                    <select asp-for="DiagnosisCategoryId" asp-items="ViewBag.DiagnosisCategoryId">
+                        <option value="">Select Diagnosis Category</option>
+                    </select>
+                    <span asp-validation-for="DiagnosisCategoryId" class="text-danger"></span>
+                </label>
 
-                <select name="interested" aria-required="true" aria-invalid="false">
-                    <option value="0" selected="" disabled="">Please select diagnosis category</option>
-                    <option value="1">Primary</option>
-                    <option value="2">Secondary</option>
-                    <option value="3">Other</option>
-                </select>
             </label>
-        </section>
-    </div>
-</fieldset>
-<fieldset>
-    <div class="row">
-        <section class="col col-12">
-            <label class="select state-success">
-                <i class="icon-append fa fa-medkit"></i>
-
-                <select name="interested" aria-required="true" aria-invalid="false">
-                    <option value="0" selected="" disabled="">Please select diagnosis type</option>
-                    <option value="1">Allergic bronchopulmonary aspergillosis (ABPA)</option>
-                    <option value="2">Chronic pulmonary aspergillosis (CPA)</option>
-                    <option value="3">Aspergilloma</option>
-                </select>
+        </div>
+    </fieldset>
+    <fieldset>
+        <div class="row">
+            <label class="select">
+                <label asp-for="DiagnosisTypeId" class="select">
+                    <select asp-for="DiagnosisTypeId" asp-items="ViewBag.DiagnosisTypeId">
+                        <option value="">Select Diagnosis Type</option>
+                    </select>
+                    <span asp-validation-for="DiagnosisCategoryId" class="text-danger"></span>
+                </label>
             </label>
-        </section>
-    </div>
-    <div class="row">
-        <label class="textarea">
-            <i class="icon-append fa fa-comment"></i>
-            <textarea rows="5" name="comment" placeholder="Diagnosis Comment" style="width: 100%"></textarea>
-        </label>
-
-    </div>
-</fieldset>
+        </div>
+        <div class="row">
+            <label class="textarea">
+                <i class="icon-append fa fa-comment"></i>
+                <textarea rows="5" name="comment" placeholder="Diagnosis Comment" style="width: 100%"></textarea>
+            </label>
+        </div>
+    </fieldset>
+</div>
+<a href="@Url.Action("DiagnosisForm", "Partials")" class="btn btn-success add-diagnosis" style="padding: 5px">
+    <i class="fa fa-plus"></i>
+    <span>
+        <strong>Add diagnosis</strong>
+    </span>
+</a>

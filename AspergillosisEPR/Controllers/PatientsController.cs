@@ -24,9 +24,15 @@ namespace AspergillosisEPR.Controllers
             _context = context;
         }
 
+        public IActionResult New()
+        {
+            PopulateDiagnosisCategoriesDropDownList();
+            PopulateDiagnosisTypeDropDownList(); 
+            return PartialView();
+        }
+
         public IActionResult Index()
         {
-
             return View();
         }
 
@@ -128,6 +134,22 @@ namespace AspergillosisEPR.Controllers
             {
                 throw;
             }
+        }
+
+        private void PopulateDiagnosisCategoriesDropDownList(object selectedCategory = null)
+        {
+            var categoriesQuery = from d in _context.DiagnosisCategories
+                                   orderby d.CategoryName
+                                   select d;
+            ViewBag.DiagnosisCategoryId = new SelectList(categoriesQuery.AsNoTracking(), "ID", "CategoryName", selectedCategory);
+        }
+
+        private void PopulateDiagnosisTypeDropDownList(object selectedCategory = null)
+        {
+            var diagnosisTypesQuery = from d in _context.DiagnosisTypes
+                                  orderby d.Name
+                                  select d;
+            ViewBag.DiagnosisTypeId = new SelectList(diagnosisTypesQuery.AsNoTracking(), "ID", "Name", selectedCategory);
         }
     }
 }
