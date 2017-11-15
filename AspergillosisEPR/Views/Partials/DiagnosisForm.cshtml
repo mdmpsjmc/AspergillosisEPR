@@ -1,32 +1,32 @@
-﻿@model PatientDiagnosis
-<fieldset>
-    <div class="row">
-        <label class="select">
-            <label asp-for="DiagnosisCategoryId" class="select">
-                <select asp-for="DiagnosisCategoryId" asp-items="ViewBag.DiagnosisCategoryId">
-                    <option value="">Select Diagnosis Category</option>
-                </select>
-                <span asp-validation-for="DiagnosisCategoryId" class="text-danger"></span>
-            </label>
+﻿@using HtmlHelpers.BeginCollectionItemCore;
+@model AspergillosisEPR.Models.PatientDiagnosis
+@using (Html.BeginCollectionItem("Diagnoses"))
+{
+    <div class="diagnosis-row">
+        <fieldset>
+            <div class="row">
+                <label class="select">
+                    <label asp-for="DiagnosisCategoryId" class="select">
+                        @Html.DropDownListFor(m => m.DiagnosisCategoryId, (SelectList)ViewBag.DiagnosisCategoryId, "Select Diagnosis Category")
+                        <span asp-validation-for="DiagnosisCategoryId" class="text-danger"></span>
+                    </label>
 
-        </label>
+                </label>
+            </div>
+            <div class="row">
+                <label class="select">
+                    <label asp-for="DiagnosisTypeId" class="select">
+                        @Html.DropDownListFor(m => m.DiagnosisTypeId, (SelectList)ViewBag.DiagnosisTypeId, "Select Diagnosis")
+                        <span asp-validation-for="DiagnosisCategoryId" class="text-danger"></span>
+                    </label>
+                </label>
+            </div>
+            <div class="row">
+                <label class="textarea">
+                    <i class="icon-append fa fa-comment"></i>
+                    @Html.TextArea("Description", null, new { @class = "comment", @rows = 5, @placeholder = "Diagnosis Comment" })
+                </label>
+            </div>
+        </fieldset>
     </div>
-</fieldset>
-<fieldset>
-    <div class="row">
-        <label class="select">
-            <label asp-for="DiagnosisTypeId" class="select">
-                <select asp-for="DiagnosisTypeId" asp-items="ViewBag.DiagnosisTypeId">
-                    <option value="">Select Diagnosis Type</option>
-                </select>
-                <span asp-validation-for="DiagnosisCategoryId" class="text-danger"></span>
-            </label>
-        </label>
-    </div>
-    <div class="row">
-        <label class="textarea">
-            <i class="icon-append fa fa-comment"></i>
-            <textarea rows="5" name="comment" placeholder="Diagnosis Comment" style="width: 100%"></textarea>
-        </label>
-    </div>
-</fieldset>
+}

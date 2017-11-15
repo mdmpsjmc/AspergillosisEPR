@@ -12,9 +12,13 @@ namespace AspergillosisEPR.Models
         public Patient Patient { get; set; }
         public Drug Drug { get; set; }
 
+        [Required]
+        [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:dd-MMM-yyy}", ApplyFormatInEditMode = true)]
         public DateTime StartDate { get; set; }
 
+        [Required]
+        [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:dd-MMM-yyy}", ApplyFormatInEditMode = true)]
         public DateTime EndDate { get; set; }
     }

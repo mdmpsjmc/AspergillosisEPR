@@ -38,14 +38,16 @@ namespace AspergillosisEPR.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("LastName,FirstName,DOB,Gender, RM2Number")] Patient patient, PatientDiagnosis[] diagnoses)
+        public async Task<IActionResult> Create([Bind("LastName,FirstName,DOB,Gender, RM2Number")] Patient patient, PatientDiagnosis[] diagnoses, PatientDrug[] drugs)
         {
+            patient.PatientDiagnoses = diagnoses;
+            patient.PatientDrugs = drugs;
             try
             {
                 if (ModelState.IsValid)
-                {
-                   _context.Add(patient);
-                   await _context.SaveChangesAsync();
+                {                  
+                    _context.Add(patient);
+                    await _context.SaveChangesAsync();
                    return Json(new { result = "ok" });
                 }else
                   {

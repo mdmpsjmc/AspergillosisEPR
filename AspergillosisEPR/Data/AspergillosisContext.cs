@@ -13,6 +13,8 @@ namespace AspergillosisEPR.Data
         public DbSet<DiagnosisType> DiagnosisTypes { get; set; }
         public DbSet<PatientDiagnosis> PatientDiagnoses { get; set; }
         public DbSet<DiagnosisCategory> DiagnosisCategories { get; set; }
+        public DbSet<Drug> Drugs { get; set; }
+        public DbSet<PatientDrug> PatientDrugs { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -20,7 +22,8 @@ namespace AspergillosisEPR.Data
             modelBuilder.Entity<PatientDiagnosis>().ToTable("PatientDiagnosis");
             modelBuilder.Entity<DiagnosisType>().ToTable("DiagnosisTypes");
             modelBuilder.Entity<DiagnosisCategory>().ToTable("DiagnosisCategories");
-
+            modelBuilder.Entity<Drug>().ToTable("Drugs");
+            modelBuilder.Entity<PatientDrug>().ToTable("PatientDrugs");
         }
     }
 

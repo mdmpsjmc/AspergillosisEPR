@@ -26,6 +26,12 @@ namespace AspergillosisEPR.Controllers
             return PartialView();
         }
 
+        public IActionResult DrugForm()
+        {
+            PopulateDrugsDropDownList();
+            return PartialView();
+        }
+
         private void PopulateDiagnosisCategoriesDropDownList(object selectedCategory = null)
         {
             var categoriesQuery = from d in _context.DiagnosisCategories
@@ -34,12 +40,20 @@ namespace AspergillosisEPR.Controllers
             ViewBag.DiagnosisCategoryId = new SelectList(categoriesQuery.AsNoTracking(), "ID", "CategoryName", selectedCategory);
         }
 
-        private void PopulateDiagnosisTypeDropDownList(object selectedCategory = null)
+        private void PopulateDiagnosisTypeDropDownList(object selectedDiagnosis = null)
         {
             var diagnosisTypesQuery = from d in _context.DiagnosisTypes
                                       orderby d.Name
                                       select d;
-            ViewBag.DiagnosisTypeId = new SelectList(diagnosisTypesQuery.AsNoTracking(), "ID", "Name", selectedCategory);
+            ViewBag.DiagnosisTypeId = new SelectList(diagnosisTypesQuery.AsNoTracking(), "ID", "Name", selectedDiagnosis);
+        }
+
+        private void PopulateDrugsDropDownList(object selectedDrug = null)
+        {
+            var drugsQuery = from d in _context.Drugs
+                                      orderby d.Name
+                                      select d;
+            ViewBag.DrugId = new SelectList(drugsQuery.AsNoTracking(), "ID", "Name", selectedDrug);
         }
     }
 

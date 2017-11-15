@@ -57,6 +57,22 @@ namespace AspergillosisEPR.Data
                 context.DiagnosisTypes.Add(dt);
             }
             context.SaveChanges();
+
+
+            var drugs = new Drug[]
+            {
+            new Drug{Name="Other drug 1"},
+            new Drug{Name="Other drug"},
+            new Drug{Name="Other drug 2"},
+            new Drug{Name="Other drug 3"},
+            new Drug{Name="Other drug 4"},
+            new Drug{Name="Other drug 7"},
+            };
+            foreach (Drug d in drugs)
+            {
+                context.Drugs.Add(d);
+            }
+            context.SaveChanges();
         }
     }
 }

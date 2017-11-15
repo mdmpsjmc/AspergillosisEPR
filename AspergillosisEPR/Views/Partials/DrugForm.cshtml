@@ -1,0 +1,31 @@
+﻿@using HtmlHelpers.BeginCollectionItemCore;
+@model AspergillosisEPR.Models.PatientDrug;
+@using (Html.BeginCollectionItem("Drugs"))
+{
+    <div class="drug-row">
+        <fieldset>
+            <div class="row">
+                <label class="select">
+                    <label asp-for="DrugId" class="select">
+                        @Html.DropDownListFor(m => m.DrugId, (SelectList)ViewBag.DrugId, "Select Drug")
+                        <span asp-validation-for="DrugId" class="text-danger"></span>
+                    </label>
+                </label>
+            </div>
+        </fieldset>
+        <section class="col col-6">
+            <label asp-for="StartDate" class="input">
+                <i class="icon-append fa fa-calendar"></i>
+                <input asp-for="StartDate" placeholder="Start date">
+            </label>
+        </section>
+        <section class="col col-6">
+            <label asp-for="EndDate" class="input">
+                <i class="icon-append fa fa-calendar"></i>
+                <input asp-for="EndDate" placeholder="End date">
+            </label>
+        </section>
+        
+    </div>
+
+}

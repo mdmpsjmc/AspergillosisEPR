@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 
 namespace AspergillosisEPR.Models
@@ -6,8 +7,11 @@ namespace AspergillosisEPR.Models
     public class PatientDiagnosis
     {
         public int ID { get; set; }
+        [Required]
         public int PatientId { get; set; }
+        [Required]
         public int DiagnosisTypeId { get; set; }
+        [Required]
         public int DiagnosisCategoryId { get; set; }
         [Column(TypeName = "ntext")]
         public string Description { get; set; }

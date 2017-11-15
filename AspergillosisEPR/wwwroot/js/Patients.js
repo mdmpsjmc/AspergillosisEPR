@@ -97,11 +97,21 @@
          })
     }
 
+    var addDrugsForm = function () {
+        $(document).off("click.add-drug").on("click.add-drug", "a.add-drug", function (e) {
+            e.preventDefault();
+            $.get($(this).attr("href"), function (responseHtml) {
+                $("div.drug-form").append(responseHtml);
+            });
+        })
+    }
+
     return {
 
         bindShowPatientsModal: function () {
             newPatientsModalShow();
             addDiagnosisForm();
+            addDrugsForm();
         },
 
         setupForm: function () {
