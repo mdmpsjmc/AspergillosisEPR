@@ -1,0 +1,40 @@
+﻿@model AspergillosisEPR.Models.Patient
+
+@if (Model.PatientDrugs.Any())
+{
+    <div class="col-sm-12">
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>Drug</th>
+                    <th>Start Date</th>
+                    <th>EndDate</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var drug in Model.PatientDrugs)
+                     {
+                        <tr>
+                            <td>@(drug.StartDate)</td>
+                            <td>@(drug.StartDate)</td>
+                            <td>@(drug.EndDate)</td>
+                        </tr>
+                     }   
+                         
+            </tbody>
+        </table>
+        
+
+    </div>
+
+}
+else
+{
+    <div class="col-sm-12">
+        <div class="alert alert-warning alert-block">
+            <h4 class="alert-heading">Info!</h4>
+            This patient does not currently take any drugs
+        </div>
+    </div>
+
+}

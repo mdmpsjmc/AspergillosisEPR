@@ -69,7 +69,11 @@ namespace AspergillosisEPR.Controllers
             }
 
             var patient = await _context.Patients
+                                .Include(p => p.PatientDiagnoses).
+                                    ThenInclude(d => d.DiagnosisType)
+                                .Include(p => p.PatientDrugs)
                                 .Include(p => p.PatientDiagnoses)
+                                    .ThenInclude(d => d.DiagnosisCategory)
                                 .AsNoTracking()
                                 .SingleOrDefaultAsync(m => m.ID == id);
             if (patient == null)
@@ -77,7 +81,7 @@ namespace AspergillosisEPR.Controllers
                 return NotFound();
             }
 
-            return View(patient);
+            return PartialView(patient);
         }
 
         public JsonResult hasRMNumber(string RM2Number, int? Id)

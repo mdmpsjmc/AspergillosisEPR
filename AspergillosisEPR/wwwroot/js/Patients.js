@@ -23,8 +23,8 @@
                     { "data": "dob", "name": "DOB", "autoWidth": true },
                     {
                         "render": function (data, type, patient, meta) {
-                            return '<a class="btn btn-info btn-xs" href="javascript:void(0)" onclick=\'$(\"#patient-modal\").modal(\"show\")\'"><i class=\'fa fa-edit\'></i>&nbsp;Edit</a>&nbsp;' +
-                                '<a class="btn btn-primary btn-xs" href="/DemoGrid/Details/' + patient.id + '"><i class=\'fa fa-eye\' ></i>&nbsp;Details</a>&nbsp;' +
+                            return '<a class="btn btn-info btn-xs patient-details" href="/Patients/Details/' + patient.id + '"><i class=\'fa fa-eye\'></i>&nbsp;Details</a>&nbsp;' +
+                                '<a class="btn btn-warning btn-xs" href="/DemoGrid/Details/' + patient.id + '"><i class=\'fa fa-edit\' ></i>&nbsp;Edit</a>&nbsp;' +
                                 '<a class="btn btn-danger btn-xs" href="/DemoGrid/Details/' + patient.id + '"><i class=\'fa fa-trash\' ></i>&nbsp;Delete</a>&nbsp;';
                         }
                     }
@@ -88,7 +88,7 @@
         });
     }
 
-    var addDiagnosisForm = function () {
+    var bindDiagnosisFormOnClick = function () {
         $(document).off("click.add-diagnosis").on("click.add-diagnosis", "a.add-diagnosis", function (e) {
             e.preventDefault();
             $.get($(this).attr("href"), function (responseHtml) {
@@ -97,7 +97,7 @@
          })
     }
 
-    var addDrugsForm = function () {
+    var bindDrugsFormOnClick = function () {
         $(document).off("click.add-drug").on("click.add-drug", "a.add-drug", function (e) {
             e.preventDefault();
             $.get($(this).attr("href"), function (responseHtml) {
@@ -106,12 +106,23 @@
         })
     }
 
+    var bindPatientDetailsShow = function () {
+        $(document).off("click.patient-details").on("click.patient-details", "a.patient-details", function (e) {
+            e.preventDefault();
+            $.get($(this).attr("href"), function (responseHtml) {
+                $("div#modal-container").html(responseHtml);
+                $("div#details-modal").modal("show");
+            });
+        });
+    }
+
     return {
 
         bindShowPatientsModal: function () {
             newPatientsModalShow();
-            addDiagnosisForm();
-            addDrugsForm();
+            bindDiagnosisFormOnClick();
+            bindDrugsFormOnClick();
+            bindPatientDetailsShow();
         },
 
         setupForm: function () {

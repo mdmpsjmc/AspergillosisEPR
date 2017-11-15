@@ -44,5 +44,15 @@ namespace AspergillosisEPR.Models
         }
         public static readonly List<string> Genders = new List<string>() { "male", "female" };
 
+        public int Age()
+        {
+            int age = 0;
+            age = DateTime.Now.Year - DOB.Year;
+            if (DateTime.Now.DayOfYear < DOB.DayOfYear)
+                age = age - 1;
+
+            return age;
+        }
+
     }
 }

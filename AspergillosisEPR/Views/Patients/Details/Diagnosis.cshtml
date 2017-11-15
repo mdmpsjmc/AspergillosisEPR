@@ -1,0 +1,27 @@
+﻿@model AspergillosisEPR.Models.Patient
+
+@if (Model.PatientDiagnoses.Any())
+{
+    <div class="col-sm-12">
+        @foreach (var diagnosis in Model.PatientDiagnoses)
+        {
+            <h3>Diagnosis: @(diagnosis.DiagnosisCategory.CategoryName)</h3>
+            <div class="alert alert-info alert-block">
+                <h4 class="alert-heading">@(diagnosis.DiagnosisType.Name)</h4>
+                @(diagnosis.Description)
+            </div>
+        }
+
+    </div>
+
+}
+else
+{
+    <div class="col-sm-12">
+        <div class="alert alert-warning alert-block">
+            <h4 class="alert-heading">Info!</h4>
+            This patient does not currently have any diagnosed diseases
+        </div>
+    </div>
+
+}
