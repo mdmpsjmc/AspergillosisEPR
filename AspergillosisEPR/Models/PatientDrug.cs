@@ -5,6 +5,7 @@ namespace AspergillosisEPR.Models
 {
     public class PatientDrug
     {
+        [Key]
         public int ID { get; set; }
         public int PatientId { get; set; }
         public int DrugId { get; set; }

@@ -113,7 +113,8 @@ namespace AspergillosisEPR.Controllers
 
         [HttpPost, ActionName("Edit")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditPatient(int? id, [Bind("ID,DiagnosisCategoryId,DiagnosisTypeId,Description")] PatientDiagnosis[] diagnoses)
+        public async Task<IActionResult> EditPatient(int? id, [Bind("ID,DiagnosisCategoryId,DiagnosisTypeId,Description")] PatientDiagnosis[] diagnoses, 
+                                                              [Bind("ID,DrugId,StartDate,EndDate")] PatientDrug[] drugs)
         {
             if (id == null)
             {
@@ -122,6 +123,7 @@ namespace AspergillosisEPR.Controllers
 
             var patientToUpdate = await _context.Patients
                                 .Include(p => p.PatientDiagnoses)       
+                                .Include(p => p.PatientDrugs)
                                 .AsNoTracking()
                                 .SingleOrDefaultAsync(m => m.ID == id);
 
@@ -129,7 +131,8 @@ namespace AspergillosisEPR.Controllers
             {
                 if (diagnosis.ID == 0)
                 {
-                    patientToUpdate.PatientDiagnoses.Add(diagnosis);
+                    diagnosis.PatientId = patientToUpdate.ID;
+                    _context.Update(diagnosis);
                 } else
                 {
                     var diagnosisToUpdate = patientToUpdate.PatientDiagnoses.SingleOrDefault(pd => pd.ID == diagnosis.ID);
@@ -140,8 +143,22 @@ namespace AspergillosisEPR.Controllers
                 }
             }
 
-
-            
+            foreach (var drug in drugs)
+            {
+                if (drug.ID == 0)
+                {
+                    drug.PatientId = patientToUpdate.ID;
+                    _context.Update(drug);
+                }
+                else
+                {
+                    var drugToUpdate = patientToUpdate.PatientDrugs.SingleOrDefault(pd => pd.ID == drug.ID);
+                    drugToUpdate.StartDate = drug.StartDate;
+                    drugToUpdate.EndDate = drug.EndDate;
+                    drugToUpdate.DrugId = drug.DrugId;
+                    _context.Update(drugToUpdate);
+                }
+            }
 
             if (await TryUpdateModelAsync<Patient>(patientToUpdate,
                 "",
