@@ -71,7 +71,8 @@ namespace AspergillosisEPR.Controllers
             var patient = await _context.Patients
                                 .Include(p => p.PatientDiagnoses).
                                     ThenInclude(d => d.DiagnosisType)
-                                .Include(p => p.PatientDrugs)
+                                .Include(p => p.PatientDrugs).
+                                    ThenInclude(d => d.Drug)
                                 .Include(p => p.PatientDiagnoses)
                                     .ThenInclude(d => d.DiagnosisCategory)
                                 .AsNoTracking()
@@ -82,6 +83,84 @@ namespace AspergillosisEPR.Controllers
             }
 
             return PartialView(patient);
+        }
+
+        public async Task<IActionResult> Edit(int? id)
+        {
+            if (id == null)             
+            {
+                return NotFound();
+            }
+
+            var patient = await _context.Patients
+                                .Include(p => p.PatientDiagnoses).
+                                    ThenInclude(d => d.DiagnosisType)
+                                .Include(p => p.PatientDrugs).
+                                    ThenInclude(d => d.Drug)
+                                .Include(p => p.PatientDiagnoses)
+                                    .ThenInclude(d => d.DiagnosisCategory)
+                                .AsNoTracking()
+                                .SingleOrDefaultAsync(m => m.ID == id);
+            if (patient == null)
+            {
+                return NotFound();
+            }
+            bindSelects(patient);
+            return PartialView(patient);
+        }
+
+     
+
+        [HttpPost, ActionName("Edit")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditPatient(int? id, [Bind("ID,DiagnosisCategoryId,DiagnosisTypeId,Description")] PatientDiagnosis[] diagnoses)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var patientToUpdate = await _context.Patients
+                                .Include(p => p.PatientDiagnoses)       
+                                .AsNoTracking()
+                                .SingleOrDefaultAsync(m => m.ID == id);
+
+            foreach(var diagnosis in diagnoses)
+            {
+                if (diagnosis.ID == 0)
+                {
+                    patientToUpdate.PatientDiagnoses.Add(diagnosis);
+                } else
+                {
+                    var diagnosisToUpdate = patientToUpdate.PatientDiagnoses.SingleOrDefault(pd => pd.ID == diagnosis.ID);
+                    diagnosisToUpdate.DiagnosisCategoryId = diagnosis.DiagnosisCategoryId;
+                    diagnosisToUpdate.DiagnosisTypeId = diagnosis.DiagnosisTypeId;
+                    diagnosisToUpdate.Description = diagnosis.Description;
+                    _context.Update(diagnosisToUpdate);
+                }
+            }
+
+
+            
+
+            if (await TryUpdateModelAsync<Patient>(patientToUpdate,
+                "",
+                p => p.FirstName, p => p.LastName, p => p.DOB, p => p.RM2Number, p=> p.Gender))
+            {
+                try
+                {
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateException /* ex */)
+                {
+                    //Log the error (uncomment ex variable name and write a log.)
+                    ModelState.AddModelError("", "Unable to save changes. " +
+                        "Try again, and if the problem persists, " +
+                        "see your system administrator.");
+                }
+            }
+            
+            return Json(new { result = "ok" });
         }
 
         public JsonResult hasRMNumber(string RM2Number, int? Id)
@@ -157,5 +236,53 @@ namespace AspergillosisEPR.Controllers
                                   select d;
             ViewBag.DiagnosisTypeId = new SelectList(diagnosisTypesQuery.AsNoTracking(), "ID", "Name", selectedCategory);
         }
+
+        private SelectList DiagnosisTypeDropDownList(object selectedCategory = null)
+        {
+            var diagnosisTypesQuery = from d in _context.DiagnosisTypes
+                                      orderby d.Name
+                                      select d;
+            return new SelectList(diagnosisTypesQuery.AsNoTracking(), "ID", "Name", selectedCategory);
+        }
+
+        private SelectList DiagnosisCategoriesDropDownList(object selectedCategory = null)
+        {
+            var categoriesQuery = from d in _context.DiagnosisCategories
+                                  orderby d.CategoryName
+                                  select d;
+            return new SelectList(categoriesQuery.AsNoTracking(), "ID", "CategoryName", selectedCategory);
+        }
+
+        private SelectList DrugsDropDownList(object selectedCategory = null)
+        {
+            var categoriesQuery = from d in _context.Drugs
+                                  orderby d.Name
+                                  select d;
+            return new SelectList(categoriesQuery.AsNoTracking(), "ID", "Name", selectedCategory);
+        }
+
+        private void bindSelects(Patient patient)
+        {
+            List<SelectList> diagnosesTypes = new List<SelectList>();
+            List<SelectList> diagnosesCategories = new List<SelectList>();
+            List<SelectList> drugs = new List<SelectList>();
+
+            for (int i = 0; i < patient.PatientDiagnoses.Count; i++)
+            {
+                var item = patient.PatientDiagnoses.ToList()[i];
+                diagnosesTypes.Add(DiagnosisTypeDropDownList(item.DiagnosisTypeId));
+                diagnosesCategories.Add(DiagnosisCategoriesDropDownList(item.DiagnosisCategoryId));
+            }
+
+            for (int i = 0; i < patient.PatientDrugs.Count; i++)
+            {
+                var item = patient.PatientDrugs.ToList()[i];
+                drugs.Add(DrugsDropDownList(item.DrugId));
+            }
+            ViewBag.DiagnosisTypes = diagnosesTypes;
+            ViewBag.DiagnosisCategories = diagnosesCategories;
+            ViewBag.Drugs = drugs;
+        }
+
     }
 }

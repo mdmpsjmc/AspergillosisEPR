@@ -106,3 +106,6 @@ div#diagnosis {
     margin-top: 22px;
     margin-left: 20px;
 }
+div.details#drugs {
+    min-height: 150px;
+}

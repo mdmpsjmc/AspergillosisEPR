@@ -6,6 +6,7 @@ namespace AspergillosisEPR.Models
 {
     public class PatientDiagnosis
     {
+        [Key]
         public int ID { get; set; }
         [Required]
         public int PatientId { get; set; }

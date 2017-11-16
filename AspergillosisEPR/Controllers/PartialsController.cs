@@ -32,6 +32,21 @@ namespace AspergillosisEPR.Controllers
             return PartialView();
         }
 
+        public IActionResult EditDiagnosisForm()
+        {
+            PopulateDiagnosisCategoriesDropDownList();
+            PopulateDiagnosisTypeDropDownList();
+            ViewBag.Index = (string)Request.Query["index"];
+            return PartialView();
+        }
+
+        public IActionResult EditDrugForm()
+        {
+            PopulateDrugsDropDownList();
+            ViewBag.Index = (string)Request.Query["index"];
+            return PartialView();
+        }
+
         private void PopulateDiagnosisCategoriesDropDownList(object selectedCategory = null)
         {
             var categoriesQuery = from d in _context.DiagnosisCategories

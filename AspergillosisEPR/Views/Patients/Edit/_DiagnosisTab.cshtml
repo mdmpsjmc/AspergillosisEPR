@@ -1,0 +1,46 @@
+﻿@model AspergillosisEPR.Models.Patient
+<div class="col-12 row diagnosis-form" style="margin: 0px !important">
+
+
+    @for (int i = 0; i < Model.PatientDiagnoses.Count; i++)
+    {
+        
+        PatientDiagnosis diagnosis = Model.PatientDiagnoses.ToList()[i];
+        <div class="diagnosis-row">
+            <input type="hidden" value="@diagnosis.ID" name="Diagnoses[@(i.ToString())].ID" />
+            <fieldset>
+                <div class="row">
+                    <label class="select">
+                        <label asp-for="@(diagnosis.DiagnosisCategoryId)" class="select">
+                            @Html.DropDownList("Diagnoses[" + i.ToString() + "].DiagnosisCategoryId", (SelectList)ViewBag.DiagnosisCategories[i], "Select Diagnosis Category")
+                            <span asp-validation-for="@(diagnosis.DiagnosisCategoryId)" class="text-danger"></span>
+                        </label>
+
+                    </label>
+                </div>
+                <div class="row">
+                    <label class="select">
+                        <label asp-for="@(diagnosis.DiagnosisTypeId)" class="select">
+                            @Html.DropDownList("Diagnoses[" + i.ToString()+"].DiagnosisTypeId", (SelectList)ViewBag.DiagnosisTypes[i], "Select Diagnosis")
+                            <span asp-validation-for="@(diagnosis.DiagnosisTypeId)" class="text-danger"></span>
+                        </label>
+                    </label>
+                </div>
+                <div class="row">
+                    <label class="textarea">
+                        <i class="icon-append fa fa-comment"></i>
+                        @Html.TextArea("Diagnoses[" + i.ToString() + "].Description", diagnosis.Description, new { @class = "comment", @rows = 5, @placeholder = "Diagnosis Comment" })
+                    </label>
+                </div>
+            </fieldset>
+        </div>
+
+    }
+    
+</div>
+<a href="@Url.Action("EditDiagnosisForm", "Partials")" class="btn btn-success add-edit-diagnosis" style="padding: 5px">
+    <i class="fa fa-plus"></i>
+    <span>
+        <strong>Add diagnosis</strong>
+    </span>
+</a>

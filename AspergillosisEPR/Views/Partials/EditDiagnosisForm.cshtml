@@ -1,0 +1,29 @@
+﻿@using HtmlHelpers.BeginCollectionItemCore;
+@model AspergillosisEPR.Models.PatientDiagnosis
+<div class="diagnosis-row">
+        <fieldset>
+            <div class="row">
+                <label class="select">
+                    <label asp-for="DiagnosisCategoryId" class="select">
+                        @Html.DropDownList("Diagnoses[" + (string)ViewBag.Index + "].DiagnosisCategoryId", (SelectList)ViewBag.DiagnosisCategoryId, "Select Diagnosis Category")
+                        <span asp-validation-for="DiagnosisCategoryId" class="text-danger"></span>
+                    </label>
+
+                </label>
+            </div>
+            <div class="row">
+                <label class="select">
+                    <label asp-for="DiagnosisTypeId" class="select">
+                        @Html.DropDownList("Diagnoses[" + (string)ViewBag.Index + "].DiagnosisTypeId", (SelectList)ViewBag.DiagnosisTypeId, "Select Diagnosis")
+                        <span asp-validation-for="DiagnosisCategoryId" class="text-danger"></span>
+                    </label>
+                </label>
+            </div>
+            <div class="row">
+                <label class="textarea">
+                    <i class="icon-append fa fa-comment"></i>
+                    @Html.TextArea("Diagnoses[" + (string)ViewBag.Index +"].Description", null, new { @class = "comment", @rows = 5, @placeholder = "Diagnosis Comment" })
+                </label>
+            </div>
+        </fieldset>
+</div>

@@ -1,0 +1,49 @@
+﻿@model AspergillosisEPR.Models.Patient
+<div class="modal fade" tabindex="-1" role="dialog" id="edit-modal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">Change Patient information</h4>
+            </div>
+            <div class="modal-body">
+                <div class="widget-body">
+                    <ul id="new-patient-tabs" class="nav nav-tabs bordered">
+                        <li class="active">
+                            <a href="#details" data-toggle="tab"><i class="fa fa-fw fa-lg fa-info-circle"></i> Details </a>
+                        </li>
+                        <li>
+                            <a href="#diagnosis" data-toggle="tab"><i class="fa fa-fw fa-lg fa-heartbeat"></i> Diagnosis</a>
+                        </li>
+                        <li>
+                            <a href="#drugs" data-toggle="tab"><i class="fa fa-fw fa-lg fa-medkit"></i> Drugs</a>
+                        </li>
+                    </ul>
+                    <form asp-controller="Patients" asp-action="Edit" class="smart-form" data-ajax="true" data-ajax-method="POST" id="edit-patient-form">
+                        <div id="new-patient-tab-content" class="tab-content padding-10">
+                            <div class="tab-pane fade in active" id="details">
+                                @{ await Html.RenderPartialAsync("/Views/Patients/Edit/_DetailsTab.cshtml"); }
+                            </div>
+                            <div class="tab-pane fade" id="diagnosis">
+                                @{ await Html.RenderPartialAsync("/Views/Patients/Edit/_DiagnosisTab.cshtml"); }
+                            </div>
+                            <div class="tab-pane fade" id="drugs">
+                                @{ await Html.RenderPartialAsync("/Views/Patients/Edit/_DrugsTab.cshtml"); }
+                            </div>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary update-patient">Update Patient</button>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

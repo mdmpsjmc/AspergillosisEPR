@@ -1,0 +1,25 @@
+﻿@model AspergillosisEPR.Models.PatientDrug;
+<div class="drug-row">
+    <fieldset>
+        <div class="row">
+            <label class="select">
+                <label asp-for="DrugId" class="select">
+                    @Html.DropDownList("Drugs[" + (string)ViewBag.Index + "].DrugId", (SelectList)ViewBag.DrugId, "Select Drug")
+                    <span asp-validation-for="DrugId" class="text-danger"></span>
+                </label>
+            </label>
+        </div>
+    </fieldset>
+    <section class="col col-6">
+        <label asp-for="StartDate" class="input">
+            <i class="icon-append fa fa-calendar"></i>
+            @Html.Editor("Diagnoses[" + (string)ViewBag.Index + "].StartDate", null, new { @placeholder = "Start Date" })
+        </label>
+    </section>
+    <section class="col col-6">
+        <label asp-for="EndDate" class="input">
+            <i class="icon-append fa fa-calendar"></i>
+            @Html.Editor("Diagnoses[" + (string)ViewBag.Index + "].EndDate", null, new { @placeholder = "End Date" })
+        </label>
+    </section>
+</div>

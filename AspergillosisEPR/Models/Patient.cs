@@ -23,7 +23,7 @@ namespace AspergillosisEPR.Models
 
         [Required]
         [DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString = "{dd-MMM-yyy}", ApplyFormatInEditMode = true)]
+        [DisplayFormat(DataFormatString = "{dd-MM-yyyy}")]
         public DateTime DOB { get; set; }
 
         [Required]

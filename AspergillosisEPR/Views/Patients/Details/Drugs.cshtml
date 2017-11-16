@@ -8,19 +8,18 @@
                 <tr>
                     <th>Drug</th>
                     <th>Start Date</th>
-                    <th>EndDate</th>
+                    <th>End Date</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach (var drug in Model.PatientDrugs)
                      {
                         <tr>
-                            <td>@(drug.StartDate)</td>
-                            <td>@(drug.StartDate)</td>
-                            <td>@(drug.EndDate)</td>
+                            <td>@(drug.Drug.Name)</td>
+                            <td>@(drug.StartDate.ToString("dd/MM/yyyy"))</td>
+                            <td>@(drug.EndDate.ToString("dd/MM/yyyy"))</td>
                         </tr>
                      }   
-                         
             </tbody>
         </table>
         
