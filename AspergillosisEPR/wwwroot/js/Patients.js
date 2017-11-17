@@ -66,6 +66,9 @@
     var displayErrors = function (errors) {
         for (var i = 0; i < Object.keys(errors).length; i++) {
             var field = Object.keys(errors)[i];
+            if (field.match("diagnoses") || field.match("drugs")) {
+                field = field.charAt(0).toUpperCase() + field.slice(1).replace("[", "_").replace("].", "__");
+            }
             var htmlCode = "<label for='" + field + "' class='text-danger'></label>";
             var fieldError = errors[Object.keys(errors)[i]];
             $(htmlCode).html(fieldError).appendTo($("input#" + field + ", select#" + field).parent());
