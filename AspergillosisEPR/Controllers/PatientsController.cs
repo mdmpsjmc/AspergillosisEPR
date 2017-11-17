@@ -175,6 +175,10 @@ namespace AspergillosisEPR.Controllers
                         "Try again, and if the problem persists, " +
                         "see your system administrator.");
                 }
+            } else
+            {
+                Hashtable errors = ModelStateHelper.Errors(ModelState);
+                return Json(new { success = false, errors });
             }
             
             return Json(new { result = "ok" });
