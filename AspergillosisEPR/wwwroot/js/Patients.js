@@ -3,10 +3,10 @@
     var initPatientsDataTable = function () {
         $(document).ready(function () {
             window.patientsTable = $("#patients_datatable").DataTable({
-                "processing": true, 
+                "processing": true,
                 "serverSide": true,
                 "filter": true,
-                "orderMulti": false, 
+                "orderMulti": false,
                 "initComplete": function (settings, json) {
                     newPatientsModalShow();
                 },
@@ -25,9 +25,9 @@
                         "render": function (data, type, patient, meta) {
                             return '<a class="btn btn-info patient-details" href="/Patients/Details/' + patient.id + '"><i class=\'fa fa-eye\'></i>&nbsp;Details</a>&nbsp;' +
                                 '<a class="btn btn-warning patient-edit" href="/Patients/Edit/' + patient.id + '"><i class=\'fa fa-edit\' ></i>&nbsp;Edit</a>&nbsp;' +
-                                '<a class="btn btn-danger patient-delete" href="/Patients/Delete/' + patient.id + '"><i class=\'fa fa-trash\' ></i>&nbsp;Delete</a>&nbsp;';
+                                '<a class="btn btn-danger patient-delete" href="javascript:void(0)" data-id="' + patient.id + '"><i class=\'fa fa-trash\' ></i>&nbsp;Delete</a>&nbsp;';
                         },
-                        "sortable" : false
+                        "sortable": false
                     }
                 ]
 
@@ -53,17 +53,17 @@
                         $("div#new-patient-modal").modal("hide");
                         window.patientsTable.ajax.reload();
                     }
-                 }
-                }).fail(function (data) {
-                    $("form#new-patient-form")[0].reset();
-                    $("div#new-patient-modal").modal("hide");
-                    alert("There was a problem saving this patient. Please contact administrator");
+                }
+            }).fail(function (data) {
+                $("form#new-patient-form")[0].reset();
+                $("div#new-patient-modal").modal("hide");
+                alert("There was a problem saving this patient. Please contact administrator");
             });
 
         });
     }
 
-    var displayErrors = function(errors) {
+    var displayErrors = function (errors) {
         for (var i = 0; i < Object.keys(errors).length; i++) {
             var field = Object.keys(errors)[i];
             var htmlCode = "<label for='" + field + "' class='text-danger'></label>";
@@ -82,7 +82,7 @@
 
     var newPatientsModalShow = function () {
         $(document).off("click.launch-new-patient-modal").on("click.launch-new-patient-modal", "a.new-patient-modal-show", function () {
-            $.get("/Patients/New", function (responseHtml){
+            $.get("/Patients/New", function (responseHtml) {
                 $("div#modal-container").html(responseHtml);
                 $("div#new-patient-modal").modal("show");
             });
@@ -95,14 +95,14 @@
             $.get($(this).attr("href"), function (responseHtml) {
                 $("div.diagnosis-form").append(responseHtml);
             });
-         })
+        })
     }
 
     var bindDiagnosisEditFormOnClick = function () {
         $(document).off("click.add-edit-diagnosis").on("click.add-edit-diagnosis", "a.add-edit-diagnosis", function (e) {
             e.preventDefault();
             var index = $("div.diagnosis-row:visible").length;
-            $.get($(this).attr("href")+"?index="+index, function (responseHtml) {
+            $.get($(this).attr("href") + "?index=" + index, function (responseHtml) {
                 $("div.diagnosis-form").append(responseHtml);
             });
         })
@@ -146,7 +146,7 @@
                 updatePatient();
             });
         });
-    } 
+    }
 
     var updatePatient = function () {
         $(document).off("click.update-patient").on("click.update-patient", "button.update-patient", function () {
@@ -176,6 +176,27 @@
         });
     }
 
+    var bindOnDeletePatientClick = function () {
+        $(document).off("click.patient-delete").on("click.patient-delete", "a.patient-delete", function () {
+            var patientId = $(this).data("id");
+            var question = 'Are you sure you want to delete this patient and all related data?';
+            BootstrapDialog.confirm(question, function (result, dialog) {
+                if (result) {
+                    $.ajax({
+                        url: "/Patients/Delete/" + patientId,
+                        type: "POST",
+                        contentType: "application/x-www-form-urlencoded",
+                        dataType: 'json'
+                    }).done(function (data, textStatus) {
+                        if (textStatus === "success") {
+                            window.patientsTable.ajax.reload();
+                        }
+                    });
+                }
+            });
+        });        
+    }
+
     return {
 
         bindShowPatientsModal: function () {
@@ -186,6 +207,7 @@
             bindPatientEdit();
             bindDiagnosisEditFormOnClick();
             bindDrugsEditFormOnClick();
+            bindOnDeletePatientClick();
         },
 
         setupForm: function () {

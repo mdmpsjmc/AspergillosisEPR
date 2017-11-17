@@ -194,6 +194,16 @@ namespace AspergillosisEPR.Controllers
             }
         }
 
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            var patient = await _context.Patients.SingleOrDefaultAsync(p => p.ID == id);
+            _context.Patients.Remove(patient);
+            await _context.SaveChangesAsync();
+            return Json(new { ok = "ok" });
+        }
+
         public IActionResult LoadData()
         {
             try
@@ -236,7 +246,7 @@ namespace AspergillosisEPR.Controllers
             {
                 throw;
             }
-        }
+        }      
 
         private void PopulateDiagnosisCategoriesDropDownList(object selectedCategory = null)
         {
