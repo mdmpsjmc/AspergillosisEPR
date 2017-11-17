@@ -38,7 +38,8 @@
     </header>
     @{ await Html.RenderPartialAsync("_Aside"); }
     <div id="main" role="main">
-        @{await Html.RenderPartialAsync("_Ribbon"); }
+            
+        @{await Html.RenderPartialAsync("_Ribbon"); }        
         @RenderBody()
         <div id="modal-container"></div>
     </div>

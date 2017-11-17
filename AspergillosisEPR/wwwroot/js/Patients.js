@@ -202,7 +202,7 @@
 
     return {
 
-        bindShowPatientsModal: function () {
+        bindPatientsModals: function () {
             newPatientsModalShow();
             bindDiagnosisFormOnClick();
             bindDrugsFormOnClick();

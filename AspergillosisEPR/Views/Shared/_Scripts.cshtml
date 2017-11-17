@@ -10,6 +10,16 @@
         pageSetUp();
         drawBreadCrumb();
         Patients.init();
+
+        $(document).ajaxSend(function (event, request, settings) {
+            $('#loading-indicator').show();
+            $('#loading').show();
+        });
+
+        $(document).ajaxComplete(function (event, request, settings) {
+            $('#loading-indicator').hide();
+            $('#loading').hide();
+        });
     });
 </script>
 
