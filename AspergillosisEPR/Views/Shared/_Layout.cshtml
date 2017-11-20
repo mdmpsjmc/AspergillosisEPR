@@ -43,6 +43,9 @@
         @RenderBody()
         <div id="modal-container"></div>
     </div>
+    @await Html.PartialAsync("_LoginPartial")
+
+
     @if (User.Identity.IsAuthenticated)
     {
         await Html.RenderPartialAsync("_Footer");

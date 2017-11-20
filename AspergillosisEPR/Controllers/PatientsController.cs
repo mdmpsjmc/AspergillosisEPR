@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using AspergillosisEPR.Data;
-using System.Linq.Dynamic;
 using System.Linq.Dynamic.Core;
 using Microsoft.EntityFrameworkCore;
 using AspergillosisEPR.Models;

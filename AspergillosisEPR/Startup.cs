@@ -5,6 +5,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using AspergillosisEPR.Data;
 using AspergillosisEPR.Models.AspergillosisViewModels;
+using AspergillosisEPR.Models;
+using Microsoft.AspNetCore.Identity;
+using AspergillosisEPR.Services;
 
 namespace AspergillosisEPR
 {
@@ -23,6 +26,15 @@ namespace AspergillosisEPR
             services.AddDbContext<AspergillosisContext>(options =>
                         options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"))
             );
+            services.AddDbContext<ApplicationDbContext>(options =>
+                       options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"))
+           );
+            services.AddIdentity<ApplicationUser, IdentityRole>()
+                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddDefaultTokenProviders();
+
+            // Add application services.
+            services.AddTransient<IEmailSender, EmailSender>();
             services.AddTransient<PatientViewModel>();
             services.AddMvc();
         }
@@ -41,6 +53,7 @@ namespace AspergillosisEPR
             }
 
             app.UseStaticFiles();
+            app.UseIdentity();
 
             app.UseMvc(routes =>
             {
