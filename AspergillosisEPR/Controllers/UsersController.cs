@@ -3,8 +3,7 @@ using AspergillosisEPR.Data;
 
 namespace AspergillosisEPR.Controllers
 {
-    [Produces("application/json")]
-    [Route("api/Users")]
+
     public class UsersController : Controller
     {
         private readonly ApplicationDbContext _context;

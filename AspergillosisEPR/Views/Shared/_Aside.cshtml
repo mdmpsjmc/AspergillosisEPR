@@ -17,7 +17,18 @@
 
         <ul>
             <li>
-                <a href="@Url.Action("index", "home")" title="Dashboard"><i class="fa fa-lg fa-fw fa-home"></i> <span class="menu-item-parent">Dashboard</span></a>
+                <a href="@Url.Action("index", "home")" title="Dashboard">
+                    <i class="fa fa-lg fa-fw fa-home"></i> 
+                    <span class="menu-item-parent">Dashboard</span>
+                </a>
+                <a href="@Url.Action("index", "settings")" title="Settings">
+                    <i class="fa fa-gear"></i>
+                    <span class="menu-item-parent">Settings</span>
+                </a>
+                <a href="@Url.Action("index", "users")" title="Users">
+                    <i class="fa fa-users"></i>
+                    <span class="menu-item-parent">Application Users</span>
+                </a>
             </li>
         </ul>
     </nav>

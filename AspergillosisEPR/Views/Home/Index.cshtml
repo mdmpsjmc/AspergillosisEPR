@@ -1,15 +1,4 @@
-﻿<!-- MAIN CONTENT -->
-<div id="content">
-    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-        <h1 class="page-title txt-color-blueDark">
-            <i class="fa-fw fa fa-home"></i>
-            <span>
-            </span>
-        </h1>        
-        @Html.Partial("~/Views/Patients/Index.cshtml")
-    </div>
-</div>
-<!-- END MAIN CONTENT -->
+﻿@Html.Partial("~/Views/Patients/Index.cshtml")
 @section Scripts {
     <script type="text/javascript">
         Patients.bindPatientsModals();
