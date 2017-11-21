@@ -1,0 +1,27 @@
+﻿@model AspergillosisEPR.Models.SettingsViewModels.SettingsViewModel
+<div class="table-responsive">
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Category Name</th>
+                <th>Edit</th>                       
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var category in Model.DiagnosisCategories)
+            {
+                <tr>
+                    <td>@category.ID</td>
+                    <td>@category.CategoryName</td>
+                    <td>
+                        <a href="@Url.Action("Edit", "DiagnosisCategory")" class="btn btn-primary edit-diagnosis-category edit-link">
+                            <i class="fa fa-edit"></i> &nbsp; Edit
+                        </a>
+                    </td>
+                </tr>
+            }
+           
+        </tbody>
+    </table>
+</div>
