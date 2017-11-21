@@ -15,13 +15,12 @@
                     <td>@category.ID</td>
                     <td>@category.CategoryName</td>
                     <td>
-                        <a href="@Url.Action("Edit", "DiagnosisCategory")" class="btn btn-primary edit-diagnosis-category edit-link">
+                        <a href="@Url.Action("Edit", "DiagnosisCategory", new { id= category.ID })" class="btn btn-primary edit-diagnosis-category edit-link">
                             <i class="fa fa-edit"></i> &nbsp; Edit
                         </a>
                     </td>
                 </tr>
-            }
-           
+            }           
         </tbody>
     </table>
 </div>

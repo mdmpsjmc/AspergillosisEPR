@@ -17,6 +17,7 @@
                 },
                 "columns": [
                     { "data": "rM2Number", "name": "RM2Number", "autoWidth": true },
+                    { "data": "diagnoses", "name": "Primary Diagnosis", "autoWidth": true, "sortable": false },
                     { "data": "firstName", "name": "FirstName", "autoWidth": true },
                     { "data": "lastName", "name": "LastName", "autoWidth": true },
                     { "data": "gender", "name": "Gender", "autoWidth": true },

@@ -220,15 +220,28 @@ namespace AspergillosisEPR.Controllers
                 int pageSize = length != null ? Convert.ToInt32(length) : 0;
                 int skip = start != null ? Convert.ToInt32(start) : 0;
                 int recordsTotal = 0;
+
+                var primaryDiagnosis = (from diagnosesCategories in _context.DiagnosisCategories
+                                       where diagnosesCategories.CategoryName == "Primary" select new { diagnosesCategories.ID}).Single();
+
                 var patientData = (from patient in _context.Patients
-                                    select new {
-                                        ID = patient.ID,
-                                        RM2Number = patient.RM2Number,
-                                        LastName = patient.LastName,
-                                        FirstName = patient.FirstName,
-                                        Gender = patient.Gender,
-                                        DOB = patient.DOB.ToString("dd/MM/yyyy")
-                                    });
+                                   join patientDiagnosis in _context.PatientDiagnoses on patient.ID equals patientDiagnosis.PatientId into diagnoses
+                                   from patientDiagnosis in diagnoses.DefaultIfEmpty()
+                                   join diagnosesTypes in _context.DiagnosisTypes on patientDiagnosis.DiagnosisTypeId equals diagnosesTypes.ID
+                                   into patientsWithDiagnoses
+                                   join diagnosisCategories in _context.DiagnosisCategories on patientDiagnosis.DiagnosisCategoryId equals diagnosisCategories.ID into categories
+                                   from diagnosisCategories in categories.DefaultIfEmpty()
+                                   select new
+                                   {
+                                       ID = patient.ID,
+                                       RM2Number = patient.RM2Number,
+                                       Diagnoses = string.Join(",", patient.PatientDiagnoses.Where(pd => pd.DiagnosisCategoryId == primaryDiagnosis.ID).Select(pd => pd.DiagnosisType.Name).ToList()),
+                                       LastName = patient.LastName,
+                                       FirstName = patient.FirstName,
+                                       Gender = patient.Gender,
+                                       DOB = patient.DOB.ToString("dd/MM/yyyy")
+                                   });
+
                 if (!(string.IsNullOrEmpty(sortColumn) && string.IsNullOrEmpty(sortColumnDirection)))
                 {
                     string sorting = sortColumn + " " + sortColumnDirection;

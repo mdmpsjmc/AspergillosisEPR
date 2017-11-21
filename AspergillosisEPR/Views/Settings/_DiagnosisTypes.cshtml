@@ -1,4 +1,26 @@
-﻿
-@*
-    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model AspergillosisEPR.Models.SettingsViewModels.SettingsViewModel
+<div class="table-responsive">
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Diagnosis Type</th>
+                <th>Edit</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var type in Model.DiagnosisTypes)
+            {
+                <tr>
+                    <td>@type.ID</td>
+                    <td>@type.Name</td>
+                    <td>
+                        <a href="@Url.Action("Edit", "DiagnosisTypes", new { id=type.ID })" class="btn btn-primary edit-diagnosis-type edit-link">
+                            <i class="fa fa-edit"></i> &nbsp; Edit
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
