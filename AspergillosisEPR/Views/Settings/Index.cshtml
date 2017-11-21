@@ -1,4 +1,16 @@
-﻿
-@*
-    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿<div class="row">
+    <article class="col-sm-12 sortable-grid ui-sortable">
+        <div class="jarviswidget" id="wid-id-x" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-togglebutton="false" data-widget-deletebutton="false" data-widget-fullscreenbutton="false" data-widget-custombutton="false" data-widget-sortable="false" role="widget">
+            <header role="heading">
+                <span class="widget-icon"> <i class="fa fa-gears"></i> </span>
+                <h2>Application Settings</h2>
+            </header>
+            <div role="content">
+                <div class="jarviswidget-editbox"></div>
+                <div class="widget-body">
+                    @Html.Partial("/Views/Settings/_Index.cshtml")
+                </div>
+            </div>
+        </div>
+    </article>
+</div>
