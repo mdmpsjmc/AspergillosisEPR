@@ -206,63 +206,7 @@ namespace AspergillosisEPR.Controllers
             await _context.SaveChangesAsync();
             return Json(new { ok = "ok" });
         }
-
-        public IActionResult LoadData()
-        {
-            try
-            {
-                var draw = HttpContext.Request.Form["draw"].FirstOrDefault();
-                var start = Request.Form["start"].FirstOrDefault();
-                var length = Request.Form["length"].FirstOrDefault();
-                var sortColumn = Request.Form["columns[" + Request.Form["order[0][column]"].FirstOrDefault() + "][name]"].FirstOrDefault();
-                var sortColumnDirection = Request.Form["order[0][dir]"].FirstOrDefault();
-                var searchValue = Request.Form["search[value]"].FirstOrDefault();
-                int pageSize = length != null ? Convert.ToInt32(length) : 0;
-                int skip = start != null ? Convert.ToInt32(start) : 0;
-                int recordsTotal = 0;
-
-                var primaryDiagnosis = (from diagnosesCategories in _context.DiagnosisCategories
-                                       where diagnosesCategories.CategoryName == "Primary" select new { diagnosesCategories.ID}).Single();
-
-                var patientData = (from patient in _context.Patients
-                                   join patientDiagnosis in _context.PatientDiagnoses on patient.ID equals patientDiagnosis.PatientId into diagnoses
-                                   from patientDiagnosis in diagnoses.DefaultIfEmpty()
-                                   join diagnosesTypes in _context.DiagnosisTypes on patientDiagnosis.DiagnosisTypeId equals diagnosesTypes.ID
-                                   into patientsWithDiagnoses
-                                   join diagnosisCategories in _context.DiagnosisCategories on patientDiagnosis.DiagnosisCategoryId equals diagnosisCategories.ID into categories
-                                   from diagnosisCategories in categories.DefaultIfEmpty()
-                                   select new
-                                   {
-                                       ID = patient.ID,
-                                       RM2Number = patient.RM2Number,
-                                       Diagnoses = string.Join(",", patient.PatientDiagnoses.Where(pd => pd.DiagnosisCategoryId == primaryDiagnosis.ID).Select(pd => pd.DiagnosisType.Name).ToList()),
-                                       LastName = patient.LastName,
-                                       FirstName = patient.FirstName,
-                                       Gender = patient.Gender,
-                                       DOB = patient.DOB.ToString("dd/MM/yyyy")
-                                   });
-
-                if (!(string.IsNullOrEmpty(sortColumn) && string.IsNullOrEmpty(sortColumnDirection)))
-                {
-                    string sorting = sortColumn + " " + sortColumnDirection;
-                    patientData = patientData.OrderBy(sorting);
-                }
-                //Search  
-                if (!string.IsNullOrEmpty(searchValue))
-                {
-                    
-                    patientData = patientData.Where(p => p.FirstName.Contains(searchValue) ||  p.LastName.Contains(searchValue) || p.RM2Number.Contains(searchValue));
-                }
-
-                recordsTotal = patientData.Count();
-                var data = patientData.Skip(skip).Take(pageSize).ToList();
-                return Json(new { draw = draw, recordsFiltered = recordsTotal, recordsTotal = recordsTotal, data = data });
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-        }      
+      
 
         private void PopulateDiagnosisCategoriesDropDownList(object selectedCategory = null)
         {

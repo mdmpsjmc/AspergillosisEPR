@@ -9,9 +9,11 @@
                 "orderMulti": false,
                 "initComplete": function (settings, json) {
                     newPatientsModalShow();
+                    addFilteringColumns();
+                    moveSearchFieldsFromFooterToHead()
                 },
                 "ajax": {
-                    "url": "/Patients/LoadData",
+                    "url": "/DataTableJson/LoadPatients",
                     "type": "POST",
                     "datatype": "json"
                 },
@@ -59,12 +61,12 @@
                         window.patientsTable.ajax.reload();
                     }
                 }
-                }).fail(function (data) {
-                    $('#loading-indicator').hide();
-                    $('#loading').hide();
-                    $("form#new-patient-form")[0].reset();
-                    $("div#new-patient-modal").modal("hide");
-                    alert("There was a problem saving this patient. Please contact administrator");
+            }).fail(function (data) {
+                $('#loading-indicator').hide();
+                $('#loading').hide();
+                $("form#new-patient-form")[0].reset();
+                $("div#new-patient-modal").modal("hide");
+                alert("There was a problem saving this patient. Please contact administrator");
             });
 
         });
@@ -209,9 +211,9 @@
                         window.patientsTable.ajax.reload();
                     }
                 }
-                }).fail(function (data) {
-                    $('#loading-indicator').hide();
-                    $('#loading').hide();
+            }).fail(function (data) {
+                $('#loading-indicator').hide();
+                $('#loading').hide();
                 $("form#edit-patient-form")[0].reset();
                 $("div#edit-modal").modal("hide");
                 alert("There was a problem saving this patient. Please contact administrator");
@@ -245,7 +247,7 @@
                     });
                 }
             });
-        });        
+        });
     }
 
     var deletePatientPartialFromPopup = function () {
@@ -258,7 +260,7 @@
                     button.parent().parent().remove();
                 }
             });
-        });        
+        });
     }
 
     var deletePatientDbPartialFromPopup = function () {
@@ -267,11 +269,11 @@
             var whatToRemove = $(this).data("what");
             var button = $(this);
             var question = "Are you sure you want to remove this " + whatToRemove + "?";
-           
+
 
             BootstrapDialog.confirm(question, function (result, dialog) {
 
-               
+
                 if (result) {
 
                     var requestUrl = function () {
@@ -303,6 +305,36 @@
         });
     }
 
+    var addFilteringColumns = function () {
+        $('#patients_datatable tfoot th').each(function () {
+            var title = $(this).text();
+            $(this).html('<input type="text" class="form-control ' + title + '" placeholder="Search ' + title + '" />');
+        });
+
+        window.patientsTable.columns().every(function () {
+            var that = this;
+
+            $('input', this.footer()).on('keyup change', function () {
+                if (that.search() !== this.value) {
+                    that
+                        .search(this.value)
+                        .draw();
+                }
+            });
+        });
+    }
+
+    var moveSearchFieldsFromFooterToHead = function () {
+        var r = $('#patients_datatable tfoot tr');
+        r.find('th').each(function () {
+            $(this).css('padding', 8);
+        });
+        $('#patients_datatable thead').append(r);
+        $('#search_0').css('text-align', 'center');
+        $("div#patients_datatable_filter").hide();
+        $("input.Actions").remove();
+    }
+
 
     return {
 
@@ -328,6 +360,7 @@
             initPatientsDataTable();
             submitNewPatient();
             enableAntiForgeryProtectionWithAjax();
+
         }
     }
 
