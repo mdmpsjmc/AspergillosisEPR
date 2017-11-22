@@ -1,11 +1,17 @@
 ﻿@model AspergillosisEPR.Models.SettingsViewModels.SettingsViewModel
 <div class="table-responsive">
+    <div class="button">
+        <a href="@Url.Action("New", "DiagnosisCategories")" class="btn btn-success add-category add-settings-item disable-default" data-klass="DiagnosisCategory">
+            <i class="fa fa-plus"></i> Add new diagnosis category
+        </a>
+    </div>
     <table class="table table-bordered">
         <thead>
             <tr>
                 <th>ID</th>
                 <th>Category Name</th>
-                <th>Edit</th>                       
+                <th>Edit</th>  
+                <th>Delete</th>
             </tr>
         </thead>
         <tbody>
@@ -15,8 +21,13 @@
                     <td>@category.ID</td>
                     <td>@category.CategoryName</td>
                     <td>
-                        <a href="@Url.Action("Edit", "DiagnosisCategory", new { id= category.ID })" class="btn btn-primary edit-diagnosis-category edit-link">
-                            <i class="fa fa-edit"></i> &nbsp; Edit
+                        <a href="@Url.Action("Edit", "DiagnosisCategories", new { id= category.ID })" class="btn btn-primary edit-diagnosis-category edit-link disable-default">
+                            <i class="fa fa-edit"></i> 
+                        </a>
+                    </td>
+                    <td>
+                        <a href="@Url.Action("Edit", "DiagnosisCategories", new { id= category.ID })" class="btn btn-danger edit-diagnosis-category disable-default delete-link">
+                            <i class="fa fa-trash"></i> 
                         </a>
                     </td>
                 </tr>

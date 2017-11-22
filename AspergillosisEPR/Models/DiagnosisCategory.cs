@@ -11,6 +11,12 @@ namespace AspergillosisEPR.Models
         public string CategoryName { get; set; }
 
         public ICollection<PatientDiagnosis> PatientDiagnoses { get; set; }
+        public string KlassName => typeof(DiagnosisCategory).Name;
+
+        public string Name()
+        {
+            return CategoryName;
+        }
 
     }
 }

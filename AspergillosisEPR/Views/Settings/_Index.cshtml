@@ -1,11 +1,11 @@
 ﻿<p>Manage system collections</p>
 <hr class="simple">
 <ul id="settings" class="nav nav-tabs bordered">
-    <li class="">
-        <a href="#diagnosis-types" data-toggle="tab" aria-expanded="false"><i class="fa fa-heartbeat fa-2x"></i>&nbsp; Diagnosis Types</a>
-    </li>
     <li class="active">
-        <a href="#diagnosis-categories" data-toggle="tab" aria-expanded="true"><i class="fa fa-ambulance fa-2x"></i>&nbsp; Diagnosis Categories</a>
+        <a href="#diagnosis-types" data-toggle="tab" aria-expanded="true"><i class="fa fa-heartbeat fa-2x"></i>&nbsp; Diagnosis Types</a>
+    </li>
+    <li>
+        <a href="#diagnosis-categories" data-toggle="tab"><i class="fa fa-ambulance fa-2x"></i>&nbsp; Diagnosis Categories</a>
     </li>
     <li class="">
         <a href="#drugs" data-toggle="tab" aria-expanded="false"><i class="fa fa-medkit fa-2x"></i>&nbsp; Drugs</a>
@@ -13,10 +13,10 @@
 </ul>
 
 <div id="settings-content" class="tab-content padding-10">
-    <div class="tab-pane fade" id="diagnosis-types">
+    <div class="tab-pane fade in active" id="diagnosis-types">
         @Html.Partial("/Views/Settings/_DiagnosisTypes.cshtml")
     </div>
-    <div class="tab-pane fade active in" id="diagnosis-categories">
+    <div class="tab-pane fade" id="diagnosis-categories">
         @Html.Partial("/Views/Settings/_DiagnosisCategories.cshtml")
     </div>
     <div class="tab-pane fade" id="drugs">

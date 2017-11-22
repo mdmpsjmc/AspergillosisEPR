@@ -40,8 +40,7 @@
 
     var submitNewPatient = function () {
         $(document).off("click.save-patient").on("click.save-patient", "button.submit-new-patient", function () {
-            $('#loading-indicator').show();
-            $('#loading').show();
+            LoadingIndicator.show();
             $("label.text-danger").remove();
             $.ajax({
                 url: $("form#new-patient-form").attr("action"),
@@ -50,8 +49,7 @@
                 contentType: "application/x-www-form-urlencoded",
                 dataType: 'json'
             }).done(function (data, textStatus) {
-                $('#loading-indicator').hide();
-                $('#loading').hide();
+                LoadingIndicator.hide();
                 if (textStatus === "success") {
                     if (data.errors) {
                         displayErrors(data.errors);
@@ -61,9 +59,8 @@
                         window.patientsTable.ajax.reload();
                     }
                 }
-            }).fail(function (data) {
-                $('#loading-indicator').hide();
-                $('#loading').hide();
+                }).fail(function (data) {
+                LoadingIndicator.hide();
                 $("form#new-patient-form")[0].reset();
                 $("div#new-patient-modal").modal("hide");
                 alert("There was a problem saving this patient. Please contact administrator");
@@ -94,11 +91,9 @@
 
     var newPatientsModalShow = function () {
         $(document).off("click.launch-new-patient-modal").on("click.launch-new-patient-modal", "a.new-patient-modal-show", function () {
-            $('#loading-indicator').show();
-            $('#loading').show();
+            LoadingIndicator.show();
             $.get("/Patients/New", function (responseHtml) {
-                $('#loading-indicator').hide();
-                $('#loading').hide();
+                LoadingIndicator.hide();
                 $("div#modal-container").html(responseHtml);
                 $("div#new-patient-modal").modal("show");
             });
@@ -107,12 +102,10 @@
 
     var bindDiagnosisFormOnClick = function () {
         $(document).off("click.add-diagnosis").on("click.add-diagnosis", "a.add-diagnosis", function (e) {
-            $('#loading-indicator').show();
-            $('#loading').show();
+            LoadingIndicator.show();
             e.preventDefault();
             $.get($(this).attr("href"), function (responseHtml) {
-                $('#loading-indicator').hide();
-                $('#loading').hide();
+                LoadingIndicator.hide();
                 $("div.diagnosis-form").append(responseHtml);
             });
         })
@@ -120,13 +113,11 @@
 
     var bindDiagnosisEditFormOnClick = function () {
         $(document).off("click.add-edit-diagnosis").on("click.add-edit-diagnosis", "a.add-edit-diagnosis", function (e) {
-            $('#loading-indicator').show();
-            $('#loading').show();
+            LoadingIndicator.show();
             e.preventDefault();
             var index = $("div.diagnosis-row:visible").length;
             $.get($(this).attr("href") + "?index=" + index, function (responseHtml) {
-                $('#loading-indicator').hide();
-                $('#loading').hide();
+                LoadingIndicator.hide();
                 $("div.diagnosis-form").append(responseHtml);
             });
         })
@@ -134,12 +125,10 @@
 
     var bindDrugsFormOnClick = function () {
         $(document).off("click.add-drug").on("click.add-drug", "a.add-drug", function (e) {
-            $('#loading-indicator').show();
-            $('#loading').show();
+            LoadingIndicator.show();
             e.preventDefault();
             $.get($(this).attr("href"), function (responseHtml) {
-                $('#loading-indicator').hide();
-                $('#loading').hide();
+                LoadingIndicator.hide();
                 $("div.drug-form").append(responseHtml);
             });
         })
@@ -147,13 +136,11 @@
 
     var bindDrugsEditFormOnClick = function () {
         $(document).off("click.add-edit-drug").on("click.add-edit-drug", "a.add-edit-drug", function (e) {
-            $('#loading-indicator').show();
-            $('#loading').show();
+            LoadingIndicator.show();
             e.preventDefault();
             var index = $("div.drug-row:visible").length;
             $.get($(this).attr("href") + "?index=" + index, function (responseHtml) {
-                $('#loading-indicator').hide();
-                $('#loading').hide();
+                LoadingIndicator.hide();
                 $("div.drug-form").append(responseHtml);
             });
         })
@@ -161,12 +148,10 @@
 
     var bindPatientDetailsShow = function () {
         $(document).off("click.patient-details").on("click.patient-details", "a.patient-details", function (e) {
-            $('#loading-indicator').show();
-            $('#loading').show();
+            LoadingIndicator.show();
             e.preventDefault();
             $.get($(this).attr("href"), function (responseHtml) {
-                $('#loading-indicator').hide();
-                $('#loading').hide();
+                LoadingIndicator.hide();
                 $("div#modal-container").html(responseHtml);
                 $("div#details-modal").modal("show");
             });
@@ -175,12 +160,10 @@
 
     var bindPatientEdit = function () {
         $(document).off("click.patient-edit").on("click.patient-edit", "a.patient-edit", function (e) {
-            $('#loading-indicator').show();
-            $('#loading').show();
+            LoadingIndicator.show();
             e.preventDefault();
             $.get($(this).attr("href"), function (responseHtml) {
-                $('#loading-indicator').hide();
-                $('#loading').hide();
+                LoadingIndicator.hide();
                 $("div#modal-container").html(responseHtml);
                 $("div#edit-modal").modal("show");
                 updatePatient();
@@ -191,8 +174,7 @@
     var updatePatient = function () {
         $(document).off("click.update-patient").on("click.update-patient", "button.update-patient", function () {
             $("label.text-danger").remove();
-            $('#loading-indicator').show();
-            $('#loading').show();
+            LoadingIndicator.show();
             $.ajax({
                 url: $("form#edit-patient-form").attr("action"),
                 type: "POST",
@@ -200,8 +182,7 @@
                 contentType: "application/x-www-form-urlencoded",
                 dataType: 'json'
             }).done(function (data, textStatus) {
-                $('#loading-indicator').hide();
-                $('#loading').hide();
+                LoadingIndicator.hide();
                 if (textStatus === "success") {
                     if (data.errors) {
                         displayErrors(data.errors);
@@ -212,8 +193,7 @@
                     }
                 }
             }).fail(function (data) {
-                $('#loading-indicator').hide();
-                $('#loading').hide();
+                LoadingIndicator.hide();
                 $("form#edit-patient-form")[0].reset();
                 $("div#edit-modal").modal("hide");
                 alert("There was a problem saving this patient. Please contact administrator");
@@ -224,13 +204,11 @@
 
     var bindOnDeletePatientClick = function () {
         $(document).off("click.patient-delete").on("click.patient-delete", "a.patient-delete", function () {
-            $('#loading-indicator').show();
-            $('#loading').show();
+            LoadingIndicator.show();
             var patientId = $(this).data("id");
             var question = 'Are you sure you want to delete this patient and all related data?';
             BootstrapDialog.confirm(question, function (result, dialog) {
-                $('#loading-indicator').hide();
-                $('#loading').hide();
+                LoadingIndicator.hide();
                 if (result) {
                     $.ajax({
                         url: "/Patients/Delete/" + patientId,
@@ -242,8 +220,7 @@
                             window.patientsTable.ajax.reload();
                         }
                     }).always(function () {
-                        $('#loading-indicator').hide();
-                        $('#loading').hide();
+                        LoadingIndicator.hide();
                     });
                 }
             });
@@ -272,10 +249,7 @@
 
 
             BootstrapDialog.confirm(question, function (result, dialog) {
-
-
                 if (result) {
-
                     var requestUrl = function () {
                         if (whatToRemove === "diagnosis") {
                             return "/PatientDiagnoses/Delete/" + itemId;
@@ -283,8 +257,6 @@
                             return "/PatientDrugs/Delete/" + itemId;
                         }
                     }
-
-
                     $.ajax({
                         url: requestUrl(),
                         type: "POST",
@@ -297,8 +269,7 @@
                             button.parent().parent().remove();
                         }
                     }).always(function () {
-                        $('#loading-indicator').hide();
-                        $('#loading').hide();
+                        LoadingIndicator.hide();
                     });
                 }
             });
@@ -338,7 +309,7 @@
 
     return {
 
-        bindPatientsModals: function () {
+        bindPatientsModals: function() {
             newPatientsModalShow();
             bindDiagnosisFormOnClick();
             bindDrugsFormOnClick();
@@ -351,12 +322,12 @@
             deletePatientDbPartialFromPopup();
         },
 
-        setupForm: function () {
+        setupForm: function() {
             submitNewPatient();
             enableAntiForgeryProtectionWithAjax();
         },
 
-        init: function () {
+        init: function() {
             initPatientsDataTable();
             submitNewPatient();
             enableAntiForgeryProtectionWithAjax();
