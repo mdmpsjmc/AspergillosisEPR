@@ -15,7 +15,15 @@
                             <div class="row">
                                 <label class="input" for="Name">
                                     <i class="icon-append fa fa-info-circle"></i>
-                                    <input placeholder="Enter @(Model.Title) Name" name="@(Model.ItemKlass).Name">
+                                    @if (Model.ItemKlass == "DiagnosisCategory")
+                                    {
+                                        <input placeholder="Enter @(Model.Title) Name" name="@(Model.ItemKlass).CategoryName">
+                                    }
+                                    else
+                                    {
+                                        <input placeholder="Enter @(Model.Title) Name" name="@(Model.ItemKlass).Name">
+
+                                    }
                                     <span class="text-danger"></span>
                                 </label>
                            </div>
@@ -25,7 +33,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-success submit-settings-item">SAVE</button>
+                <button type="button" class="btn btn-success submit-settings-item" data-tab="@(Model.Tab)">SAVE</button>
             </div>
         </div>
     </div>

@@ -104,7 +104,7 @@ namespace AspergillosisEPR.Controllers
             {
                 return NotFound();
             }
-            bindSelects(patient);
+            BindSelects(patient);
             return PartialView(patient);
         }
 
@@ -182,7 +182,7 @@ namespace AspergillosisEPR.Controllers
             return Json(new { result = "ok" });
         }
 
-        public JsonResult hasRMNumber(string RM2Number, int? Id)
+        public JsonResult HasRMNumber(string RM2Number, int? Id)
         {
             var validateName = _context.Patients.FirstOrDefault(x => x.RM2Number == RM2Number && x.ID != Id);
 
@@ -247,7 +247,7 @@ namespace AspergillosisEPR.Controllers
             return new SelectList(categoriesQuery.AsNoTracking(), "ID", "Name", selectedCategory);
         }
 
-        private void bindSelects(Patient patient)
+        private void BindSelects(Patient patient)
         {
             List<SelectList> diagnosesTypes = new List<SelectList>();
             List<SelectList> diagnosesCategories = new List<SelectList>();

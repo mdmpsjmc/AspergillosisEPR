@@ -26,7 +26,7 @@
                         </a>
                     </td>
                     <td>
-                        <a href="@Url.Action("Delete", "DiagnosisTypes", new { id=type.ID })" class="btn btn-danger edit-diagnosis-type delete-link disable-default">
+                        <a href="@Url.Action("Delete", "DiagnosisTypes", new { id=type.ID })" data-tab="diagnosis-types" class="btn btn-danger edit-diagnosis-type delete-link disable-default" data-what="Diagnosis Type" data-warning="All patient diagnoses related to this diagnosis will be also irreversibly lost from database if you remove this item">
                             <i class="fa fa-trash"></i>
                         </a>
                     </td>

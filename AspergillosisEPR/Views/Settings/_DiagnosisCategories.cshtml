@@ -21,12 +21,12 @@
                     <td>@category.ID</td>
                     <td>@category.CategoryName</td>
                     <td>
-                        <a href="@Url.Action("Edit", "DiagnosisCategories", new { id= category.ID })" class="btn btn-primary edit-diagnosis-category edit-link disable-default">
+                        <a href="@Url.Action("Edit", "DiagnosisCategories", new { id= category.ID })" class="btn btn-primary edit-diagnosis-category edit-link disable-default" data-tab="diagnosis-categories">
                             <i class="fa fa-edit"></i> 
                         </a>
                     </td>
                     <td>
-                        <a href="@Url.Action("Edit", "DiagnosisCategories", new { id= category.ID })" class="btn btn-danger edit-diagnosis-category disable-default delete-link">
+                        <a href="@Url.Action("Delete", "DiagnosisCategories", new { id= category.ID })" class="btn btn-danger edit-diagnosis-category disable-default delete-link" data-tab="diagnosis-categories" data-what="Diagnosis Category" data-warning="*ALL* patient diagnoses related to this diagnosis category  (@(category.CategoryName)) will be also irreversibly lost from database if you remove this item">
                             <i class="fa fa-trash"></i> 
                         </a>
                     </td>

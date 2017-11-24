@@ -8,9 +8,22 @@
 
     var showSettingsModal = function () {
         $(document).off("click.add-settings-modal").on("click.add-settings-modal", "a.add-settings-item", function () {
+            LoadingIndicator.show();
             $.get((this).href + "?klass=" + $(this).data("klass"), function(html) {
+                LoadingIndicator.hide();
                 $("div#modal-container").html(html);
                 $("div.new-settings-modal").modal("show");
+            });
+        });
+    }
+
+    var showSettingsEditModal = function () {
+        $(document).off("click.edit-settings-modal").on("click.edit-settings-modal", "a.edit-link", function () {
+            LoadingIndicator.show();
+            $.get((this).href, function (html) {
+                LoadingIndicator.hide();
+                $("div#modal-container").html(html);
+                $("div.edit-settings-modal").modal("show");
             });
         });
     }
@@ -72,6 +85,36 @@
     var capitalizeFirstLetter = function(string) {
         return string.charAt(0).toUpperCase() + string.slice(1);
     }
+
+    var bindOnDeleteSettingsItemClick = function () {
+        $(document).off("click.delete-link").on("click.delete-link", "a.delete-link", function () {
+            LoadingIndicator.show();
+            var deleteUrl = $(this).attr("href");
+            var whatToDelete = $(this).data("what");
+            var warningMessage = $(this).data("warning");
+            window.openedTab = $(this).data("tab");
+            var question = 'Are you sure you want to irreversibly delete this ' + whatToDelete +' and all related data?<br><br><div class=\'alert alert-danger\' style=\'padding: 10px\'>'+warningMessage+ '</div>';
+            BootstrapDialog.confirm(question, function (result, dialog) {
+                LoadingIndicator.hide();
+
+                if (result) {
+                    $.ajax({
+                        url: deleteUrl,
+                        type: "POST",
+                        contentType: "application/x-www-form-urlencoded",
+                        dataType: 'json'
+                    }).done(function (data, textStatus) {
+                        if (textStatus === "success") {
+                            window.location.hash = window.openedTab;
+                            window.location.reload();
+                        }
+                    }).always(function () {
+                        LoadingIndicator.hide();
+                    });
+                }
+            });
+        });
+    }
          
     return {
         init: function () {
@@ -79,6 +122,8 @@
             showSettingsModal();
             goToTab();
             onSettingsItemSubmit();
+            showSettingsEditModal();
+            bindOnDeleteSettingsItemClick();
         }
     }
 
