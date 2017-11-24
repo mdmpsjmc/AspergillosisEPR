@@ -29,7 +29,7 @@ namespace AspergillosisEPR.Models
         [Required]
         [Display(Name = "RM2 Number")]
         [StringLength(50)]
-        [Remote("hasRMNumber", "Patients", AdditionalFields = "Id",
+        [Remote("HasRMNumber", "Patients", AdditionalFields = "Id",
                 ErrorMessage = "Patient RM2 Number already exists in database")]
         public string RM2Number { get; set; }      
         

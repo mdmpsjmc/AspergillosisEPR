@@ -8,8 +8,11 @@
     <li>
         <a href="#diagnosis-categories" data-toggle="tab"><i class="fa fa-ambulance fa-2x"></i>&nbsp; Diagnosis Categories</a>
     </li>
-    <li class="">
+    <li>
         <a href="#drugs" data-toggle="tab" aria-expanded="false"><i class="fa fa-medkit fa-2x"></i>&nbsp; Drugs</a>
+    </li>
+    <li>
+        <a href="#side-effects" data-toggle="tab" aria-expanded="false"><i class="fa fa-user-md fa-2x"></i>&nbsp; Side Effects</a>
     </li>
 </ul>
 
@@ -22,5 +25,8 @@
     </div>
     <div class="tab-pane fade" id="drugs">
         @Html.Partial("/Views/Settings/_Drugs.cshtml")
+    </div>
+    <div class="tab-pane fade" id="side-effects">
+        @Html.Partial("/Views/Settings/_SideEffects.cshtml")
     </div>
 </div>

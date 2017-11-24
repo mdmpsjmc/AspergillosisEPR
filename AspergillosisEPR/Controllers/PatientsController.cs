@@ -10,6 +10,8 @@ using AspergillosisEPR.Models;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Collections;
 using AspergillosisEPR.Helpers;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Server.Kestrel.Internal.System.Collections.Sequences;
 
 namespace AspergillosisEPR.Controllers
 {
@@ -37,10 +39,25 @@ namespace AspergillosisEPR.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("LastName,FirstName,DOB,Gender, RM2Number")] Patient patient, PatientDiagnosis[] diagnoses, PatientDrug[] drugs)
+        public async Task<IActionResult> Create([Bind("LastName,FirstName,DOB,Gender, RM2Number")] Patient patient, 
+                                                 PatientDiagnosis[] diagnoses, PatientDrug[] drugs)
         {
             patient.PatientDiagnoses = diagnoses;
             patient.PatientDrugs = drugs;
+
+            for(var cursor = 0; cursor < Request.Form["Drugs.index"].ToList().Count; cursor++)
+            {
+                string stringIndex = Request.Form["Drugs.index"][cursor];
+                string sideEffectsIds = Request.Form["Drugs[" + stringIndex + "].SideEffects"];
+                var sideEffects = _context.SideEffects.Where(se => sideEffectsIds.Contains(se.ID.ToString()));
+                foreach(var sideEffect in sideEffects)
+                {
+                    PatientDrugSideEffect drugSideEffect = new PatientDrugSideEffect();
+                    drugSideEffect.PatientDrug = drugs[cursor];
+                    drugSideEffect.SideEffect = sideEffect;
+                    drugs[cursor].SideEffects.Add(drugSideEffect);
+                }                
+            }
             try
             {
                 if (ModelState.IsValid)
@@ -71,9 +88,12 @@ namespace AspergillosisEPR.Controllers
                                 .Include(p => p.PatientDiagnoses).
                                     ThenInclude(d => d.DiagnosisType)
                                 .Include(p => p.PatientDrugs).
-                                    ThenInclude(d => d.Drug)
+                                    ThenInclude(d => d.Drug)                                    
                                 .Include(p => p.PatientDiagnoses)
                                     .ThenInclude(d => d.DiagnosisCategory)
+                                .Include(p => p.PatientDrugs)
+                                    .ThenInclude(d => d.SideEffects)
+                                    .ThenInclude(se => se.SideEffect)
                                 .AsNoTracking()
                                 .SingleOrDefaultAsync(m => m.ID == id);
             if (patient == null)
@@ -182,7 +202,8 @@ namespace AspergillosisEPR.Controllers
             return Json(new { result = "ok" });
         }
 
-        public JsonResult HasRMNumber(string RM2Number, int? Id)
+        [AllowAnonymous]
+        public JsonResult HasRM2Number(string RM2Number, int? Id)
         {
             var validateName = _context.Patients.FirstOrDefault(x => x.RM2Number == RM2Number && x.ID != Id);
 

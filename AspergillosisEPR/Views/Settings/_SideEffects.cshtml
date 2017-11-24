@@ -1,0 +1,37 @@
+﻿@model AspergillosisEPR.Models.SettingsViewModels.SettingsViewModel
+<div class="table-responsive">
+    <div class="button">
+        <a href="@Url.Action("New", "SideEffects")" class="btn btn-success add-side-effect add-settings-item disable-default" data-klass="SideEffect" data-tab="side-effects">
+            <i class="fa fa-plus"></i> Add new side effect
+        </a>
+    </div>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Side Effect Name</th>
+                <th>Edit</th>
+                <th>Delete</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var sideEffect in Model.SideEffects)
+            {
+                <tr>
+                    <td>@sideEffect.ID</td>
+                    <td>@sideEffect.Name</td>
+                    <td>
+                        <a href="@Url.Action("Edit", "SideEffects", new { id= sideEffect.ID })" class="btn btn-primary edit-diagnosis-side-effect edit-link disable-default">
+                            <i class="fa fa-edit"></i>
+                        </a>
+                    </td>
+                    <td>
+                        <a href="@Url.Action("Delete", "SideEffects", new { id= sideEffect.ID })" class="btn btn-danger edit-side-effect delete-link disable-default" data-tab="side-effects" data-what="Side Effect" data-warning="All drug entries for this side-effects, for all patients in database will be also irreversibly lost if you remove this item">
+                            <i class="fa fa-trash"></i>
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

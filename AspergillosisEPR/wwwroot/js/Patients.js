@@ -10,7 +10,7 @@
                 "initComplete": function (settings, json) {
                     newPatientsModalShow();
                     addFilteringColumns();
-                    moveSearchFieldsFromFooterToHead()
+                    moveSearchFieldsFromFooterToHead();
                 },
                 "ajax": {
                     "url": "/DataTableJson/LoadPatients",
@@ -130,6 +130,7 @@
             $.get($(this).attr("href"), function (responseHtml) {
                 LoadingIndicator.hide();
                 $("div.drug-form").append(responseHtml);
+                $("select.select2").select2();
             });
         })
     }
@@ -142,6 +143,7 @@
             $.get($(this).attr("href") + "?index=" + index, function (responseHtml) {
                 LoadingIndicator.hide();
                 $("div.drug-form").append(responseHtml);
+                $("select.select2").select2();
             });
         })
     }

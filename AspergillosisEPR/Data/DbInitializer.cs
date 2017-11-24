@@ -72,6 +72,22 @@ namespace AspergillosisEPR.Data
             {
                 context.Drugs.Add(d);
             }
+
+            var sideEffects = new SideEffect[]
+           {
+            new SideEffect{Name="Clumsiness"},
+            new SideEffect{Name="Discouragement"},
+            new SideEffect{Name="Drowsiness"},
+            new SideEffect{Name="Feeling sad or empty"},
+            new SideEffect{Name="Irritability"},
+            new SideEffect{Name="Vomiting"},
+            new SideEffect{Name="Fever"},
+            new SideEffect{Name="Irregular heartbeats"}
+           };
+            foreach (SideEffect se in sideEffects)
+            {
+                context.SideEffects.Add(se);
+            }
             context.SaveChanges();
         }
     }

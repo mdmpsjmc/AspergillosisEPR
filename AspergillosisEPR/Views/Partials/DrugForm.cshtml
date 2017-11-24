@@ -26,6 +26,14 @@
             </label>
         </section>
         <div class="row">
+            <label class="select">
+                <label asp-for="SideEffects" class="select">
+                    @Html.DropDownListFor(m => m.SideEffects, (MultiSelectList)ViewBag.SideEffects, new {multiple = "multiple", @class = "select2"})
+                    <span asp-validation-for="SideEffects" class="text-danger"></span>
+                </label>
+            </label>
+        </div>
+        <div class="row">
             <a href="javascript:void(0)" class="btn btn-danger remove-new-drug pull-right btn-lg" data-what="drug" data-toggle="tooltip" data-title="Remove drug" style="padding: 5px">
                 <i class="fa fa-trash"></i>
             </a>

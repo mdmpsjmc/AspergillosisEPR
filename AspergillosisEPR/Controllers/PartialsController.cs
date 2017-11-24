@@ -5,7 +5,7 @@ using AspergillosisEPR.Data;
 using System.Linq.Dynamic.Core;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc.Rendering;
-
+using System.Collections.Generic;
 
 namespace AspergillosisEPR.Controllers
 {
@@ -29,6 +29,7 @@ namespace AspergillosisEPR.Controllers
         public IActionResult DrugForm()
         {
             PopulateDrugsDropDownList();
+            PopulateSideEffectsDropDownList();
             return PartialView();
         }
 
@@ -69,6 +70,14 @@ namespace AspergillosisEPR.Controllers
                                       orderby d.Name
                                       select d;
             ViewBag.DrugId = new SelectList(drugsQuery.AsNoTracking(), "ID", "Name", selectedDrug);
+        }
+
+        private void PopulateSideEffectsDropDownList(object selectedIds = null)
+        {
+            var sideEffects = from se in _context.SideEffects
+                              orderby se.Name
+                              select se;
+            ViewBag.SideEffects = new MultiSelectList(sideEffects, "ID", "Name");
         }
     }
 
