@@ -18,9 +18,13 @@
                         <tr>
                             <td>@(drug.Drug.Name)</td>
                             <td>@(drug.StartDate.ToString("dd/MM/yyyy"))</td>
-                            <td>@(drug.EndDate.ToString("dd/MM/yyyy"))</td>
-                            <td>@(string.Join(",", drug.SideEffects.Select( se => se.SideEffect.Name )))</td>
+                            @if (drug.EndDate == null) {
+                            <td>None</td>
+                            } else {
+                            <td>@(drug.EndDate.Value.ToString("dd/MM/yyyy"))</td>
+                            }
 
+                            <td>@(string.Join(",", drug.SideEffects.Select( se => se.SideEffect.Name )))</td>
                         </tr>
                      }   
             </tbody>

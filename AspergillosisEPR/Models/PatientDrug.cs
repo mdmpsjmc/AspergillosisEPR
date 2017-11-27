@@ -23,7 +23,7 @@ namespace AspergillosisEPR.Models
 
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{dd-MM-yyyy}")]
-        public DateTime EndDate { get; set; }        
+        public DateTime? EndDate { get; set; }        
         public List<int> SelectedEffectsIds
         {
             get

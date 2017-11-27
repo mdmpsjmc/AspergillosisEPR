@@ -171,7 +171,7 @@ namespace AspergillosisEPR.Controllers
                 string[] sideEffectsIDs = Request.Form["Drugs[" + cursor + "].SideEffects"];
                 if (drug.ID == 0)
                 {
-                    drug.PatientId = patientToUpdate.ID;                    
+                    drug.PatientId = patientToUpdate.ID;
                     var sideEffectsItems = _context.SideEffects.Where(se => sideEffectsIDs.Contains(se.ID.ToString()));
                     foreach (var sideEffect in sideEffectsItems)
                     {

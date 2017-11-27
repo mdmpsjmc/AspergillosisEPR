@@ -25,7 +25,8 @@ namespace AspergillosisEPR.Migrations.Aspergillosis
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("CategoryName");
+                    b.Property<string>("CategoryName")
+                        .IsRequired();
 
                     b.HasKey("ID");
 
@@ -37,7 +38,8 @@ namespace AspergillosisEPR.Migrations.Aspergillosis
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("Name");
+                    b.Property<string>("Name")
+                        .IsRequired();
 
                     b.HasKey("ID");
 
@@ -49,7 +51,8 @@ namespace AspergillosisEPR.Migrations.Aspergillosis
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("Name");
+                    b.Property<string>("Name")
+                        .IsRequired();
 
                     b.HasKey("ID");
 
@@ -113,7 +116,7 @@ namespace AspergillosisEPR.Migrations.Aspergillosis
 
                     b.Property<int>("DrugId");
 
-                    b.Property<DateTime>("EndDate");
+                    b.Property<DateTime?>("EndDate");
 
                     b.Property<int>("PatientId");
 
@@ -126,6 +129,37 @@ namespace AspergillosisEPR.Migrations.Aspergillosis
                     b.HasIndex("PatientId");
 
                     b.ToTable("PatientDrugs");
+                });
+
+            modelBuilder.Entity("AspergillosisEPR.Models.PatientDrugSideEffect", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("PatientDrugId");
+
+                    b.Property<int>("SideEffectId");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("PatientDrugId");
+
+                    b.HasIndex("SideEffectId");
+
+                    b.ToTable("PatientDrugSideEffects");
+                });
+
+            modelBuilder.Entity("AspergillosisEPR.Models.SideEffect", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Name")
+                        .IsRequired();
+
+                    b.HasKey("ID");
+
+                    b.ToTable("SideEffects");
                 });
 
             modelBuilder.Entity("AspergillosisEPR.Models.PatientDiagnosis", b =>
@@ -156,6 +190,19 @@ namespace AspergillosisEPR.Migrations.Aspergillosis
                     b.HasOne("AspergillosisEPR.Models.Patient", "Patient")
                         .WithMany("PatientDrugs")
                         .HasForeignKey("PatientId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("AspergillosisEPR.Models.PatientDrugSideEffect", b =>
+                {
+                    b.HasOne("AspergillosisEPR.Models.PatientDrug", "PatientDrug")
+                        .WithMany("SideEffects")
+                        .HasForeignKey("PatientDrugId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("AspergillosisEPR.Models.SideEffect", "SideEffect")
+                        .WithMany()
+                        .HasForeignKey("SideEffectId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618
