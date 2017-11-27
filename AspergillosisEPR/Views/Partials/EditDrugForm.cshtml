@@ -22,4 +22,13 @@
             <input asp-for="@(Model.EndDate)" name="Diagnoses[@((string)ViewBag.Index)].EndDate" placeholder="End Date"/>
         </label>
     </section>
+    <div class="row">
+        <label class="select side-effects">
+            <label asp-for="SideEffects" class="select">
+                <p>Please select drug side effects from the list (if applicable)</p>
+                @Html.DropDownList("Drugs[" + (string)ViewBag.Index + "].SideEffects", (MultiSelectList)ViewBag.SideEffects, new { multiple = "multiple", @class = "select2", @data_placeholder = "Type side effect name to start search" })
+                <span asp-validation-for="SideEffects" class="text-danger"></span>
+            </label>
+        </label>
+    </div>
 </div>

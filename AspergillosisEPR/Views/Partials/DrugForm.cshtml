@@ -26,9 +26,10 @@
             </label>
         </section>
         <div class="row">
-            <label class="select">
+            <label class="select side-effects">
                 <label asp-for="SideEffects" class="select">
-                    @Html.DropDownListFor(m => m.SideEffects, (MultiSelectList)ViewBag.SideEffects, new {multiple = "multiple", @class = "select2"})
+                    <p>Please select drug side effects from the list (if applicable)</p>
+                    @Html.DropDownListFor(m => m.SideEffects, (MultiSelectList)ViewBag.SideEffects, new {multiple = "multiple", @class = "select2", @data_placeholder="Type side effect name to start search"}))
                     <span asp-validation-for="SideEffects" class="text-danger"></span>
                 </label>
             </label>

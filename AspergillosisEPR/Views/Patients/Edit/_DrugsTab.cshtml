@@ -6,6 +6,7 @@
     {
 
         PatientDrug drug = Model.PatientDrugs.ToList()[i];
+
         <div class="drug-row">
             <input type="hidden" value="@drug.ID" name="Drugs[@(i.ToString())].ID" />
             <fieldset>
@@ -30,6 +31,12 @@
                     <input asp-for="@(drug.EndDate)" placeholder="End date" name="Drugs[@(i.ToString())].EndDate">
                 </label>
             </section>
+            <div class="row">
+                <label class="select side-effects">
+                        <p>Please select drug side effects from the list (if applicable)</p>
+                        @(Html.DropDownList("Drugs[" + i.ToString() + "].SideEffects", (MultiSelectList)ViewBag.SideEffects[i], new { multiple = "multiple", @class = "select2", @style = "width: 100%", @data_placeholder = "Type side effect name to start search" }))
+                </label>
+            </div>
             <div class="row">
                 <a href="javascript:void(0)" class="btn btn-danger remove-existing-drug pull-right btn-lg" data-id="@drug.ID" data-what="drug" data-toggle="tooltip" data-title="Remove drug" style="padding: 5px">
                     <i class="fa fa-trash"></i>

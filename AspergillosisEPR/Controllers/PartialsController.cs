@@ -44,6 +44,7 @@ namespace AspergillosisEPR.Controllers
         public IActionResult EditDrugForm()
         {
             PopulateDrugsDropDownList();
+            PopulateSideEffectsDropDownList();
             ViewBag.Index = (string)Request.Query["index"];
             return PartialView();
         }

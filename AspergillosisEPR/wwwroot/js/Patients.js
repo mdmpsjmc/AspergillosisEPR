@@ -130,9 +130,14 @@
             $.get($(this).attr("href"), function (responseHtml) {
                 LoadingIndicator.hide();
                 $("div.drug-form").append(responseHtml);
-                $("select.select2").select2();
-            });
-        })
+                $("select.select2").select2({
+                    minimumResultsForSearch: -1,
+                    placeholder: function () {
+                        $(this).data('placeholder');
+                    }
+                });
+            })
+        });
     }
 
     var bindDrugsEditFormOnClick = function () {
@@ -143,7 +148,12 @@
             $.get($(this).attr("href") + "?index=" + index, function (responseHtml) {
                 LoadingIndicator.hide();
                 $("div.drug-form").append(responseHtml);
-                $("select.select2").select2();
+                $("select.select2").select2({
+                    minimumResultsForSearch: -1,
+                    placeholder: function () {
+                        $(this).data('placeholder');
+                    }
+                });
             });
         })
     }
@@ -169,6 +179,12 @@
                 $("div#modal-container").html(responseHtml);
                 $("div#edit-modal").modal("show");
                 updatePatient();
+                $("select.select2").select2({
+                    minimumResultsForSearch: -1,
+                    placeholder: function () {
+                        $(this).data('placeholder');
+                    }
+                });
             });
         });
     }

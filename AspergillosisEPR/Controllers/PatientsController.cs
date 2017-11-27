@@ -118,6 +118,9 @@ namespace AspergillosisEPR.Controllers
                                     ThenInclude(d => d.Drug)
                                 .Include(p => p.PatientDiagnoses)
                                     .ThenInclude(d => d.DiagnosisCategory)
+                                 .Include(p => p.PatientDrugs)
+                                    .ThenInclude(d => d.SideEffects)
+                                    .ThenInclude(se => se.SideEffect)
                                 .AsNoTracking()
                                 .SingleOrDefaultAsync(m => m.ID == id);
             if (patient == null)
@@ -160,18 +163,53 @@ namespace AspergillosisEPR.Controllers
                     diagnosisToUpdate.Description = diagnosis.Description;
                     _context.Update(diagnosisToUpdate);
                 }
-            }
+            }     
 
-            foreach (var drug in drugs)
+            for(var cursor = 0; cursor < drugs.Length; cursor++)
             {
+                PatientDrug drug = drugs[cursor];
+                string[] sideEffectsIDs = Request.Form["Drugs[" + cursor + "].SideEffects"];
                 if (drug.ID == 0)
                 {
-                    drug.PatientId = patientToUpdate.ID;
+                    drug.PatientId = patientToUpdate.ID;                    
+                    var sideEffectsItems = _context.SideEffects.Where(se => sideEffectsIDs.Contains(se.ID.ToString()));
+                    foreach (var sideEffect in sideEffectsItems)
+                    {
+                        PatientDrugSideEffect drugSideEffect = new PatientDrugSideEffect();
+                        drugSideEffect.PatientDrug = drugs[cursor];
+                        drugSideEffect.SideEffect = sideEffect;
+                        drugs[cursor].SideEffects.Add(drugSideEffect);
+                    }
                     _context.Update(drug);
                 }
                 else
                 {
-                    var drugToUpdate = patientToUpdate.PatientDrugs.SingleOrDefault(pd => pd.ID == drug.ID);
+                    //var drugToUpdate = patientToUpdate.PatientDrugs.SingleOrDefault(pd => pd.ID == drug.ID);
+                    var drugToUpdate = _context.PatientDrugs.Include(pd => pd.SideEffects).
+                                          SingleOrDefault(pd => pd.ID == drug.ID);
+                    var sideEffectsItems = _context.SideEffects.Where(se => sideEffectsIDs.Contains(se.ID.ToString()));
+                    var uiSelectedIds = sideEffectsIDs.Select(int.Parse).ToList();
+                    var toDeleteEffectIds = drugToUpdate.SelectedEffectsIds.Except(uiSelectedIds);
+                    var toInsertEffectIds = uiSelectedIds.Except(drugToUpdate.SelectedEffectsIds);
+
+                    if (toDeleteEffectIds.Count() > 0)
+                    {
+                        _context.PatientDrugSideEffects.
+                                RemoveRange(_context.PatientDrugSideEffects.
+                                    Where(pdse => toDeleteEffectIds.Contains(pdse.SideEffectId) && pdse.PatientDrugId == drugToUpdate.ID));
+                    }
+
+                    if (toInsertEffectIds.Count() > 0)
+                    {
+                        var sideEffectsNewItems = _context.SideEffects.Where(se => toInsertEffectIds.Contains(se.ID));
+                        foreach(var sideEffect in sideEffectsNewItems)
+                        {
+                            PatientDrugSideEffect drugSideEffect = new PatientDrugSideEffect();
+                            drugSideEffect.PatientDrug = drugs[cursor];
+                            drugSideEffect.SideEffect = sideEffect;
+                            drugToUpdate.SideEffects.Add(drugSideEffect);
+                        }                    
+                    }
                     drugToUpdate.StartDate = drug.StartDate;
                     drugToUpdate.EndDate = drug.EndDate;
                     drugToUpdate.DrugId = drug.DrugId;
@@ -273,7 +311,8 @@ namespace AspergillosisEPR.Controllers
             List<SelectList> diagnosesTypes = new List<SelectList>();
             List<SelectList> diagnosesCategories = new List<SelectList>();
             List<SelectList> drugs = new List<SelectList>();
-
+            List<MultiSelectList> sideEffects = new List<MultiSelectList>();
+            
             for (int i = 0; i < patient.PatientDiagnoses.Count; i++)
             {
                 var item = patient.PatientDiagnoses.ToList()[i];
@@ -285,10 +324,30 @@ namespace AspergillosisEPR.Controllers
             {
                 var item = patient.PatientDrugs.ToList()[i];
                 drugs.Add(DrugsDropDownList(item.DrugId));
+                if (item.SideEffects.Any())
+                {
+                    MultiSelectList list = PopulateSideEffectsDropDownList(item.SelectedEffectsIds);
+                    sideEffects.Add(list);
+                } else
+                {
+                    MultiSelectList list = PopulateSideEffectsDropDownList(new List<int>());
+                    sideEffects.Add(list);
+                }
             }
             ViewBag.DiagnosisTypes = diagnosesTypes;
             ViewBag.DiagnosisCategories = diagnosesCategories;
             ViewBag.Drugs = drugs;
+            ViewBag.SideEffects = sideEffects;
+
+        }
+
+
+        private MultiSelectList PopulateSideEffectsDropDownList(List<int> selectedIds)
+        {
+            var sideEffects = from se in _context.SideEffects
+                              orderby se.Name
+                              select se;
+            return new MultiSelectList(sideEffects, "ID", "Name", selectedIds);
         }
 
     }
