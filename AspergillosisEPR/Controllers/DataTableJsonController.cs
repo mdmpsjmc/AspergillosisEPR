@@ -9,11 +9,13 @@ namespace AspergillosisEPR.Controllers
 {
     public class DataTableJsonController : Controller
     {
-        private AspergillosisContext _context;
+        private AspergillosisContext _aspergillosisContext;
+        private ApplicationDbContext _appContext;
 
-        public DataTableJsonController(AspergillosisContext context)
+        public DataTableJsonController(AspergillosisContext context, ApplicationDbContext context2)
         {
-            _context = context;
+            _aspergillosisContext = context;
+            _appContext = context2;
         }
 
         public IActionResult LoadPatients()
@@ -30,14 +32,14 @@ namespace AspergillosisEPR.Controllers
                 int skip = start != null ? Convert.ToInt32(start) : 0;
                 int recordsTotal = 0;
 
-                var primaryDiagnosis = (from diagnosesCategories in _context.DiagnosisCategories
+                var primaryDiagnosis = (from diagnosesCategories in _aspergillosisContext.DiagnosisCategories
                                         where diagnosesCategories.CategoryName == "Primary"
                                         select new { diagnosesCategories.ID }).Single();
 
-                var patientData = (from patient in _context.Patients
-                                   join patientDiagnosis in _context.PatientDiagnoses on patient.ID equals patientDiagnosis.PatientId into diagnoses
+                var patientData = (from patient in _aspergillosisContext.Patients
+                                   join patientDiagnosis in _aspergillosisContext.PatientDiagnoses on patient.ID equals patientDiagnosis.PatientId into diagnoses
                                    from patientDiagnosis in diagnoses.DefaultIfEmpty()
-                                   join diagnosesTypes in _context.DiagnosisTypes on patientDiagnosis.DiagnosisTypeId equals diagnosesTypes.ID
+                                   join diagnosesTypes in _aspergillosisContext.DiagnosisTypes on patientDiagnosis.DiagnosisTypeId equals diagnosesTypes.ID
                                    into patientsWithDiagnoses
                                    select new
                                    {
@@ -98,5 +100,55 @@ namespace AspergillosisEPR.Controllers
                 throw;
             }
         }
-       }
+
+        public IActionResult LoadUsers()
+        {
+            try
+            {
+                var draw = HttpContext.Request.Form["draw"].FirstOrDefault();
+                var start = Request.Form["start"].FirstOrDefault();
+                var length = Request.Form["length"].FirstOrDefault();
+                var sortColumn = Request.Form["columns[" + Request.Form["order[0][column]"].FirstOrDefault() + "][name]"].FirstOrDefault();
+                var sortColumnDirection = Request.Form["order[0][dir]"].FirstOrDefault();
+                var searchValue = Request.Form["search[value]"].FirstOrDefault();
+                int pageSize = length != null ? Convert.ToInt32(length) : 0;
+                int skip = start != null ? Convert.ToInt32(start) : 0;
+                int recordsTotal = 0;
+
+                var usersData = (from user in _appContext.Users
+                             select new
+                             {
+                                 id = user.Id,
+                                 Login = user.LoginName,
+                                 FirstName = user.FirstName,
+                                 LastName = user.LastName,
+                                 Email = user.Email
+                             });
+
+             
+
+                if (!(string.IsNullOrEmpty(sortColumn) && string.IsNullOrEmpty(sortColumnDirection)))
+                {
+                    string sorting = sortColumn + " " + sortColumnDirection;
+                    usersData = usersData.OrderBy(sorting);
+                }
+                
+                if (!string.IsNullOrEmpty(searchValue))
+                {
+
+                    usersData = usersData.Where(u => u.FirstName.Contains(searchValue) || u.Email.Contains(searchValue));
+                }
+                recordsTotal = usersData.Count();
+                var data = usersData.Skip(skip).Take(pageSize).ToList();
+                return Json(new { draw = draw, recordsFiltered = recordsTotal, recordsTotal = recordsTotal, data = data });
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+
+
+    }
     }

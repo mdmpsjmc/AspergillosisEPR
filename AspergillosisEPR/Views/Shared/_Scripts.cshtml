@@ -6,6 +6,7 @@
 <script src="~/js/LoadingIndicator.js"></script>
 <script src="~/js/Patients.js"></script>
 <script src="~/js/Settings.js"></script>
+<script src="~/js/Users.js"></script>
 @Html.Partial("/Views/Shared/_ValidationScriptsPartial.cshtml");
 <script>
     $(document).ready(function () {
@@ -13,5 +14,6 @@
         drawBreadCrumb();
         Patients.init();
         Settings.init();
+        Users.init();
     });
 </script>

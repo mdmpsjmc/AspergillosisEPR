@@ -34,7 +34,7 @@ namespace AspergillosisEPR
         public static IWebHost BuildWebHost(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
                 .UseIISIntegration()
-                .UseUrls("http://0*:5100/")
+                .UseUrls("http://0*:5000/")
                 .UseKestrel()
                 .UseStartup<Startup>()
                 .Build();

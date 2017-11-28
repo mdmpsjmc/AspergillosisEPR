@@ -26,7 +26,7 @@ namespace AspergillosisEPR
             services.AddDbContext<AspergillosisContext>(options =>
                         options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"), b => b.UseRowNumberForPaging()));
             services.AddDbContext<ApplicationDbContext>(options =>
-                       options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"))
+                       options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"), b => b.UseRowNumberForPaging())
            );
             services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
@@ -36,6 +36,8 @@ namespace AspergillosisEPR
             services.AddTransient<IEmailSender, EmailSender>();
             services.AddTransient<PatientViewModel>();
             services.AddMvc();
+
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

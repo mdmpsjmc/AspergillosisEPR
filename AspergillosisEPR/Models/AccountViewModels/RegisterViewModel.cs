@@ -21,5 +21,10 @@ namespace AspergillosisEPR.Models.AccountViewModels
         [Display(Name = "Confirm password")]
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
+
+        [Required(ErrorMessage = "The First Name field is required")]
+        public string FirstName { get; set; }
+        [Required(ErrorMessage = "The Last Name field is required")]
+        public string LastName { get; set; }
     }
 }

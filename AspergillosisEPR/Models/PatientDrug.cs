@@ -13,6 +13,7 @@ namespace AspergillosisEPR.Models
         public int DrugId { get; set; }
 
         public Patient Patient { get; set; }
+        [Required(ErrorMessage = "The field is required")]
         public Drug Drug { get; set; }
         public ICollection<PatientDrugSideEffect> SideEffects { get; set; }
 
