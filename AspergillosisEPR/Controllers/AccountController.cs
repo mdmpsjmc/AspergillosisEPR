@@ -13,6 +13,7 @@ using Microsoft.Extensions.Options;
 using AspergillosisEPR.Models;
 using AspergillosisEPR.Models.AccountViewModels;
 using AspergillosisEPR.Services;
+using AspergillosisEPR.Data;
 
 namespace AspergillosisEPR.Controllers
 {
@@ -24,17 +25,24 @@ namespace AspergillosisEPR.Controllers
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IEmailSender _emailSender;
         private readonly ILogger _logger;
+        private readonly ApplicationDbContext _context;
+        private readonly RoleManager<ApplicationRole> _roleManager;
+
 
         public AccountController(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
             IEmailSender emailSender,
-            ILogger<AccountController> logger)
+            ILogger<AccountController> logger, 
+            ApplicationDbContext context,
+            RoleManager<ApplicationRole> roleManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _emailSender = emailSender;
             _logger = logger;
+            _context = context;
+            _roleManager = roleManager;
         }
 
         [TempData]
@@ -209,6 +217,7 @@ namespace AspergillosisEPR.Controllers
         public IActionResult Register(string returnUrl = null)
         {
             ViewData["ReturnUrl"] = returnUrl;
+            ViewBag.Roles = PopulateRolesDropDownList();
             return View();
         }
 
@@ -217,21 +226,32 @@ namespace AspergillosisEPR.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(RegisterViewModel model, string returnUrl = null)
         {
+            ViewBag.Roles = PopulateRolesDropDownList();
             ViewData["ReturnUrl"] = returnUrl;
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.Email,
-                                                Email = model.Email,
-                                                FirstName = model.FirstName,
-                                                LastName = model.LastName,
-                                                EmailConfirmed = true,
-                                                LoginName = ApplicationUser.GenerateUsername(model.FirstName, model.LastName)
-                };
+                
+                var user = new ApplicationUser {
+                    UserName = ApplicationUser.GenerateUsername(model.FirstName, model.LastName),
+                    Email = model.Email,
+                    FirstName = model.FirstName,
+                    LastName = model.LastName,
+                    EmailConfirmed = true,
+                    LoginName = ApplicationUser.GenerateUsername(model.FirstName, model.LastName),
+                };                                    
+                    
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
+                    var selectedRoles = Request.Form["Roles"].AsEnumerable();
+                    string readAccessRole = "Read Role";
+                    if (!selectedRoles.Contains(readAccessRole))
+                    {
+                        selectedRoles.Append(readAccessRole);
+                    }
+                    await _userManager.AddToRolesAsync(user, selectedRoles);
                     _logger.LogInformation("User created a new account with password.");
-                    //await _signInManager.SignInAsync(user, isPersistent: false);
+                    //await _signInManager.SignInAsync(user, isPersistent: fa`lse);
                     return RedirectToLocal(returnUrl);
                 }
                 AddErrors(result);
@@ -455,6 +475,14 @@ namespace AspergillosisEPR.Controllers
             {
                 return RedirectToAction(nameof(HomeController.Index), "Home");
             }
+        }
+
+        private MultiSelectList PopulateRolesDropDownList(object selectedIds = null)
+        {
+            var roles = from role in _context.Roles
+                              orderby role.Name
+                              select role;
+           return new MultiSelectList(roles, "Name", "Name");
         }
 
         #endregion

@@ -20,6 +20,8 @@ namespace AspergillosisEPR
                 {
                     var context = services.GetRequiredService<AspergillosisContext>();
                     DbInitializer.Initialize(context);
+                    var context2 = services.GetRequiredService<ApplicationDbContext>();
+                    AppDbInitializer.Iniitalize(context2);
                 }
                 catch (Exception ex)
                 {

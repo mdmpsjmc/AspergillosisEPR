@@ -1,0 +1,18 @@
+﻿@model List<AspergillosisEPR.Models.ApplicationRolesViewModels.ApplicationRoleListViewModel>
+<table id="roles" class="table table-striped table-bordered table-hover">
+    <thead>
+        <tr>
+            <th data-hide="phone"><i class="glyphicon glyphicon-credit-card text-muted hidden-md hidden-sm hidden-xs"></i>&nbsp; Name</th>
+            <th data-hide="phone"><i class="fa fa-file-text text-muted hidden-md hidden-sm hidden-xs"></i>&nbsp; Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.RoleName</td>
+                <td>@item.Description</td>
+            </tr>
+        }        
+    </tbody>
+</table>

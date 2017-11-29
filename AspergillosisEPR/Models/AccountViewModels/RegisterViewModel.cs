@@ -1,4 +1,6 @@
 ﻿
+using Microsoft.AspNetCore.Mvc.Rendering;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 
@@ -26,5 +28,7 @@ namespace AspergillosisEPR.Models.AccountViewModels
         public string FirstName { get; set; }
         [Required(ErrorMessage = "The Last Name field is required")]
         public string LastName { get; set; }
+
+        public IEnumerable<SelectListItem> Roles { get; set; }
     }
 }

@@ -15,10 +15,8 @@ namespace AspergillosisEPR.Controllers
 
         public PatientDrugsController(AspergillosisContext context)
         {
-
             _context = context;
         }
-
 
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]

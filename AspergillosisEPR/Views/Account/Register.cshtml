@@ -1,11 +1,11 @@
 ﻿@model AspergillosisEPR.Models.AccountViewModels.RegisterViewModel
 <form asp-route-returnUrl="@ViewData["ReturnUrl"]" method="post" id="smart-form-register" class="smart-form client-form">
-    <div asp-validation-summary="All" class="alert alert-danger alert-dismissable alert-block validation-alert" style="display:none"></div>
     <header>
         <i class="fa fa-user fa-2x"></i>&nbsp;Add new system user
     </header>
     <fieldset>
         <div class="row">
+            <div asp-validation-summary="All" class="text-danger alert-block validation-alert" style="padding-left: 20px"></div>
             <section class="col col-6" style="padding-left: 0px">
                 <label class="input">
                     <input asp-for="FirstName" placeholder="First name" class="form-control">
@@ -48,8 +48,20 @@
             </label>
         </section>
     </fieldset>
+    <fieldset>
+        <label class="select">
+            Start typing roles to add them to the newly created user
+            @(Html.DropDownListFor(u => u.Roles, (MultiSelectList)ViewBag.Roles,
+                        new { multiple = "multiple",
+                            @class = "select2",
+                            @style = "width: 100%",
+                            @data_placeholder = "Type role name to add"
+                        })
+              )
+        </label>
+</fieldset>
     <footer>
-        <button type="submit" class="btn btn-primary pull-left" onclick="$('div.validation-alert').show()">
+        <button type="submit" class="btn btn-primary pull-left">
             Register
         </button>
         <a href="@Url.Action("Index", "Users")" class="btn btn-success pull-left">Go back to users list</a>
@@ -57,4 +69,14 @@
 </form>
 @section Scripts {
     @await Html.PartialAsync("_ValidationScriptsPartial")
+    <script>
+        $(function () {
+            $("select.select2").select2({
+                minimumResultsForSearch: -1,
+                placeholder: function () {
+                    $(this).data('placeholder');
+                }
+            });
+        });
+    </script>
 }

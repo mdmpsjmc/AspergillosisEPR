@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace AspergillosisEPR.Models
@@ -12,9 +13,12 @@ namespace AspergillosisEPR.Models
         [Required]
         public string LoginName { get; set; }
 
+        
         public static string GenerateUsername(string firstName, string lastName)
         {
             return (firstName[0] + lastName).ToLower();
         }
+
+
     }
 }

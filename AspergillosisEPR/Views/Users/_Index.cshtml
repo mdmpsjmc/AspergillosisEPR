@@ -6,7 +6,7 @@
         <a href="#users" data-toggle="tab" aria-expanded="true"><i class="fa fa-users"></i>&nbsp; Users</a>
     </li>
     <li>
-        <a href="#roles" data-toggle="tab"><i class="fa fa-rol"></i>&nbsp; Roles</a>
+        <a href="ApplicationRoles/Index"  data-toggle="tabajax" data-target="#roles"><i class="fa fa-role"></i>&nbsp; Roles</a>
     </li>   
 </ul>
 
@@ -14,7 +14,7 @@
     <div class="tab-pane fade in active" id="users">
         @Html.Partial("/Views/Users/_Users.cshtml")
     </div>
-    <div class="tab-pane fade" id="roles">
-        @Html.Partial("/Views/Users/_Roles.cshtml")
+    <div class="tab-pane fade" id="roles" >
+       
     </div>  
 </div>

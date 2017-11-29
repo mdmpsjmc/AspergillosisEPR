@@ -4,6 +4,10 @@ using Microsoft.AspNetCore.Mvc;
 using AspergillosisEPR.Data;
 
 using System.Linq.Dynamic.Core;
+using AspergillosisEPR.Models;
+using Microsoft.AspNetCore.Identity;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace AspergillosisEPR.Controllers
 {
@@ -11,11 +15,13 @@ namespace AspergillosisEPR.Controllers
     {
         private AspergillosisContext _aspergillosisContext;
         private ApplicationDbContext _appContext;
+        private UserManager<ApplicationUser> _userManager;
 
-        public DataTableJsonController(AspergillosisContext context, ApplicationDbContext context2)
+        public DataTableJsonController(AspergillosisContext context, ApplicationDbContext context2, UserManager<ApplicationUser> userManager)
         {
             _aspergillosisContext = context;
             _appContext = context2;
+            _userManager = userManager;
         }
 
         public IActionResult LoadPatients()
@@ -101,7 +107,7 @@ namespace AspergillosisEPR.Controllers
             }
         }
 
-        public IActionResult LoadUsers()
+        public  IActionResult  LoadUsers()
         {
             try
             {
@@ -115,17 +121,17 @@ namespace AspergillosisEPR.Controllers
                 int skip = start != null ? Convert.ToInt32(start) : 0;
                 int recordsTotal = 0;
 
-                var usersData = (from user in _appContext.Users
-                             select new
-                             {
-                                 id = user.Id,
-                                 Login = user.LoginName,
-                                 FirstName = user.FirstName,
-                                 LastName = user.LastName,
-                                 Email = user.Email
-                             });
-
-             
+                var usersData = _appContext.Users.Select(
+                     user => new
+                     {
+                         id = user.Id,
+                         UserName = user.UserName,
+                         FirstName = user.FirstName,
+                         LastName = user.LastName,
+                         Roles = string.Join(", ", ""),
+                         Email = user.Email
+                     });
+                
 
                 if (!(string.IsNullOrEmpty(sortColumn) && string.IsNullOrEmpty(sortColumnDirection)))
                 {
@@ -134,8 +140,7 @@ namespace AspergillosisEPR.Controllers
                 }
                 
                 if (!string.IsNullOrEmpty(searchValue))
-                {
-
+                {                
                     usersData = usersData.Where(u => u.FirstName.Contains(searchValue) || u.Email.Contains(searchValue));
                 }
                 recordsTotal = usersData.Count();

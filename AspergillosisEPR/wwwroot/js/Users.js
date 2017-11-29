@@ -18,8 +18,9 @@
                     { "data": "id", "name": "ID", "autoWidth": true },                   
                     { "data": "firstName", "name": "FirstName", "autoWidth": true },
                     { "data": "lastName", "name": "LastName", "autoWidth": true },
-                    { "data": "login", "name": "Login", "autoWidth": true },
-                    { "data": "email", "name": "Email", "autoWidth": true },                    
+                    { "data": "userName", "name": "UserName", "autoWidth": true },
+                    { "data": "email", "name": "Email", "autoWidth": true },   
+                    { "data": "roles", "name": "Roles", "autoWidth": true },             
                     {
                         "render": function (data, type, patient, meta) {
                             return '<a class="btn btn-info patient-details" href="/Users/Details/' + patient.id + '"><i class=\'fa fa-eye\'></i>&nbsp;Details</a>&nbsp;' +
@@ -33,9 +34,25 @@
         });
     }
 
+    var initAjaxTab = function () {
+        $('[data-toggle="tabajax"]').click(function (e) {
+            var $this = $(this),
+                loadurl = $this.attr('href'),
+                targ = $this.attr('data-target');
+
+            $.get(loadurl, function (data) {
+                $(targ).html(data);
+            });
+
+            $this.tab('show');
+            return false;
+        });
+    }
+
     return {
         init: function () {
             initUsersDataTable();
+            initAjaxTab();
         }
     }
 

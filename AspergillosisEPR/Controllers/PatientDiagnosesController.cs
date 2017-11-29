@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Mvc;
 using AspergillosisEPR.Data;
 using Microsoft.EntityFrameworkCore;
 
-
 namespace AspergillosisEPR.Controllers
 {
     public class PatientDiagnosesController : Controller
@@ -13,10 +12,8 @@ namespace AspergillosisEPR.Controllers
 
         public PatientDiagnosesController(AspergillosisContext context)
         {
-
             _context = context;
         }
-
 
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]

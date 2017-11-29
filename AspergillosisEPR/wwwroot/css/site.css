@@ -174,3 +174,6 @@ label.side-effects {
 div#details-tab-content {
     min-height: 320px !important;
 }
+.smart-form ul {
+    padding-left: 30px !important;
+}
