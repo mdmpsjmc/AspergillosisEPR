@@ -6,8 +6,7 @@ using AspergillosisEPR.Data;
 using System.Linq.Dynamic.Core;
 using AspergillosisEPR.Models;
 using Microsoft.AspNetCore.Identity;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 
 namespace AspergillosisEPR.Controllers
 {
@@ -107,7 +106,7 @@ namespace AspergillosisEPR.Controllers
             }
         }
 
-        public  IActionResult  LoadUsers()
+        public   IActionResult  LoadUsers()
         {
             try
             {
@@ -120,18 +119,29 @@ namespace AspergillosisEPR.Controllers
                 int pageSize = length != null ? Convert.ToInt32(length) : 0;
                 int skip = start != null ? Convert.ToInt32(start) : 0;
                 int recordsTotal = 0;
+                //_appContext.UserRoles.Include(ur => ur.UserId == )
 
-                var usersData = _appContext.Users.Select(
-                     user => new
-                     {
-                         id = user.Id,
-                         UserName = user.UserName,
-                         FirstName = user.FirstName,
-                         LastName = user.LastName,
-                         Roles = string.Join(", ", ""),
-                         Email = user.Email
-                     });
-                
+
+                var usersData = (from user in _appContext.Users
+                                 join usersRoles in _appContext.UserRoles on user.Id equals usersRoles.UserId into usersWithRoles
+                                 from usersRoles in usersWithRoles.DefaultIfEmpty()
+                                 join systemRoles in _appContext.Roles on usersRoles.RoleId equals systemRoles.Id into appRoles
+                                 select new
+                                 {
+                                     id = user.Id,
+                                     UserName = user.UserName,
+                                     FirstName = user.FirstName,
+                                     LastName = user.LastName,
+                                     Roles = string.Join(", ", _appContext.Roles.
+                                                                                Where(r => _appContext.
+                                                                                                UserRoles.
+                                                                                                Where(u => u.UserId == user.Id).
+                                                                                                Select(ur => ur.RoleId).Contains(r.Id)).
+                                                                                                Select(r => "<label class='label label-primary'>" + r.Name.ToUpper() +"</label>")
+                                                                                                ),
+                                     Email = user.Email
+                                 } //appRoles.Select(ar => ar.Name).ToList()
+                                 ).GroupBy(u => u.id).SelectMany(p => p).Distinct();        
 
                 if (!(string.IsNullOrEmpty(sortColumn) && string.IsNullOrEmpty(sortColumnDirection)))
                 {
@@ -153,7 +163,9 @@ namespace AspergillosisEPR.Controllers
             }
         }
 
-
-
+        private IEnumerable<string> RolesIdsFor(ApplicationUser user)
+        {
+          return _appContext.UserRoles.Where(ur => ur.UserId == user.Id).Select(ur => ur.RoleId).ToList();
+        }
     }
     }
