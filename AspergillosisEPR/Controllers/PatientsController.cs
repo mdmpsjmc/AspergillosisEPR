@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace AspergillosisEPR.Controllers
 {
+    [Authorize]
     public class PatientsController : Controller
     {
         private readonly AspergillosisContext _context;

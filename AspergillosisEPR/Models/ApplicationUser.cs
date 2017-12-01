@@ -22,6 +22,11 @@ namespace AspergillosisEPR.Models
             return (firstName[0] + lastName).ToLower();
         }
 
+        [Display(Name = "Full Name")]
+        public string FullName
+        {
+            get { return FirstName + " " + LastName; }
+        }
 
     }
 }

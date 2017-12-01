@@ -6,9 +6,11 @@ using System.Linq.Dynamic.Core;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Authorization;
 
 namespace AspergillosisEPR.Controllers
 {
+    [Authorize]
     public class PartialsController : Controller
     {
         private readonly AspergillosisContext _context;

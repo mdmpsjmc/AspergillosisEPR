@@ -1,0 +1,46 @@
+﻿@model AspergillosisEPR.Models.AccountViewModels.LoginViewModel
+<div class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
+</div>
+<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+    <div class="well no-padding">
+        <form asp-controller="Account" asp-action="Login" id="login-form" class="smart-form client-form" method="post">
+            <header>
+                Aspergillosis Database - Log in
+            </header>
+            <fieldset>
+                <div asp-validation-summary="All" class="text-danger alert-block validation-alert" style="padding-left: 20px"></div>
+                <section>
+                    <label asp-for="UserName" class="label">Username</label>
+                    <label class="input">
+                        <i class="icon-append fa fa-user"></i>
+                        <input asp-for="UserName">
+                        <b class="tooltip tooltip-top-right"><i class="fa fa-user txt-color-teal"></i> Please enter username</b>
+                    </label>
+                </section>
+
+                <section>
+                    <label asp-for="Password" class="label">Password</label>
+                    <label class="input">
+                        <i class="icon-append fa fa-lock"></i>
+                        <input asp-for="Password">
+                        <b class="tooltip tooltip-top-right"><i class="fa fa-lock txt-color-teal"></i> Enter your password</b>
+                    </label>
+                </section>
+
+                <section>
+                    <label class="checkbox">
+                        <input asp-for="RememberMe">
+                        <i></i>Stay logged in
+                    </label>
+                </section>
+            </fieldset>
+            <footer>
+                <button type="submit" class="btn btn-primary pull-left">
+                    Log in
+                </button>
+            </footer>
+        </form>
+    </div>
+</div>
+<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+</div>

@@ -10,10 +10,11 @@ using System.Collections.Generic;
 using AspergillosisEPR.Helpers;
 using System.Collections;
 using AspergillosisEPR.Models.AccountViewModels;
+using Microsoft.AspNetCore.Authorization;
 
 namespace AspergillosisEPR.Controllers
 {
-
+    [Authorize]
     public class UsersController : Controller
     {
         private readonly ApplicationDbContext _context;

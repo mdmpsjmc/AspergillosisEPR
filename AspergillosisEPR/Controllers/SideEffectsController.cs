@@ -7,9 +7,11 @@ using System.Collections;
 using AspergillosisEPR.Data;
 using System.Threading.Tasks;
 using System.Linq;
+using Microsoft.AspNetCore.Authorization;
 
 namespace AspergillosisEPR.Controllers
 {
+    [Authorize]
     public class SideEffectsController : Controller
     {
         private AspergillosisContext _context;

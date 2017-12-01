@@ -7,9 +7,11 @@ using System.Linq.Dynamic.Core;
 using AspergillosisEPR.Models;
 using Microsoft.AspNetCore.Identity;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Authorization;
 
 namespace AspergillosisEPR.Controllers
 {
+    [Authorize]
     public class DataTableJsonController : Controller
     {
         private AspergillosisContext _aspergillosisContext;

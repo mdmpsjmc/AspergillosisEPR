@@ -2,9 +2,11 @@
 using Microsoft.AspNetCore.Mvc;
 using AspergillosisEPR.Models.SettingsViewModels;
 using AspergillosisEPR.Data;
+using Microsoft.AspNetCore.Authorization;
 
 namespace AspergillosisEPR.Controllers
 {
+    [Authorize]
     public class SettingsController : Controller
     {
         private AspergillosisContext _context;

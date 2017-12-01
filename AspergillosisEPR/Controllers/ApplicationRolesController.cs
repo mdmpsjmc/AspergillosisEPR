@@ -4,9 +4,11 @@ using AspergillosisEPR.Models;
 using AspergillosisEPR.Models.ApplicationRolesViewModels;
 using System.Linq;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Authorization;
 
 namespace AspergillosisEPR.Controllers
 {
+    [Authorize]
     public class ApplicationRolesController : Controller
     {
         private readonly RoleManager<ApplicationRole> roleManager;
