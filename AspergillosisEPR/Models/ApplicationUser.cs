@@ -11,16 +11,11 @@ namespace AspergillosisEPR.Models
     public class ApplicationUser : IdentityUser<string>
     {
         [Required]
+        [Display(Name = "Last Name")]
         public string FirstName { get; set; }
         [Required]
+        [Display(Name = "First Name")]
         public string LastName { get; set; }
-        [Required]
-        public string LoginName { get; set; }
-
-        public List<string> RoleIds(ApplicationDbContext context)
-        {
-            return context.UserRoles.Where(u => u.UserId == Id).Select(ur => ur.RoleId).ToList();
-        }
 
         public static string GenerateUsername(string firstName, string lastName)
         {

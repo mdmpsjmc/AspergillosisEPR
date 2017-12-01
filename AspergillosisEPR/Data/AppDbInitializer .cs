@@ -33,7 +33,7 @@ namespace AspergillosisEPR.Data
                     LastName = "Admin",
                     Email = "superadmin@example.net",
                     EmailConfirmed = true,
-                    LoginName = ApplicationUser.GenerateUsername("Super", "Admin")
+                    UserName = ApplicationUser.GenerateUsername("Super", "Admin")
                 };
                 context.Users.Add(adminUser);
                 context.SaveChanges();

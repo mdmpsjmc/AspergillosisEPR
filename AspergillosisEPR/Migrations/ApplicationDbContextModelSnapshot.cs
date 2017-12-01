@@ -6,7 +6,6 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.EntityFrameworkCore.Storage.Internal;
-using Microsoft.EntityFrameworkCore.ValueGeneration;
 using System;
 
 namespace AspergillosisEPR.Migrations
@@ -75,9 +74,6 @@ namespace AspergillosisEPR.Migrations
                     b.Property<bool>("LockoutEnabled");
 
                     b.Property<DateTimeOffset?>("LockoutEnd");
-
-                    b.Property<string>("LoginName")
-                        .IsRequired();
 
                     b.Property<string>("NormalizedEmail")
                         .HasMaxLength(256);
@@ -173,16 +169,11 @@ namespace AspergillosisEPR.Migrations
 
                     b.Property<string>("RoleId");
 
-                    b.Property<string>("Discriminator")
-                        .IsRequired();
-
                     b.HasKey("UserId", "RoleId");
 
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetUserRoles");
-
-                    b.HasDiscriminator<string>("Discriminator").HasValue("IdentityUserRole<string>");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
@@ -198,21 +189,6 @@ namespace AspergillosisEPR.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens");
-                });
-
-            modelBuilder.Entity("AspergillosisEPR.Models.ApplicationUserRole", b =>
-                {
-                    b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUserRole<string>");
-
-                    b.Property<string>("ApplicationUserId");
-
-                    b.Property<int>("ID");
-
-                    b.HasIndex("ApplicationUserId");
-
-                    b.ToTable("ApplicationUserRole");
-
-                    b.HasDiscriminator().HasValue("ApplicationUserRole");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -258,13 +234,6 @@ namespace AspergillosisEPR.Migrations
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("AspergillosisEPR.Models.ApplicationUserRole", b =>
-                {
-                    b.HasOne("AspergillosisEPR.Models.ApplicationUser")
-                        .WithMany("UserRoles")
-                        .HasForeignKey("ApplicationUserId");
                 });
 #pragma warning restore 612, 618
         }

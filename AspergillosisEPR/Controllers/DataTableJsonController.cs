@@ -136,9 +136,10 @@ namespace AspergillosisEPR.Controllers
                                                                                 Where(r => _appContext.
                                                                                                 UserRoles.
                                                                                                 Where(u => u.UserId == user.Id).
-                                                                                                Select(ur => ur.RoleId).Contains(r.Id)).
-                                                                                                Select(r => "<label class='label label-primary'>" + r.Name.ToUpper() +"</label>")
-                                                                                                ),
+                                                                                                Select(ur => ur.RoleId).
+                                                                                                Contains(r.Id)
+                                                                                        ).
+                                                                                        Select(r => "<label class='label label-primary'>" + r.Name.ToUpper() +"</label>")),
                                      Email = user.Email
                                  } //appRoles.Select(ar => ar.Name).ToList()
                                  ).GroupBy(u => u.id).SelectMany(p => p).Distinct();        
@@ -161,11 +162,6 @@ namespace AspergillosisEPR.Controllers
             {
                 throw;
             }
-        }
-
-        private IEnumerable<string> RolesIdsFor(ApplicationUser user)
-        {
-          return _appContext.UserRoles.Where(ur => ur.UserId == user.Id).Select(ur => ur.RoleId).ToList();
         }
     }
     }

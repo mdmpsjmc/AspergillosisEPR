@@ -1,5 +1,4 @@
-﻿@model AspergillosisEPR.Models.ApplicationUser
-<div class="modal fade" tabindex="-1" role="dialog" id="edit-user-modal">
+﻿<div class="modal fade" tabindex="-1" role="dialog" id="edit-user-modal">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -10,17 +9,28 @@
             </div>
             <div class="modal-body">
                 <div class="widget-body">
+                    <ul id="new-patient-tabs" class="nav nav-tabs bordered">
+                        <li class="active">
+                            <a href="#details" data-toggle="tab" data-replace="true" data-url="/Users/Edit/@(Model.Id)" data-form-target="#edit-user-form"><i class="fa fa-fw fa-lg fa-user"></i> Details </a>
+                        </li>
+                        <li>
+                            <a href="/Users/Password/@(Model.Id)" data-replace="true" data-url="/Users/EditPassword/@(Model.Id)" data-form-target="#edit-user-form" data-target="#password" data-toggle="tabajax"><i class="fa fa-fw fa-lg fa-lock"></i> Password</a>
+                        </li>
+                    </ul>
                     <form asp-controller="users" asp-action="Edit" class="smart-form" data-ajax="true" data-ajax-method="POST" id="edit-user-form">
-                        <div id="new-user-tab-content" class="tab-content padding-10">                  
-                            @Html.Partial("/Views/Users/_Edit.cshtml")                     
-                        </div>
+                        <div id="new-user-tab-content" class="tab-content padding-10">
+                            <div class="tab-pane fade in active" id="details">
+                                @Html.Partial("/Views/Users/_Details.cshtml")                                
+                            </div>
+                            <div class="tab-pane fade" id="password">
+                            </div>                           
+                        </div>                       
                     </form>
-
                 </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary update-user">Update User</button>
+                <button type="button" class="btn btn-primary update-user disable-default">Update User</button>
             </div>
         </div>
     </div>

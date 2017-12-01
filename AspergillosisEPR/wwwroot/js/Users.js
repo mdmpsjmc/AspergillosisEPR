@@ -1,4 +1,4 @@
-﻿var Users = function(){
+﻿var Users = function () {
 
     var initUsersDataTable = function () {
         $(document).ready(function () {
@@ -15,16 +15,16 @@
                     "datatype": "json"
                 },
                 "columns": [
-                    { "data": "id", "name": "ID", "autoWidth": true },                   
+                    { "data": "id", "name": "ID", "autoWidth": true },
                     { "data": "firstName", "name": "FirstName", "autoWidth": true },
                     { "data": "lastName", "name": "LastName", "autoWidth": true },
                     { "data": "userName", "name": "UserName", "autoWidth": true },
-                    { "data": "email", "name": "Email", "autoWidth": true },   
-                    { "data": "roles", "name": "Roles", "autoWidth": true, "sortable": false },             
+                    { "data": "email", "name": "Email", "autoWidth": true },
+                    { "data": "roles", "name": "Roles", "autoWidth": true, "sortable": false },
                     {
                         "render": function (data, type, user, meta) {
-                            return '<a class="disable-default btn btn-warning user-edit" href="/Users/Edit/' + user.id + '" data-id="' + user.id +'"><i class=\'fa fa-edit\' ></i>&nbsp;Edit</a>&nbsp;' +
-                                '<a class="disable-default btn btn-danger user-delete" href="javascript:void(0)" data-id="' + user.id + '"><i class=\'fa fa-trash\' ></i>&nbsp;Delete</a>&nbsp;';
+                            return '<a class="disable-default btn btn-warning user-edit" href="/Users/Edit/' + user.id + '" data-id="' + user.id + '"><i class=\'fa fa-edit\' ></i>&nbsp;Edit</a>&nbsp;' +
+                                '<a class="disable-default btn btn-danger user-delete" href="/Users/Delete/' + user.id + '" data-id="' + user.id + '"><i class=\'fa fa-trash\' ></i>&nbsp;Delete</a>&nbsp;' 
                         },
                         "sortable": false
                     }
@@ -40,12 +40,22 @@
                 targ = $this.attr('data-target');
 
             $.get(loadurl, function (data) {
-                $(targ).html(data);
+                $(targ).html(data);                
             });
 
             $this.tab('show');
             return false;
         });
+    }
+
+    var replaceFormTargetOnTabClick = function () {
+        $('[data-replace="true"]').click(function (e) {
+            var $this = $(this),
+                newurl = $this.attr('data-url'),
+                formTarget = $this.attr('data-form-target');
+
+        $(formTarget).attr("action", newurl);
+        });                  
     }
 
     var editUserModalShow = function () {
@@ -57,6 +67,70 @@
                 $("div#modal-container").html(responseHtml);
                 $("div#edit-user-modal").modal("show");
                 $("select.select2").select2();
+                updateUser();
+                initAjaxTab();
+                replaceFormTargetOnTabClick();
+            }).fail(function (data) {
+                LoadingIndicator.hide();
+                $("form#edit-user-form")[0].reset();
+                $("div#edit-modal").modal("hide");
+                alert("There was a problem reading this user information. Please contact database administrator");
+            });
+        });
+    }
+
+    var updateUser = function () {
+        $(document).off("click.update-user").on("click.update-user", "button.update-user", function () {
+            $("label.text-danger").remove();
+            LoadingIndicator.show();
+            $.ajax({
+                url: $("form#edit-user-form").attr("action"),
+                type: "POST",
+                data: $("form#edit-user-form").serialize(),
+                contentType: "application/x-www-form-urlencoded",
+                dataType: 'json'
+            }).done(function (data, textStatus) {
+                LoadingIndicator.hide();
+                if (textStatus === "success") {
+                    if (data.errors) {
+                        Patients.displayErrors(data.errors);
+                    } else {
+                        $("form#edit-user-form")[0].reset();
+                        $("div#edit-user-modal").modal("hide");
+                        window.usersTable.ajax.reload();
+                    }
+                }
+            }).fail(function (data) {
+                LoadingIndicator.hide();
+                $("form#edit-user-form")[0].reset();
+                $("div#edit-modal").modal("hide");
+                alert("There was a problem saving this user. Please contact database administrator");
+            });
+
+        });
+    }
+
+    var bindOnDeletePatientClick = function () {
+        $(document).off("click.user-delete").on("click.user-delete", "a.user-delete", function () {
+            LoadingIndicator.show();
+            var userId = $(this).data("id");
+            var question = 'Are you sure you want to delete this user from database?';
+            BootstrapDialog.confirm(question, function (result, dialog) {
+                LoadingIndicator.hide();
+                if (result) {
+                    $.ajax({
+                        url: "/Users/Delete/" + userId,
+                        type: "POST",
+                        contentType: "application/x-www-form-urlencoded",
+                        dataType: 'json'
+                    }).done(function (data, textStatus) {
+                        if (textStatus === "success") {
+                            window.usersTable.ajax.reload();
+                        }
+                    }).always(function () {
+                        LoadingIndicator.hide();
+                    });
+                }
             });
         });
     }
@@ -65,8 +139,8 @@
         init: function () {
             initUsersDataTable();
             initAjaxTab();
-            editUserModalShow();            
+            editUserModalShow();  
+            bindOnDeletePatientClick();
         }
     }
-
 }();

@@ -345,6 +345,10 @@
             enableAntiForgeryProtectionWithAjax();
         },
 
+        displayErrors: function (errors) {
+            displayErrors(errors);
+        },
+
         init: function() {
             initPatientsDataTable();
             submitNewPatient();

@@ -23,8 +23,7 @@ namespace AspergillosisEPR.Controllers
             {
                 RoleName = r.Name,
                 Id = r.Id,
-                Description = r.Description,
-                //NumberOfUsers = r.Users.Count
+                Description = r.Description                
             }).ToList();
             return PartialView(model);
         }
