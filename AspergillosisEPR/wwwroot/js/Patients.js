@@ -1,7 +1,6 @@
 ﻿var Patients = function () {
 
     var initPatientsDataTable = function () {
-        $(document).ready(function () {
             window.patientsTable = $("#patients_datatable").DataTable({
                 "processing": true,
                 "serverSide": true,
@@ -36,9 +35,11 @@
                         "autoWidth": false
                     }
                 ]
-
-            });
         });
+
+        window.patientsTable.on('draw.dt', function () {
+            currentUserWithRoles();
+        }); 
     }
 
     var submitNewPatient = function () {

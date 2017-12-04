@@ -1,7 +1,6 @@
 ﻿var Users = function () {
 
     var initUsersDataTable = function () {
-        $(document).ready(function () {
             window.usersTable = $("#users-datatable").DataTable({
                 "processing": true,
                 "serverSide": true,
@@ -33,7 +32,10 @@
                     }
                 ]
             });
-        });
+
+        window.usersTable.on('draw.dt', function () {
+            Users.loadDataTableWithForCurrentUserRoles();
+        }); 
     }
 
     var initAjaxTab = function () {
