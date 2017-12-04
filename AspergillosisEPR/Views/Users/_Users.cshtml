@@ -1,8 +1,11 @@
 ﻿<div class="table-responsive">
-    <div class="button">
-        <a href="@Url.Action("Register", "Account")" class="btn btn-success add-user">
-            <i class="fa fa-user-plus"></i> Add new user
-        </a>
-    </div>
+    @if (User.IsInRole("Create Role") || User.IsInRole("Admin Role"))
+    {
+        <div class="button">
+            <a href="@Url.Action("Register", "Account")" class="btn btn-success add-user">
+                <i class="fa fa-user-plus"></i> Add new user
+            </a>
+        </div>
+    }   
     @Html.Partial("/Views/Users/_DataTable.cshtml")
 </div>

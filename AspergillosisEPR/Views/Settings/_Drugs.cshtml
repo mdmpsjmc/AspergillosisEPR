@@ -1,17 +1,26 @@
 ﻿@model AspergillosisEPR.Models.SettingsViewModels.SettingsViewModel
 <div class="table-responsive">
+@if (User.IsInRole("Create Role") || User.IsInRole("Admin Role"))
+{
     <div class="button">
         <a href="@Url.Action("New", "Drugs")" class="btn btn-success add-drug add-settings-item disable-default" data-klass="Drug" data-tab="drugs">
             <i class="fa fa-plus"></i> Add new drug
         </a>
     </div>
+}
     <table class="table table-bordered">
         <thead>
             <tr>
                 <th>ID</th>
                 <th>Drug Name</th>
+                @if (User.IsInRole("Update Role") || User.IsInRole("Admin Role"))
+                {
                 <th>Edit</th>
+                }
+                @if (User.IsInRole("Delete Role") || User.IsInRole("Admin Role"))
+                {
                 <th>Delete</th>
+                }
             </tr>
         </thead>
         <tbody>
@@ -20,16 +29,22 @@
                 <tr>
                     <td>@drug.ID</td>
                     <td>@drug.Name</td>
+                    @if (User.IsInRole("Update Role") || User.IsInRole("Admin Role"))
+                    {
                     <td>
-                        <a href="@Url.Action("Edit", "Drugs", new { id= drug.ID })" class="btn btn-primary edit-diagnosis-drug edit-link disable-default">
+                        <a href="@Url.Action("Edit", "Drugs", new { id = drug.ID })" class="btn btn-primary edit-diagnosis-drug edit-link disable-default">
                             <i class="fa fa-edit"></i>
                         </a>
                     </td>
+                    }
+                    @if (User.IsInRole("Delete Role") || User.IsInRole("Admin Role"))
+                    {
                     <td>
-                        <a href="@Url.Action("Delete", "Drugs", new { id= drug.ID })" class="btn btn-danger edit-diagnosis-drug delete-link disable-default" data-tab="drugs" data-what="Drug" data-warning="All entries for this drugs, for all patients in database will be also irreversibly lost if you remove this item">
+                        <a href="@Url.Action("Delete", "Drugs", new { id = drug.ID })" class="btn btn-danger edit-diagnosis-drug delete-link disable-default" data-tab="drugs" data-what="Drug" data-warning="All entries for this drugs, for all patients in database will be also irreversibly lost if you remove this item">
                             <i class="fa fa-trash"></i>
                         </a>
                     </td>
+                    }
                 </tr>
             }
         </tbody>

@@ -8,6 +8,7 @@
                 "filter": true,
                 "orderMulti": false,
                 "initComplete": function (settings, json) {
+                    Users.loadDataTableWithForCurrentUserRoles();
                 },
                 "ajax": {
                     "url": "/DataTableJson/LoadUsers",
@@ -23,10 +24,12 @@
                     { "data": "roles", "name": "Roles", "autoWidth": true, "sortable": false },
                     {
                         "render": function (data, type, user, meta) {
-                            return '<a class="disable-default btn btn-warning user-edit" href="/Users/Edit/' + user.id + '" data-id="' + user.id + '"><i class=\'fa fa-edit\' ></i>&nbsp;Edit</a>&nbsp;' +
-                                '<a class="disable-default btn btn-danger user-delete" href="/Users/Delete/' + user.id + '" data-id="' + user.id + '"><i class=\'fa fa-trash\' ></i>&nbsp;Delete</a>&nbsp;' 
+                            return '<a class="disable-default btn btn-warning user-edit" style="display: none" data-role="Update Role" href="/Users/Edit/' + user.id + '" data-id="' + user.id + '"><i class=\'fa fa-edit\' ></i>&nbsp;Edit</a>&nbsp;' +
+                                '<a class="disable-default btn btn-danger user-delete" style="display: none" data-role="Delete Role" href="/Users/Delete/' + user.id + '" data-id="' + user.id + '"><i class=\'fa fa-trash\' ></i>&nbsp;Delete</a>&nbsp;' 
                         },
-                        "sortable": false
+                        "sortable": false,
+                        "width": 250,
+                        "autoWidth": false
                     }
                 ]
             });
@@ -97,7 +100,9 @@
                     } else {
                         $("form#edit-user-form")[0].reset();
                         $("div#edit-user-modal").modal("hide");
-                        window.usersTable.ajax.reload();
+                        window.usersTable.ajax.reload(function (json) {
+                            Users.loadDataTableWithForCurrentUserRoles();
+                        });
                     }
                 }
             }).fail(function (data) {
@@ -125,7 +130,9 @@
                         dataType: 'json'
                     }).done(function (data, textStatus) {
                         if (textStatus === "success") {
-                            window.usersTable.ajax.reload();
+                            window.usersTable.ajax.reload(function (json) {
+                                Users.loadDataTableWithForCurrentUserRoles();
+                            });
                         }
                     }).always(function () {
                         LoadingIndicator.hide();
@@ -135,7 +142,26 @@
         });
     }
 
+    var currentUserWithRoles = function () {
+        $.getJSON("/Account/GetCurrentUserRolesAsync", function (response) {
+            var container = $("div#current-user-roles");
+            container.attr("data-id", response.user);
+            container.attr("data-roles", response.roles.join(","));
+            $.each(response.roles, function (index, role) {
+                $("[data-role='" + role + "']").show();
+                if (role === "Admin Role") {
+                    $("[data-role]").show();
+                }
+            });
+        });
+    }
+
     return {
+
+        loadDataTableWithForCurrentUserRoles: function () {
+            currentUserWithRoles();
+        },
+
         init: function () {
             initUsersDataTable();
             initAjaxTab();

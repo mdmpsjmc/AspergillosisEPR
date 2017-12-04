@@ -11,6 +11,7 @@
                     newPatientsModalShow();
                     addFilteringColumns();
                     moveSearchFieldsFromFooterToHead();
+                    currentUserWithRoles();
                 },
                 "ajax": {
                     "url": "/DataTableJson/LoadPatients",
@@ -26,11 +27,13 @@
                     { "data": "dob", "name": "DOB", "autoWidth": true },
                     {
                         "render": function (data, type, patient, meta) {
-                            return '<a class="btn btn-info patient-details" href="/Patients/Details/' + patient.id + '"><i class=\'fa fa-eye\'></i>&nbsp;Details</a>&nbsp;' +
-                                '<a class="btn btn-warning patient-edit" href="/Patients/Edit/' + patient.id + '"><i class=\'fa fa-edit\' ></i>&nbsp;Edit</a>&nbsp;' +
-                                '<a class="btn btn-danger patient-delete" href="javascript:void(0)" data-id="' + patient.id + '"><i class=\'fa fa-trash\' ></i>&nbsp;Delete</a>&nbsp;';
+                            return '<a class="btn btn-info patient-details"  style="display: none" data-role="Read Role" href="/Patients/Details/' + patient.id + '"><i class=\'fa fa-eye\'></i>&nbsp;Details</a>&nbsp;' +
+                                '<a class="btn btn-warning patient-edit" style="display: none" data-role="Update Role" href="/Patients/Edit/' + patient.id + '"><i class=\'fa fa-edit\' ></i>&nbsp;Edit</a>&nbsp;' +
+                                '<a class="btn btn-danger patient-delete" style="display: none" data-role="Delete Role" href="javascript:void(0)" data-id="' + patient.id + '"><i class=\'fa fa-trash\' ></i>&nbsp;Delete</a>&nbsp;';
                         },
-                        "sortable": false
+                        "sortable": false,
+                        "width": 250,
+                        "autoWidth": false
                     }
                 ]
 
@@ -56,7 +59,9 @@
                     } else {
                         $("form#new-patient-form")[0].reset();
                         $("div#new-patient-modal").modal("hide");
-                        window.patientsTable.ajax.reload();
+                        window.patientsTable.ajax.reload(function () {
+                            currentUserWithRoles();     
+                        });
                     }
                 }
                 }).fail(function (data) {
@@ -207,7 +212,9 @@
                     } else {
                         $("form#edit-patient-form")[0].reset();
                         $("div#edit-modal").modal("hide");
-                        window.patientsTable.ajax.reload();
+                        window.patientsTable.ajax.reload(function () {
+                            currentUserWithRoles();
+                        });
                     }
                 }
             }).fail(function (data) {
@@ -324,8 +331,25 @@
         $("input.Actions").remove();
     }
 
+    var currentUserWithRoles = function () {
+        $.getJSON("/Account/GetCurrentUserRolesAsync", function (response) {
+            var container = $("div#current-user-roles");
+            container.attr("data-id", response.user);
+            container.attr("data-roles", response.roles.join(","));
+            $.each(response.roles, function (index, role) {
+                $("[data-role='" + role + "']").show();
+                if (role === "Admin Role") {
+                    $("[data-role]").show();
+                }
+            });
+        });
+    }
 
     return {
+
+        loadDataTableWithForCurrentUserRoles: function () {
+            currentUserWithRoles();
+        },
 
         bindPatientsModals: function() {
             newPatientsModalShow();

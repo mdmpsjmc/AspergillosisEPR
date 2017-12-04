@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Identity;
 using AspergillosisEPR.Services;
 using System;
 using System.Threading.Tasks;
+using Audit.Core;
 
 namespace AspergillosisEPR
 {
@@ -39,6 +40,14 @@ namespace AspergillosisEPR
             services.AddTransient<PatientViewModel>();
             services.AddMvc();
 
+            Audit.Core.Configuration.Setup()
+                .UseSqlServer(config => config
+                .ConnectionString(Configuration.GetConnectionString("DefaultConnection"))
+                .Schema("dbo")
+                .TableName("AuditEvents")
+                .IdColumnName("ID")
+                .JsonColumnName("Data")
+                .LastUpdatedColumnName("LastUpdatedDate"));
 
         }
 

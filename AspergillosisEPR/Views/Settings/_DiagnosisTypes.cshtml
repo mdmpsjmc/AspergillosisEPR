@@ -1,17 +1,26 @@
 ﻿@model AspergillosisEPR.Models.SettingsViewModels.SettingsViewModel
 <div class="table-responsive">
+@if (User.IsInRole("Create Role") || User.IsInRole("Admin Role"))
+{
     <div class="button">
         <a href="@Url.Action("New", "DiagnosisTypes")" class="btn btn-success add-diagnosis-type add-settings-item disable-default" data-tab="diagnosis-types" data-klass="DiagnosisType">
             <i class="fa fa-plus"></i> Add new diagnosis type
         </a>
     </div>
+}
     <table class="table table-bordered">
         <thead>
             <tr>
                 <th>ID</th>
                 <th>Diagnosis Type</th>
+                @if (User.IsInRole("Update Role") || User.IsInRole("Admin Role"))
+                {
                 <th>Edit</th>
+                }
+                @if (User.IsInRole("Delete Role") || User.IsInRole("Admin Role"))
+                {
                 <th>Delete</th>
+                }
             </tr>
         </thead>
         <tbody>
@@ -20,16 +29,22 @@
                 <tr>
                     <td>@type.ID</td>
                     <td>@type.Name</td>
+                    @if (User.IsInRole("Update Role") || User.IsInRole("Admin Role"))
+                    {
                     <td>
-                        <a href="@Url.Action("Edit", "DiagnosisTypes", new { id=type.ID })" class="btn btn-primary edit-diagnosis-type edit-link disable-default">
+                        <a href="@Url.Action("Edit", "DiagnosisTypes", new { id = type.ID })" class="btn btn-primary edit-diagnosis-type edit-link disable-default">
                             <i class="fa fa-edit"></i>
                         </a>
                     </td>
+                    }
+                    @if (User.IsInRole("Delete Role") || User.IsInRole("Admin Role"))
+                    {
                     <td>
-                        <a href="@Url.Action("Delete", "DiagnosisTypes", new { id=type.ID })" data-tab="diagnosis-types" class="btn btn-danger edit-diagnosis-type delete-link disable-default" data-what="Diagnosis Type" data-warning="All patient diagnoses related to this diagnosis will be also irreversibly lost from database if you remove this item">
+                        <a href="@Url.Action("Delete", "DiagnosisTypes", new { id = type.ID })" data-tab="diagnosis-types" class="btn btn-danger edit-diagnosis-type delete-link disable-default" data-what="Diagnosis Type" data-warning="All patient diagnoses related to this diagnosis will be also irreversibly lost from database if you remove this item">
                             <i class="fa fa-trash"></i>
                         </a>
                     </td>
+                    }
                 </tr>
             }
         </tbody>

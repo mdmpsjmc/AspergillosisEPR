@@ -24,6 +24,7 @@ namespace AspergillosisEPR.Controllers
             _context = context;
         }
 
+        [Authorize(Roles =("Admin Role, Create Role"))]
         public IActionResult New()
         {
             PopulateDiagnosisCategoriesDropDownList();
@@ -31,6 +32,7 @@ namespace AspergillosisEPR.Controllers
             return PartialView();
         }
 
+        [Authorize(Roles = ("Admin Role, Read Role"))]
         public IActionResult Index()
         {
             return View();
@@ -38,6 +40,7 @@ namespace AspergillosisEPR.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = ("Admin Role, Create Role"))]
         public async Task<IActionResult> Create([Bind("LastName,FirstName,DOB,Gender, RM2Number")] Patient patient, 
                                                  PatientDiagnosis[] diagnoses, PatientDrug[] drugs)
         {
@@ -76,6 +79,7 @@ namespace AspergillosisEPR.Controllers
             }        
         }
 
+        [Authorize(Roles = ("Admin Role, Read Role"))]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -103,6 +107,7 @@ namespace AspergillosisEPR.Controllers
             return PartialView(patient);
         }
 
+        [Authorize(Roles = ("Admin Role, Update Role"))]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)             
@@ -130,8 +135,8 @@ namespace AspergillosisEPR.Controllers
             return PartialView(patient);
         }
 
-     
 
+        [Authorize(Roles = ("Admin Role, Update Role"))]
         [HttpPost, ActionName("Edit")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> EditPatient(int? id, [Bind("ID,DiagnosisCategoryId,DiagnosisTypeId,Description")] PatientDiagnosis[] diagnoses, 
@@ -256,6 +261,7 @@ namespace AspergillosisEPR.Controllers
 
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = ("Admin Role, Delete Role"))]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var patient = await _context.Patients.SingleOrDefaultAsync(p => p.ID == id);

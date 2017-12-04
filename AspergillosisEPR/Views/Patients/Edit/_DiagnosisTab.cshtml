@@ -41,9 +41,12 @@
         </div>
     }    
 </div>
+@if (User.IsInRole("Update Role") || User.IsInRole("Admin Role"))
+{
 <a href="@Url.Action("EditDiagnosisForm", "Partials")" class="btn btn-success add-edit-diagnosis" style="padding: 5px">
     <i class="fa fa-plus"></i>
     <span>
         <strong>Add diagnosis</strong>
     </span>
 </a>
+}

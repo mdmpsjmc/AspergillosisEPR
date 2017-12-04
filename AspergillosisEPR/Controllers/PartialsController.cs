@@ -20,7 +20,7 @@ namespace AspergillosisEPR.Controllers
 
             _context = context;
         }
-
+        [Authorize(Roles ="Create Role, Admin Role")]
         public IActionResult DiagnosisForm()
         {
             PopulateDiagnosisCategoriesDropDownList();
@@ -28,6 +28,7 @@ namespace AspergillosisEPR.Controllers
             return PartialView();
         }
 
+        [Authorize(Roles = "Create Role, Admin Role")]
         public IActionResult DrugForm()
         {
             PopulateDrugsDropDownList();
@@ -35,6 +36,7 @@ namespace AspergillosisEPR.Controllers
             return PartialView();
         }
 
+        [Authorize(Roles = "Update Role, Admin Role")]
         public IActionResult EditDiagnosisForm()
         {
             PopulateDiagnosisCategoriesDropDownList();
@@ -43,6 +45,7 @@ namespace AspergillosisEPR.Controllers
             return PartialView();
         }
 
+        [Authorize(Roles = "Update Role, Admin Role")]
         public IActionResult EditDrugForm()
         {
             PopulateDrugsDropDownList();

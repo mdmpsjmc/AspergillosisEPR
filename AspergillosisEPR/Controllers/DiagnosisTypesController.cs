@@ -21,6 +21,7 @@ namespace AspergillosisEPR.Controllers
             _context = context;
         }
 
+        [Authorize(Roles = "Admin Role, Create Role")]
         public IActionResult New()
         {
             return PartialView(SetupViewModel());
@@ -28,6 +29,7 @@ namespace AspergillosisEPR.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin Role, Create Role")]
         public async Task<IActionResult> Create([Bind("Name")] DiagnosisType diagnosisType)
         {
             try
@@ -49,7 +51,7 @@ namespace AspergillosisEPR.Controllers
                 return null;
             }
         }
-
+        [Authorize(Roles = "Admin Role, Update Role")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -69,6 +71,7 @@ namespace AspergillosisEPR.Controllers
 
         [HttpPost, ActionName("Edit")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin Role, Update Role")]
         public async Task<IActionResult> EditDiagnosisType(int? id)
         {
             if (id == null)
@@ -105,6 +108,7 @@ namespace AspergillosisEPR.Controllers
 
 
         [HttpPost, ActionName("Delete")]
+        [Authorize(Roles = "Admin Role, Delete Role")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {

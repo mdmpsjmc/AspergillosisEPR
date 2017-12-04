@@ -27,11 +27,13 @@ namespace AspergillosisEPR.Controllers
             _userManager = userManager;
         }
 
+        [Authorize(Roles = "Read Role, Admin Role")]
         public IActionResult Index()
         {
             return View();
         }
 
+        [Authorize(Roles = "Update Role, Admin Role")]
         public async Task<IActionResult> Edit(string id)
         {
             if (string.IsNullOrEmpty(id))
@@ -52,6 +54,7 @@ namespace AspergillosisEPR.Controllers
         }
 
         [HttpPost, ActionName("Edit")]
+        [Authorize(Roles = "Update Role, Admin Role")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> EditUser(string id, 
                                                   ApplicationUser user, 
@@ -105,6 +108,7 @@ namespace AspergillosisEPR.Controllers
             return Json(new { result = "ok" });
         }
 
+        [Authorize(Roles = "Update Role, Admin Role")]
         public async Task<IActionResult> Password(string id)
         {
             if (string.IsNullOrEmpty(id))
@@ -120,6 +124,7 @@ namespace AspergillosisEPR.Controllers
         }
 
         [HttpPost, ActionName("EditPassword")]
+        [Authorize(Roles = "Update Role, Admin Role")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> EditPassword(string id, ResetPasswordViewModel passwordResetViewModel)
         {
@@ -145,6 +150,7 @@ namespace AspergillosisEPR.Controllers
         }
 
         [HttpPost, ActionName("Delete")]
+        [Authorize(Roles = "Delete Role, Admin Role")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(string id)
         {
@@ -157,6 +163,21 @@ namespace AspergillosisEPR.Controllers
                 await _userManager.DeleteAsync(user);
                 return Json(new { ok = "ok" });
             }                                
+        }
+
+        [Authorize(Roles ="Read Role, Admin Role")]
+        public async Task<IActionResult> UserRoles(string id)
+        {
+            var user = await _userManager.FindByIdAsync(id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                var roles = await _userManager.GetRolesAsync(user);
+                return Json(new { roles = roles });
+            }
         }
 
         private MultiSelectList PopulateRolesDropDownList(IList<string> selectedRoles)

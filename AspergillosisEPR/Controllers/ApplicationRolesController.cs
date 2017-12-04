@@ -18,6 +18,7 @@ namespace AspergillosisEPR.Controllers
             this.roleManager = roleManager;
         }
 
+        [Authorize(Roles = "Read Role, Admin Role")]
         public IActionResult Index()
         {
             List<ApplicationRoleListViewModel> model = new List<ApplicationRoleListViewModel>();

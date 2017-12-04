@@ -1,9 +1,12 @@
 ﻿@model AspergillosisEPR.Models.PatientDiagnosis
 <div class="col-12 row diagnosis-form" style="margin: 0px !important">
 </div>
+@if (User.IsInRole("Create Role") || User.IsInRole("Admin Role"))
+{
 <a href="@Url.Action("DiagnosisForm", "Partials")" class="btn btn-success add-diagnosis" style="padding: 5px">
     <i class="fa fa-plus"></i>
     <span>
         <strong>Add diagnosis</strong>
     </span>
 </a>
+}

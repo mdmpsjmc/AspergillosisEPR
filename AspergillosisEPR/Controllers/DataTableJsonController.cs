@@ -25,6 +25,7 @@ namespace AspergillosisEPR.Controllers
             _userManager = userManager;
         }
 
+        [Authorize(Roles = "Read Role, Admin Role")]
         public IActionResult LoadPatients()
         {
             try
@@ -108,7 +109,8 @@ namespace AspergillosisEPR.Controllers
             }
         }
 
-        public   IActionResult  LoadUsers()
+        [Authorize(Roles = "Read Role, Admin Role")]
+        public IActionResult  LoadUsers()
         {
             try
             {

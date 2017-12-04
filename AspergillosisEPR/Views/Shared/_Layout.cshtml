@@ -67,6 +67,7 @@
     @if (User.Identity.IsAuthenticated)
     {
         await Html.RenderPartialAsync("_Footer");
+        <div id="current-user-roles" data-roles="" data-id=""></div>
     }
     @{ await Html.RenderPartialAsync("_Scripts"); }
 

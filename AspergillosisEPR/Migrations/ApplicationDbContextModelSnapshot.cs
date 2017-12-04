@@ -107,6 +107,22 @@ namespace AspergillosisEPR.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
+            modelBuilder.Entity("AspergillosisEPR.Models.AuditEvent", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Data");
+
+                    b.Property<DateTime>("InsertedDate");
+
+                    b.Property<DateTime?>("LastUpdatedDate");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("AuditEvents");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.Property<int>("Id")

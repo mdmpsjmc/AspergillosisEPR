@@ -1,9 +1,12 @@
 ﻿@model AspergillosisEPR.Models.PatientDrug
 <div class="col-12 row drug-form" style="margin: 0px !important">
 </div>
+@if (User.IsInRole("Create Role") || User.IsInRole("Admin Role"))
+{
 <a href="@Url.Action("DrugForm", "Partials")" class="btn btn-success add-drug" style="padding: 5px">
     <i class="fa fa-plus"></i>
     <span>
         <strong>Add drug</strong>
     </span>
 </a>
+}

@@ -11,6 +11,7 @@ using AspergillosisEPR.Models;
 using AspergillosisEPR.Models.AccountViewModels;
 using AspergillosisEPR.Services;
 using AspergillosisEPR.Data;
+using Audit.Core;
 
 namespace AspergillosisEPR.Controllers
 {
@@ -97,7 +98,7 @@ namespace AspergillosisEPR.Controllers
         }
 
         [HttpGet]
-        [AllowAnonymous]
+        [Authorize(Roles ="Create Role, Admin Role")]
         public IActionResult Register(string returnUrl = null)
         {
             ViewData["ReturnUrl"] = returnUrl;
@@ -106,38 +107,45 @@ namespace AspergillosisEPR.Controllers
         }
 
         [HttpPost]
-        [AllowAnonymous]
+        [Authorize(Roles = "Create Role, Admin Role")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(RegisterViewModel model, string returnUrl = null)
         {
             ViewBag.Roles = PopulateRolesDropDownList();
             ViewData["ReturnUrl"] = returnUrl;
+            
             if (ModelState.IsValid)
             {
-                
-                var user = new ApplicationUser {
+                var user = new ApplicationUser()
+                {
                     UserName = ApplicationUser.GenerateUsername(model.FirstName, model.LastName),
                     Email = model.Email,
                     FirstName = model.FirstName,
                     LastName = model.LastName,
                     EmailConfirmed = true
-                };                                    
-                    
-                var result = await _userManager.CreateAsync(user, model.Password);
-                if (result.Succeeded)
-                {
-                    var selectedRoles = Request.Form["Roles"].AsEnumerable();
-                    string readAccessRole = "Read Role";
-                    if (!selectedRoles.Contains(readAccessRole))
+                };
+                using (var audit = AuditScope.Create("User:Register", () => user))
+                {                                      
+                    var result = await _userManager.CreateAsync(user, model.Password);
+
+                    if (result.Succeeded)
                     {
-                        selectedRoles = selectedRoles.Append(readAccessRole);
+                        var selectedRoles = Request.Form["Roles"].AsEnumerable();
+                        string readAccessRole = "Read Role";
+                        if (!selectedRoles.Contains(readAccessRole))
+                        {
+                            selectedRoles = selectedRoles.Append(readAccessRole);
+                        }
+                        await _userManager.AddToRolesAsync(user, selectedRoles);     
+                        audit.Comment("Created user " + user.UserName);
+                        var currentUser = GetCurrentUserAsync().Result;
+                        audit.Event.CustomFields["CreatedById"] = currentUser.Id;
+                        audit.Event.CustomFields["CreatedByUserName"] = currentUser.UserName;
+                        //await _signInManager.SignInAsync(user, isPersistent: fa`lse);
+                        return RedirectToLocal(returnUrl);
                     }
-                    await _userManager.AddToRolesAsync(user, selectedRoles);
-                    _logger.LogInformation("User created a new account with password.");
-                    //await _signInManager.SignInAsync(user, isPersistent: fa`lse);
-                    return RedirectToLocal(returnUrl);
+                    AddErrors(result);
                 }
-                AddErrors(result);
             }
             return View(model);
         }
@@ -201,6 +209,27 @@ namespace AspergillosisEPR.Controllers
         public IActionResult AccessDenied()
         {
             return View();
+        }
+
+        [HttpGet]
+        public async Task<string> GetCurrentUserId()
+        {
+            ApplicationUser usr = await GetCurrentUserAsync();
+            return usr?.Id;
+        }
+
+        private async Task<ApplicationUser> GetCurrentUserAsync()
+        {
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            return user;
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetCurrentUserRolesAsync()
+        {
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            var roles = await _userManager.GetRolesAsync(user);
+            return Json(new { user = user.Id, roles });
         }
 
         #region Helpers

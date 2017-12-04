@@ -16,6 +16,7 @@ namespace AspergillosisEPR.Controllers
             _context = context;
         }
 
+        [Authorize(Roles = "Admin Role, Read Role")]
         public IActionResult Index()
         {
             var settings = new SettingsViewModel();

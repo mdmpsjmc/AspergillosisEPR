@@ -19,6 +19,7 @@ namespace AspergillosisEPR.Controllers
 
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Delete Role, Admin Role")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var patientDiagnosis = await _context.PatientDiagnoses.SingleOrDefaultAsync(pd => pd.ID == id);

@@ -21,6 +21,7 @@ namespace AspergillosisEPR.Controllers
             _context = context;
         }
 
+        [Authorize(Roles = "Admin Role, Create Role")]
         public IActionResult New()
         {
             
@@ -30,6 +31,7 @@ namespace AspergillosisEPR.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin Role, Create Role")]
         public async Task<IActionResult> Create([Bind("Name")] Drug drug)
         {
             try
@@ -52,6 +54,7 @@ namespace AspergillosisEPR.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin Role, Update Role")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -70,6 +73,7 @@ namespace AspergillosisEPR.Controllers
         }
 
         [HttpPost, ActionName("Edit")]
+        [Authorize(Roles = "Admin Role, Update Role")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> EditDrug(int? id)
         {
@@ -106,6 +110,7 @@ namespace AspergillosisEPR.Controllers
         }
 
         [HttpPost, ActionName("Delete")]
+        [Authorize(Roles = "Admin Role, Delete Role")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {

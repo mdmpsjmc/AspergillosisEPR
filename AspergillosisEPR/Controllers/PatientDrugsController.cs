@@ -22,6 +22,7 @@ namespace AspergillosisEPR.Controllers
         }
 
         [HttpPost, ActionName("Delete")]
+        [Authorize(Roles = "Delete Role, Admin Role")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
