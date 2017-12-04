@@ -1,32 +1,22 @@
 ﻿<aside id="left-panel">
-
-    <!-- User info -->
+    @addTagHelper *, AspergillosisEPR
     @{ await Html.RenderPartialAsync("_CurrentUser"); }
-    <!-- end user info -->
-    <!-- NAVIGATION : This navigation is also responsive
-
-    To make this navigation dynamic please make sure to link the node
-    (the reference to the nav > ul) after page load. Or the navigation
-    will not initialize.
-    -->
     <nav>
-        <!-- NOTE: Notice the gaps after each icon usage <i></i>..
-        Please note that these links work a bit different than
-        traditional href="" links. See documentation for details.
-        -->
-        @{
-            var controllerName = this.ViewContext.RouteData.Values["controller"].ToString();
-        }
         <ul>
-            <li class="active">
-                <a href="@Url.Action("index", "home")" title="Dashboard" >
-                    <i class="fa fa-lg fa-fw fa-home"></i> 
-                    <span class="menu-item-parent">Dashboard</span>
+            <li is-active-route asp-controller="Home" asp-action="Index">
+                <a href="@Url.Action("index", "Home")" title="Patients">
+
+                    <i class="fa fa-lg fa-fw fa-home"></i>
+                    <span class="menu-item-parent">Patients</span>
                 </a>
+            </li>
+            <li is-active-route asp-controller="Settings" asp-action="Index">
                 <a href="@Url.Action("index", "settings")" title="Settings">
                     <i class="fa fa-gear"></i>
                     <span class="menu-item-parent">Settings</span>
                 </a>
+            </li>
+            <li is-active-route asp-controller="Users" asp-action="Index">
                 <a href="@Url.Action("index", "users")" title="Users">
                     <i class="fa fa-users"></i>
                     <span class="menu-item-parent">Application Users</span>
@@ -37,6 +27,4 @@
     <span class="minifyme" data-action="minifyMenu">
         <i class="fa fa-arrow-circle-left hit"></i>
     </span>
-
 </aside>
-<!-- END NAVIGATION -->

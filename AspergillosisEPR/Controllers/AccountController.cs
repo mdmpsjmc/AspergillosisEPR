@@ -130,7 +130,7 @@ namespace AspergillosisEPR.Controllers
                     string readAccessRole = "Read Role";
                     if (!selectedRoles.Contains(readAccessRole))
                     {
-                        selectedRoles.Append(readAccessRole);
+                        selectedRoles = selectedRoles.Append(readAccessRole);
                     }
                     await _userManager.AddToRolesAsync(user, selectedRoles);
                     _logger.LogInformation("User created a new account with password.");

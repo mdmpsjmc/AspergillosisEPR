@@ -72,6 +72,10 @@ namespace AspergillosisEPR.Controllers
                 {
                     await _userManager.UpdateAsync(userToUpdate);
                     var uiSelectedRoles = roles;
+                    if (uiSelectedRoles.Count() == 0 || !uiSelectedRoles.Contains("Read Role"))
+                    {
+                        uiSelectedRoles.Add("Read Role");
+                    }
                     var currentRoles = _userManager.GetRolesAsync(userToUpdate).Result;
                     var toDeleteRoles = currentRoles.Except(uiSelectedRoles);
                     var toInsertRoles = uiSelectedRoles.Except(currentRoles);
@@ -80,7 +84,7 @@ namespace AspergillosisEPR.Controllers
                     {
                         await _userManager.RemoveFromRolesAsync(userToUpdate, toDeleteRoles);
                     }
-
+                    
                     if (toInsertRoles.Count() > 0)
                     {
                         await _userManager.AddToRolesAsync(userToUpdate, toInsertRoles);
