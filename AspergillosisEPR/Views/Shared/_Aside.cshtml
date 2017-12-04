@@ -14,10 +14,12 @@
         Please note that these links work a bit different than
         traditional href="" links. See documentation for details.
         -->
-
+        @{
+            var controllerName = this.ViewContext.RouteData.Values["controller"].ToString();
+        }
         <ul>
-            <li>
-                <a href="@Url.Action("index", "home")" title="Dashboard">
+            <li class="active">
+                <a href="@Url.Action("index", "home")" title="Dashboard" >
                     <i class="fa fa-lg fa-fw fa-home"></i> 
                     <span class="menu-item-parent">Dashboard</span>
                 </a>
