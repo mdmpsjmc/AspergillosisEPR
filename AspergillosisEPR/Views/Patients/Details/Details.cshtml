@@ -22,6 +22,23 @@
                             <i class="fa fa-birthday-cake"></i>&nbsp;&nbsp;<span class="txt-color-darken">@(Model.DOB.ToString("dd/MMM/yyy")) (@(Model.Age()) years)</span>
                         </p>
                     </li>
+                    @if (Model.PatientStatus != null)
+                    {
+                        <li>
+                            <p class="text-muted">
+                                <i class="fa fa-info-circle"></i>&nbsp;&nbsp;<span class="txt-color-darken">Status:&nbsp;@(Model.PatientStatus.Name)</span>
+                            </p>
+                        </li>
+                    }
+                    @if (Model.IsDeceased())
+                    {
+                        <li>
+                            <p class="text-muted">
+                                <i class="fa fa-bolt"></i>&nbsp;&nbsp;<span class="txt-color-darken">Death:&nbsp;@(Model.DateOfDeath.Value.ToString("dd/MMM/yyy"))</span>
+                            </p>
+                        </li>
+
+                    }
                 </ul>
                 <br>                
             </div>            

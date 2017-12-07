@@ -90,5 +90,26 @@ namespace AspergillosisEPR.Data
             }
             context.SaveChanges();
         }
+
+        public static void AddDefaultPatientStatuses(AspergillosisContext context)
+        {
+            if (context.PatientStatuses.Any())
+            {
+                return;
+            }
+            var statuses = new PatientStatus[]
+            {
+                new PatientStatus{Name="Active"},
+                new PatientStatus{Name="Discharged"},
+                new PatientStatus{Name="Inactive"},
+                new PatientStatus{Name="Deceased"},
+            };
+            foreach(var status in statuses)
+            {
+                context.Add(status);
+            }
+            context.SaveChanges();
+
+       }
     }
 }

@@ -11,6 +11,27 @@
                 <span asp-validation-for="RM2Number" class="text-danger"></span>
             </label>
         </section>
+        <section class="col col-6">
+            <label asp-for="PatientStatusId" class="select">
+                <select asp-for="PatientStatusId" asp-items="(SelectList) ViewBag.PatientStatuses">
+                    <option value="">Select Status</option>
+                </select>
+                <span asp-validation-for="PatientStatusId" class="text-danger"></span>
+                <i class="icon-append fa fa-venus-mars"></i>
+            </label>
+        </section>
+        <div class="death @((Model.IsDeceased() ? "" : "hidden"))">
+            <section class="col col-6">
+                <label class="pull-right">Date of death:</label>
+            </section>
+            <section class="col col-6">
+                <label asp-for="DateOfDeath" class="input">
+                    <i class="icon-append fa fa-bolt"></i>
+                    <input asp-for="DateOfDeath" placeholder="Date of Death">
+                    <span asp-validation-for="DateOfDeath" class="text-danger"></span>
+                </label>
+            </section>
+        </div>            
     </div>
 </fieldset>
 <fieldset>

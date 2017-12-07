@@ -31,12 +31,18 @@ namespace AspergillosisEPR.Models
         [StringLength(50)]
         [Remote("HasRMNumber", "Patients", AdditionalFields = "Id",
                 ErrorMessage = "Patient RM2 Number already exists in database")]
-        public string RM2Number { get; set; }      
-        
+        public string RM2Number { get; set; }
+
+        public int? PatientStatusId { get; set; }
+
+        [DataType(DataType.Date)]
+        [Display(Name = "Date of Death")]
+        [DisplayFormat(DataFormatString = "{dd-MM-yyyy}")]
+        public DateTime? DateOfDeath { get; set; }
 
         public ICollection<PatientDiagnosis> PatientDiagnoses { get; set; }
         public ICollection<PatientDrug> PatientDrugs { get; set; }
-
+        public PatientStatus PatientStatus { get; set; }
         [Display(Name = "Full Name")]
         public string FullName
         {
@@ -47,11 +53,32 @@ namespace AspergillosisEPR.Models
         public int Age()
         {
             int age = 0;
-            age = DateTime.Now.Year - DOB.Year;
-            if (DateTime.Now.DayOfYear < DOB.DayOfYear)
+            int endDate = 0;
+            int endDateDayOfYear = 0;
+            if (IsAlive())
+            {
+                endDate = DateTime.Now.Year;
+                endDateDayOfYear = DateTime.Now.DayOfYear;
+            } else
+            {
+                endDate = DateOfDeath.Value.Year;
+                endDateDayOfYear = DateOfDeath.Value.DayOfYear;
+            }
+            age = endDate  - DOB.Year;
+            if (endDateDayOfYear < DOB.DayOfYear)
                 age = age - 1;
 
             return age;
+        }
+
+        public bool IsDeceased()
+        {
+            return !IsAlive();
+        }
+
+        private bool IsAlive()
+        {
+            return DateOfDeath == null; 
         }
 
     }

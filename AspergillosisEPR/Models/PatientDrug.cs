@@ -9,11 +9,12 @@ namespace AspergillosisEPR.Models
     {
         [Key]
         public int ID { get; set; }
+        [Required(ErrorMessage = "Patient cannot be blank")]
         public int PatientId { get; set; }
+        [Required(ErrorMessage = "Drug must be selected required")]
         public int DrugId { get; set; }
 
         public Patient Patient { get; set; }
-        [Required(ErrorMessage = "The field is required")]
         public Drug Drug { get; set; }
         public ICollection<PatientDrugSideEffect> SideEffects { get; set; }
 

@@ -66,6 +66,8 @@ namespace AspergillosisEPR.Migrations.Aspergillosis
 
                     b.Property<DateTime>("DOB");
 
+                    b.Property<DateTime?>("DateOfDeath");
+
                     b.Property<string>("FirstName")
                         .IsRequired();
 
@@ -74,6 +76,8 @@ namespace AspergillosisEPR.Migrations.Aspergillosis
 
                     b.Property<string>("LastName")
                         .IsRequired();
+
+                    b.Property<int?>("PatientStatusId");
 
                     b.Property<string>("RM2Number")
                         .IsRequired()
@@ -147,6 +151,18 @@ namespace AspergillosisEPR.Migrations.Aspergillosis
                     b.HasIndex("SideEffectId");
 
                     b.ToTable("PatientDrugSideEffects");
+                });
+
+            modelBuilder.Entity("AspergillosisEPR.Models.PatientStatus", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Name");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("PatientStatuses");
                 });
 
             modelBuilder.Entity("AspergillosisEPR.Models.SideEffect", b =>

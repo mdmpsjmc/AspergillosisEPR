@@ -8,6 +8,7 @@ namespace AspergillosisEPR.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            
             migrationBuilder.AddColumn<DateTime>(
                 name: "CreatedAt",
                 table: "AspNetRoles",

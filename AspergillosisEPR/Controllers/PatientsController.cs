@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Collections;
 using AspergillosisEPR.Helpers;
 using Microsoft.AspNetCore.Authorization;
+using Audit.Mvc;
 
 namespace AspergillosisEPR.Controllers
 {
@@ -28,7 +29,8 @@ namespace AspergillosisEPR.Controllers
         public IActionResult New()
         {
             PopulateDiagnosisCategoriesDropDownList();
-            PopulateDiagnosisTypeDropDownList(); 
+            PopulateDiagnosisTypeDropDownList();
+            PopulatePatientStatusesDropdownList();
             return PartialView();
         }
 
@@ -41,7 +43,8 @@ namespace AspergillosisEPR.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = ("Admin Role, Create Role"))]
-        public async Task<IActionResult> Create([Bind("LastName,FirstName,DOB,Gender, RM2Number")] Patient patient, 
+        [Audit(EventTypeName = "Patient::Create", IncludeHeaders = true, IncludeModel = true)]
+        public async Task<IActionResult> Create([Bind("LastName,FirstName,DOB,Gender, RM2Number, PatientStatusId, DateOfDeath")] Patient patient, 
                                                  PatientDiagnosis[] diagnoses, PatientDrug[] drugs)
         {
             patient.PatientDiagnoses = diagnoses;
@@ -97,6 +100,7 @@ namespace AspergillosisEPR.Controllers
                                 .Include(p => p.PatientDrugs)
                                     .ThenInclude(d => d.SideEffects)
                                     .ThenInclude(se => se.SideEffect)
+                                .Include(p => p.PatientStatus)
                                 .AsNoTracking()
                                 .SingleOrDefaultAsync(m => m.ID == id);
             if (patient == null)
@@ -152,8 +156,8 @@ namespace AspergillosisEPR.Controllers
                                 .Include(p => p.PatientDrugs)
                                 .AsNoTracking()
                                 .SingleOrDefaultAsync(m => m.ID == id);
-
-            foreach(var diagnosis in diagnoses)
+            _context.Entry(patientToUpdate).State = EntityState.Modified;
+            foreach (var diagnosis in diagnoses)
             {
                 if (diagnosis.ID == 0)
                 {
@@ -223,11 +227,12 @@ namespace AspergillosisEPR.Controllers
 
             if (await TryUpdateModelAsync<Patient>(patientToUpdate,
                 "",
-                p => p.FirstName, p => p.LastName, p => p.DOB, p => p.RM2Number, p=> p.Gender))
+                p => p.FirstName, p => p.LastName, p => p.DOB, p => p.RM2Number, 
+                p => p.Gender, p => p.PatientStatusId, p => p.DateOfDeath))
             {
                 try
                 {
-                    await _context.SaveChangesAsync();
+                    _context.SaveChanges();
                 }
                 catch (DbUpdateException /* ex */)
                 {
@@ -343,9 +348,16 @@ namespace AspergillosisEPR.Controllers
             ViewBag.DiagnosisCategories = diagnosesCategories;
             ViewBag.Drugs = drugs;
             ViewBag.SideEffects = sideEffects;
-
+            PopulatePatientStatusesDropdownList(patient.PatientStatusId);
         }
 
+        private void PopulatePatientStatusesDropdownList(object selectedStatus = null)
+        {
+            var statuses = from se in _context.PatientStatuses
+                              orderby se.Name
+                              select se;
+            ViewBag.PatientStatuses = new SelectList(statuses, "ID", "Name", selectedStatus);
+        }
 
         private MultiSelectList PopulateSideEffectsDropDownList(List<int> selectedIds)
         {
@@ -354,6 +366,5 @@ namespace AspergillosisEPR.Controllers
                               select se;
             return new MultiSelectList(sideEffects, "ID", "Name", selectedIds);
         }
-
     }
 }

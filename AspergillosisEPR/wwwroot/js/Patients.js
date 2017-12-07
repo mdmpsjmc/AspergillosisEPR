@@ -185,6 +185,7 @@
                 $("div#modal-container").html(responseHtml);
                 $("div#edit-modal").modal("show");
                 updatePatient();
+                onPatientStatusChange();
                 $("select.select2").select2({
                     minimumResultsForSearch: -1,
                     placeholder: function () {
@@ -346,6 +347,18 @@
         });
     }
 
+    var onPatientStatusChange = function () {
+        $(document).off("change.patient-status").on("change.patient-status", "select#PatientStatusId", function () {
+            var selectedValue = $("select#" + $(this).attr("id") + " option:selected").text().toLowerCase();
+            if (selectedValue.toLowerCase() === "deceased") {
+                $("div.death").removeClass("hidden");
+            } else {
+                $("div.death").addClass("hidden");
+                $("input#DateOfDeath").val("")
+            }
+        });
+    }
+
     return {
 
         loadDataTableWithForCurrentUserRoles: function () {
@@ -363,6 +376,7 @@
             bindOnDeletePatientClick();
             deletePatientPartialFromPopup();
             deletePatientDbPartialFromPopup();
+            onPatientStatusChange();
         },
 
         setupForm: function() {
@@ -381,5 +395,4 @@
 
         }
     }
-
 }();
