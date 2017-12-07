@@ -8,6 +8,7 @@
 <script src="~/js/Patients.js"></script>
 <script src="~/js/Settings.js"></script>
 <script src="~/js/Users.js"></script>
+<script src="~/js/Imports.js"></script>
 @Html.Partial("/Views/Shared/_ValidationScriptsPartial.cshtml");
 <script>
     $(document).ready(function () {
@@ -17,5 +18,6 @@
         Patients.init();
         Settings.init();
         Users.init();
+        Imports.init();
     });
 </script>

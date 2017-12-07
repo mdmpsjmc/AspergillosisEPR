@@ -22,6 +22,15 @@
                     <span class="menu-item-parent">Application Users</span>
                 </a>
             </li>
+            @if (User.IsInRole("Admin Role"))
+            {
+             <li is-active-route asp-controller="Imports" asp-action="Index">
+                <a href="@Url.Action("Index", "imports")" title="Imports">
+                    <i class="fa fa-download"></i>
+                    <span class="menu-item-parent">Import data</span>
+                </a>
+             </li>
+            }
         </ul>
     </nav>
     <span class="minifyme" data-action="minifyMenu">

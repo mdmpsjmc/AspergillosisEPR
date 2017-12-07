@@ -1,0 +1,24 @@
+﻿<div class="table-responsive row">
+    <article class="col-sm-12 sortable-grid ui-sortable">        
+        <div class="jarviswidget" id="wid-id-x" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-togglebutton="false" data-widget-deletebutton="false" data-widget-fullscreenbutton="false" data-widget-custombutton="false" data-widget-sortable="false">            
+            <header role="heading">
+                <span class="widget-icon"> <i class="fa fa-download"></i> </span>
+                <h2>Data Imports</h2>
+            </header>
+            <div role="content">
+                <div class="jarviswidget-editbox"></div>
+                <div class="widget-body">
+                    @if (User.IsInRole("Admin Role"))
+                    {
+                        <div class="button">
+                            <a href="@Url.Action("New", "Imports")" class="btn btn-success add-user">
+                                <i class="fa fa-plus"></i> Import patients into database
+                            </a>
+                        </div>
+                    } 
+                    @Html.Partial("/Views/Imports/_DataTable.cshtml")
+                </div>
+            </div>
+        </div>
+    </article>
+</div>
