@@ -41,6 +41,8 @@ namespace AspergillosisEPR.Migrations.Aspergillosis
                     b.Property<string>("Name")
                         .IsRequired();
 
+                    b.Property<string>("ShortName");
+
                     b.HasKey("ID");
 
                     b.ToTable("DiagnosisTypes");
@@ -71,8 +73,7 @@ namespace AspergillosisEPR.Migrations.Aspergillosis
                     b.Property<string>("FirstName")
                         .IsRequired();
 
-                    b.Property<string>("Gender")
-                        .IsRequired();
+                    b.Property<string>("Gender");
 
                     b.Property<string>("LastName")
                         .IsRequired();
@@ -84,6 +85,8 @@ namespace AspergillosisEPR.Migrations.Aspergillosis
                         .HasMaxLength(50);
 
                     b.HasKey("ID");
+
+                    b.HasIndex("PatientStatusId");
 
                     b.ToTable("Patients");
                 });
@@ -176,6 +179,13 @@ namespace AspergillosisEPR.Migrations.Aspergillosis
                     b.HasKey("ID");
 
                     b.ToTable("SideEffects");
+                });
+
+            modelBuilder.Entity("AspergillosisEPR.Models.Patient", b =>
+                {
+                    b.HasOne("AspergillosisEPR.Models.PatientStatus", "PatientStatus")
+                        .WithMany()
+                        .HasForeignKey("PatientStatusId");
                 });
 
             modelBuilder.Entity("AspergillosisEPR.Models.PatientDiagnosis", b =>

@@ -16,9 +16,7 @@ namespace AspergillosisEPR.Models
 
         [Required]
         [Display(Name = "First Name")]
-        public string FirstName { get; set; }
-
-        [Required]
+        public string FirstName { get; set; }       
         public string Gender { get; set; }
 
         [Required]

@@ -21,6 +21,7 @@ namespace AspergillosisEPR.Models.SettingsViewModels
         }
         public string Controller { get; set; }
         public string Name { get; set; }
+        public string ShortName { get; set; }
         public int ItemId { get; set; }
         public string Tab { get; set; }
     }

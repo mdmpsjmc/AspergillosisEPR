@@ -30,7 +30,7 @@ namespace AspergillosisEPR.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin Role, Create Role")]
-        public async Task<IActionResult> Create([Bind("Name")] DiagnosisType diagnosisType)
+        public async Task<IActionResult> Create([Bind("Name, ShortName")] DiagnosisType diagnosisType)
         {
             try
             {
@@ -83,6 +83,7 @@ namespace AspergillosisEPR.Controllers
                                 .AsNoTracking()
                                 .SingleOrDefaultAsync(m => m.ID == id);
             dbDiagnosisType.Name = Request.Form["Name"];
+            dbDiagnosisType.ShortName = Request.Form["ShortName"];
             if (TryValidateModel(dbDiagnosisType))
             {
                 try

@@ -11,6 +11,11 @@ using System.IO;
 using NPOI.SS.UserModel;
 using NPOI.HSSF.UserModel;
 using NPOI.XSSF.UserModel;
+using AspergillosisEPR.Models;
+using System.Collections;
+using System.Reflection;
+using AspergillosisEPR.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace AspergillosisEPR.Controllers
 {
@@ -18,10 +23,12 @@ namespace AspergillosisEPR.Controllers
     public class ImportsController : Controller
     {
         private readonly IHostingEnvironment _hostingEnvironment;
+        private readonly AspergillosisContext _context;
 
-        public ImportsController(IHostingEnvironment hostingEnvironment)
+        public ImportsController(IHostingEnvironment hostingEnvironment, AspergillosisContext context)
         {
             _hostingEnvironment = hostingEnvironment;
+            _context = context;
         }
 
         public IActionResult Index()
@@ -34,13 +41,19 @@ namespace AspergillosisEPR.Controllers
             return View();
         }
 
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
+            _context.Database.ExecuteSqlCommand("SET IDENTITY_INSERT Patients ON;");
             IFormFile file = Request.Form.Files[0];
+            Hashtable dictionary = DbImport.HeadersDictionary();
+            var importedPatients = new List<Patient>();
+            Patient patient;
+            DiagnosisType diagnosisType;
+            DiagnosisCategory diagnosisCategory;
             string folderName = "Upload";
             string webRootPath = _hostingEnvironment.WebRootPath;
             string newPath = Path.Combine(webRootPath, folderName);
-            StringBuilder sb = new StringBuilder();
+            //StringBuilder sb = new StringBuilder();
             if (!Directory.Exists(newPath))
             {
                 Directory.CreateDirectory(newPath);
@@ -48,7 +61,7 @@ namespace AspergillosisEPR.Controllers
             if (file.Length > 0)
             {
                 string sFileExtension = Path.GetExtension(file.FileName).ToLower();
-                ISheet sheet;
+                ISheet currentSheet;
                 string fullPath = Path.Combine(newPath, file.FileName);
                 using (var stream = new FileStream(fullPath, FileMode.Create))
                 {
@@ -56,41 +69,74 @@ namespace AspergillosisEPR.Controllers
                     stream.Position = 0;
                     if (sFileExtension == ".xls")
                     {
-                        HSSFWorkbook hssfwb = new HSSFWorkbook(stream); 
-                        sheet = hssfwb.GetSheetAt(0); 
+                        HSSFWorkbook workbook = new HSSFWorkbook(stream); 
+                        currentSheet = workbook.GetSheetAt(0); 
                     }
                     else
                     {
-                        XSSFWorkbook hssfwb = new XSSFWorkbook(stream); 
-                        sheet = hssfwb.GetSheetAt(0); 
+                        XSSFWorkbook workbook = new XSSFWorkbook(stream); 
+                        currentSheet = workbook.GetSheetAt(0);                         
                     }
-                    IRow headerRow = sheet.GetRow(0); //Get Header Row
+                    
+                    IRow headerRow = currentSheet.GetRow(0); //Get Header Row
                     int cellCount = headerRow.LastCellNum;
-                    sb.Append("<table class='table'><tr>");
-                    for (int j = 0; j < cellCount; j++)
+                    var headers = new List<string>();
+                    for (int headerCellCursor = 0; headerCellCursor < cellCount; headerCellCursor++)
                     {
-                        ICell cell = headerRow.GetCell(j);
-                        if (cell == null || string.IsNullOrWhiteSpace(cell.ToString())) continue;
-                        sb.Append("<th>" + cell.ToString() + "</th>");
+                        ICell headerCell = headerRow.GetCell(headerCellCursor);
+                        if (headerCell == null || string.IsNullOrWhiteSpace(headerCell.ToString())) continue;
+                        headers.Add(headerCell.ToString());
                     }
-                    sb.Append("</tr>");
-                    sb.AppendLine("<tr>");
-                    for (int i = (sheet.FirstRowNum + 1); i <= sheet.LastRowNum; i++) //Read Excel File
+                    for (int rowsCursor = (currentSheet.FirstRowNum + 1); rowsCursor <= currentSheet.LastRowNum; rowsCursor++) //Read Excel File
                     {
-                        IRow row = sheet.GetRow(i);
+                        IRow row = currentSheet.GetRow(rowsCursor);
                         if (row == null) continue;
                         if (row.Cells.All(d => d.CellType == CellType.Blank)) continue;
                         for (int j = row.FirstCellNum; j < cellCount; j++)
                         {
                             if (row.GetCell(j) != null)
-                                sb.Append("<td>" + row.GetCell(j).ToString() + "</td>");
+                            {
+                                patient = new Patient();
+                                string rowValue = row.GetCell(j).ToString();
+                                string header = headers.ElementAt(j);
+                                string newObjectFields = (string) dictionary[header];
+                                if (newObjectFields != null)
+                                {
+                                    string[] fields = newObjectFields.Split("|");
+                                    foreach (string field in fields)
+                                    {
+                                        var klassAndField = field.Split(".");
+                                        switch (klassAndField[0])
+                                        {
+                                            case "Patient":
+                                                
+                                                Type type = patient.GetType();
+                                                PropertyInfo propertyInfo = type.GetProperty(klassAndField[1]);
+                                                if (propertyInfo.PropertyType == typeof(DateTime)) // convert to date if its a date
+                                                {
+                                                    DateTime dateRowValue = row.GetCell(j).DateCellValue;
+                                                    propertyInfo.SetValue(patient, Convert.ChangeType(dateRowValue, propertyInfo.PropertyType), null);
+                                                } else
+                                                {
+                                                    propertyInfo.SetValue(patient, Convert.ChangeType(rowValue, propertyInfo.PropertyType), null);
+                                                }
+                                                break;
+                                        }
+
+                                    }
+                                }
+                                importedPatients.Add(patient);
+                                _context.Add(patient);
+                                await _context.SaveChangesAsync();
+                            }                            
                         }
-                        sb.AppendLine("</tr>");
+                        
                     }
-                    sb.Append("</table>");
+                    //sb.Append("</table>");                    
                 }
             }
-            return this.Content(sb.ToString());
+            _context.Database.ExecuteSqlCommand("SET IDENTITY_INSERT  [dbo].[Patients] OFF");
+            return Json(new { result = importedPatients.Count() });
         }
     }
 }

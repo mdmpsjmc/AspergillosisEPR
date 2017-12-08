@@ -13,6 +13,7 @@
             <tr>
                 <th>ID</th>
                 <th>Diagnosis Type</th>
+                <th>Short Name</th>
                 @if (User.IsInRole("Update Role") || User.IsInRole("Admin Role"))
                 {
                 <th>Edit</th>
@@ -29,6 +30,7 @@
                 <tr>
                     <td>@type.ID</td>
                     <td>@type.Name</td>
+                    <td>@type.ShortName</td>
                     @if (User.IsInRole("Update Role") || User.IsInRole("Admin Role"))
                     {
                     <td>
