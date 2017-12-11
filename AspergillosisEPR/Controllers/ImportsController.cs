@@ -48,7 +48,7 @@ namespace AspergillosisEPR.Controllers
             string webRootPath = _hostingEnvironment.WebRootPath;
            
             Action<FileStream, IFormFile, string> readSpreadsheetAction = (stream, formFile, extension) => {
-                _spreadsheetReader = new SpreadsheetReader(stream, file, extension);
+                _spreadsheetReader = new SpreadsheetReader(stream, file, extension, _context);
             };
             FileImporter.Import(file, webRootPath, readSpreadsheetAction);
 

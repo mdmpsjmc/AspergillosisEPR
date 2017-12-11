@@ -200,7 +200,8 @@ namespace AspergillosisEPR.Controllers
 
                 if (!string.IsNullOrEmpty(searchValue))
                 {
-                    importsData = importsData.Where(u => u.ImportedFileName.Contains(searchValue) || u.PatientsCount.ToString().Contains(searchValue));
+                    importsData = importsData.
+                                  Where(u => u.ImportedFileName.Contains(searchValue) || u.PatientsCount.ToString().Contains(searchValue));
                 }
                 recordsTotal = importsData.Count();
                 var data = importsData.Skip(skip).Take(pageSize).ToList();

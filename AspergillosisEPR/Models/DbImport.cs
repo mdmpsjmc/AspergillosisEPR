@@ -24,11 +24,11 @@ namespace AspergillosisEPR.Models
                   { "SEX", "Patient.Gender"},
                   { "DOB", "Patient.DOB"},
                   { "Date of death", "Patient.DateOfDeath|Patient.Status"},
-                  { "CCPA", "DiagnosisType.ID|DiagnosisCategory.ID"},
-                  { "ABPA", "DiagnosisType.ID|DiagnosisCategory.ID"},
-                  { "SAFS", "DiagnosisType.ID|DiagnosisCategory.ID"},
-                  { "Other","DiagnosisType.ID|DiagnosisCategory.ID"},
-                  { "Underlying disease", "DiagnosisType.ID|DiagnosisCategory.ID" }
+                  { "CCPA", "PatientDiagnosis"},
+                  { "ABPA", "PatientDiagnosis"},
+                  { "SAFS", "PatientDiagnosis"},
+                  { "OTHER","PatientDiagnosis"},
+                  { "Underlying disease", "PatientDiagnosis" }
              };
         }
     }
