@@ -49,9 +49,32 @@
         });           
     }
 
+    var initImportsDataTable = function () {
+        window.importsTable = $("#imports_datatable").DataTable({
+            "processing": true,
+            "serverSide": true,
+            "filter": true,
+            "orderMulti": false,
+            "initComplete": function (settings, json) {               
+            },
+            "ajax": {
+                "url": "/DataTableJson/LoadDbImports",
+                "type": "POST",
+                "datatype": "json"
+            },
+            "columns": [
+                { "data": "id", "name": "ID", "autoWidth": true },
+                { "data": "importedDate", "name": "ImportedDate", "autoWidth": true },
+                { "data": "importedFileName", "name": "ImportedFileName", "autoWidth": true },
+                { "data": "patientsCount", "name": "PatientsCount", "autoWidth": true }              
+            ]
+        });
+    }
+
     return {
         init: function () {
             initializeAjaxImport();
+            initImportsDataTable();
         }
     }
 }();

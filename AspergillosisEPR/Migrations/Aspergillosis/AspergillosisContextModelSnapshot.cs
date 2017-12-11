@@ -20,6 +20,22 @@ namespace AspergillosisEPR.Migrations.Aspergillosis
                 .HasAnnotation("ProductVersion", "2.0.1-rtm-125")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+            modelBuilder.Entity("AspergillosisEPR.Models.DbImport", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<DateTime>("ImportedDate");
+
+                    b.Property<string>("ImportedFileName");
+
+                    b.Property<int>("PatientsCount");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("DbImports");
+                });
+
             modelBuilder.Entity("AspergillosisEPR.Models.DiagnosisCategory", b =>
                 {
                     b.Property<int>("ID")

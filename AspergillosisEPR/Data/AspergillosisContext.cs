@@ -18,6 +18,7 @@ namespace AspergillosisEPR.Data
         public DbSet<SideEffect> SideEffects { get; set; }
         public DbSet<PatientDrugSideEffect> PatientDrugSideEffects { get; set; }
         public DbSet<PatientStatus> PatientStatuses { get; set; }
+        public DbSet<DbImport> DbImports { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -31,7 +32,7 @@ namespace AspergillosisEPR.Data
             modelBuilder.Entity<SideEffect>().ToTable("SideEffects");
             modelBuilder.Entity<PatientDrugSideEffect>().ToTable("PatientDrugSideEffects");
             modelBuilder.Entity<PatientStatus>().ToTable("PatientStatuses");
-
+            modelBuilder.Entity<DbImport>().ToTable("DbImports");
         }
     }
 

@@ -9,7 +9,7 @@ namespace AspergillosisEPR.Helpers
 {
     public class FileImporter
     {
-        public static void Import(IFormFile file, string webRootPath, Action action)
+        public static void Import(IFormFile file, string webRootPath, Action<FileStream, IFormFile, string> action)
         {
             string folderName = "Upload";
             string newPath = Path.Combine(webRootPath, folderName);
@@ -23,7 +23,7 @@ namespace AspergillosisEPR.Helpers
                 string fullPath = Path.Combine(newPath, file.FileName);
                 using (var stream = new FileStream(fullPath, FileMode.Create))
                 {
-                    action();
+                    action(stream, file, fileExtension);
                 }
             }
         }

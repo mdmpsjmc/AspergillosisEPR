@@ -110,7 +110,7 @@ namespace AspergillosisEPR.Controllers
         }
 
         [Authorize(Roles = "Read Role, Admin Role")]
-        public IActionResult  LoadUsers()
+        public IActionResult LoadUsers()
         {
             try
             {
@@ -143,19 +143,19 @@ namespace AspergillosisEPR.Controllers
                                                                                                 Select(ur => ur.RoleId).
                                                                                                 Contains(r.Id)
                                                                                         ).
-                                                                                        Select(r => "<label class='label label-primary'>" + r.Name.ToUpper() +"</label>")),
+                                                                                        Select(r => "<label class='label label-primary'>" + r.Name.ToUpper() + "</label>")),
                                      Email = user.Email
                                  } //appRoles.Select(ar => ar.Name).ToList()
-                                 ).GroupBy(u => u.id).SelectMany(p => p).Distinct();        
+                                 ).GroupBy(u => u.id).SelectMany(p => p).Distinct();
 
                 if (!(string.IsNullOrEmpty(sortColumn) && string.IsNullOrEmpty(sortColumnDirection)))
                 {
                     string sorting = sortColumn + " " + sortColumnDirection;
                     usersData = usersData.OrderBy(sorting);
                 }
-                
+
                 if (!string.IsNullOrEmpty(searchValue))
-                {                
+                {
                     usersData = usersData.Where(u => u.FirstName.Contains(searchValue) || u.Email.Contains(searchValue));
                 }
                 recordsTotal = usersData.Count();
@@ -167,5 +167,49 @@ namespace AspergillosisEPR.Controllers
                 throw;
             }
         }
+
+        [Authorize(Roles = "Read Role, Admin Role")]
+        public IActionResult LoadDbImports()
+        {
+            try
+            {
+                var draw = HttpContext.Request.Form["draw"].FirstOrDefault();
+                var start = Request.Form["start"].FirstOrDefault();
+                var length = Request.Form["length"].FirstOrDefault();
+                var sortColumn = Request.Form["columns[" + Request.Form["order[0][column]"].FirstOrDefault() + "][name]"].FirstOrDefault();
+                var sortColumnDirection = Request.Form["order[0][dir]"].FirstOrDefault();
+                var searchValue = Request.Form["search[value]"].FirstOrDefault();
+                int pageSize = length != null ? Convert.ToInt32(length) : 0;
+                int skip = start != null ? Convert.ToInt32(start) : 0;
+                int recordsTotal = 0;
+
+                var importsData = (from import in _aspergillosisContext.DbImports
+                                   select new
+                                   {
+                                       id = import.ID,
+                                       ImportedDate = import.ImportedDate.ToString("dd/MM/yyyy HH:MM"),
+                                       ImportedFileName = import.ImportedFileName,
+                                       PatientsCount = import.PatientsCount
+                                   }).GroupBy(u => u.id).SelectMany(p => p).Distinct();
+
+                if (!(string.IsNullOrEmpty(sortColumn) && string.IsNullOrEmpty(sortColumnDirection)))
+                {
+                    string sorting = sortColumn + " " + sortColumnDirection;
+                    importsData = importsData.OrderBy(sorting);
+                }
+
+                if (!string.IsNullOrEmpty(searchValue))
+                {
+                    importsData = importsData.Where(u => u.ImportedFileName.Contains(searchValue) || u.PatientsCount.ToString().Contains(searchValue));
+                }
+                recordsTotal = importsData.Count();
+                var data = importsData.Skip(skip).Take(pageSize).ToList();
+                return Json(new { draw = draw, recordsFiltered = recordsTotal, recordsTotal = recordsTotal, data = data });
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
     }
-    }
+}
