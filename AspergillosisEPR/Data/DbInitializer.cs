@@ -9,7 +9,7 @@ namespace AspergillosisEPR.Data
         public static void Initialize(AspergillosisContext context)
         {
             context.Database.EnsureCreated();
-            if (context.Patients.Any())
+            if (context.DiagnosisCategories.Any())
             {
                 return;  
             }

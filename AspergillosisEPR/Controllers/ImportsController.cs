@@ -24,11 +24,17 @@ namespace AspergillosisEPR.Controllers
     {
         private readonly IHostingEnvironment _hostingEnvironment;
         private readonly AspergillosisContext _context;
+        private List<Patient> _importedPatients;
+        private Hashtable _dictonary;
+        private List<string> _headers;
 
         public ImportsController(IHostingEnvironment hostingEnvironment, AspergillosisContext context)
         {
             _hostingEnvironment = hostingEnvironment;
             _context = context;
+            _importedPatients = new List<Patient>();
+            _dictonary = DbImport.HeadersDictionary();
+            _headers = new List<string>();
         }
 
         public IActionResult Index()
@@ -41,102 +47,120 @@ namespace AspergillosisEPR.Controllers
             return View();
         }
 
-        public async Task<IActionResult> Create()
+        public IActionResult Create()
         {
-            _context.Database.ExecuteSqlCommand("SET IDENTITY_INSERT Patients ON;");
             IFormFile file = Request.Form.Files[0];
-            Hashtable dictionary = DbImport.HeadersDictionary();
-            var importedPatients = new List<Patient>();
-            Patient patient;
-            DiagnosisType diagnosisType;
-            DiagnosisCategory diagnosisCategory;
             string folderName = "Upload";
             string webRootPath = _hostingEnvironment.WebRootPath;
             string newPath = Path.Combine(webRootPath, folderName);
-            //StringBuilder sb = new StringBuilder();
             if (!Directory.Exists(newPath))
             {
                 Directory.CreateDirectory(newPath);
             }
             if (file.Length > 0)
             {
-                string sFileExtension = Path.GetExtension(file.FileName).ToLower();
-                ISheet currentSheet;
+                string fileExtension = Path.GetExtension(file.FileName).ToLower();
                 string fullPath = Path.Combine(newPath, file.FileName);
                 using (var stream = new FileStream(fullPath, FileMode.Create))
                 {
-                    file.CopyTo(stream);
-                    stream.Position = 0;
-                    if (sFileExtension == ".xls")
-                    {
-                        HSSFWorkbook workbook = new HSSFWorkbook(stream); 
-                        currentSheet = workbook.GetSheetAt(0); 
-                    }
-                    else
-                    {
-                        XSSFWorkbook workbook = new XSSFWorkbook(stream); 
-                        currentSheet = workbook.GetSheetAt(0);                         
-                    }
-                    
-                    IRow headerRow = currentSheet.GetRow(0); //Get Header Row
-                    int cellCount = headerRow.LastCellNum;
-                    var headers = new List<string>();
-                    for (int headerCellCursor = 0; headerCellCursor < cellCount; headerCellCursor++)
-                    {
-                        ICell headerCell = headerRow.GetCell(headerCellCursor);
-                        if (headerCell == null || string.IsNullOrWhiteSpace(headerCell.ToString())) continue;
-                        headers.Add(headerCell.ToString());
-                    }
-                    for (int rowsCursor = (currentSheet.FirstRowNum + 1); rowsCursor <= currentSheet.LastRowNum; rowsCursor++) //Read Excel File
-                    {
-                        IRow row = currentSheet.GetRow(rowsCursor);
-                        if (row == null) continue;
-                        if (row.Cells.All(d => d.CellType == CellType.Blank)) continue;
-                        for (int j = row.FirstCellNum; j < cellCount; j++)
-                        {
-                            if (row.GetCell(j) != null)
-                            {
-                                patient = new Patient();
-                                string rowValue = row.GetCell(j).ToString();
-                                string header = headers.ElementAt(j);
-                                string newObjectFields = (string) dictionary[header];
-                                if (newObjectFields != null)
-                                {
-                                    string[] fields = newObjectFields.Split("|");
-                                    foreach (string field in fields)
-                                    {
-                                        var klassAndField = field.Split(".");
-                                        switch (klassAndField[0])
-                                        {
-                                            case "Patient":
-                                                
-                                                Type type = patient.GetType();
-                                                PropertyInfo propertyInfo = type.GetProperty(klassAndField[1]);
-                                                if (propertyInfo.PropertyType == typeof(DateTime)) // convert to date if its a date
-                                                {
-                                                    DateTime dateRowValue = row.GetCell(j).DateCellValue;
-                                                    propertyInfo.SetValue(patient, Convert.ChangeType(dateRowValue, propertyInfo.PropertyType), null);
-                                                } else
-                                                {
-                                                    propertyInfo.SetValue(patient, Convert.ChangeType(rowValue, propertyInfo.PropertyType), null);
-                                                }
-                                                break;
-                                        }
-
-                                    }
-                                }
-                                importedPatients.Add(patient);
-                                _context.Add(patient);
-                                await _context.SaveChangesAsync();
-                            }                            
-                        }
-                        
-                    }
-                    //sb.Append("</table>");                    
+                    ReadDatabaseFile(stream, file, fileExtension);
                 }
             }
-            _context.Database.ExecuteSqlCommand("SET IDENTITY_INSERT  [dbo].[Patients] OFF");
-            return Json(new { result = importedPatients.Count() });
+ 
+            return Json(new { result = _importedPatients.Count() });
         }
+
+        private void ReadDatabaseFile(FileStream stream, IFormFile file, string fileExtension)
+        {
+            Patient patient;
+            ISheet currentSheet;
+            file.CopyTo(stream);
+            stream.Position = 0;
+            if (fileExtension == ".xls")
+            {
+                HSSFWorkbook workbook = new HSSFWorkbook(stream);
+                currentSheet = workbook.GetSheetAt(0);
+            }
+            else
+            {
+                XSSFWorkbook workbook = new XSSFWorkbook(stream);
+                currentSheet = workbook.GetSheetAt(0);
+            }
+
+            IRow headerRow = currentSheet.GetRow(0); //Get Header Row
+            int cellCount = headerRow.LastCellNum;
+
+            GetSpreadsheetHeaders(headerRow);
+            
+            for (int rowsCursor = (currentSheet.FirstRowNum + 1); rowsCursor <= currentSheet.LastRowNum; rowsCursor++) 
+            {
+                patient = new Patient();
+                IRow row = currentSheet.GetRow(rowsCursor);
+                if (row == null) continue;
+                if (row.Cells.All(d => d.CellType == CellType.Blank)) continue;
+                patient  = ReadRowCells(patient, row, cellCount);
+                _importedPatients.Add(patient);
+            }
+            SavePatientsInDatabase();
+        }
+
+        
+        private Patient ReadRowCells(Patient patient, IRow row, int cellCount)
+        {
+         for (int j = row.FirstCellNum; j < cellCount; j++)
+          {
+           if (row.GetCell(j) != null)
+           {
+             string rowValue = row.GetCell(j).ToString();
+             string header = _headers.ElementAt(j);
+             string newObjectFields = (string)_dictonary[header];
+              if (newObjectFields != null)
+              {
+                  string[] fields = newObjectFields.Split("|");
+                  foreach (string field in fields)
+                   {
+                    var klassAndField = field.Split(".");
+                    switch (klassAndField[0])
+                    {
+                      case "Patient":
+                         Type type = patient.GetType();
+                          PropertyInfo propertyInfo = type.GetProperty(klassAndField[1]);
+                          if (propertyInfo.PropertyType == typeof(DateTime)) // convert to date if its a date
+                          {
+                            DateTime dateRowValue = row.GetCell(j).DateCellValue;
+                            propertyInfo.SetValue(patient, Convert.ChangeType(dateRowValue, propertyInfo.PropertyType), null);
+                           }
+                           else
+                            {
+                             propertyInfo.SetValue(patient, Convert.ChangeType(rowValue, propertyInfo.PropertyType), null);
+                            }
+                           break;          
+                    }
+                  }
+              }
+            }
+         }
+         return patient; 
+        }
+
+        private void GetSpreadsheetHeaders(IRow headerRow)
+        {
+            for (int headerCellCursor = 0; headerCellCursor < headerRow.LastCellNum; headerCellCursor++)
+            {
+                ICell headerCell = headerRow.GetCell(headerCellCursor);
+                if (headerCell == null || string.IsNullOrWhiteSpace(headerCell.ToString())) continue;
+                _headers.Add(headerCell.ToString());
+            }
+        }
+
+        private void SavePatientsInDatabase()
+        {
+            foreach (var newPatient in _importedPatients)
+            {
+                _context.Add(newPatient);
+                _context.SaveChanges();
+            }
+        }
+
     }
 }

@@ -1,9 +1,11 @@
 ﻿<section class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+    <div id="upload-response"></div>
     <form asp-route-returnUrl="@ViewData["ReturnUrl"]" method="post" id="import-data-form" class="client-form smart-form" enctype="multipart/form-data">
         <header>
             <i class="fa fa-download fa-2x"></i>&nbsp;Import new patients into database
         </header>
         <fieldset>
+            @Html.Partial("/Views/Home/_Spinner.cshtml")
             <section>
                 <div class="input input-file">
                     <span class="button">
@@ -20,5 +22,4 @@
             <a href="@Url.Action("Index", "imports")" class="btn btn-success pull-left">Go back to imports list</a>
         </footer>
     </form>
-    <div id="upload-response"></div>
 </section>

@@ -3,6 +3,7 @@
     var initializeAjaxImport = function () {
         $('#btn-import-data').on('click', function (e) {
             e.preventDefault();
+            $('#upload-response').html("");
             var fileExtension = ['xls', 'xlsx'];
             var filename = $('#fileToImport').val();
             if (filename.length === 0) {
@@ -20,6 +21,7 @@
             var fileUpload = $("input#file").get(0);
             var files = fileUpload.files;
             fdata.append(files[0].name, files[0]);
+            LoadingIndicator.show();
             $.ajax({
                 type: "POST",
                 url: "/Imports/Create",
@@ -31,13 +33,16 @@
                 contentType: false,
                 processData: false,
                 success: function (response) {
-                    if (response.length === 0)
+                    if (response.length === 0) {
+                        LoadingIndicator.hide();
                         alert('Some error occured while uploading');
-                    else {
-                        $('#upload-response').html(response);
+                    } else {
+                        $('#upload-response').html("<div class='alert alert-info'><i class='fa fa-info-circle'></i> &nbsp; Imported "+ response.result + " patients into database</div>");
+                        LoadingIndicator.hide();
                     }
                 },
                 error: function (e) {
+                    LoadingIndicator.hide();
                     $('#upload-response').html(e.responseText);
                 }
             });
