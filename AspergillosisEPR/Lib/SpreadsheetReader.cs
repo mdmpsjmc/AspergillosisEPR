@@ -18,11 +18,11 @@ namespace AspergillosisEPR.Helpers
     public class SpreadsheetReader
     {
         private readonly FileStream _stream;
-        public IFormFile _file { get; }
-        public string _fileExtension { get; }
+        private IFormFile _file { get; }
+        private string _fileExtension { get; }     
+        private Hashtable _dictonary { get; set; }
+        public static string UNDERLYING_DISEASE_HEADER = "Underlying disease";
         public List<Patient> ImportedPatients { get; set; }
-        public Hashtable _dictonary { get; private set; }
-        public static string OTHER_HEADER_NAME = "OTHER";    
         private List<string> _headers;
         private readonly AspergillosisContext _context;
 
@@ -42,25 +42,47 @@ namespace AspergillosisEPR.Helpers
 
         private void ReadSpreadsheetFile()
         {
-            Patient patient;
-            ISheet currentSheet;
             _file.CopyTo(_stream);
             _stream.Position = 0;
             if (_fileExtension == ".xls")
             {
                 HSSFWorkbook workbook = new HSSFWorkbook(_stream);  //old excel
-                currentSheet = workbook.GetSheetAt(0);
+                processSheets(workbook);
             }
             else
             {
                 XSSFWorkbook workbook = new XSSFWorkbook(_stream); //new excel
-                currentSheet = workbook.GetSheetAt(0);
-            }
+                processSheets(workbook);
+            }            
+        }
 
+        private void processSheets(XSSFWorkbook workbook)
+        {
+            for(int tabIndex=0; tabIndex < workbook.NumberOfSheets; tabIndex++)
+            {
+                ISheet currentSheet = workbook.GetSheetAt(tabIndex);
+                processSheet(currentSheet);
+            }
+        }
+
+        private void processSheets(HSSFWorkbook workbook)
+        {
+            for (int tabIndex = 0; tabIndex < workbook.NumberOfSheets; tabIndex++)
+            {
+                ISheet currentSheet = workbook.GetSheetAt(tabIndex);
+                processSheet(currentSheet);
+            }
+        }
+
+        private void processSheet(ISheet currentSheet)
+        {
+            Patient patient;
             IRow headerRow = currentSheet.GetRow(0); //Get Header Row
-            int cellCount = headerRow.LastCellNum;
+            
 
             GetSpreadsheetHeaders(headerRow);
+            int cellCount2= headerRow.Cells.GetRange(0, _headers.Count()).Count;
+            int cellCount = headerRow.LastCellNum;
 
             for (int rowsCursor = (currentSheet.FirstRowNum + 1); rowsCursor <= currentSheet.LastRowNum; rowsCursor++)
             {
@@ -70,11 +92,10 @@ namespace AspergillosisEPR.Helpers
                 if (row == null) continue;
                 if (row.Cells.All(d => d.CellType == CellType.Blank)) continue;
 
-                patient = ReadRowCellsIntoPatientObject(patient, row, cellCount);
+                patient = ReadRowCellsIntoPatientObject(patient, row, cellCount2);
                 ImportedPatients.Add(patient);
             }
         }
-
 
         private Patient ReadRowCellsIntoPatientObject(Patient patient, IRow row, int cellCount)
         {
@@ -112,7 +133,7 @@ namespace AspergillosisEPR.Helpers
                             {
                                 diagnosesNames.Add(_headers[cellIndex]);
                             }
-                            if (_headers[cellIndex] == OTHER_HEADER_NAME)
+                            if (_headers[cellIndex] == UNDERLYING_DISEASE_HEADER)
                             {
                                 diagnosesNames.Add(hasDiagnosis);
                             }
@@ -126,19 +147,41 @@ namespace AspergillosisEPR.Helpers
         {
             Type type = patient.GetType();
             PropertyInfo propertyInfo = type.GetProperty(property);
-            if (propertyInfo.PropertyType == typeof(DateTime)) // convert to date if its a date
+            DateTime dateRowValue;
+            if (propertyInfo != null && propertyInfo.PropertyType == typeof(DateTime)) // convert to date if its a date
             {
-                DateTime dateRowValue = row.GetCell(cellIndex).DateCellValue;
+                try
+                {
+                    dateRowValue = row.GetCell(cellIndex).DateCellValue;
+                }
+                catch (InvalidDataException ex)
+                {
+                    dateRowValue = DateTime.Parse(row.GetCell(cellIndex).ToString());
+                    Console.WriteLine(ex.Message);
+                }                
                 propertyInfo.SetValue(patient, Convert.ChangeType(dateRowValue, propertyInfo.PropertyType), null);
             }
-            else
+            else 
             {
-                propertyInfo.SetValue(patient, Convert.ChangeType(row.GetCell(cellIndex).ToString(), propertyInfo.PropertyType), null);
+                string stringRowValue = row.GetCell(cellIndex).ToString();
+                if (stringRowValue != "")
+                {
+                    try
+                    {
+                        propertyInfo.SetValue(patient, Convert.ChangeType(stringRowValue, propertyInfo.PropertyType), null);
+                    }
+                    catch (InvalidCastException)
+                    {// date in a text field
+                        dateRowValue = row.GetCell(cellIndex).DateCellValue;
+                        propertyInfo.SetValue(patient, dateRowValue);                        
+                    }
+                }                
             }
         }
 
         private void GetSpreadsheetHeaders(IRow headerRow)
         {
+            _headers = new List<string>();
             for (int headerCellCursor = 0; headerCellCursor < headerRow.LastCellNum; headerCellCursor++)
             {
                 ICell headerCell = headerRow.GetCell(headerCellCursor);

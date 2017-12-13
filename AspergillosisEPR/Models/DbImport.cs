@@ -18,12 +18,15 @@ namespace AspergillosisEPR.Models
         {
             return new Hashtable()
             {
-                  { "SURNAME", "Patient.FirstName" },
-                  { "FORENAME", "Patient.LastName" },
+                  { "SURNAME", "Patient.LastName" },
+                  { "FORENAME", "Patient.FirstName" },
+                  { "FIRST NAME", "Patient.FirstName"},
                   { "HOSPITAL No", "Patient.RM2Number" },
                   { "SEX", "Patient.Gender"},
+                  { "Sex", "Patient.Gender"},
                   { "DOB", "Patient.DOB"},
-                  { "Date of death", "Patient.DateOfDeath|Patient.Status"},
+                  { "Date of death", "Patient.DateOfDeath"},
+                  { "HOSPITAL NUMBER", "Patient.RM2Number"},
                   { "CCPA", "PatientDiagnosis"},
                   { "ABPA", "PatientDiagnosis"},
                   { "SAFS", "PatientDiagnosis"},

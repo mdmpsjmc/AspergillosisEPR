@@ -4,6 +4,7 @@ using AspergillosisEPR.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Dynamic.Core;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
@@ -33,6 +34,18 @@ namespace AspergillosisEPR.Lib
             };
         }
 
+        public static List<string> ExisitingDiagnosisTypes(AspergillosisContext context)
+        {
+            var allDiagnoses = context.DiagnosisTypes;
+            List<string> fullNames = allDiagnoses.Select(dt => dt.Name).
+                                         ToList();
+            List<string> shortNames = allDiagnoses.Where(dt => !string.IsNullOrEmpty(dt.ShortName)).
+                                                   Select(dt => dt.ShortName).
+                                                   ToList();
+            var except = (IEnumerable<string>) PrimaryDiagnoses();
+            return fullNames.Concat(shortNames).Except(except).ToList(); 
+        }
+
         public List<PatientDiagnosis> Resolve()
         {
             foreach (string diagnosisName in _potentialDiagnosisNames)
@@ -41,79 +54,93 @@ namespace AspergillosisEPR.Lib
                 {
                     if (_discoveredDiagnoses.Count == 0)
                     {
-                        _currentDiagnosisCategory = GetDiagnosisCategoryByName("Primary");
-                        
+                        _currentDiagnosisCategory = GetDiagnosisCategoryByName("Primary");                        
                     } else if (_discoveredDiagnoses.Count == 1) 
                     {
-                        _currentDiagnosisCategory = GetDiagnosisCategoryByName("Secondary");
+                        _currentDiagnosisCategory = GetDiagnosisCategoryByName("Secondary");                       
                     }
                     DiagnosisType diagnosisType = GetDiagnosisByName(diagnosisName);
                     CreateAndAddPatientDiagnosis(diagnosisType);
-                } else
+                }
+                else
                 {
-                    //var otherDiagnoses = _potentialDiagnosisNames.Except(PrimaryDiagnoses());
-                    //if (otherDiagnoses == null)
-                   // {
-                   //     otherDiagnoses = _potentialDiagnosisNames;
-                   // }
-                   // foreach(string otherDiagnosis in otherDiagnoses)
-                  //  {
-                  //      _currentDiagnosisCategory = GetDiagnosisCategoryByName(SpreadsheetReader.OTHER_HEADER_NAME);
-                  //      var diagnosisTypes = GetDiagnosisTypesFromOtherColumn(otherDiagnosis);
-                  //      foreach(var diagType in diagnosisTypes)
-                  //      {
-                  //          CreateAndAddPatientDiagnosis(diagType);
-                  //      }
-                  //  }
+                    var underlyingDiagnoses = _potentialDiagnosisNames.Except(PrimaryDiagnoses());
+                    processUnderlyingDiagnoses(underlyingDiagnoses);
                 } 
             }
            
             return _discoveredDiagnoses;
         }
 
-        private void CreateAndAddPatientDiagnosis(DiagnosisType diagnosisType)
-        {         
-            if (diagnosisType !=  null)         
+        private void processUnderlyingDiagnoses(IEnumerable<string> underlyingDiagnoses)
+        {
+            if (underlyingDiagnoses == null)
+            {
+                underlyingDiagnoses = _potentialDiagnosisNames;
+            }
+
+            foreach (string underlyingDiagnosis in underlyingDiagnoses)
+            {
+                if (string.IsNullOrEmpty(underlyingDiagnosis)) continue;
+                processUnderlyingDiagnosis(underlyingDiagnosis);
+            }
+        }
+
+        private void processUnderlyingDiagnosis(string underlyingDiagnosis)
+        {
+            var existingDiagnoses = ExisitingDiagnosisTypes(_context);
+            var words = GetDiagnosisTypesWords(underlyingDiagnosis);
+            if (words.Count != 0)
+            {               
+                var matchingDiagnosesNames = existingDiagnoses.Where(ed => (SearchRegex(words).IsMatch(ed) && (ed.Split(" ").Count() < 4))).ToList();
+                _currentDiagnosisCategory = GetDiagnosisCategoryByName("Underlying Diagnosis");
+                foreach (var diagType in matchingDiagnosesNames)
+                {
+                    DiagnosisType dbDiagnosis = GetDiagnosisByName(diagType);
+                    CreateAndAddPatientDiagnosis(dbDiagnosis, underlyingDiagnosis);
+                }
+            }
+        }
+
+        private Regex SearchRegex(List<string> words)
+        {
+            return new Regex(@"\b(" + string.Join("|", words.Select(Regex.Escape).ToArray()) + @"\b)", RegexOptions.IgnoreCase);
+        }
+
+        private void CreateAndAddPatientDiagnosis(DiagnosisType diagnosisType, string comment = null)
+        {
+            if (diagnosisType != null)
             {
                 var patientDiagnosis = new PatientDiagnosis();
                 patientDiagnosis.DiagnosisTypeId = diagnosisType.ID;
                 patientDiagnosis.PatientId = _patient.ID;
                 patientDiagnosis.DiagnosisCategoryId = _currentDiagnosisCategory.ID;
+                if (!string.IsNullOrEmpty(comment))
+                {
+                    patientDiagnosis.Description = comment;
+                }
                 _discoveredDiagnoses.Add(patientDiagnosis);
                 _patient.PatientDiagnoses = _discoveredDiagnoses;
             }            
         }
 
-        private List<DiagnosisType> GetDiagnosisTypesFromOtherColumn(string diagnosisName)
+        private List<string> GetDiagnosisTypesWords(string diagnosisName)
         {
-            string[] names = diagnosisName.Split(",");
-            List<DiagnosisType> types = new List<DiagnosisType>();
-            foreach(string name in names)
+
+            List<string> words = new List<string>();
+            if (diagnosisName.IndexOf(",") != -1) {
+                string[] names = diagnosisName.Split(",");
+                foreach(var name in names)
+                {
+                    if (string.IsNullOrEmpty(name)) continue;
+                    words.AddRange(name.Trim().Split(null));
+                }
+            } else
             {
-                if (name == "") continue;
-                string cleanedOutput;
-                var output = Regex.Replace(name, @"[\d-]", string.Empty); // removes any digits
-                if (name.Count(c => char.IsUpper(c)) > 1) {
-                    cleanedOutput = string.Join("", name.Select(c => (char.IsUpper(c) ? c : '\0')).ToList()).Replace('\0'.ToString(), ""); //leaves only capital words for search
-                } else
-                {
-                    cleanedOutput = output;
-                }
-                
-                DiagnosisType diagnosisType = GetDiagnosisByName(cleanedOutput);
-                if (diagnosisType != null)
-                {
-                    types.Add(diagnosisType);
-                }
-                else 
-                {
-                    diagnosisType = new DiagnosisType();
-                    diagnosisType.Name = cleanedOutput;
-                    types.Add(diagnosisType);
-                    _context.SaveChanges();
-                }          
+                var names = diagnosisName.Split(null);
+                words.AddRange(words);
             }
-            return types;
+            return words;
         }
 
         private DiagnosisCategory GetDiagnosisCategoryByName(string categoryName)
@@ -125,8 +152,8 @@ namespace AspergillosisEPR.Lib
         private DiagnosisType GetDiagnosisByName(string diagnosisName)
         {
             return _context.DiagnosisTypes.Where(dt => dt.ShortName.
-                                           Contains(diagnosisName) || dt.Name.Contains(diagnosisName)).
-                                           SingleOrDefault();
+                                           Contains(diagnosisName) || dt.Name == diagnosisName).
+                                           FirstOrDefault();
         }
     }
 }
