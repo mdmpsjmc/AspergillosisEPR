@@ -22,6 +22,7 @@ namespace AspergillosisEPR.Helpers
         private string _fileExtension { get; }     
         private Hashtable _dictonary { get; set; }
         public static string UNDERLYING_DISEASE_HEADER = "Underlying disease";
+        public static string[] IdentifierHeaders = { "HOSPITAL No", "HOSPITAL NUMBER" };
         public List<Patient> ImportedPatients { get; set; }
         private List<string> _headers;
         private readonly AspergillosisContext _context;
@@ -93,8 +94,29 @@ namespace AspergillosisEPR.Helpers
                 if (row.Cells.All(d => d.CellType == CellType.Blank)) continue;
 
                 patient = ReadRowCellsIntoPatientObject(patient, row, cellCount2);
-                ImportedPatients.Add(patient);
+                var existingPatient = ExistingPatient(patient.RM2Number);
+                if (existingPatient == null)
+                {
+                    ImportedPatients.Add(patient);
+                } else
+                {
+                    copyPropertiesFrom(existingPatient, patient);
+                }
+               
             }
+        }
+
+        private void copyPropertiesFrom(Patient existingPatient, Patient sourcePatient)
+        {
+            existingPatient.FirstName = sourcePatient.FirstName;
+            existingPatient.LastName = sourcePatient.LastName;
+            existingPatient.RM2Number = sourcePatient.RM2Number;
+            existingPatient.DOB = sourcePatient.DOB;
+            existingPatient.Gender = sourcePatient.Gender;
+            existingPatient.DateOfDeath = sourcePatient.DateOfDeath;
+            existingPatient.PatientStatusId = sourcePatient.PatientStatusId;
+            var combinedDiagnoses = sourcePatient.PatientDiagnoses.Concat(existingPatient.PatientDiagnoses).Distinct().ToList();
+            existingPatient.PatientDiagnoses = combinedDiagnoses.GroupBy(p => p.DiagnosisTypeId).Select(g => g.First()).ToList();
         }
 
         private Patient ReadRowCellsIntoPatientObject(Patient patient, IRow row, int cellCount)
@@ -115,6 +137,7 @@ namespace AspergillosisEPR.Helpers
         private void readCell(Patient patient, IRow row, int cellIndex, List<string> diagnosesNames)
         {
             string header = _headers.ElementAt(cellIndex);
+            
             string newObjectFields = (string)_dictonary[header];
             if (newObjectFields != null)
             {
@@ -177,6 +200,11 @@ namespace AspergillosisEPR.Helpers
                     }
                 }                
             }
+        }
+
+        private Patient ExistingPatient(string rRM2Number)
+        {
+            return ImportedPatients.Where(p => p.RM2Number == rRM2Number).FirstOrDefault();
         }
 
         private void GetSpreadsheetHeaders(IRow headerRow)
