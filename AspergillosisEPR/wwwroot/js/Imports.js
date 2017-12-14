@@ -61,7 +61,7 @@
             "initComplete": function (settings, json) {               
             },
             "ajax": {
-                "url": "/DataTableJson/LoadDbImports",
+                "url": "/DataTableDbImports/Load",
                 "type": "POST",
                 "datatype": "json"
             },
