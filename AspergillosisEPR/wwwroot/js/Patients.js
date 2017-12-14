@@ -2,6 +2,9 @@
 
     var initPatientsDataTable = function () {
             window.patientsTable = $("#patients_datatable").DataTable({
+                dom: "<'row'<'col-sm-3'l><'col-sm-3'f><'col-sm-6'p>>" +
+                "<'row'<'col-sm-12'tr>>" +
+                "<'row'<'col-sm-5'i><'col-sm-7'p>>",
                 "processing": true,
                 "serverSide": true,
                 "filter": true,
@@ -19,7 +22,7 @@
                 },
                 "columns": [
                     { "data": "rM2Number", "name": "RM2Number", "autoWidth": true },
-                    { "data": "diagnoses", "name": "Primary Diagnosis", "autoWidth": true, "sortable": false },
+                    { "data": "primaryDiagnosis", "name": "Primary Diagnosis", "autoWidth": true, "sortable": true },
                     { "data": "firstName", "name": "FirstName", "autoWidth": true },
                     { "data": "lastName", "name": "LastName", "autoWidth": true },
                     { "data": "gender", "name": "Gender", "autoWidth": true },

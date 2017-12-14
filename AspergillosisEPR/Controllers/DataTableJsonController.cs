@@ -8,6 +8,9 @@ using AspergillosisEPR.Models;
 using Microsoft.AspNetCore.Identity;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.EntityFrameworkCore;
+using AspergillosisEPR.Models.PatientViewModels;
+using AspergillosisEPR.Lib;
 
 namespace AspergillosisEPR.Controllers
 {
@@ -49,22 +52,32 @@ namespace AspergillosisEPR.Controllers
                                    from patientDiagnosis in diagnoses.DefaultIfEmpty()
                                    join diagnosesTypes in _aspergillosisContext.DiagnosisTypes on patientDiagnosis.DiagnosisTypeId equals diagnosesTypes.ID
                                    into patientsWithDiagnoses
-                                   select new
+                                   select new PatientDataTableViewModel()
                                    {
                                        ID = patient.ID,
                                        RM2Number = patient.RM2Number,
-                                       Diagnoses = string.Join(",", patient.PatientDiagnoses.Where(pd => pd.DiagnosisCategoryId == primaryDiagnosis.ID).Select(pd => pd.DiagnosisType.Name).ToList()),
+                                       PrimaryDiagnosis = "",//string.Join(",", patient.PatientDiagnoses.Where(pd => pd.DiagnosisCategoryId == primaryDiagnosis.ID).Select(pd => pd.DiagnosisType.Name).ToList()),
                                        LastName = patient.LastName,
                                        FirstName = patient.FirstName,
                                        Gender = patient.Gender,
                                        DOB = patient.DOB.ToString("dd/MM/yyyy")
                                    });
 
-                if (!(string.IsNullOrEmpty(sortColumn) && string.IsNullOrEmpty(sortColumnDirection)))
+
+                var ids = patientData.Select(pd => pd.ID).ToList();
+                List<PatientDiagnosis> pdiagnoses = _aspergillosisContext.
+                                     PatientDiagnoses.
+                                     Include(pd => pd.DiagnosisType).
+                                     Where(pd => ids.Contains(pd.PatientId) && pd.DiagnosisCategoryId == primaryDiagnosis.ID).
+                                     ToList();
+                 List<PatientDataTableViewModel> patienListData  = patientData.GroupBy(p => p.ID).Select(a => a.FirstOrDefault()).ToList();
+                foreach(var patient in patienListData)
                 {
-                    string sorting = sortColumn + " " + sortColumnDirection;
-                    patientData = patientData.OrderBy(sorting);
+                    var diagnosis = pdiagnoses.Where(pd => pd.PatientId == patient.ID).FirstOrDefault();
+                    patient.PrimaryDiagnosis = diagnosis == null ? 
+                        "" : pdiagnoses.Where(pd => pd.PatientId == patient.ID).FirstOrDefault().DiagnosisType.Name;
                 }
+
                 for (int cursor = 0; cursor < 6; cursor++)
                 {
                     string partialSearch = Request.Form["columns[" + cursor.ToString() + "][search][value]"];
@@ -73,22 +86,22 @@ namespace AspergillosisEPR.Controllers
                         switch (cursor)
                         {
                             case 0:
-                                patientData = patientData.Where(p => p.RM2Number.Contains(partialSearch));
+                                patienListData = patienListData.Where(p => p.RM2Number.Contains(partialSearch)).ToList();
                                 break;
                             case 1:
-                                patientData = patientData.Where(p => p.Diagnoses.Contains(partialSearch));
+                                patienListData = patienListData.Where(p => p.PrimaryDiagnosis.Contains(partialSearch)).ToList();
                                 break;
                             case 2:
-                                patientData = patientData.Where(p => p.FirstName.Contains(partialSearch));
+                                patienListData = patienListData.Where(p => p.FirstName.Contains(partialSearch)).ToList();
                                 break;
                             case 3:
-                                patientData = patientData.Where(p => p.LastName.Contains(partialSearch));
+                                patienListData = patienListData.Where(p => p.LastName.Contains(partialSearch)).ToList();
                                 break;
                             case 4:
-                                patientData = patientData.Where(p => p.Gender == partialSearch);
+                                patienListData = patienListData.Where(p => p.Gender == partialSearch).ToList();
                                 break;
                             case 5:
-                                patientData = patientData.Where(p => p.DOB.Contains(partialSearch));
+                                patienListData = patienListData.Where(p => p.DOB.Contains(partialSearch)).ToList();
                                 break;
                         }
                     }
@@ -96,11 +109,23 @@ namespace AspergillosisEPR.Controllers
                 if (!string.IsNullOrEmpty(searchValue))
                 {
 
-                    patientData = patientData.Where(p => p.FirstName.Contains(searchValue) || p.LastName.Contains(searchValue) || p.RM2Number.Contains(searchValue) || p.Diagnoses.Contains(searchValue));
+                    patienListData = patienListData.Where(p => p.FirstName.Contains(searchValue) || p.LastName.Contains(searchValue) || p.RM2Number.Contains(searchValue) || p.PrimaryDiagnosis.Contains(searchValue)).ToList();
                 }
-                patientData = patientData.GroupBy(p => p.ID).SelectMany(p => p).Distinct();
-                recordsTotal = patientData.Count();
-                var data = patientData.Skip(skip).Take(pageSize).ToList();
+
+
+                if (!(string.IsNullOrEmpty(sortColumn) && string.IsNullOrEmpty(sortColumnDirection)))
+                {
+                   
+                    patienListData = patienListData.OrderBy(p => p.GetProperty(sortColumn)).ToList();
+                    if (sortColumnDirection == "desc")
+                    {
+                        patienListData.Reverse();
+                    }
+                }
+
+                recordsTotal = patienListData.Count();
+                var data = patienListData.Skip(skip).Take(pageSize).ToList();
+                
                 return Json(new { draw = draw, recordsFiltered = recordsTotal, recordsTotal = recordsTotal, data = data });
             }
             catch (Exception)
@@ -211,6 +236,14 @@ namespace AspergillosisEPR.Controllers
             {
                 throw;
             }
+        }
+
+        private string[] SortColumns()
+        {
+            return new string[]
+            {
+                "ID", "PrimaryDiagnosis", "FirstName", "LastName", "Gender", "DOB"
+            };
         }
     }
 }

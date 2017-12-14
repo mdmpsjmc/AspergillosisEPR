@@ -5,7 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace AspergillosisEPR.Helpers
+namespace AspergillosisEPR.Lib
 {
     public class FileImporter
     {

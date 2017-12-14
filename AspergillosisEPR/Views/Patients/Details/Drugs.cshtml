@@ -1,6 +1,6 @@
-﻿@model AspergillosisEPR.Models.Patient
+﻿@model AspergillosisEPR.Models.PatientViewModels.PatientDetailsViewModel
 
-@if (Model.PatientDrugs.Any())
+@if (Model.PatientDrugs != null && Model.PatientDrugs.Any())
 {
     <div class="col-sm-12">
         <table class="table table-bordered table-striped">

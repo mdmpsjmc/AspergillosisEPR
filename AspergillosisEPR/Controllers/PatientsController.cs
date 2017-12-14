@@ -11,6 +11,8 @@ using System.Collections;
 using AspergillosisEPR.Helpers;
 using Microsoft.AspNetCore.Authorization;
 using Audit.Mvc;
+using AspergillosisEPR.Models.PatientViewModels;
+using System;
 
 namespace AspergillosisEPR.Controllers
 {
@@ -94,7 +96,7 @@ namespace AspergillosisEPR.Controllers
                                 .Include(p => p.PatientDiagnoses).
                                     ThenInclude(d => d.DiagnosisType)
                                 .Include(p => p.PatientDrugs).
-                                    ThenInclude(d => d.Drug)                                    
+                                    ThenInclude(d => d.Drug)
                                 .Include(p => p.PatientDiagnoses)
                                     .ThenInclude(d => d.DiagnosisCategory)
                                 .Include(p => p.PatientDrugs)
@@ -103,13 +105,17 @@ namespace AspergillosisEPR.Controllers
                                 .Include(p => p.PatientStatus)
                                 .AsNoTracking()
                                 .SingleOrDefaultAsync(m => m.ID == id);
+
             if (patient == null)
             {
                 return NotFound();
             }
 
-            return PartialView(patient);
+            var patientDetailsViewModel = BuildPatientViewModel(patient);
+            return PartialView(patientDetailsViewModel);
         }
+
+        
 
         [Authorize(Roles = ("Admin Role, Update Role"))]
         public async Task<IActionResult> Edit(int? id)
@@ -274,7 +280,46 @@ namespace AspergillosisEPR.Controllers
             await _context.SaveChangesAsync();
             return Json(new { ok = "ok" });
         }
-      
+
+        private PatientDetailsViewModel BuildPatientViewModel(Patient patient)
+        {
+            var primaryDiagnosis = _context.DiagnosisCategories.Where(dc => dc.CategoryName == "Primary").FirstOrDefault();
+            var secondaryDiagnosis = _context.DiagnosisCategories.Where(dc => dc.CategoryName == "Secondary").FirstOrDefault();
+            var otherDiagnosis = _context.DiagnosisCategories.Where(dc => dc.CategoryName == "Other").FirstOrDefault();
+            var underlyingDiagnosis = _context.DiagnosisCategories.Where(dc => dc.CategoryName == "Underlying diagnosis").FirstOrDefault();
+
+            var patientDetailsViewModel = new PatientDetailsViewModel();
+
+            patientDetailsViewModel.Patient = patient;
+
+            if (primaryDiagnosis != null)
+            {
+                patientDetailsViewModel.PrimaryDiagnoses = patient.PatientDiagnoses.
+                                                                    Where(pd => pd.DiagnosisCategoryId == primaryDiagnosis.ID).
+                                                                    ToList();
+            }
+            if (secondaryDiagnosis != null)
+            {
+                patientDetailsViewModel.SecondaryDiagnoses = patient.PatientDiagnoses.
+                                                                    Where(pd => pd.DiagnosisCategoryId == secondaryDiagnosis.ID).
+                                                                    ToList();
+            }
+            if (otherDiagnosis != null)
+            {
+                patientDetailsViewModel.OtherDiagnoses = patient.PatientDiagnoses.
+                                                                 Where(pd => pd.DiagnosisCategoryId == otherDiagnosis.ID).
+                                                                 ToList();
+            }
+            if (underlyingDiagnosis != null)
+            {
+                patientDetailsViewModel.UnderlyingDiseases = patient.PatientDiagnoses.
+                                                                    Where(pd => pd.DiagnosisCategoryId == underlyingDiagnosis.ID).
+                                                                    ToList();
+            }
+            patientDetailsViewModel.PatientDrugs = patient.PatientDrugs;
+            return patientDetailsViewModel;
+        }
+
 
         private void PopulateDiagnosisCategoriesDropDownList(object selectedCategory = null)
         {

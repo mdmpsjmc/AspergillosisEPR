@@ -1,19 +1,28 @@
-﻿@model AspergillosisEPR.Models.Patient
+﻿@model AspergillosisEPR.Models.PatientViewModels.PatientDetailsViewModel
 
-@if (Model.PatientDiagnoses.Any())
+@if (Model.Patient.PatientDiagnoses.Any())
 {
     <div class="col-sm-12">
-        @foreach (var diagnosis in Model.PatientDiagnoses)
-        {
-            <h3>Diagnosis: @(diagnosis.DiagnosisCategory.CategoryName)</h3>
-            <div class="alert alert-info alert-block">
-                <h4 class="alert-heading">@(diagnosis.DiagnosisType.Name)</h4>
-                @(diagnosis.Description)
-            </div>
-        }
-
+        <div class="table-responsive">            
+              @if (Model.HasPrimaryDiagnoses())
+              {
+                @Html.Partial("/Views/Patients/Details/_DiagnosisCollection.cshtml", Model.PrimaryDiagnoses);
+              }              
+              @if (Model.HasSecondaryDiagnoses())
+              {
+                @Html.Partial("/Views/Patients/Details/_DiagnosisCollection.cshtml", Model.SecondaryDiagnoses);
+              }              
+              @if (Model.HasUnderlyingDeases())
+              {
+                @Html.Partial("/Views/Patients/Details/_DiagnosisCollection.cshtml", Model.UnderlyingDiseases);
+              }            
+              @if (Model.HasOtherDiagnoses())
+              {
+                @Html.Partial("/Views/Patients/Details/_DiagnosisCollection.cshtml", Model.OtherDiagnoses);
+              }
+            <br />
+        </div>     
     </div>
-
 }
 else
 {
@@ -23,5 +32,4 @@ else
             This patient does not currently have any diagnosed diseases
         </div>
     </div>
-
 }
