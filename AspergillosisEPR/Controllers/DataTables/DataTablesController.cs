@@ -7,11 +7,14 @@ using Microsoft.AspNetCore.Authorization;
 using AspergillosisEPR.Data;
 using AspergillosisEPR.Models;
 using Microsoft.AspNetCore.Identity;
+using System.Collections;
 
-namespace AspergillosisEPR.Controllers
+namespace AspergillosisEPR.Controllers.DataTables
 {
     public class DataTablesController : Controller
     {
+
+        protected IList _list;
         protected AspergillosisContext _aspergillosisContext;
         protected string _draw;
         protected string _start;
@@ -21,8 +24,11 @@ namespace AspergillosisEPR.Controllers
         protected string _searchValue;
         protected int _pageSize;
         protected int _skip;
+        protected int _recordsTotal;
 
-        public DataTablesController()
+        public DataTablesController(){}
+
+        protected void InitialSetup()
         {
             _draw = HttpContext.Request.Form["draw"].FirstOrDefault();
             _start = Request.Form["start"].FirstOrDefault();
@@ -34,12 +40,15 @@ namespace AspergillosisEPR.Controllers
             _skip = _start != null ? Convert.ToInt32(_start) : 0;
         }
 
-        [Authorize(Roles = "Read Role, Admin Role")]
-        public IActionResult LoadData(Action action)
+        protected JsonResult JSONFromData(IList data)
         {
-            
-            action();
-            return Json(new { });
+            return Json(new
+            {
+                draw = _draw,
+                recordsFiltered = _recordsTotal,
+                recordsTotal = _recordsTotal,
+                data = data
+            });
         }
     }
            

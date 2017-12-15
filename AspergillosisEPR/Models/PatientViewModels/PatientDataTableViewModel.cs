@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations;
 
 namespace AspergillosisEPR.Models.PatientViewModels
 {
@@ -13,7 +11,9 @@ namespace AspergillosisEPR.Models.PatientViewModels
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Gender { get; set; }
-        public string DOB { get; set; }
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{dd-MM-yyyy}")]
+        public DateTime DOB { get; set; }
 
     }
 }

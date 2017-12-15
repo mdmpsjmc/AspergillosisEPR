@@ -13,7 +13,7 @@
                     Users.loadDataTableWithForCurrentUserRoles();
                 },
                 "ajax": {
-                    "url": "/DataTableJson/LoadUsers",
+                    "url": "/DataTableUsers/Load",
                     "type": "POST",
                     "datatype": "json"
                 },

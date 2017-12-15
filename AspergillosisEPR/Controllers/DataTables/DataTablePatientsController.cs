@@ -9,9 +9,9 @@ using Microsoft.EntityFrameworkCore;
 using AspergillosisEPR.Models.PatientViewModels;
 using AspergillosisEPR.Lib;
 
-namespace AspergillosisEPR.Controllers
+namespace AspergillosisEPR.Controllers.DataTables
 {
-    public class DataTablePatientsController : Controller
+    public class DataTablePatientsController : DataTablesController
     {
         private AspergillosisContext _aspergillosisContext;
         private List<PatientDataTableViewModel> _patientList;
@@ -24,16 +24,8 @@ namespace AspergillosisEPR.Controllers
 
         public IActionResult Load()
         {
-            var draw = HttpContext.Request.Form["draw"].FirstOrDefault();
-            var start = Request.Form["start"].FirstOrDefault();
-            var length = Request.Form["length"].FirstOrDefault();
-            var sortColumn = Request.Form["columns[" + Request.Form["order[0][column]"].FirstOrDefault() + "][name]"].FirstOrDefault();
-            var sortColumnDirection = Request.Form["order[0][dir]"].FirstOrDefault();
-            var searchValue = Request.Form["search[value]"].FirstOrDefault();
-            int pageSize = length != null ? Convert.ToInt32(length) : 0;
-            int skip = start != null ? Convert.ToInt32(start) : 0;
+            InitialSetup();
             var patientData = QueryPatientData();
-            int recordsTotal = 0;
 
             var primaryDiagnosis = (from diagnosesCategories in _aspergillosisContext.DiagnosisCategories
                                     where diagnosesCategories.CategoryName == "Primary"
@@ -53,25 +45,21 @@ namespace AspergillosisEPR.Controllers
 
             AppendDiagnosesToPatients(patientDiagnoses);
             ColumnSearch();
-            Sorting(sortColumn, sortColumnDirection);
+            Sorting();
 
-            recordsTotal = _patientList.Count();
+            _recordsTotal = _patientList.Count();
 
-            var data = _patientList.Skip(skip).Take(pageSize).ToList();
+            var data = _patientList.Skip(_skip).Take(_pageSize).ToList();
 
-            return Json(new { draw = draw,
-                             recordsFiltered = recordsTotal,
-                             recordsTotal = recordsTotal,
-                             data = data
-            });
+            return JSONFromData(data);
         }
 
-        private void Sorting(string sortColumn, string sortDirection)
+        private void Sorting()
         {
-            if (!(string.IsNullOrEmpty(sortColumn) && string.IsNullOrEmpty(sortDirection)))
+            if (!(string.IsNullOrEmpty(_sortColumn) && string.IsNullOrEmpty(_sortColumnDirection)))
             {
-                _patientList = _patientList.OrderBy(p => p.GetProperty(sortColumn)).ToList();
-                if (sortDirection == "desc")
+                _patientList = _patientList.OrderBy(p => p.GetProperty(_sortColumn)).ToList();
+                if (_sortColumnDirection == "desc")
                 {
                     _patientList.Reverse();
                 }
@@ -103,7 +91,7 @@ namespace AspergillosisEPR.Controllers
                             _patientList = _patientList.Where(p => p.Gender == partialSearch).ToList();
                             break;
                         case 5:
-                            _patientList = _patientList.Where(p => p.DOB.Contains(partialSearch)).ToList();
+                            _patientList = _patientList.Where(p => p.DOB.ToString().Contains(partialSearch)).ToList();
                             break;
                     }
                 }
@@ -137,7 +125,7 @@ namespace AspergillosisEPR.Controllers
                         LastName = patient.LastName,
                         FirstName = patient.FirstName,
                         Gender = patient.Gender,
-                        DOB = patient.DOB.ToString("dd/MM/yyyy")
+                        DOB = DateTime.Parse(patient.DOB.ToString())
                     });
         }
     }
