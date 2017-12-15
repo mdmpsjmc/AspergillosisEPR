@@ -11,9 +11,10 @@ using System;
 namespace AspergillosisEPR.Migrations.Aspergillosis
 {
     [DbContext(typeof(AspergillosisContext))]
-    partial class AspergillosisContextModelSnapshot : ModelSnapshot
+    [Migration("20171215133150_AddPatientsSTGQuestionnaire")]
+    partial class AddPatientsSTGQuestionnaire
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -191,8 +192,6 @@ namespace AspergillosisEPR.Migrations.Aspergillosis
 
                     b.Property<decimal>("ActivityScore")
                         .HasColumnType("decimal(10,2)");
-
-                    b.Property<DateTime>("DateTaken");
 
                     b.Property<decimal>("ImpactScore")
                         .HasColumnType("decimal(10,2)");

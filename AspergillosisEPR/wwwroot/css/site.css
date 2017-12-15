@@ -177,3 +177,7 @@ div#details-tab-content {
 .smart-form ul {
     padding-left: 30px !important;
 }
+
+div#new-patient-modal .modal-dialog {
+    min-width: 700px !important;
+}

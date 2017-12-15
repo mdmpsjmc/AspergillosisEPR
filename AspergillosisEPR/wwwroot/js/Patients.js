@@ -167,6 +167,23 @@
         })
     }
 
+    var bindSTGFormOnClick = function () {
+        $(document).off("click.add-stg").on("click.add-stg", "a.add-stg-entry", function (e) {
+            LoadingIndicator.show();
+            e.preventDefault();
+            $.get($(this).attr("href"), function (responseHtml) {
+                LoadingIndicator.hide();
+                $("div.stg-form").append(responseHtml);
+                $("select.select2").select2({
+                    minimumResultsForSearch: -1,
+                    placeholder: function () {
+                        $(this).data('placeholder');
+                    }
+                });
+            })
+        });
+    }
+
     var bindPatientDetailsShow = function () {
         $(document).off("click.patient-details").on("click.patient-details", "a.patient-details", function (e) {
             LoadingIndicator.show();
@@ -380,6 +397,7 @@
             deletePatientPartialFromPopup();
             deletePatientDbPartialFromPopup();
             onPatientStatusChange();
+            bindSTGFormOnClick();
         },
 
         setupForm: function() {

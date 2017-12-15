@@ -1,0 +1,34 @@
+﻿@model AspergillosisEPR.Models.PatientSTGQuestionnaire
+@using HtmlHelpers.BeginCollectionItemCore;
+@using (Html.BeginCollectionItem("sTGQuestionnaires"))
+{
+<fieldset>
+    <div class="row">
+        <section class="col col-4">
+            <label class="input" asp-for="DateTaken">
+                <input asp-for="DateTaken" placeholder="Date Taken"/>
+            </label>
+        </section>
+        <section class="col col-2">
+            <label class="input" asp-for="ActivityScore">
+                <input asp-for="ActivityScore" placeholder="Activity"/>
+            </label>
+        </section>
+        <section class="col col-2">
+            <label class="input" asp-for="ImpactScore">
+                <input asp-for="ImpactScore" placeholder="Impact">
+            </label>
+        </section>
+        <section class="col col-2">
+            <label class="input" asp-for="SymptomScore">
+                <input asp-for="SymptomScore" placeholder="Symptoms">
+            </label>
+        </section>
+        <section class="col col-2">
+            <label class="input" asp-for="TotalScore">
+                <input asp-for="TotalScore" placeholder="Total">
+            </label>
+        </section>
+    </div>
+</fieldset>
+}

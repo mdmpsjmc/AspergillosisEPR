@@ -47,10 +47,13 @@ namespace AspergillosisEPR.Controllers
         [Authorize(Roles = ("Admin Role, Create Role"))]
         [Audit(EventTypeName = "Patient::Create", IncludeHeaders = true, IncludeModel = true)]
         public async Task<IActionResult> Create([Bind("LastName,FirstName,DOB,Gender, RM2Number, PatientStatusId, DateOfDeath")] Patient patient, 
-                                                 PatientDiagnosis[] diagnoses, PatientDrug[] drugs)
+                                                 PatientDiagnosis[] diagnoses, 
+                                                 PatientDrug[] drugs,
+                                                 PatientSTGQuestionnaire[] sTGQuestionnaires)
         {
             patient.PatientDiagnoses = diagnoses;
             patient.PatientDrugs = drugs;
+            patient.STGQuestionnaires = sTGQuestionnaires;
 
             for(var cursor = 0; cursor < Request.Form["Drugs.index"].ToList().Count; cursor++)
             {
@@ -78,7 +81,7 @@ namespace AspergillosisEPR.Controllers
                    return Json(new { success = false, errors });
                   }
             }
-            catch (DbUpdateException)
+            catch (DbUpdateException ex)
             {
                 return null;
             }        
@@ -103,6 +106,7 @@ namespace AspergillosisEPR.Controllers
                                     .ThenInclude(d => d.SideEffects)
                                     .ThenInclude(se => se.SideEffect)
                                 .Include(p => p.PatientStatus)
+                                .Include(p => p.STGQuestionnaires)
                                 .AsNoTracking()
                                 .SingleOrDefaultAsync(m => m.ID == id);
 

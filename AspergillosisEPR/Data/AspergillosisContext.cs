@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using AspergillosisEPR.Models;
+using AspergillosisEPR.Extensions;
 
 namespace AspergillosisEPR.Data
 {
@@ -19,6 +20,7 @@ namespace AspergillosisEPR.Data
         public DbSet<PatientDrugSideEffect> PatientDrugSideEffects { get; set; }
         public DbSet<PatientStatus> PatientStatuses { get; set; }
         public DbSet<DbImport> DbImports { get; set; }
+        public DbSet<PatientSTGQuestionnaire> PatientSTGQuestionnaires { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -33,6 +35,11 @@ namespace AspergillosisEPR.Data
             modelBuilder.Entity<PatientDrugSideEffect>().ToTable("PatientDrugSideEffects");
             modelBuilder.Entity<PatientStatus>().ToTable("PatientStatuses");
             modelBuilder.Entity<DbImport>().ToTable("DbImports");
+            modelBuilder.Entity<PatientSTGQuestionnaire>().ToTable("PatientSTGQuestionnaires");
+            modelBuilder.Entity<PatientSTGQuestionnaire>().Property(x => x.ImpactScore).HasPrecision(10, 2);
+            modelBuilder.Entity<PatientSTGQuestionnaire>().Property(x => x.ActivityScore).HasPrecision(10, 2);
+            modelBuilder.Entity<PatientSTGQuestionnaire>().Property(x => x.TotalScore).HasPrecision(10, 2);
+            modelBuilder.Entity<PatientSTGQuestionnaire>().Property(x => x.SymptomScore).HasPrecision(10, 2);
         }
     }
 
