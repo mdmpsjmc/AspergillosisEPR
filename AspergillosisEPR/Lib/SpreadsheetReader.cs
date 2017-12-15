@@ -100,13 +100,13 @@ namespace AspergillosisEPR.Helpers
                     ImportedPatients.Add(patient);
                 } else
                 {
-                    copyPropertiesFrom(existingPatient, patient);
+                    CopyPropertiesFrom(existingPatient, patient);
                 }
                
             }
         }
 
-        private void copyPropertiesFrom(Patient existingPatient, Patient sourcePatient)
+        private void CopyPropertiesFrom(Patient existingPatient, Patient sourcePatient)
         {
             existingPatient.FirstName = sourcePatient.FirstName;
             existingPatient.LastName = sourcePatient.LastName;

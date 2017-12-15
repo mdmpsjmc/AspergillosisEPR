@@ -12,5 +12,10 @@ namespace AspergillosisEPR.Lib
             Type t = typeof(T);
             return t.GetProperty(name).GetValue(obj, null);
         }
+
+        public static object GetProperty<T>(dynamic obj, string name) 
+        {
+            return obj.GetProperty(name).GetValue(obj, null);
+        }
     }
 }

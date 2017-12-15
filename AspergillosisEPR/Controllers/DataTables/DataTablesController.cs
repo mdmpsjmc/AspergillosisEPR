@@ -8,13 +8,14 @@ using AspergillosisEPR.Data;
 using AspergillosisEPR.Models;
 using Microsoft.AspNetCore.Identity;
 using System.Collections;
+using AspergillosisEPR.Lib;
+using System.Collections.ObjectModel;
 
 namespace AspergillosisEPR.Controllers.DataTables
 {
     public class DataTablesController : Controller
     {
-
-        protected IList _list;
+        protected List<dynamic> _list;
         protected AspergillosisContext _aspergillosisContext;
         protected string _draw;
         protected string _start;
@@ -40,6 +41,14 @@ namespace AspergillosisEPR.Controllers.DataTables
             _skip = _start != null ? Convert.ToInt32(_start) : 0;
         }
 
+        public IActionResult LoadData(Action queriesAction)
+        {
+            InitialSetup();
+            queriesAction();
+            CountTotal();
+            return JSONFromData(GetPaginatedData());
+        }
+
         protected JsonResult JSONFromData(IList data)
         {
             return Json(new
@@ -50,6 +59,29 @@ namespace AspergillosisEPR.Controllers.DataTables
                 data = data
             });
         }
+
+        protected List<dynamic> GetPaginatedData()
+        {
+            return _list.Skip(_skip).Take(_pageSize).ToList();
+        }
+
+        protected void Sorting()
+        {
+            if (!(string.IsNullOrEmpty(_sortColumn) && string.IsNullOrEmpty(_sortColumnDirection)))
+            {
+                _list = _list.OrderBy(p => PropertiesExtensions.GetProperty(p, _sortColumn)).ToList();
+                if (_sortColumnDirection == "desc")
+                {
+                    _list.Reverse();
+                }
+            }
+        }
+
+        protected void CountTotal()
+        {
+            _recordsTotal = _list.Count();
+        }
+
     }
            
     }

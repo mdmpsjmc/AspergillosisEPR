@@ -1,10 +1,10 @@
-﻿using System;
+﻿using AspergillosisEPR.Lib;
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace AspergillosisEPR.Models.PatientViewModels
 {
-    public class PatientDataTableViewModel
-    {
+    public class PatientDataTableViewModel  : DTCollection<PatientDataTableViewModel>    {
         public int ID {get; set;}
         public string PrimaryDiagnosis { get; set; }
         public string RM2Number { get; set; }

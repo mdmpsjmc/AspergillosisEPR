@@ -5,32 +5,30 @@ using AspergillosisEPR.Models.DataTableViewModels;
 using AspergillosisEPR.Data;
 using AspergillosisEPR.Lib;
 using Microsoft.AspNetCore.Authorization;
+using System;
 
 namespace AspergillosisEPR.Controllers.DataTables
 {
     public class DataTableUsersController : DataTablesController
     {
         private ApplicationDbContext _appContext;
-        private List<UserDataTableViewModel> _list;
-
-
         public DataTableUsersController(ApplicationDbContext context)
         {
             _appContext = context;
-            _list = new List<UserDataTableViewModel>();
+            _list = new List<dynamic>();
         }
 
         [Authorize(Roles = "Read Role, Admin Role")]
         public IActionResult Load()
         {
-            InitialSetup();
-            var usersData = QueryUsersData().GroupBy(u => u.ID).Select(a => a.FirstOrDefault()).ToList();
-            _list = usersData.ToList();
-            Sorting();
-            SingleSearch();
-            _recordsTotal = usersData.Count();
-            var data = _list.Skip(_skip).Take(_pageSize).ToList();
-            return JSONFromData(data);
+            Action queriesAction = () =>
+            {
+                var usersData = QueryUsersData().GroupBy(u => u.ID).Select(a => a.FirstOrDefault()).ToList();
+                _list = usersData.ToList<dynamic>();
+                Sorting();
+                SingleSearch();
+            };
+            return LoadData(queriesAction);
         }
 
         public IQueryable<UserDataTableViewModel> QueryUsersData()
@@ -65,18 +63,6 @@ namespace AspergillosisEPR.Controllers.DataTables
                         .Where(u => u.FirstName.Contains(_searchValue) || u.LastName.ToString().Contains(_searchValue) 
                                 || u.Email.ToString().Contains(_searchValue) || u.UserName.Contains(_searchValue))
                         .ToList();
-            }
-        }
-
-        private void Sorting()
-        {
-            if (!(string.IsNullOrEmpty(_sortColumn) && string.IsNullOrEmpty(_sortColumnDirection)))
-            {
-                _list = _list.OrderBy(p => p.GetProperty(_sortColumn)).ToList();
-                if (_sortColumnDirection == "desc")
-                {
-                    _list.Reverse();
-                }
             }
         }
     }
