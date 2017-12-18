@@ -1,0 +1,43 @@
+﻿@model AspergillosisEPR.Models.PatientViewModels.PatientDetailsViewModel
+
+@if (Model.STGQuestionnaires != null && Model.STGQuestionnaires.Any())
+{
+    <div class="col-sm-12">
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Date Taken</th>
+                    <th>Activity</th>
+                    <th>Impact</th>
+                    <th>Symptopms</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var stg in Model.STGQuestionnaires)
+                {
+                    <tr>
+                        <td>@(stg.ID)</td>
+                        <td>@(stg.DateTaken.ToString("dd/MM/yyyy"))</td>
+                        <td>@(stg.ActivityScore)</td>
+                        <td>@(stg.ImpactScore)</td>
+                        <td>@(stg.SymptomScore)</td>
+                        <td>@(stg.TotalScore)</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+}
+else
+{
+    <div class="col-sm-12">
+        <div class="alert alert-warning alert-block">
+            <h4 class="alert-heading">Info!</h4>
+            This patient does not have any associated St Georges Questionnaires  
+        </div>
+    </div>
+
+}

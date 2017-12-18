@@ -49,46 +49,65 @@
         $(document).off("click.save-patient").on("click.save-patient", "button.submit-new-patient", function () {
             LoadingIndicator.show();
             $("label.text-danger").remove();
-            $.ajax({
-                url: $("form#new-patient-form").attr("action"),
-                type: "POST",
-                data: $("form#new-patient-form").serialize(),
-                contentType: "application/x-www-form-urlencoded",
-                dataType: 'json'
-            }).done(function (data, textStatus) {
-                LoadingIndicator.hide();
-                if (textStatus === "success") {
-                    if (data.errors) {
-                        displayErrors(data.errors);
-                    } else {
-                        $("form#new-patient-form")[0].reset();
-                        $("div#new-patient-modal").modal("hide");
-                        window.patientsTable.ajax.reload(function () {
-                            currentUserWithRoles();     
-                        });
+            $.validator.unobtrusive.parse("form#new-patient-form");
+            $("form#new-patient-form").trigger('submit');
+            $("form#new-patient-form").off("submit").on("submit", function (e) {
+                e.preventDefault();
+                $.ajax({
+                    url: $("form#new-patient-form").attr("action"),
+                    type: "POST",
+                    data: $("form#new-patient-form").serialize(),
+                    contentType: "application/x-www-form-urlencoded",
+                    dataType: 'json'
+                }).done(function (data, textStatus) {
+                    LoadingIndicator.hide();
+                    if (textStatus === "success") {
+                        if (data.errors) {
+                            displayErrors(data.errors);
+                        } else {
+                            $("form#new-patient-form")[0].reset();
+                            $("div#new-patient-modal").modal("hide");
+                            window.patientsTable.ajax.reload(function () {
+                                currentUserWithRoles();
+                            });
+                        }
                     }
-                }
                 }).fail(function (data) {
-                LoadingIndicator.hide();
-                $("form#new-patient-form")[0].reset();
-                $("div#new-patient-modal").modal("hide");
-                alert("There was a problem saving this patient. Please contact administrator");
-            });
+                    LoadingIndicator.hide();
+                    $("form#new-patient-form")[0].reset();
+                    $("div#new-patient-modal").modal("hide");
+                    alert("There was a problem saving this patient. Please contact administrator");
+                });
 
+            });
         });
     }
 
     var displayErrors = function (errors) {
         for (var i = 0; i < Object.keys(errors).length; i++) {
             var field = Object.keys(errors)[i];
-            if (field.match("diagnoses") || field.match("drugs")) {
+            if (field.match("diagnoses") || field.match("drugs") || field.match("sTGQuestionnaires")) {
                 field = field.charAt(0).toUpperCase() + field.slice(1).replace("[", "_").replace("].", "__");
+                var htmlCode = "<label for='" + field + "' class='text-danger'></label>";
+                var fieldError = errors[Object.keys(errors)[i]];
+                $(htmlCode).html(fieldError).appendTo($("input#" + field + ", select#" + field).parent());
+            }            
+        }
+    }
+
+    var displayUpdateErrors = function (errors) {
+        for (var i = 0; i < Object.keys(errors).length; i++) {
+            var field = Object.keys(errors)[i];
+            if (field.match("diagnoses") || field.match("drugs")) {
+                field = field.charAt(0).toUpperCase() + field.slice(1).replace("[", "_").replace("].", "__");          
             }
             var htmlCode = "<label for='" + field + "' class='text-danger'></label>";
             var fieldError = errors[Object.keys(errors)[i]];
             $(htmlCode).html(fieldError).appendTo($("input#" + field + ", select#" + field).parent());
         }
     }
+
+
 
     var enableAntiForgeryProtectionWithAjax = function () {
         $(document)
@@ -204,6 +223,7 @@
                 LoadingIndicator.hide();
                 $("div#modal-container").html(responseHtml);
                 $("div#edit-modal").modal("show");
+                //$.validator.unobtrusive.parse("form#edit-patient-form");
                 updatePatient();
                 onPatientStatusChange();
                 $("select.select2").select2({
@@ -217,9 +237,10 @@
     }
 
     var updatePatient = function () {
-        $(document).off("click.update-patient").on("click.update-patient", "button.update-patient", function () {
+        $(document).off("click.update-patient").on("click.update-patient", "button.update-patient", function (e) {
             $("label.text-danger").remove();
-            LoadingIndicator.show();
+            LoadingIndicator.show();            
+            e.preventDefault();
             $.ajax({
                 url: $("form#edit-patient-form").attr("action"),
                 type: "POST",
@@ -230,7 +251,7 @@
                 LoadingIndicator.hide();
                 if (textStatus === "success") {
                     if (data.errors) {
-                        displayErrors(data.errors);
+                        displayUpdateErrors(data.errors);
                     } else {
                         $("form#edit-patient-form")[0].reset();
                         $("div#edit-modal").modal("hide");
@@ -245,7 +266,6 @@
                 $("div#edit-modal").modal("hide");
                 alert("There was a problem saving this patient. Please contact administrator");
             });
-
         });
     }
 
@@ -275,7 +295,7 @@
     }
 
     var deletePatientPartialFromPopup = function () {
-        $(document).off("click.delete-partial").on("click.delete-partial", "a.remove-new-diagnosis, a.remove-new-drug", function () {
+        $(document).off("click.delete-partial").on("click.delete-partial", "a.remove-new-diagnosis, a.remove-new-drug, a.remove-new-stg", function () {
             var whatToRemove = $(this).data("what");
             var button = $(this);
             var question = "Are you sure you want to remove this " + whatToRemove + "?";
@@ -379,6 +399,12 @@
         });
     }
 
+    var onModalClose = function () {
+        $('#edit-modal, #new-patient-modal').on('hidden.bs.modal', function () {
+            LoadingIndicator.hide();
+        })
+    }
+
     return {
 
         loadDataTableWithForCurrentUserRoles: function () {
@@ -398,6 +424,7 @@
             deletePatientDbPartialFromPopup();
             onPatientStatusChange();
             bindSTGFormOnClick();
+            onModalClose();
         },
 
         setupForm: function() {

@@ -260,11 +260,11 @@ namespace AspergillosisEPR.Controllers
         }
 
         [AllowAnonymous]
-        public JsonResult HasRM2Number(string RM2Number, int? Id)
+        public JsonResult HasRM2Number(string RM2Number, int? Id, string initialRM2Number)
         {
             var validateName = _context.Patients.FirstOrDefault(x => x.RM2Number == RM2Number && x.ID != Id);
 
-            if (validateName != null)
+            if (validateName != null && initialRM2Number == "undefined")
             {
                 return Json(false);
             }
@@ -321,6 +321,7 @@ namespace AspergillosisEPR.Controllers
                                                                     ToList();
             }
             patientDetailsViewModel.PatientDrugs = patient.PatientDrugs;
+            patientDetailsViewModel.STGQuestionnaires = patient.STGQuestionnaires;
             return patientDetailsViewModel;
         }
 

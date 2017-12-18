@@ -13,6 +13,7 @@ namespace AspergillosisEPR.Models.PatientViewModels
         public ICollection<PatientDiagnosis> UnderlyingDiseases { get; set; }
         public ICollection<PatientDiagnosis> OtherDiagnoses { get; set; }
         public ICollection<PatientDrug> PatientDrugs { get; set; }
+        public ICollection<PatientSTGQuestionnaire> STGQuestionnaires { get; set; }
 
         public bool HasPrimaryDiagnoses()
         {

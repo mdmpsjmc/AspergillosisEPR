@@ -1,6 +1,6 @@
 ﻿@model AspergillosisEPR.Models.PatientSTGQuestionnaire
 @using HtmlHelpers.BeginCollectionItemCore;
-@using (Html.BeginCollectionItem("sTGQuestionnaires"))
+@using (Html.BeginCollectionItem("STGQuestionnaires"))
 {
 <fieldset>
     <div class="row">
@@ -29,6 +29,11 @@
                 <input asp-for="TotalScore" placeholder="Total">
             </label>
         </section>
+    </div>
+    <div class="row">
+        <a href="javascript:void(0)" class="btn btn-danger remove-new-stg pull-right btn-lg" data-what="St Georges Questionnaire" data-toggle="tooltip" data-title="Remove St Georges Questionnaire" style="padding: 5px">
+            <i class="fa fa-trash"></i>
+        </a>
     </div>
 </fieldset>
 }

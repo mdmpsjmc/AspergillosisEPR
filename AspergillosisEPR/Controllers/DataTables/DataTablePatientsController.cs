@@ -7,7 +7,7 @@ using AspergillosisEPR.Models;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using AspergillosisEPR.Models.PatientViewModels;
-using AspergillosisEPR.Lib;
+using Microsoft.AspNetCore.Authorization;
 
 namespace AspergillosisEPR.Controllers.DataTables
 {
@@ -21,6 +21,7 @@ namespace AspergillosisEPR.Controllers.DataTables
             _list = new List<dynamic>();
         }
 
+        [Authorize(Roles = "Read Role, Admin Role")]
         public IActionResult Load()
         {
             Action queriesAction = () =>

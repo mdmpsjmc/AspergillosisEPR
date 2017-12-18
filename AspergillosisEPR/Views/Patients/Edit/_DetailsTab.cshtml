@@ -9,6 +9,7 @@
                 <i class="icon-append fa fa-hospital-o"></i>
                 <input asp-for="RM2Number" placeholder="RM2 Number">
                 <span asp-validation-for="RM2Number" class="text-danger"></span>
+                <input type="hidden" name="InitialRM2Number" value="@(Model.RM2Number)" />
             </label>
         </section>
         <section class="col col-6">
