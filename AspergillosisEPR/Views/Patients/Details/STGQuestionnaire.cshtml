@@ -15,7 +15,7 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (var stg in Model.STGQuestionnaires)
+                @foreach (var stg in Model.STGQuestionnaires.OrderByDescending(q => q.DateTaken))
                 {
                     <tr>
                         <td>@(stg.ID)</td>
@@ -29,15 +29,14 @@
             </tbody>
         </table>
     </div>
-
 }
 else
 {
     <div class="col-sm-12">
-        <div class="alert alert-warning alert-block">
+        <div class="alert alert-info alert-block">
             <h4 class="alert-heading">Info!</h4>
+            <i class="fa fa-info-circle"></i>
             This patient does not have any associated St Georges Questionnaires  
         </div>
     </div>
-
 }

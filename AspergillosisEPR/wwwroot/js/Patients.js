@@ -26,7 +26,12 @@
                     { "data": "firstName", "name": "FirstName", "autoWidth": true },
                     { "data": "lastName", "name": "LastName", "autoWidth": true },
                     { "data": "gender", "name": "Gender", "autoWidth": true },
-                    { "data": "dob", "name": "DOB", "autoWidth": true },
+                    {
+                        "data": "dob", "name": "DOB", "autoWidth": true,
+                        "render": function(data) {
+                            return moment.unix(data).format("MM/DD/YYYY");
+                        }                    
+                    },
                     {
                         "render": function (data, type, patient, meta) {
                             return '<a class="btn btn-info patient-details"  style="display: none" data-role="Read Role" href="/Patients/Details/' + patient.id + '"><i class=\'fa fa-eye\'></i>&nbsp;Details</a>&nbsp;' +
@@ -98,7 +103,7 @@
     var displayUpdateErrors = function (errors) {
         for (var i = 0; i < Object.keys(errors).length; i++) {
             var field = Object.keys(errors)[i];
-            if (field.match("diagnoses") || field.match("drugs")) {
+            if (field.match("diagnoses") || field.match("drugs") || field.match("sTGQuestionnaires")) {
                 field = field.charAt(0).toUpperCase() + field.slice(1).replace("[", "_").replace("].", "__");          
             }
             var htmlCode = "<label for='" + field + "' class='text-danger'></label>";
@@ -106,8 +111,6 @@
             $(htmlCode).html(fieldError).appendTo($("input#" + field + ", select#" + field).parent());
         }
     }
-
-
 
     var enableAntiForgeryProtectionWithAjax = function () {
         $(document)
@@ -147,6 +150,18 @@
             $.get($(this).attr("href") + "?index=" + index, function (responseHtml) {
                 LoadingIndicator.hide();
                 $("div.diagnosis-form").append(responseHtml);
+            });
+        })
+    }
+
+    var bindSTGEditFormOnClick = function () {
+        $(document).off("click.add-edit-stg").on("click.add-edit-stg", "a.add-edit-stg", function (e) {
+            LoadingIndicator.show();
+            e.preventDefault();
+            var index = $("div.stg-row:visible").length;
+            $.get($(this).attr("href") + "?index=" + index, function (responseHtml) {
+                LoadingIndicator.hide();
+                $("div.stg-form").append(responseHtml);
             });
         })
     }
@@ -308,7 +323,7 @@
     }
 
     var deletePatientDbPartialFromPopup = function () {
-        $(document).off("click.delete-db-partial").on("click.delete-db-partial", "a.remove-existing-diagnosis, a.remove-existing-drug", function () {
+        $(document).off("click.delete-db-partial").on("click.delete-db-partial", "a.remove-existing-diagnosis, a.remove-existing-drug, a.remove-existing-stg", function () {
             var itemId = $(this).data("id");
             var whatToRemove = $(this).data("what");
             var button = $(this);
@@ -320,8 +335,10 @@
                     var requestUrl = function () {
                         if (whatToRemove === "diagnosis") {
                             return "/PatientDiagnoses/Delete/" + itemId;
-                        } else {
+                        } else if (whatToRemove == "drug") {
                             return "/PatientDrugs/Delete/" + itemId;
+                        } else {
+                            return "/PatientSTGQuestionnaires/Delete/" + itemId;
                         }
                     }
                     $.ajax({
@@ -425,6 +442,7 @@
             onPatientStatusChange();
             bindSTGFormOnClick();
             onModalClose();
+            bindSTGEditFormOnClick();
         },
 
         setupForm: function() {

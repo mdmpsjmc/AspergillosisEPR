@@ -60,6 +60,13 @@ namespace AspergillosisEPR.Controllers
             return PartialView();
         }
 
+        [Authorize(Roles = "Update Role, Admin Role")]
+        public IActionResult EditSTGForm()
+        {
+            ViewBag.Index = (string)Request.Query["index"];
+            return PartialView();
+        }
+
         private void PopulateDiagnosisCategoriesDropDownList(object selectedCategory = null)
         {
             var categoriesQuery = from d in _context.DiagnosisCategories

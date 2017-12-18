@@ -58,6 +58,7 @@
             "serverSide": true,
             "filter": true,
             "orderMulti": false,
+            "order": [[1, "desc"]],
             "initComplete": function (settings, json) {               
             },
             "ajax": {
@@ -67,7 +68,12 @@
             },
             "columns": [
                 { "data": "id", "name": "ID", "autoWidth": true },
-                { "data": "importedDate", "name": "ImportedDate", "autoWidth": true },
+                {
+                    "data": "importedDate", "name": "ImportedDate", "autoWidth": true,
+                    "render": function (data) {
+                        return moment.unix(data).format("MM/DD/YYYY");
+                    }
+                },
                 { "data": "importedFileName", "name": "ImportedFileName", "autoWidth": true },
                 { "data": "patientsCount", "name": "PatientsCount", "autoWidth": true }              
             ]

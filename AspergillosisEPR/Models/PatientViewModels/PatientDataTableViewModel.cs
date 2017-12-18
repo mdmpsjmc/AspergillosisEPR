@@ -13,7 +13,7 @@ namespace AspergillosisEPR.Models.PatientViewModels
         public string Gender { get; set; }
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{dd-MM-yyyy}")]
-        public DateTime DOB { get; set; }
+        public double DOB { get; set; }
 
     }
 }

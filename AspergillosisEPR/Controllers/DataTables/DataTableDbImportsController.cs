@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using AspergillosisEPR.Models.DataTableViewModels;
 using AspergillosisEPR.Lib;
 using System;
+using AspergillosisEPR.Helpers;
 
 namespace AspergillosisEPR.Controllers.DataTables
 {
@@ -43,11 +44,13 @@ namespace AspergillosisEPR.Controllers.DataTables
 
         private ICollection<DbImportsTableViewModel> QueryDbImportsTable()
         {
-            return (from import in _aspergillosisContext.DbImports select 
+            return (from import in _aspergillosisContext.DbImports
+                    orderby import.ImportedDate descending
+                    select 
               new DbImportsTableViewModel()
              {
                  ID = import.ID,
-                 ImportedDate = import.ImportedDate,
+                 ImportedDate = DateHelper.DateTimeToUnixTimestamp(import.ImportedDate),
                  ImportedFileName = import.ImportedFileName,
                  PatientsCount = import.PatientsCount
              }).ToList();

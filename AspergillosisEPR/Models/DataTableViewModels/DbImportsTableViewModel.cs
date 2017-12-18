@@ -12,7 +12,7 @@ namespace AspergillosisEPR.Models.DataTableViewModels
         public int ID { get; set; }
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{dd-MM-yyyy}")]
-        public DateTime ImportedDate { get; set; }
+        public double ImportedDate { get; set; }
         public string ImportedFileName { get; set; }
         public int PatientsCount { get; set; }
     }

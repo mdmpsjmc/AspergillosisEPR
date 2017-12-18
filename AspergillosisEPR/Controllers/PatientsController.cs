@@ -43,7 +43,6 @@ namespace AspergillosisEPR.Controllers
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
         [Authorize(Roles = ("Admin Role, Create Role"))]
         [Audit(EventTypeName = "Patient::Create", IncludeHeaders = true, IncludeModel = true)]
         public async Task<IActionResult> Create([Bind("LastName,FirstName,DOB,Gender, RM2Number, PatientStatusId, DateOfDeath")] Patient patient, 
@@ -139,6 +138,7 @@ namespace AspergillosisEPR.Controllers
                                  .Include(p => p.PatientDrugs)
                                     .ThenInclude(d => d.SideEffects)
                                     .ThenInclude(se => se.SideEffect)
+                                .Include(p => p.STGQuestionnaires)
                                 .AsNoTracking()
                                 .SingleOrDefaultAsync(m => m.ID == id);
             if (patient == null)
@@ -154,7 +154,8 @@ namespace AspergillosisEPR.Controllers
         [HttpPost, ActionName("Edit")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> EditPatient(int? id, [Bind("ID,DiagnosisCategoryId,DiagnosisTypeId,Description")] PatientDiagnosis[] diagnoses, 
-                                                              [Bind("ID,DrugId,StartDate,EndDate")] PatientDrug[] drugs)
+                                                              [Bind("ID,DrugId,StartDate,EndDate")] PatientDrug[] drugs, 
+                                                              [Bind("ID, ActivityScore, SymptomScore, ImpactScore, TotalScore")] PatientSTGQuestionnaire[] sTGQuestionnaires)
         {
             if (id == null)
             {
@@ -164,6 +165,7 @@ namespace AspergillosisEPR.Controllers
             var patientToUpdate = await _context.Patients
                                 .Include(p => p.PatientDiagnoses)       
                                 .Include(p => p.PatientDrugs)
+                                .Include(p => p.STGQuestionnaires)
                                 .AsNoTracking()
                                 .SingleOrDefaultAsync(m => m.ID == id);
             _context.Entry(patientToUpdate).State = EntityState.Modified;
@@ -181,8 +183,27 @@ namespace AspergillosisEPR.Controllers
                     diagnosisToUpdate.Description = diagnosis.Description;
                     _context.Update(diagnosisToUpdate);
                 }
-            }     
+            }
 
+            foreach (var stg in sTGQuestionnaires)
+            {
+                if (stg.ID == 0)
+                {
+                    stg.PatientId = patientToUpdate.ID;
+                    _context.Update(stg);
+                } else
+                {
+                    var stgToUpdate = patientToUpdate.STGQuestionnaires.SingleOrDefault(s => s.ID == stg.ID);
+                    stgToUpdate.ActivityScore = stg.ActivityScore;
+                    stgToUpdate.SymptomScore = stg.SymptomScore;
+                    stgToUpdate.ImpactScore = stg.ImpactScore;
+                    stgToUpdate.TotalScore = stg.TotalScore;
+                    stgToUpdate.DateTaken = stg.DateTaken;
+                    _context.Update(stgToUpdate);
+                }
+
+
+            }
             for(var cursor = 0; cursor < drugs.Length; cursor++)
             {
                 PatientDrug drug = drugs[cursor];

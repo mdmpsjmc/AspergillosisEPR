@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using AspergillosisEPR.Models.PatientViewModels;
 using Microsoft.AspNetCore.Authorization;
+using AspergillosisEPR.Helpers;
 
 namespace AspergillosisEPR.Controllers.DataTables
 {
@@ -108,7 +109,7 @@ namespace AspergillosisEPR.Controllers.DataTables
                         LastName = patient.LastName,
                         FirstName = patient.FirstName,
                         Gender = patient.Gender,
-                        DOB = DateTime.Parse(patient.DOB.ToString())
+                        DOB = DateHelper.DateTimeToUnixTimestamp(patient.DOB)
                     });
         }
     }

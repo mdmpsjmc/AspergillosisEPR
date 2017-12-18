@@ -7,6 +7,7 @@
     "jquery-validation": "1.14.0",
     "jquery-validation-unobtrusive": "3.2.6",
     "select2": "4.0.6-rc.1",
-    "select2-bootstrap-theme": "0.1.0-beta.10"
+    "select2-bootstrap-theme": "0.1.0-beta.10",
+    "moment": "2.20.0"
   }
 }

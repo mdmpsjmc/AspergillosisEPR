@@ -1,0 +1,53 @@
+﻿@model AspergillosisEPR.Models.Patient
+<div class="col-12 row stg-form" style="margin: 0px !important">
+    @for (int i = 0; i < Model.STGQuestionnaires.Count; i++)
+    {
+        PatientSTGQuestionnaire stg = Model.STGQuestionnaires.OrderByDescending(q => q.DateTaken).ToList()[i];
+        <div class="stg-row">
+            <input type="hidden" value="@stg.ID" name="STGQuestionnaires[@(i.ToString())].ID" />
+            <fieldset>
+                <div class="row">
+                    <section class="col col-4">
+                        <label class="input" asp-for="@stg.DateTaken">
+                            <input asp-for="@stg.DateTaken" name="STGQuestionnaires[@(i.ToString())].DateTaken" id="STGQuestionnaires_@(i.ToString())__DateTaken" placeholder="Date Taken" />
+                        </label>
+                    </section>
+                    <section class="col col-2">
+                        <label class="input" asp-for="@stg.ActivityScore">
+                            <input asp-for="@stg.ActivityScore" name="STGQuestionnaires[@(i.ToString())].ActivityScore" placeholder="Activity" />
+                        </label>
+                    </section>
+                    <section class="col col-2">
+                        <label class="input" asp-for="@stg.ImpactScore">
+                            <input asp-for="@stg.ImpactScore" name="STGQuestionnaires[@(i.ToString())].ImpactScore" placeholder="Impact">
+                        </label>
+                    </section>
+                    <section class="col col-2">
+                        <label class="input" asp-for="@stg.SymptomScore">
+                            <input asp-for="@stg.SymptomScore" name="STGQuestionnaires[@(i.ToString())].SymptomScore" placeholder="Symptoms">
+                        </label>
+                    </section>
+                    <section class="col col-2">
+                        <label class="input" asp-for="@stg.TotalScore">
+                            <input asp-for="@stg.TotalScore" placeholder="Total" name="STGQuestionnaires[@(i.ToString())].TotalScore">
+                        </label>
+                    </section>
+                </div>
+                <div class="row">
+                    <a href="javascript:void(0)" class="btn btn-danger remove-existing-stg pull-right btn-lg" data-id="@(stg.ID)" data-what="St Georges Questionnaire" data-toggle="tooltip" data-title="Remove Questionnaire" style="padding: 5px">
+                        <i class="fa fa-trash"></i>
+                    </a>
+                </div>
+            </fieldset>
+    </div>
+         }
+</div>
+@if (User.IsInRole("Update Role") || User.IsInRole("Admin Role"))
+{
+    <a href="@Url.Action("EditSTGForm", "Partials")" class="btn btn-success add-edit-stg" style="padding: 5px">
+        <i class="fa fa-plus"></i>
+        <span>
+            <strong>Add item</strong>
+        </span>
+    </a>
+}
