@@ -54,10 +54,6 @@
         $(document).off("click.save-patient").on("click.save-patient", "button.submit-new-patient", function () {
             LoadingIndicator.show();
             $("label.text-danger").remove();
-            $.validator.unobtrusive.parse("form#new-patient-form");
-            $("form#new-patient-form").trigger('submit');
-            $("form#new-patient-form").off("submit").on("submit", function (e) {
-                e.preventDefault();
                 $.ajax({
                     url: $("form#new-patient-form").attr("action"),
                     type: "POST",
@@ -83,8 +79,6 @@
                     $("div#new-patient-modal").modal("hide");
                     alert("There was a problem saving this patient. Please contact administrator");
                 });
-
-            });
         });
     }
 
@@ -92,11 +86,11 @@
         for (var i = 0; i < Object.keys(errors).length; i++) {
             var field = Object.keys(errors)[i];
             if (field.match("diagnoses") || field.match("drugs") || field.match("sTGQuestionnaires")) {
-                field = field.charAt(0).toUpperCase() + field.slice(1).replace("[", "_").replace("].", "__");
-                var htmlCode = "<label for='" + field + "' class='text-danger'></label>";
-                var fieldError = errors[Object.keys(errors)[i]];
-                $(htmlCode).html(fieldError).appendTo($("input#" + field + ", select#" + field).parent());
+                field = field.charAt(0).toUpperCase() + field.slice(1).replace("[", "_").replace("].", "__");            
             }            
+            var htmlCode = "<label for='" + field + "' class='text-danger'></label>";
+            var fieldError = errors[Object.keys(errors)[i]];
+            $(htmlCode).html(fieldError).appendTo($("input#" + field + ", select#" + field).parent());
         }
     }
 

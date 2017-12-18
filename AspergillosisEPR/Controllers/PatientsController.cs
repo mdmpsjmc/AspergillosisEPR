@@ -45,11 +45,16 @@ namespace AspergillosisEPR.Controllers
         [HttpPost]
         [Authorize(Roles = ("Admin Role, Create Role"))]
         [Audit(EventTypeName = "Patient::Create", IncludeHeaders = true, IncludeModel = true)]
-        public async Task<IActionResult> Create([Bind("LastName,FirstName,DOB,Gender, RM2Number, PatientStatusId, DateOfDeath")] Patient patient, 
-                                                 PatientDiagnosis[] diagnoses, 
+        public IActionResult Create([Bind("LastName,FirstName,DOB,Gender, RM2Number, PatientStatusId, DateOfDeath")] Patient patient,
+                                                 PatientDiagnosis[] diagnoses,
                                                  PatientDrug[] drugs,
                                                  PatientSTGQuestionnaire[] sTGQuestionnaires)
         {
+            var existingPatient = _context.Patients.FirstOrDefault(x => x.RM2Number == patient.RM2Number);
+            if (existingPatient != null)
+            {
+                ModelState.AddModelError("RM2Number", "Patient with this RM2 Number already exists in database");
+            }
             patient.PatientDiagnoses = diagnoses;
             patient.PatientDrugs = drugs;
             patient.STGQuestionnaires = sTGQuestionnaires;
@@ -72,7 +77,7 @@ namespace AspergillosisEPR.Controllers
                 if (ModelState.IsValid)
                 {                  
                     _context.Add(patient);
-                    await _context.SaveChangesAsync();
+                    _context.SaveChanges();
                    return Json(new { result = "ok" });
                 }else
                   {
@@ -300,7 +305,13 @@ namespace AspergillosisEPR.Controllers
         [Authorize(Roles = ("Admin Role, Delete Role"))]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var patient = await _context.Patients.SingleOrDefaultAsync(p => p.ID == id);
+            var patient = await _context.Patients.
+                Include(p => p.STGQuestionnaires).
+                SingleOrDefaultAsync(p => p.ID == id);
+            if (patient.STGQuestionnaires != null)
+            {
+                _context.PatientSTGQuestionnaires.RemoveRange(patient.STGQuestionnaires);
+            }
             _context.Patients.Remove(patient);
             await _context.SaveChangesAsync();
             return Json(new { ok = "ok" });
