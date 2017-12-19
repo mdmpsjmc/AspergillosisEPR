@@ -14,6 +14,7 @@
     <PackageReference Include="Audit.NET" Version="9.1.2" />
     <PackageReference Include="Audit.NET.SqlServer" Version="9.1.2" />
     <PackageReference Include="BeginCollectionItemCore" Version="1.0.8" />
+    <PackageReference Include="CsvHelper" Version="6.1.0" />
     <PackageReference Include="DotNetCore.NPOI" Version="1.0.2" />
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.3" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="2.0.1" />
@@ -30,6 +31,7 @@
 
   <ItemGroup>
     <Folder Include="Properties\PublishProfiles\" />
+    <Folder Include="wwwroot\Upload\" />
   </ItemGroup>
 
   <ItemGroup>

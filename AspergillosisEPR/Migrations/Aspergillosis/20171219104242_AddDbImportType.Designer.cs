@@ -11,9 +11,10 @@ using System;
 namespace AspergillosisEPR.Migrations.Aspergillosis
 {
     [DbContext(typeof(AspergillosisContext))]
-    partial class AspergillosisContextModelSnapshot : ModelSnapshot
+    [Migration("20171219104242_AddDbImportType")]
+    partial class AddDbImportType
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -43,11 +44,7 @@ namespace AspergillosisEPR.Migrations.Aspergillosis
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("ImporterClass")
-                        .IsRequired();
-
-                    b.Property<string>("Name")
-                        .IsRequired();
+                    b.Property<string>("Name");
 
                     b.HasKey("ID");
 

@@ -13,28 +13,22 @@ using System.Reflection;
 using AspergillosisEPR.Lib;
 using AspergillosisEPR.Data;
 
-namespace AspergillosisEPR.Helpers
+namespace AspergillosisEPR.Lib.Importers
 {
-    public class SpreadsheetReader
+    public class CHSpreadsheetImporter : Importer
     {
-        private readonly FileStream _stream;
-        private IFormFile _file { get; }
-        private string _fileExtension { get; }     
         private Hashtable _dictonary { get; set; }
         public static string UNDERLYING_DISEASE_HEADER = "Underlying disease";
         public static string[] IdentifierHeaders = { "HOSPITAL No", "HOSPITAL NUMBER" };
-        public List<Patient> ImportedPatients { get; set; }
         private List<string> _headers;
-        private readonly AspergillosisContext _context;
 
-
-        public SpreadsheetReader(FileStream stream, IFormFile file, 
+        public CHSpreadsheetImporter(FileStream stream, IFormFile file, 
                                  string fileExtension,  AspergillosisContext context)
         {
             _stream = stream;
             _file = file;
             _fileExtension = fileExtension;
-            ImportedPatients = new List<Patient>();
+            Imported = new List<dynamic>();
             _dictonary = DbImport.HeadersDictionary();
             _headers = new List<string>();
             _context = context;
@@ -97,7 +91,7 @@ namespace AspergillosisEPR.Helpers
                 var existingPatient = ExistingPatient(patient.RM2Number);
                 if (existingPatient == null)
                 {
-                    ImportedPatients.Add(patient);
+                    Imported.Add(patient);
                 } else
                 {
                     CopyPropertiesFrom(existingPatient, patient);
@@ -117,6 +111,11 @@ namespace AspergillosisEPR.Helpers
             existingPatient.PatientStatusId = sourcePatient.PatientStatusId;
             var combinedDiagnoses = sourcePatient.PatientDiagnoses.Concat(existingPatient.PatientDiagnoses).Distinct().ToList();
             existingPatient.PatientDiagnoses = combinedDiagnoses.GroupBy(p => p.DiagnosisTypeId).Select(g => g.First()).ToList();
+        }
+
+        public static explicit operator CHSpreadsheetImporter(Type v)
+        {
+            throw new NotImplementedException();
         }
 
         private Patient ReadRowCellsIntoPatientObject(Patient patient, IRow row, int cellCount)
@@ -204,7 +203,7 @@ namespace AspergillosisEPR.Helpers
 
         private Patient ExistingPatient(string rRM2Number)
         {
-            return ImportedPatients.Where(p => p.RM2Number == rRM2Number).FirstOrDefault();
+            return Imported.Where(p => p.RM2Number == rRM2Number).FirstOrDefault();
         }
 
         private void GetSpreadsheetHeaders(IRow headerRow)

@@ -15,5 +15,6 @@ namespace AspergillosisEPR.Models.DataTableViewModels
         public double ImportedDate { get; set; }
         public string ImportedFileName { get; set; }
         public int PatientsCount { get; set; }
+        public string ImportTypeName { get; internal set; }
     }
 }

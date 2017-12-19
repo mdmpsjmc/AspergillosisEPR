@@ -46,12 +46,14 @@ namespace AspergillosisEPR.Controllers.DataTables
         {
             return (from import in _aspergillosisContext.DbImports
                     orderby import.ImportedDate descending
-                    select 
+                    join importType in _aspergillosisContext.DBImportTypes on import.DbImportTypeId equals importType.ID
+                    select
               new DbImportsTableViewModel()
              {
                  ID = import.ID,
                  ImportedDate = DateHelper.DateTimeToUnixTimestamp(import.ImportedDate),
                  ImportedFileName = import.ImportedFileName,
+                 ImportTypeName = importType.Name,
                  PatientsCount = import.PatientsCount
              }).ToList();
         }

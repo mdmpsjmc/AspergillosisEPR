@@ -4,7 +4,7 @@
         $('#btn-import-data').on('click', function (e) {
             e.preventDefault();
             $('#upload-response').html("");
-            var fileExtension = ['xls', 'xlsx'];
+            var fileExtension = ['xls', 'xlsx', 'csv'];
             var filename = $('#fileToImport').val();
             if (filename.length === 0) {
                 alert("Please select a file.");
@@ -22,6 +22,8 @@
             var files = fileUpload.files;
             fdata.append(files[0].name, files[0]);
             LoadingIndicator.show();
+            var dbImportTypeId = $("select#DbImportTypeId").val();
+            fdata.append("DbImportTypeId", dbImportTypeId);
             $.ajax({
                 type: "POST",
                 url: "/Imports/Create",
@@ -74,6 +76,7 @@
                         return moment.unix(data).format("MM/DD/YYYY");
                     }
                 },
+                { "data": "importTypeName", "name" : "Import Type", "autoWidth": true, "orderable" : false},
                 { "data": "importedFileName", "name": "ImportedFileName", "autoWidth": true },
                 { "data": "patientsCount", "name": "PatientsCount", "autoWidth": true }              
             ]

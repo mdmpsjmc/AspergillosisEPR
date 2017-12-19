@@ -109,7 +109,27 @@ namespace AspergillosisEPR.Data
                 context.Add(status);
             }
             context.SaveChanges();
-
        }
+
+        public static async void CreateDbImportTypes(AspergillosisContext context)
+        {
+            if (context.DBImportTypes.Any())
+            {
+                return;
+            }
+
+            var dbImportTypes = new DbImportType[]
+            {
+                new DbImportType {Name = "Chris Harris - Excel Spreadsheet", ImporterClass = "CHSpreadsheetImporter" },
+                new DbImportType { Name = "Graham Atherton - QoL CSV file", ImporterClass = "GAQoLCSVImporter" },
+                new DbImportType { Name = "David Lowes - Excel Spreadsheet", ImporterClass = "DLSpreadsheetImporter" }
+            };
+
+            foreach (var dbImportType in dbImportTypes)
+            {
+                context.Add(dbImportType);
+            }
+            await context.SaveChangesAsync();
+        }
     }
 }

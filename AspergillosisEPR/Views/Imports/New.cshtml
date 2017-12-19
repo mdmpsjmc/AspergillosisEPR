@@ -5,7 +5,17 @@
             <i class="fa fa-download fa-2x"></i>&nbsp;Import new patients into database
         </header>
         <fieldset>
-            @Html.Partial("/Views/Home/_Spinner.cshtml")
+            <section class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                Please select import type
+
+                <label class="select">
+                    @Html.DropDownList("DbImportTypeId", (SelectList)ViewBag.ImportTypes)                    
+                    <i></i>
+                </label>
+            </section>
+        </fieldset>
+        <fieldset>
+            @Html.Partial("/Views/Home/_Spinner.cshtml")            
             <section>
                 <div class="input input-file">
                     <span class="button">

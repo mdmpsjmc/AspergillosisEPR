@@ -21,6 +21,8 @@ namespace AspergillosisEPR.Data
         public DbSet<PatientStatus> PatientStatuses { get; set; }
         public DbSet<DbImport> DbImports { get; set; }
         public DbSet<PatientSTGQuestionnaire> PatientSTGQuestionnaires { get; set; }
+        public DbSet<DbImportType> DBImportTypes { get; set; }
+
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -40,6 +42,7 @@ namespace AspergillosisEPR.Data
             modelBuilder.Entity<PatientSTGQuestionnaire>().Property(x => x.ActivityScore).HasPrecision(10, 2);
             modelBuilder.Entity<PatientSTGQuestionnaire>().Property(x => x.TotalScore).HasPrecision(10, 2);
             modelBuilder.Entity<PatientSTGQuestionnaire>().Property(x => x.SymptomScore).HasPrecision(10, 2);
+            modelBuilder.Entity<DbImportType>().ToTable("DbImportTypes");
         }
     }
 

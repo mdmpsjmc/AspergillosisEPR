@@ -12,7 +12,7 @@ namespace AspergillosisEPR.Models
         public DateTime ImportedDate { get; set; }
         public string  ImportedFileName { get; set; }
         public int PatientsCount { get; set; }
-
+        public int DbImportTypeId { get; set;  }
 
         public static Hashtable HeadersDictionary()
         {
@@ -34,5 +34,6 @@ namespace AspergillosisEPR.Models
                   { "Underlying disease", "PatientDiagnosis" }
              };
         }
+
     }
 }
