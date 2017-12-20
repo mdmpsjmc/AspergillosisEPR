@@ -17,5 +17,6 @@ namespace AspergillosisEPR.Lib
         {
             return obj.GetProperty(name).GetValue(obj, null);
         }
+
     }
 }

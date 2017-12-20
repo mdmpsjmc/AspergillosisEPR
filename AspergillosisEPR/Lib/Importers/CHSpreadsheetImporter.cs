@@ -42,34 +42,34 @@ namespace AspergillosisEPR.Lib.Importers
             if (_fileExtension == ".xls")
             {
                 HSSFWorkbook workbook = new HSSFWorkbook(_stream);  //old excel
-                processSheets(workbook);
+                ProcessSheets(workbook);
             }
             else
             {
                 XSSFWorkbook workbook = new XSSFWorkbook(_stream); //new excel
-                processSheets(workbook);
+                ProcessSheets(workbook);
             }            
         }
 
-        private void processSheets(XSSFWorkbook workbook)
+        private void ProcessSheets(XSSFWorkbook workbook)
         {
             for(int tabIndex=0; tabIndex < workbook.NumberOfSheets; tabIndex++)
             {
                 ISheet currentSheet = workbook.GetSheetAt(tabIndex);
-                processSheet(currentSheet);
+                ProcessSheet(currentSheet);
             }
         }
 
-        private void processSheets(HSSFWorkbook workbook)
+        private void ProcessSheets(HSSFWorkbook workbook)
         {
             for (int tabIndex = 0; tabIndex < workbook.NumberOfSheets; tabIndex++)
             {
                 ISheet currentSheet = workbook.GetSheetAt(tabIndex);
-                processSheet(currentSheet);
+                ProcessSheet(currentSheet);
             }
         }
 
-        private void processSheet(ISheet currentSheet)
+        private void ProcessSheet(ISheet currentSheet)
         {
             Patient patient;
             IRow headerRow = currentSheet.GetRow(0); //Get Header Row
@@ -125,7 +125,7 @@ namespace AspergillosisEPR.Lib.Importers
             {
                 if (row.GetCell(cellCursor) != null)
                 {
-                    readCell(patient, row, cellCursor, diagnosesNames);
+                    ReadCell(patient, row, cellCursor, diagnosesNames);
                 }
             }
             var patientDiagnosisResolver = new PatientDiagnosisResolver(patient, diagnosesNames, _context);
@@ -133,7 +133,7 @@ namespace AspergillosisEPR.Lib.Importers
             return patient;
         }
 
-        private void readCell(Patient patient, IRow row, int cellIndex, List<string> diagnosesNames)
+        private void ReadCell(Patient patient, IRow row, int cellIndex, List<string> diagnosesNames)
         {
             string header = _headers.ElementAt(cellIndex);
             

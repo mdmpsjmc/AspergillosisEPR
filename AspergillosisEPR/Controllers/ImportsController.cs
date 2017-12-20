@@ -49,7 +49,6 @@ namespace AspergillosisEPR.Controllers
 
         public async Task<IActionResult> Create()
         {
-            //PopulateDbImportTypesDropdownList();
             IFormFile file = Request.Form.Files[0];
 
             string webRootPath = _hostingEnvironment.WebRootPath;
@@ -76,9 +75,9 @@ namespace AspergillosisEPR.Controllers
 
         private void SavePatientsInDatabase()
         {
-            foreach (var newPatient in _importer.Imported)
+            foreach (var record in _importer.Imported)
             {
-                _context.Add(newPatient);
+                _context.Add(record);
             }
         }
 
