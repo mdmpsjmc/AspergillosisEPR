@@ -10,7 +10,7 @@ using System.Dynamic;
 using System.IO;
 using System.Linq;
 
-namespace AspergillosisEPR.Lib.Importers
+namespace AspergillosisEPR.Lib.Importers.Implementations
 {
     public class GAQoLCSVImporter : Importer
     {

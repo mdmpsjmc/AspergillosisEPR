@@ -1,79 +1,30 @@
 ﻿using AspergillosisEPR.Models;
 using Microsoft.AspNetCore.Http;
-using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
-using NPOI.XSSF.UserModel;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
-using System.Collections;
 using System.Reflection;
-using AspergillosisEPR.Lib;
 using AspergillosisEPR.Data;
 
-namespace AspergillosisEPR.Lib.Importers
+namespace AspergillosisEPR.Lib.Importers.Implementations
 {
-    public class CHSpreadsheetImporter : Importer
+    public class CHSpreadsheetImporter : SpreadsheetImporter
     {
-        private Hashtable _dictonary { get; set; }
         public static string UNDERLYING_DISEASE_HEADER = "Underlying disease";
         public static string[] IdentifierHeaders = { "HOSPITAL No", "HOSPITAL NUMBER" };
-        private List<string> _headers;
 
-        public CHSpreadsheetImporter(FileStream stream, IFormFile file, 
-                                 string fileExtension,  AspergillosisContext context)
+        public  CHSpreadsheetImporter(FileStream stream, IFormFile file, 
+                                 string fileExtension,  AspergillosisContext context) : base(stream, file, fileExtension, context)
+
         {
-            _stream = stream;
-            _file = file;
-            _fileExtension = fileExtension;
-            Imported = new List<dynamic>();
-            _dictonary = DbImport.HeadersDictionary();
-            _headers = new List<string>();
-            _context = context;
-            ReadSpreadsheetFile();
         }
 
-        private void ReadSpreadsheetFile()
-        {
-            _file.CopyTo(_stream);
-            _stream.Position = 0;
-            if (_fileExtension == ".xls")
-            {
-                HSSFWorkbook workbook = new HSSFWorkbook(_stream);  //old excel
-                ProcessSheets(workbook);
-            }
-            else
-            {
-                XSSFWorkbook workbook = new XSSFWorkbook(_stream); //new excel
-                ProcessSheets(workbook);
-            }            
-        }
-
-        private void ProcessSheets(XSSFWorkbook workbook)
-        {
-            for(int tabIndex=0; tabIndex < workbook.NumberOfSheets; tabIndex++)
-            {
-                ISheet currentSheet = workbook.GetSheetAt(tabIndex);
-                ProcessSheet(currentSheet);
-            }
-        }
-
-        private void ProcessSheets(HSSFWorkbook workbook)
-        {
-            for (int tabIndex = 0; tabIndex < workbook.NumberOfSheets; tabIndex++)
-            {
-                ISheet currentSheet = workbook.GetSheetAt(tabIndex);
-                ProcessSheet(currentSheet);
-            }
-        }
-
-        private void ProcessSheet(ISheet currentSheet)
+        protected override void ProcessSheet(ISheet currentSheet)
         {
             Patient patient;
             IRow headerRow = currentSheet.GetRow(0); //Get Header Row
-            
 
             GetSpreadsheetHeaders(headerRow);
             int cellCount2= headerRow.Cells.GetRange(0, _headers.Count()).Count;
@@ -96,26 +47,7 @@ namespace AspergillosisEPR.Lib.Importers
                 {
                     CopyPropertiesFrom(existingPatient, patient);
                 }
-               
             }
-        }
-
-        private void CopyPropertiesFrom(Patient existingPatient, Patient sourcePatient)
-        {
-            existingPatient.FirstName = sourcePatient.FirstName;
-            existingPatient.LastName = sourcePatient.LastName;
-            existingPatient.RM2Number = sourcePatient.RM2Number;
-            existingPatient.DOB = sourcePatient.DOB;
-            existingPatient.Gender = sourcePatient.Gender;
-            existingPatient.DateOfDeath = sourcePatient.DateOfDeath;
-            existingPatient.PatientStatusId = sourcePatient.PatientStatusId;
-            var combinedDiagnoses = sourcePatient.PatientDiagnoses.Concat(existingPatient.PatientDiagnoses).Distinct().ToList();
-            existingPatient.PatientDiagnoses = combinedDiagnoses.GroupBy(p => p.DiagnosisTypeId).Select(g => g.First()).ToList();
-        }
-
-        public static explicit operator CHSpreadsheetImporter(Type v)
-        {
-            throw new NotImplementedException();
         }
 
         private Patient ReadRowCellsIntoPatientObject(Patient patient, IRow row, int cellCount)
@@ -201,20 +133,22 @@ namespace AspergillosisEPR.Lib.Importers
             }
         }
 
+        private void CopyPropertiesFrom(Patient existingPatient, Patient sourcePatient)
+        {
+            existingPatient.FirstName = sourcePatient.FirstName;
+            existingPatient.LastName = sourcePatient.LastName;
+            existingPatient.RM2Number = sourcePatient.RM2Number;
+            existingPatient.DOB = sourcePatient.DOB;
+            existingPatient.Gender = sourcePatient.Gender;
+            existingPatient.DateOfDeath = sourcePatient.DateOfDeath;
+            existingPatient.PatientStatusId = sourcePatient.PatientStatusId;
+            var combinedDiagnoses = sourcePatient.PatientDiagnoses.Concat(existingPatient.PatientDiagnoses).Distinct().ToList();
+            existingPatient.PatientDiagnoses = combinedDiagnoses.GroupBy(p => p.DiagnosisTypeId).Select(g => g.First()).ToList();
+        }
+
         private Patient ExistingPatient(string rRM2Number)
         {
             return Imported.Where(p => p.RM2Number == rRM2Number).FirstOrDefault();
-        }
-
-        private void GetSpreadsheetHeaders(IRow headerRow)
-        {
-            _headers = new List<string>();
-            for (int headerCellCursor = 0; headerCellCursor < headerRow.LastCellNum; headerCellCursor++)
-            {
-                ICell headerCell = headerRow.GetCell(headerCellCursor);
-                if (headerCell == null || string.IsNullOrWhiteSpace(headerCell.ToString())) continue;
-                _headers.Add(headerCell.ToString());
-            }
         }
     }
 }

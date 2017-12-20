@@ -181,3 +181,13 @@ div#details-tab-content {
 div#new-patient-modal .modal-dialog {
     min-width: 700px !important;
 }
+
+div#details-tab-content div#stg {
+    overflow-y: auto;
+    max-height: 450px;
+}
+
+div#new-patient-tab-content div#stg {
+    overflow-y: auto;
+    max-height: 450px;
+}

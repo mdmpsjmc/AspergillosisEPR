@@ -36,7 +36,7 @@ namespace AspergillosisEPR.Lib.Importers
 
         private Type GetDbImporterTypeByName(string importerClassName)
         {
-            return Type.GetType("AspergillosisEPR.Lib.Importers." + importerClassName);
+            return Type.GetType("AspergillosisEPR.Lib.Importers.Implementations." + importerClassName);
         }
     }
 }

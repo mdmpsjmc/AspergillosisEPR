@@ -8,9 +8,9 @@
                 <tr>
                     <th>ID</th>
                     <th>Date Taken</th>
-                    <th>Activity</th>
+                    <th>Symptopms</th>                    
                     <th>Impact</th>
-                    <th>Symptopms</th>
+                    <th>Activity</th>
                     <th>Total</th>
                 </tr>
             </thead>
@@ -20,9 +20,9 @@
                     <tr>
                         <td>@(stg.ID)</td>
                         <td>@(stg.DateTaken.ToString("dd/MM/yyyy"))</td>
-                        <td>@(stg.ActivityScore)</td>
-                        <td>@(stg.ImpactScore)</td>
                         <td>@(stg.SymptomScore)</td>
+                        <td>@(stg.ImpactScore)</td>
+                        <td>@(stg.ActivityScore)</td>                        
                         <td>@(stg.TotalScore)</td>
                     </tr>
                 }
