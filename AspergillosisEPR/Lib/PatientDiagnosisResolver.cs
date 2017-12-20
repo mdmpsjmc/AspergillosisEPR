@@ -26,6 +26,13 @@ namespace AspergillosisEPR.Lib
             _discoveredDiagnoses = new List<PatientDiagnosis>(); 
         }
 
+        public PatientDiagnosisResolver(Patient patient, AspergillosisContext context)
+        {
+            _patient = patient;
+            _context = context;
+            _discoveredDiagnoses = new List<PatientDiagnosis>();
+        }
+
         public static List<string> PrimaryDiagnoses()
         {
             return new List<string>()
@@ -72,6 +79,14 @@ namespace AspergillosisEPR.Lib
             return _discoveredDiagnoses;
         }
 
+        public List<PatientDiagnosis> ResolveForName(string diagnosisName, string categoryName)
+        {
+            _currentDiagnosisCategory = GetDiagnosisCategoryByName(categoryName);
+            DiagnosisType diagnosisType = GetDiagnosisByName(diagnosisName);
+            CreateAndAddPatientDiagnosis(diagnosisType);
+            return _discoveredDiagnoses;
+        }
+
         private void processUnderlyingDiagnoses(IEnumerable<string> underlyingDiagnoses)
         {
             if (underlyingDiagnoses == null)
@@ -82,11 +97,11 @@ namespace AspergillosisEPR.Lib
             foreach (string underlyingDiagnosis in underlyingDiagnoses)
             {
                 if (string.IsNullOrEmpty(underlyingDiagnosis)) continue;
-                processUnderlyingDiagnosis(underlyingDiagnosis);
+                ProcessUnderlyingDiagnosis(underlyingDiagnosis);
             }
         }
 
-        private void processUnderlyingDiagnosis(string underlyingDiagnosis)
+        private void ProcessUnderlyingDiagnosis(string underlyingDiagnosis)
         {
             var existingDiagnoses = ExisitingDiagnosisTypes(_context);
             var words = GetDiagnosisTypesWords(underlyingDiagnosis);

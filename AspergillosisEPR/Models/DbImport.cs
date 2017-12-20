@@ -12,28 +12,6 @@ namespace AspergillosisEPR.Models
         public DateTime ImportedDate { get; set; }
         public string  ImportedFileName { get; set; }
         public int PatientsCount { get; set; }
-        public int DbImportTypeId { get; set;  }
-
-        public static Hashtable HeadersDictionary()
-        {
-            return new Hashtable()
-            {
-                  { "SURNAME", "Patient.LastName" },
-                  { "FORENAME", "Patient.FirstName" },
-                  { "FIRST NAME", "Patient.FirstName"},
-                  { "HOSPITAL No", "Patient.RM2Number" },
-                  { "SEX", "Patient.Gender"},
-                  { "Sex", "Patient.Gender"},
-                  { "DOB", "Patient.DOB"},
-                  { "Date of death", "Patient.DateOfDeath"},
-                  { "HOSPITAL NUMBER", "Patient.RM2Number"},
-                  { "CCPA", "PatientDiagnosis"},
-                  { "ABPA", "PatientDiagnosis"},
-                  { "SAFS", "PatientDiagnosis"},
-                  { "OTHER","PatientDiagnosis"},
-                  { "Underlying disease", "PatientDiagnosis" }
-             };
-        }
-
+        public int DbImportTypeId { get; set;  }        
     }
 }

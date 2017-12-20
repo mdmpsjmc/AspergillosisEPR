@@ -4,9 +4,11 @@ using Microsoft.AspNetCore.Http;
 using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace AspergillosisEPR.Lib.Importers
 {
@@ -24,7 +26,6 @@ namespace AspergillosisEPR.Lib.Importers
             Imported = new List<dynamic>();
             _headers = new List<string>();
             _context = context;
-            _dictonary = DbImport.HeadersDictionary();
             ReadSpreadsheetFile();
         }
 
@@ -71,6 +72,38 @@ namespace AspergillosisEPR.Lib.Importers
                 if (headerCell == null || string.IsNullOrWhiteSpace(headerCell.ToString())) continue;
                 _headers.Add(headerCell.ToString());
             }
+        }
+
+        protected IRow InitializeHeaders(Hashtable headers, ISheet currentSheet)
+        {
+            _dictonary = headers;
+            IRow headerRow = currentSheet.GetRow(0); //Get Header Row
+
+            GetSpreadsheetHeaders(headerRow);
+            return headerRow;
+        }
+
+        protected void InitializeSheetProcessingForRows(Hashtable headers, ISheet currentSheet, Action<Patient, IRow, int> sheetProcessingAction)
+        {
+            IRow headerRow = InitializeHeaders(headers, currentSheet);
+            int cellCount = headerRow.Cells.GetRange(0, _headers.Count()).Count;
+
+            Patient patient;
+
+            for (int rowsCursor = (currentSheet.FirstRowNum + 1); rowsCursor <= currentSheet.LastRowNum; rowsCursor++)
+            {
+                patient = new Patient();
+                IRow row = currentSheet.GetRow(rowsCursor);
+
+                if (row == null) continue;
+                if (row.Cells.All(d => d.CellType == CellType.Blank)) continue;
+                sheetProcessingAction(patient, row, cellCount);
+            }
+        }
+
+        protected Patient ExistingPatient(string rRM2Number)
+        {
+            return Imported.Where(p => p.RM2Number == rRM2Number).FirstOrDefault();
         }
 
         protected abstract void ProcessSheet(ISheet currentSheet);

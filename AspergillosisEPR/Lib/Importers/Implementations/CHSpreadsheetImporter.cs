@@ -7,6 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using AspergillosisEPR.Data;
+using System.Collections;
 
 namespace AspergillosisEPR.Lib.Importers.Implementations
 {
@@ -15,39 +16,49 @@ namespace AspergillosisEPR.Lib.Importers.Implementations
         public static string UNDERLYING_DISEASE_HEADER = "Underlying disease";
         public static string[] IdentifierHeaders = { "HOSPITAL No", "HOSPITAL NUMBER" };
 
-        public  CHSpreadsheetImporter(FileStream stream, IFormFile file, 
+        public CHSpreadsheetImporter(FileStream stream, IFormFile file, 
                                  string fileExtension,  AspergillosisContext context) : base(stream, file, fileExtension, context)
 
         {
         }
 
+        public static Hashtable HeadersDictionary()
+        {
+            return new Hashtable()
+            {
+                  { "SURNAME", "Patient.LastName" },
+                  { "FORENAME", "Patient.FirstName" },
+                  { "FIRST NAME", "Patient.FirstName"},
+                  { "HOSPITAL No", "Patient.RM2Number" },
+                  { "SEX", "Patient.Gender"},
+                  { "Sex", "Patient.Gender"},
+                  { "DOB", "Patient.DOB"},
+                  { "Date of death", "Patient.DateOfDeath"},
+                  { "HOSPITAL NUMBER", "Patient.RM2Number"},
+                  { "CCPA", "PatientDiagnosis"},
+                  { "ABPA", "PatientDiagnosis"},
+                  { "SAFS", "PatientDiagnosis"},
+                  { "OTHER","PatientDiagnosis"},
+                  { "Underlying disease", "PatientDiagnosis" }
+             };
+        }
+
         protected override void ProcessSheet(ISheet currentSheet)
         {
-            Patient patient;
-            IRow headerRow = currentSheet.GetRow(0); //Get Header Row
-
-            GetSpreadsheetHeaders(headerRow);
-            int cellCount2= headerRow.Cells.GetRange(0, _headers.Count()).Count;
-            int cellCount = headerRow.LastCellNum;
-
-            for (int rowsCursor = (currentSheet.FirstRowNum + 1); rowsCursor <= currentSheet.LastRowNum; rowsCursor++)
+            Action<Patient, IRow, int> sheetProcessingAction = (patient, row, cellCount) =>
             {
-                patient = new Patient();
-                IRow row = currentSheet.GetRow(rowsCursor);
-
-                if (row == null) continue;
-                if (row.Cells.All(d => d.CellType == CellType.Blank)) continue;
-
-                patient = ReadRowCellsIntoPatientObject(patient, row, cellCount2);
+                patient = ReadRowCellsIntoPatientObject(patient, row, cellCount);
                 var existingPatient = ExistingPatient(patient.RM2Number);
                 if (existingPatient == null)
                 {
                     Imported.Add(patient);
-                } else
+                }
+                else
                 {
                     CopyPropertiesFrom(existingPatient, patient);
                 }
-            }
+            };
+            InitializeSheetProcessingForRows(HeadersDictionary(), currentSheet, sheetProcessingAction);
         }
 
         private Patient ReadRowCellsIntoPatientObject(Patient patient, IRow row, int cellCount)
@@ -144,11 +155,6 @@ namespace AspergillosisEPR.Lib.Importers.Implementations
             existingPatient.PatientStatusId = sourcePatient.PatientStatusId;
             var combinedDiagnoses = sourcePatient.PatientDiagnoses.Concat(existingPatient.PatientDiagnoses).Distinct().ToList();
             existingPatient.PatientDiagnoses = combinedDiagnoses.GroupBy(p => p.DiagnosisTypeId).Select(g => g.First()).ToList();
-        }
-
-        private Patient ExistingPatient(string rRM2Number)
-        {
-            return Imported.Where(p => p.RM2Number == rRM2Number).FirstOrDefault();
         }
     }
 }
