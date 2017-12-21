@@ -27,11 +27,11 @@ namespace AspergillosisEPR.Lib.Importers.Implementations
                   { "RM2", "Patient.RM2Number" },
                   { "Sex", "Patient.Gender"},
                   { "DoB", "Patient.DOB"},
-                  { "STG Symptoms", "PatientSTGQuestionnaire"},
-                  { "STG Impact", "PatientSTGQuestionnaire"},
-                  { "STG Activity", "PatientSTGQuestionnaire"},
-                  { "STG Total", "PatientSTGQuestionnaire"},
-                  { "STG Complettion Date" , "PatientSTGQuestionnaire"},
+                  { "STG Symptoms", "PatientSTGQuestionnaire.SymptomScore"},
+                  { "STG Impact", "PatientSTGQuestionnaire.ImpactScore"},
+                  { "STG Activity", "PatientSTGQuestionnaire.ActivityScore"},
+                  { "STG Total", "PatientSTGQuestionnaire.TotalScore"},
+                  { "STG Complettion Date" , "PatientSTGQuestionnaire.DateTaken"},
                   { "Bronchiectasis" , "PatientDiagnosis" }
              };
         }
@@ -41,24 +41,27 @@ namespace AspergillosisEPR.Lib.Importers.Implementations
             Action<Patient, IRow, int> sheetProcessingAction = (patient, row, cellCount) =>
             {
                 var modifiedPatient = ReadCellsForPatient(patient, row, cellCount);
-                //Imported.Add(modifiedPatient);
+                if (modifiedPatient.IsValid()) Imported.Add(modifiedPatient); 
             };
             InitializeSheetProcessingForRows(HeadersDictionary(), currentSheet, sheetProcessingAction);
         }
 
         private Patient ReadCellsForPatient(Patient patient, IRow row, int cellCount)
         {
+            var stgResolver = new PatientSTGQuestionnaireResolver(_context);
             for (int cellCursor = 0; cellCursor < cellCount; cellCursor++)
             {
                 if (row.GetCell(cellCursor, MissingCellPolicy.CREATE_NULL_AS_BLANK) != null)
                 {
-                    ReadCell(patient, row, cellCursor);
+                    ReadCell(patient, row, stgResolver, cellCursor);
                 }
             }
+            var questionnaires = stgResolver.Resolve();
+            patient.STGQuestionnaires = questionnaires;
             return patient;
         }
 
-        private void ReadCell(Patient patient, IRow row, int cellIndex)
+        private void ReadCell(Patient patient, IRow row, PatientSTGQuestionnaireResolver resolver, int cellIndex)
         {
             string header = _headers.ElementAt(cellIndex);
             string newObjectFields = (string)_dictonary[header];       
@@ -67,22 +70,32 @@ namespace AspergillosisEPR.Lib.Importers.Implementations
             if (!string.IsNullOrEmpty(propertyValue) && newObjectFields != null && FirstTwoCellsNotEmpty(row))
             {
                 var klassAndField = newObjectFields.Split(".");
-                
                 switch (klassAndField[0])
                 {
                     case "Patient":
                         string propertyName = klassAndField[1];
+                        if (propertyName == "Gender")
+                        {
+                            if (propertyValue == "2")
+                            {
+                                propertyValue = "Male";
+                            } else if (propertyValue == "1")
+                            {
+                                propertyValue = "Female";
+                            }
+                        }
                         SetPatientProperty(patient, propertyName, row, cellIndex, propertyValue);
                         break;
-                    case "PatientDiagnosis":
-                        var resolver = new PatientDiagnosisResolver(patient, _context);
-                        if (propertyValue == "2")
+                    case "PatientDiagnosis":                       
+                        if (propertyValue == "1")
                         {
-                            var diagnoses = resolver.ResolveForName(header, "Underlying Diagnosis");
-                            Console.WriteLine(diagnoses);
+                            var diagnosesResolver = new PatientDiagnosisResolver(patient, _context);
+                            var diagnoses = diagnosesResolver.ResolveForName(header, "Underlying Diagnosis");
                         }                                                
                         break;
                     case "PatientSTGQuestionnaire":
+                        string columnName = klassAndField[1];
+                        resolver.SetQuestionnaireProperty(columnName, propertyValue);
                         break;
                 }
             }

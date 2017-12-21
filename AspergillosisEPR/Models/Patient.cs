@@ -77,6 +77,13 @@ namespace AspergillosisEPR.Models
             return !IsAlive();
         }
 
+        public bool IsValid()
+        {
+            var context = new ValidationContext(this);
+            var results = new List<ValidationResult>();
+            return Validator.TryValidateObject(this, context, results);
+        }
+
         private bool IsAlive()
         {
             return DateOfDeath == null; 
