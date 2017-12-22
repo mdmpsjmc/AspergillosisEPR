@@ -55,10 +55,14 @@ namespace AspergillosisEPR.Controllers
             {
                 ModelState.AddModelError("RM2Number", "Patient with this RM2 Number already exists in database");
             }
+            sTGQuestionnaires = sTGQuestionnaires.Where(q => q != null).ToArray();
+            diagnoses = diagnoses.Where(d => d != null).ToArray();
+            drugs = drugs.Where(dr => dr != null).ToArray();
+
             patient.PatientDiagnoses = diagnoses;
             patient.PatientDrugs = drugs;
             patient.STGQuestionnaires = sTGQuestionnaires;
-
+            
             for(var cursor = 0; cursor < Request.Form["Drugs.index"].ToList().Count; cursor++)
             {
                 string stringIndex = Request.Form["Drugs.index"][cursor];
