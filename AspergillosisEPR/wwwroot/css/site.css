@@ -143,7 +143,7 @@ label.side-effects {
 }
 
 .select2-container--default.select2-container--focus .select2-selection--multiple {
-    border: none;
+    border: 1px solid gray !important;
     display: block;
     box-sizing: border-box;
     -moz-box-sizing: border-box;
@@ -204,4 +204,20 @@ input[type="date"]::-webkit-input-placeholder {
 
 body.modal-open .datepicker {
     z-index: 1200 !important;
+}
+
+.bootstrap-datetimepicker-widget {
+    opacity: 1 !important;
+}
+
+.dropdown-menu {
+    opacity: 1 !important;
+    display: block;
+    z-index: 3000;
+    webkit-transform: none !important;
+    transform: none !important;
+}
+
+div.stg-form{
+    min-height: 250px;
 }

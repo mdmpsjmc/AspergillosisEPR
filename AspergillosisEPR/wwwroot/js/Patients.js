@@ -121,6 +121,7 @@
                 LoadingIndicator.hide();
                 $("div#modal-container").html(responseHtml);
                 $("div#new-patient-modal").modal("show");
+                initPatientsDateTimePickers();
             });
         });
     }
@@ -156,6 +157,7 @@
             $.get($(this).attr("href") + "?index=" + index, function (responseHtml) {
                 LoadingIndicator.hide();
                 $("div.stg-form").append(responseHtml);
+                initPatientsDateTimePickers();
             });
         })
     }
@@ -167,6 +169,7 @@
             $.get($(this).attr("href"), function (responseHtml) {
                 LoadingIndicator.hide();
                 $("div.drug-form").append(responseHtml);
+                initPatientsDateTimePickers();
                 $("select.select2").select2({
                     minimumResultsForSearch: -1,
                     placeholder: function () {
@@ -185,6 +188,7 @@
             $.get($(this).attr("href") + "?index=" + index, function (responseHtml) {
                 LoadingIndicator.hide();
                 $("div.drug-form").append(responseHtml);
+                initPatientsDateTimePickers();
                 $("select.select2").select2({
                     minimumResultsForSearch: -1,
                     placeholder: function () {
@@ -202,6 +206,7 @@
             $.get($(this).attr("href"), function (responseHtml) {
                 LoadingIndicator.hide();
                 $("div.stg-form").append(responseHtml);
+                initPatientsDateTimePickers();
                 $("select.select2").select2({
                     minimumResultsForSearch: -1,
                     placeholder: function () {
@@ -235,6 +240,7 @@
                 //$.validator.unobtrusive.parse("form#edit-patient-form");
                 updatePatient();
                 onPatientStatusChange();
+                initPatientsDateTimePickers();
                 $("select.select2").select2({
                     minimumResultsForSearch: -1,
                     placeholder: function () {
@@ -403,9 +409,11 @@
             var selectedValue = $("select#" + $(this).attr("id") + " option:selected").text().toLowerCase();
             if (selectedValue.toLowerCase() === "deceased") {
                 $("div.death").removeClass("hidden");
+                initPatientsDateTimePickers();
             } else {
                 $("div.death").addClass("hidden");
                 $("input#DateOfDeath").val("")
+
             }
         });
     }
@@ -414,6 +422,16 @@
         $('#edit-modal, #new-patient-modal').on('hidden.bs.modal', function () {
             LoadingIndicator.hide();
         })
+    }
+
+    var initPatientsDateTimePickers = function () {
+        $('input[type="date"]').attr('type', 'text');
+        $('input#DOB, input#DateOfDeath, input.datepicker').datetimepicker({
+            format: 'YYYY-MM-DD'
+        });
+        $("input#DOB, input.datepicker, input#DateOfDeath").on("click", function () {
+            $(this).datetimepicker("show");
+        });
     }
 
     return {
@@ -437,6 +455,7 @@
             bindSTGFormOnClick();
             onModalClose();
             bindSTGEditFormOnClick();
+            initPatientsDateTimePickers();
         },
 
         setupForm: function() {
