@@ -15,6 +15,7 @@ namespace AspergillosisEPR.Lib.Importers.Implementations
     {
         public static string UNDERLYING_DISEASE_HEADER = "Underlying disease";
         public static string[] IdentifierHeaders = { "HOSPITAL No", "HOSPITAL NUMBER" };
+        
 
         public CHSpreadsheetImporter(FileStream stream, IFormFile file, 
                                  string fileExtension,  AspergillosisContext context) : base(stream, file, fileExtension, context)
@@ -155,6 +156,11 @@ namespace AspergillosisEPR.Lib.Importers.Implementations
             existingPatient.PatientStatusId = sourcePatient.PatientStatusId;
             var combinedDiagnoses = sourcePatient.PatientDiagnoses.Concat(existingPatient.PatientDiagnoses).Distinct().ToList();
             existingPatient.PatientDiagnoses = combinedDiagnoses.GroupBy(p => p.DiagnosisTypeId).Select(g => g.First()).ToList();
+        }
+
+        protected override List<string> IdentiferHeaders()
+        {
+            return IdentifierHeaders.ToList();
         }
     }
 }

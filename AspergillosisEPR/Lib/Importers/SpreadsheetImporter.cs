@@ -14,6 +14,7 @@ namespace AspergillosisEPR.Lib.Importers
 {
     public abstract class SpreadsheetImporter : Importer
     {
+        
         protected List<string> _headers;
         protected Hashtable _dictonary { get; set; }
 
@@ -87,14 +88,29 @@ namespace AspergillosisEPR.Lib.Importers
         {
             IRow headerRow = InitializeHeaders(headers, currentSheet);
             int cellCount = headerRow.Cells.GetRange(0, _headers.Count()).Count;
-
-            Patient patient;
-
             for (int rowsCursor = (currentSheet.FirstRowNum + 1); rowsCursor <= currentSheet.LastRowNum; rowsCursor++)
             {
-                patient = new Patient();
+                var patient = new Patient();
                 IRow row = currentSheet.GetRow(rowsCursor);
-
+                var identifierHeader = _headers.Where(X => IdentiferHeaders().Contains(X)).FirstOrDefault();
+                if (identifierHeader != null)
+                {
+                    int identifierIndex = _headers.FindIndex(i => i == identifierHeader);
+                    if (row.Cells.Count >= identifierIndex)
+                    {
+                        var identifierValue = row.Cells[identifierIndex].ToString().Trim();
+                        if (!string.IsNullOrEmpty(identifierValue))
+                        {
+                            var dbPatient = FindDbPatientByRM2Number(identifierValue);
+                            if (dbPatient != null)
+                            {
+                                patient = dbPatient;
+                            }
+                        }
+                    }
+                   
+                }
+               
                 if (row == null) continue;
                 if (row.Cells.All(d => d.CellType == CellType.Blank)) continue;
                 sheetProcessingAction(patient, row, cellCount);
@@ -106,6 +122,13 @@ namespace AspergillosisEPR.Lib.Importers
             return Imported.Where(p => p.RM2Number == rRM2Number).FirstOrDefault();
         }
 
+        protected Patient FindDbPatientByRM2Number(string rM2Number)
+        {
+            return _context.Patients.Where(p => p.RM2Number == rM2Number).FirstOrDefault();
+        }
+
         protected abstract void ProcessSheet(ISheet currentSheet);
+        protected abstract List<string> IdentiferHeaders();
+
     }
 }

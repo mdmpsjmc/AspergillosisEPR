@@ -18,6 +18,7 @@ using System.Threading.Tasks;
 using AspergillosisEPR.Helpers;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using AspergillosisEPR.Lib.Importers;
+using Microsoft.EntityFrameworkCore;
 
 namespace AspergillosisEPR.Controllers
 {
@@ -77,7 +78,14 @@ namespace AspergillosisEPR.Controllers
         {
             foreach (var record in _importer.Imported)
             {
-                _context.Add(record);
+                if (record.ID != 0)
+                {
+                    _context.Patients.Attach(record);
+                    _context.Entry(record).State = EntityState.Modified;
+                } else
+                {
+                    _context.Add(record);
+                }                
             }
         }
 

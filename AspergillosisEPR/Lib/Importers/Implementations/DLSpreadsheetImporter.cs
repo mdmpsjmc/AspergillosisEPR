@@ -7,6 +7,8 @@ using System.Collections;
 using System.Linq;
 using System;
 using System.Reflection;
+using System.Text.RegularExpressions;
+using System.Collections.Generic;
 
 namespace AspergillosisEPR.Lib.Importers.Implementations
 {
@@ -114,13 +116,29 @@ namespace AspergillosisEPR.Lib.Importers.Implementations
             }
             else
             {
-                propertyInfo.SetValue(patient, Convert.ChangeType(propertyValue, propertyInfo.PropertyType), null);
+                propertyInfo.
+                    SetValue(patient, Convert.ChangeType(RemoveUnwantedChars(property, propertyValue), 
+                                                         propertyInfo.PropertyType), null);
             }
+        }
+
+        private string RemoveUnwantedChars(string propertyName, string propertyValue)
+        {
+            if (propertyName == "RM2Number") {
+                Regex digitsOnly = new Regex(@"[^\d]");
+                return digitsOnly.Replace(propertyValue, "");
+            }
+            return propertyValue.Replace("rpt", "").Replace("two", "").Trim();
         }
 
         private bool FirstTwoCellsNotEmpty(IRow row)
         {
             return row.GetCell(0).CellType != CellType.Blank && row.GetCell(1).CellType != CellType.Blank;
+        }
+
+        protected override List<string> IdentiferHeaders()
+        {
+            return new List<string> { "RM2" };
         }
     }
 }

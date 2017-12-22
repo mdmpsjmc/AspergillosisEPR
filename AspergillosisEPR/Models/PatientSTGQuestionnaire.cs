@@ -15,5 +15,7 @@ namespace AspergillosisEPR.Models
         [Display(Name = "Date Taken")]
         [DisplayFormat(DataFormatString = "{dd-MM-yyyy}")]
         public DateTime DateTaken { get; set;  }
+
+
     }
 }

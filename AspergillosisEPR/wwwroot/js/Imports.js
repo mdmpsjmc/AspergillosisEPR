@@ -39,7 +39,7 @@
                         LoadingIndicator.hide();
                         alert('Some error occured while uploading');
                     } else {
-                        $('#upload-response').html("<div class='alert alert-info'><i class='fa fa-info-circle'></i> &nbsp; Imported "+ response.result + " records into database</div>");
+                        $('#upload-response').html("<div class='alert alert-info'><i class='fa fa-info-circle'></i> &nbsp; Processed (added or updated)"+ response.result + " records from orginal file</div>");
                         LoadingIndicator.hide();
                     }
                 },
