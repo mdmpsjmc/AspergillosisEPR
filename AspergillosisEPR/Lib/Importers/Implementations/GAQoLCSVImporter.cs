@@ -87,7 +87,7 @@ namespace AspergillosisEPR.Lib.Importers.Implementations
             stgQuestionnaire.ActivityScore = decimal.Parse((string) record[ACTIVITY_SCORE]);
             stgQuestionnaire.TotalScore = decimal.Parse((string) record[TOTAL_SCORE]);
             stgQuestionnaire.DateTaken = DateTime.Parse((string) record[DATE_TAKEN]);
-            Imported.Add(stgQuestionnaire);
+            if (stgQuestionnaire.IsValid()) Imported.Add(stgQuestionnaire);
             return stgQuestionnaire;
         }
 

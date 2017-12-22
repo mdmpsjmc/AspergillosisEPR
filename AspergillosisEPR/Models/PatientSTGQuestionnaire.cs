@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace AspergillosisEPR.Models
@@ -16,6 +17,17 @@ namespace AspergillosisEPR.Models
         [DisplayFormat(DataFormatString = "{dd-MM-yyyy}")]
         public DateTime DateTaken { get; set;  }
 
+        public bool IsValid()
+        {
+            var context = new ValidationContext(this);
+            var results = new List<ValidationResult>();
+            return Validator.TryValidateObject(this, context, results) && NoNZeroScores();
+        }
+
+        private bool NoNZeroScores()
+        {
+            return SymptomScore != 0.00m && ImpactScore != 0.00m && ActivityScore != 0.00m && TotalScore != 0.00m;
+        }
 
     }
 }

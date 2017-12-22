@@ -191,3 +191,17 @@ div#new-patient-tab-content div#stg {
     overflow-y: auto;
     max-height: 450px;
 }
+
+/* hide native chrome datepicker */
+
+input::-webkit-calendar-picker-indicator {
+    display: none;
+}
+
+input[type="date"]::-webkit-input-placeholder {
+    visibility: hidden !important;
+}
+
+body.modal-open .datepicker {
+    z-index: 1200 !important;
+}
