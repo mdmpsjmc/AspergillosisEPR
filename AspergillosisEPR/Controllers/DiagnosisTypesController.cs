@@ -132,6 +132,7 @@ namespace AspergillosisEPR.Controllers
             addNewItemVM.Controller = GetType().Name.ToString().Replace("Controller", "");
             addNewItemVM.Name = diagnosisType.Name;
             addNewItemVM.ItemId = diagnosisType.ID;
+            addNewItemVM.ShortName = diagnosisType.ShortName;
             addNewItemVM.Tab = "diagnosis-types";
             return addNewItemVM;
         }

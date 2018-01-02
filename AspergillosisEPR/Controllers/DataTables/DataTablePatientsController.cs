@@ -12,6 +12,7 @@ using AspergillosisEPR.Helpers;
 
 namespace AspergillosisEPR.Controllers.DataTables
 {
+    [Authorize]
     public class DataTablePatientsController : DataTablesController
     {
         private new AspergillosisContext _aspergillosisContext;

@@ -9,6 +9,7 @@ using System;
 
 namespace AspergillosisEPR.Controllers.DataTables
 {
+    [Authorize]
     public class DataTableUsersController : DataTablesController
     {
         private ApplicationDbContext _appContext;

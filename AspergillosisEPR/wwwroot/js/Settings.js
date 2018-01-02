@@ -107,6 +107,9 @@
                         if (textStatus === "success") {
                             window.location.hash = window.openedTab;
                             window.location.reload();
+                            if (window.diagnosisTypesDataTable !== undefined) {
+                                window.diagnosisTypesDataTable.reload();
+                            }
                         }
                     }).always(function () {
                         LoadingIndicator.hide();

@@ -10,6 +10,7 @@ using AspergillosisEPR.Helpers;
 
 namespace AspergillosisEPR.Controllers.DataTables
 {
+    [Authorize]
     public class DataTableDbImportsController : DataTablesController
     {
 

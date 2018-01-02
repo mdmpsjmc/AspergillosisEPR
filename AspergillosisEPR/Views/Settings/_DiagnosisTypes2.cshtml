@@ -1,0 +1,26 @@
+﻿@model AspergillosisEPR.Models.SettingsViewModels.SettingsViewModel
+<div class="table-responsive">
+    @if (User.IsInRole("Create Role") || User.IsInRole("Admin Role"))
+    {
+        <div class="button">
+            <a href="@Url.Action("New", "DiagnosisTypes")" class="btn btn-success add-diagnosis-type add-settings-item disable-default" data-tab="diagnosis-types" data-klass="DiagnosisType">
+                <i class="fa fa-plus"></i> Add new diagnosis type
+            </a>
+        </div>
+    }
+    <table class="table table-bordered table-hover" id="diagnosis_types_datatable">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Diagnosis Type</th>
+                <th>Short Name</th>
+                @if (User.IsInRole("Update Role") || User.IsInRole("Admin Role"))
+                {
+                    <th>Action</th>
+                }
+            </tr>
+        </thead>
+        <tbody>            
+        </tbody>
+    </table>
+</div>
