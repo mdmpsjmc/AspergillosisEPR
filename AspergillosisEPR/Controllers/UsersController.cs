@@ -139,8 +139,22 @@ namespace AspergillosisEPR.Controllers
 
             if (ModelState.IsValid)
             {
-                await _userManager.RemovePasswordAsync(user);
-                await _userManager.AddPasswordAsync(user, passwordResetViewModel.Password);                
+                IdentityResult removeResult = await _userManager.RemovePasswordAsync(user);
+                IdentityResult addResult = await _userManager.AddPasswordAsync(user, passwordResetViewModel.Password);
+                if (removeResult.Succeeded && addResult.Succeeded)
+                {
+                   await _userManager.UpdateAsync(user);                 
+                } else
+                {
+                    var updateResultErrors = removeResult.Errors.Concat(addResult.Errors);
+                    foreach(var error in updateResultErrors)
+                    {
+                        ModelState.AddModelError("Password", error.Description);
+                        Hashtable errors = ModelStateHelper.Errors(ModelState);
+                        return Json(new { success = false, errors });
+                    }
+
+                }
                 return Json(new { result = "ok" });
             } else
             {

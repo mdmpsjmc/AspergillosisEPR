@@ -148,14 +148,18 @@
     }
 
     var currentUserWithRoles = function () {
+        var responseUser = null;
         $.getJSON("/Account/GetCurrentUserRolesAsync", function (response) {
             var container = $("div#current-user-roles");
-            container.attr("data-id", response.user);
+            responseUser = response.user;
+            container.attr("data-id", responseUser);
             container.attr("data-roles", response.roles.join(","));
             $.each(response.roles, function (index, role) {
                 $("[data-role='" + role + "']").show();
                 if (role === "Admin Role") {
                     $("[data-role]").show();
+                } else {
+                    $("a.user-edit:not([data-id='" + responseUser + "'])").hide()
                 }
             });
         });
