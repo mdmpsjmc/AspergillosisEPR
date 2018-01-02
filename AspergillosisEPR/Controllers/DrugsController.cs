@@ -36,6 +36,7 @@ namespace AspergillosisEPR.Controllers
         {
             try
             {
+                CheckIfNameIsUnique(drug);
                 if (ModelState.IsValid)
                 {
                     _context.Add(drug);
@@ -135,7 +136,16 @@ namespace AspergillosisEPR.Controllers
             addNewItemVM.ItemId = drug.ID;
             addNewItemVM.Tab = "drugs";
             return addNewItemVM;
-        }        
+        }
+
+        private void CheckIfNameIsUnique(Drug drug)
+        {
+            var existingItem = _context.Drugs.FirstOrDefault(x => x.Name == drug.Name);
+            if (existingItem != null)
+            {
+                ModelState.AddModelError("drug.Name", "Drug with this name already exists in database");
+            }
+        }
     }
 
 

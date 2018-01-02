@@ -8,6 +8,7 @@ using AspergillosisEPR.Data;
 using System.Threading.Tasks;
 using System.Linq;
 using Microsoft.AspNetCore.Authorization;
+using System;
 
 namespace AspergillosisEPR.Controllers
 {
@@ -34,6 +35,7 @@ namespace AspergillosisEPR.Controllers
         {
             try
             {
+                CheckIfNameIsUnique(diagnosisType);
                 if (ModelState.IsValid)
                 {
                     _context.Add(diagnosisType);
@@ -50,7 +52,8 @@ namespace AspergillosisEPR.Controllers
             {
                 return null;
             }
-        }
+        }        
+
         [Authorize(Roles = "Admin Role, Update Role")]
         public async Task<IActionResult> Edit(int? id)
         {
@@ -135,6 +138,15 @@ namespace AspergillosisEPR.Controllers
             addNewItemVM.ShortName = diagnosisType.ShortName;
             addNewItemVM.Tab = "diagnosis-types";
             return addNewItemVM;
+        }
+
+        private void CheckIfNameIsUnique(DiagnosisType diagnosisType)
+        {
+            var existingDiagnosisType = _context.DiagnosisTypes.FirstOrDefault(x => x.Name == diagnosisType.Name);
+            if (existingDiagnosisType != null)
+            {
+                ModelState.AddModelError("diagnosisType.Name", "Diagnosis Type with this name already exists in database");
+            }
         }
     }
 }
