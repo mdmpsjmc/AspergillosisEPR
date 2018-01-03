@@ -1,6 +1,7 @@
 ﻿<script src="~/js/smartadmin.js"></script>
 <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.2.1/js/dataTables.responsive.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap3-dialog/1.34.7/js/bootstrap-dialog.min.js"></script>
 <script src="~/lib/select2/dist/js/select2.min.js"></script>
 <script src="~/lib/moment/moment.js"></script>
@@ -12,6 +13,7 @@
 <script src="~/js/Users.js"></script>
 <script src="~/js/Imports.js"></script>
 <script src="~/js/DiagnosisTypes.js"></script>
+<script src="~/js/SideEffects.js"></script>
 @Html.Partial("/Views/Shared/_ValidationScriptsPartial.cshtml");
 <script>
     $(document).ready(function () {
@@ -23,5 +25,6 @@
         Users.init();
         Imports.init();
         DiagnosisTypes.init();
+        SideEffects.init();
     });
 </script>

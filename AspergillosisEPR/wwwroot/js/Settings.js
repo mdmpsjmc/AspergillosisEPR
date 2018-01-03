@@ -36,6 +36,7 @@
         }
 
         $('.nav-tabs a').on('shown.bs.tab', function (e) {
+            window.sideEffectsDT.columns.adjust();
             window.location.hash = e.target.hash.replace("#", "#" + prefix);
         });
     }

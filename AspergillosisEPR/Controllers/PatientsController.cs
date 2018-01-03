@@ -27,6 +27,7 @@ namespace AspergillosisEPR.Controllers
             _context = context;
         }
 
+        [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
         [Authorize(Roles =("Admin Role, Create Role"))]
         public IActionResult New()
         {
@@ -37,6 +38,7 @@ namespace AspergillosisEPR.Controllers
         }
 
         [Authorize(Roles = ("Admin Role, Read Role"))]
+        [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
         public IActionResult Index()
         {
             return View();
@@ -130,6 +132,7 @@ namespace AspergillosisEPR.Controllers
         
 
         [Authorize(Roles = ("Admin Role, Update Role"))]
+        [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)             

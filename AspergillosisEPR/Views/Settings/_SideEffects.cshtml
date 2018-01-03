@@ -8,45 +8,15 @@
         </a>
     </div>
 }
-    <table class="table table-bordered table-hover">
+    <table class="table table-bordered table-hover" id="side_effects_datatable" style="width: 100%">
         <thead>
             <tr>
                 <th>ID</th>
-                <th>Side Effect Name</th>
-                @if (User.IsInRole("Update Role") || User.IsInRole("Admin Role"))
-                {
-                <th>Edit</th>
-                }
-                @if (User.IsInRole("Delete Role") || User.IsInRole("Admin Role"))
-                {
-                <th>Delete</th>
-                }
+                <th>Side Effect Name</th>                
+                <th>Action</th>                
             </tr>
         </thead>
-        <tbody>
-            @foreach (var sideEffect in Model.SideEffects)
-            {
-                <tr>
-                    <td>@sideEffect.ID</td>
-                    <td>@sideEffect.Name</td>
-                    @if (User.IsInRole("Update Role") || User.IsInRole("Admin Role"))
-                    {
-                    <td>
-                        <a href="@Url.Action("Edit", "SideEffects", new { id = sideEffect.ID })" class="btn btn-primary edit-diagnosis-side-effect edit-link disable-default">
-                            <i class="fa fa-edit"></i>
-                        </a>
-                    </td>
-                    }
-                    @if (User.IsInRole("Delete Role") || User.IsInRole("Admin Role"))
-                    {
-                    <td>
-                        <a href="@Url.Action("Delete", "SideEffects", new { id = sideEffect.ID })" class="btn btn-danger edit-side-effect delete-link disable-default" data-tab="side-effects" data-what="Side Effect" data-warning="All drug entries for this side-effects, for all patients in database will be also irreversibly lost if you remove this item">
-                            <i class="fa fa-trash"></i>
-                        </a>
-                    </td>
-                    }
-                </tr>
-            }
+        <tbody>          
         </tbody>
     </table>
 </div>
