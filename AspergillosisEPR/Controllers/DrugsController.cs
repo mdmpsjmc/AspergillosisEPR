@@ -8,6 +8,7 @@ using AspergillosisEPR.Data;
 using System.Threading.Tasks;
 using System.Linq;
 using Microsoft.AspNetCore.Authorization;
+using AspergillosisEPR.Extensions.Validations;
 
 namespace AspergillosisEPR.Controllers
 {
@@ -36,7 +37,8 @@ namespace AspergillosisEPR.Controllers
         {
             try
             {
-                CheckIfNameIsUnique(drug);
+                ValidationExtensions.CheckFieldUniqueness(this, _context.Drugs, "Name", drug.Name);
+
                 if (ModelState.IsValid)
                 {
                     _context.Add(drug);
@@ -136,15 +138,6 @@ namespace AspergillosisEPR.Controllers
             addNewItemVM.ItemId = drug.ID;
             addNewItemVM.Tab = "drugs";
             return addNewItemVM;
-        }
-
-        private void CheckIfNameIsUnique(Drug drug)
-        {
-            var existingItem = _context.Drugs.FirstOrDefault(x => x.Name == drug.Name);
-            if (existingItem != null)
-            {
-                ModelState.AddModelError("drug.Name", "Drug with this name already exists in database");
-            }
         }
     }
 

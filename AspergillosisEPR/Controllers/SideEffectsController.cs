@@ -8,6 +8,7 @@ using AspergillosisEPR.Data;
 using System.Threading.Tasks;
 using System.Linq;
 using Microsoft.AspNetCore.Authorization;
+using AspergillosisEPR.Extensions.Validations;
 
 namespace AspergillosisEPR.Controllers
 {
@@ -36,7 +37,7 @@ namespace AspergillosisEPR.Controllers
         {
             try
             {
-                CheckIfNameIsUnique(sideEffect);
+                ValidationExtensions.CheckFieldUniqueness(this, _context.SideEffects, "Name", sideEffect.Name);
                 if (ModelState.IsValid)
                 {
                     _context.Add(sideEffect);

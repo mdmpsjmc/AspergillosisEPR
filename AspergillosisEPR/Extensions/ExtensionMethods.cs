@@ -1,4 +1,7 @@
-﻿using System.Linq;
+﻿using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace AspergillosisEPR.Extensions
@@ -21,6 +24,14 @@ namespace AspergillosisEPR.Extensions
                 @"(\p{Ll})(\P{Ll})",
                 "$1 $2"
             );
+        }
+
+        public static string FirstCharacterToLower(this string str)
+        {
+            if (string.IsNullOrEmpty(str))
+                return str;
+
+            return Char.ToLowerInvariant(str[0]) + str.Substring(1);
         }
     }
 }

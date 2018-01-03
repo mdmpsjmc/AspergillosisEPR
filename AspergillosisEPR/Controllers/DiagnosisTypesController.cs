@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Linq;
 using Microsoft.AspNetCore.Authorization;
 using System;
+using AspergillosisEPR.Extensions.Validations;
 
 namespace AspergillosisEPR.Controllers
 {
@@ -35,7 +36,8 @@ namespace AspergillosisEPR.Controllers
         {
             try
             {
-                CheckIfNameIsUnique(diagnosisType);
+                ValidationExtensions.CheckFieldUniqueness(this, _context.DiagnosisTypes, "Name", diagnosisType.Name);
+
                 if (ModelState.IsValid)
                 {
                     _context.Add(diagnosisType);
@@ -138,15 +140,6 @@ namespace AspergillosisEPR.Controllers
             addNewItemVM.ShortName = diagnosisType.ShortName;
             addNewItemVM.Tab = "diagnosis-types";
             return addNewItemVM;
-        }
-
-        private void CheckIfNameIsUnique(DiagnosisType diagnosisType)
-        {
-            var existingDiagnosisType = _context.DiagnosisTypes.FirstOrDefault(x => x.Name == diagnosisType.Name);
-            if (existingDiagnosisType != null)
-            {
-                ModelState.AddModelError("diagnosisType.Name", "Diagnosis Type with this name already exists in database");
-            }
         }
     }
 }

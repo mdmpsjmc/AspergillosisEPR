@@ -9,6 +9,9 @@ using System.Threading.Tasks;
 using System.Linq;
 using Microsoft.AspNetCore.Authorization;
 using System;
+using System.Collections.Generic;
+using AspergillosisEPR.Extensions;
+using AspergillosisEPR.Extensions.Validations;
 
 namespace AspergillosisEPR.Controllers
 {
@@ -34,7 +37,7 @@ namespace AspergillosisEPR.Controllers
         {
             try
             {
-                CheckIfNameExists(diagnosisCategory);
+                ValidationExtensions.CheckFieldUniqueness(this, _context.DiagnosisCategories, "CategoryName", diagnosisCategory.CategoryName);
                 if (ModelState.IsValid)
                 {
                     _context.Add(diagnosisCategory);
@@ -135,16 +138,6 @@ namespace AspergillosisEPR.Controllers
             addNewItemVM.ItemId = diagnosisCategory.ID;
             addNewItemVM.Tab = "diagnosis-categories";
             return addNewItemVM;
-        }
-
-
-        private void CheckIfNameExists(DiagnosisCategory diagnosisCategory)
-        {
-            var existingItem = _context.DiagnosisCategories.FirstOrDefault(x => x.CategoryName == diagnosisCategory.CategoryName);
-            if (existingItem != null)
-            {
-                ModelState.AddModelError("diagnosisCategory.CategoryName", "Diagnosis Category with this name already exists in database");
-            }
         }
     }
 }
