@@ -37,7 +37,7 @@ namespace AspergillosisEPR.Controllers
         {
             try
             {
-                ValidationExtensions.CheckFieldUniqueness(this, _context.SideEffects, "Name", sideEffect.Name);
+                this.CheckFieldUniqueness(_context.SideEffects, "Name", sideEffect.Name);
                 if (ModelState.IsValid)
                 {
                     _context.Add(sideEffect);
@@ -137,16 +137,6 @@ namespace AspergillosisEPR.Controllers
             addNewItemVM.ItemId = sideEffect.ID;
             addNewItemVM.Tab = "side-effects";
             return addNewItemVM;
-        }
-
-
-        private void CheckIfNameIsUnique(SideEffect sideEffect)
-        {
-            var existingItem = _context.SideEffects.FirstOrDefault(x => x.Name == sideEffect.Name);
-            if (existingItem != null)
-            {
-                ModelState.AddModelError("sideEffect.Name", "Side effect with this name already exists in database");
-            }
         }
     }
 }

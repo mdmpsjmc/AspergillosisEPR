@@ -37,7 +37,7 @@ namespace AspergillosisEPR.Controllers
         {
             try
             {
-                ValidationExtensions.CheckFieldUniqueness(this, _context.Drugs, "Name", drug.Name);
+                this.CheckFieldUniqueness(_context.Drugs, "Name", drug.Name);
 
                 if (ModelState.IsValid)
                 {

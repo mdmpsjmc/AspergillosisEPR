@@ -37,7 +37,7 @@ namespace AspergillosisEPR.Controllers
         {
             try
             {
-                ValidationExtensions.CheckFieldUniqueness(this, _context.DiagnosisCategories, "CategoryName", diagnosisCategory.CategoryName);
+                this.CheckFieldUniqueness(_context.DiagnosisCategories, "CategoryName", diagnosisCategory.CategoryName);
                 if (ModelState.IsValid)
                 {
                     _context.Add(diagnosisCategory);
