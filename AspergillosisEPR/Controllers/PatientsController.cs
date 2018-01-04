@@ -98,6 +98,7 @@ namespace AspergillosisEPR.Controllers
         }
 
         [Authorize(Roles = ("Admin Role, Read Role"))]
+        [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)

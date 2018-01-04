@@ -7,6 +7,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Dynamic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 
@@ -15,7 +16,7 @@ namespace AspergillosisEPR.Lib.Importers.Implementations
     public class GAQoLCSVImporter : Importer
     {
         private static string RM2NUMBER = "Field4";
-        private static string DATE_TAKEN = "Field5";
+        private static string DATE_TAKEN = "Field6";
         private static string SYMPTOM_SCORE = "Field119";
         private static string IMPACT_SCORE = "Field120";
         private static string ACTIVITY_SCORE = "Field121";
@@ -86,7 +87,25 @@ namespace AspergillosisEPR.Lib.Importers.Implementations
             stgQuestionnaire.ImpactScore = decimal.Parse((string) record[IMPACT_SCORE]);
             stgQuestionnaire.ActivityScore = decimal.Parse((string) record[ACTIVITY_SCORE]);
             stgQuestionnaire.TotalScore = decimal.Parse((string) record[TOTAL_SCORE]);
-            stgQuestionnaire.DateTaken = DateTime.Parse((string) record[DATE_TAKEN]);
+            string dateTaken = (string)record[DATE_TAKEN];
+            if (patient.RM2Number.Equals("4331330"))
+            {
+                Console.WriteLine(dateTaken);
+            }
+            try
+            {
+                stgQuestionnaire.DateTaken = DateTime.ParseExact(dateTaken, "yyyy-MM-dd", CultureInfo.InvariantCulture);
+            } catch (FormatException)
+            {
+                try
+                {
+                    stgQuestionnaire.DateTaken = Convert.ToDateTime(dateTaken);
+                } catch (FormatException)
+                {
+                    Console.WriteLine(dateTaken);
+                }
+                
+            }           
             if (stgQuestionnaire.IsValid()) Imported.Add(stgQuestionnaire);
             return stgQuestionnaire;
         }

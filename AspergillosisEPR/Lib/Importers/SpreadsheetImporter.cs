@@ -129,6 +129,5 @@ namespace AspergillosisEPR.Lib.Importers
 
         protected abstract void ProcessSheet(ISheet currentSheet);
         protected abstract List<string> IdentiferHeaders();
-
     }
 }

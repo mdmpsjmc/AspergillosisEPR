@@ -1,5 +1,9 @@
 ﻿@model AspergillosisEPR.Models.PatientViewModels.PatientDetailsViewModel
-
+<div class="col-sm-12" id="sgrq-chart">
+    <a href="@Url.Action("SGRQ", "PatientCharts", new { patientId= Model.Patient.ID})" data-id="@(Model.Patient.ID)" class="btn-lg disable-default btn btn-primary show-sgrq-chart" style="padding: 5px">
+        <i class="fa fa-line-chart"></i>&nbsp; Show Chart
+    </a>
+</div>
 @if (Model.STGQuestionnaires != null && Model.STGQuestionnaires.Any())
 {
     <div class="col-sm-12">
@@ -19,7 +23,7 @@
                 {
                     <tr>
                         <td>@(stg.ID)</td>
-                        <td>@(stg.DateTaken.ToString("dd/MM/yyyy"))</td>
+                        <td>@(stg.DateTaken.ToString("dd-MMM-yyyy"))</td>
                         <td>@(stg.SymptomScore)</td>
                         <td>@(stg.ImpactScore)</td>
                         <td>@(stg.ActivityScore)</td>                        

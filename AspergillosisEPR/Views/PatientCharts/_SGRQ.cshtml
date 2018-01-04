@@ -1,0 +1,18 @@
+﻿@model AspergillosisEPR.Models.PatientViewModels.PatientDetailsViewModel
+<div id="sgrq-chart-@(Model.Patient.ID)" class="printable modal fade sgrq-modal" data-id="@(Model.Patient.ID)">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h3 class="modal-title">SGRQ Chart for @(Model.Patient.FullName)  RM2: @(Model.Patient.RM2Number) </h3>
+            </div>
+            <div class="modal-body">
+                <canvas id="sgrq-chart-content" width="800" height="400"></canvas>
+            </div >
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="window.print();"><i class="fa fa-print"></i>&nbsp; Print</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal" onclick="$('div.modal-backdrop.in').remove()">Close</button>
+            </div>
+        </div >
+    </div >
+</div >

@@ -6,6 +6,7 @@
 <script src="~/lib/select2/dist/js/select2.min.js"></script>
 <script src="~/lib/moment/moment.js"></script>
 <script src="~/lib/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
+<script src="~/lib/chart.js/dist/Chart.min.js"></script>
 <script src="~/js/LoadingIndicator.js"></script>
 <script src="~/js/App.js"></script>
 <script src="~/js/Patients.js"></script>
@@ -14,6 +15,7 @@
 <script src="~/js/Imports.js"></script>
 <script src="~/js/DiagnosisTypes.js"></script>
 <script src="~/js/SideEffects.js"></script>
+<script src="~/js/Charts.js"></script>
 @Html.Partial("/Views/Shared/_ValidationScriptsPartial.cshtml");
 <script>
     $(document).ready(function () {
@@ -26,5 +28,6 @@
         Imports.init();
         DiagnosisTypes.init();
         SideEffects.init();
+        Charts.init();
     });
 </script>

@@ -221,3 +221,17 @@ body.modal-open .datepicker {
 div.stg-form{
     min-height: 250px;
 }
+
+div#sgrq-chart {
+    padding-bottom: 20px;
+}
+
+div.sgrq-modal .modal-dialog {
+  width: 900px;
+  height: 600px;
+  padding: 0;
+}
+
+div.sgrq-modal .modal-content {
+    height: 600px;
+}

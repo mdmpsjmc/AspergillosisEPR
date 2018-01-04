@@ -42,8 +42,9 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" data-dismiss="modal">Close Window</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="$('div.modal-backdrop.in').remove()">Close Window</button>
             </div>
         </div>
     </div>
 </div>
+@Html.Partial("/Views/PatientCharts/_SGRQ.cshtml")
