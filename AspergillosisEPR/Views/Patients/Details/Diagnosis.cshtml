@@ -20,6 +20,10 @@
               {
                 @Html.Partial("/Views/Patients/Details/_DiagnosisCollection.cshtml", Model.OtherDiagnoses);
               }
+              @if (Model.HasPastDeseases())
+              {
+                @Html.Partial("/Views/Patients/Details/_DiagnosisCollection.cshtml", Model.PastDiagnoses);
+              }
             <br />
         </div>     
     </div>

@@ -15,7 +15,6 @@ namespace AspergillosisEPR.Models.PatientViewModels
         public string RM2Number;
         public string ImpactScore;
         public string ActivityScore;
-        public string SymptomScore;
-        
+        public string SymptomScore;       
     }
 }

@@ -331,6 +331,7 @@ namespace AspergillosisEPR.Controllers
             var secondaryDiagnosis = _context.DiagnosisCategories.Where(dc => dc.CategoryName == "Secondary").FirstOrDefault();
             var otherDiagnosis = _context.DiagnosisCategories.Where(dc => dc.CategoryName == "Other").FirstOrDefault();
             var underlyingDiagnosis = _context.DiagnosisCategories.Where(dc => dc.CategoryName == "Underlying diagnosis").FirstOrDefault();
+            var pastDiagnosis = _context.DiagnosisCategories.Where(dc => dc.CategoryName == "Past Diagnosis").FirstOrDefault();
 
             var patientDetailsViewModel = new PatientDetailsViewModel();
 
@@ -360,11 +361,17 @@ namespace AspergillosisEPR.Controllers
                                                                     Where(pd => pd.DiagnosisCategoryId == underlyingDiagnosis.ID).
                                                                     ToList();
             }
+
+            if (pastDiagnosis != null)
+            {
+                patientDetailsViewModel.PastDiagnoses = patient.PatientDiagnoses.
+                                                                    Where(pd => pd.DiagnosisCategoryId == pastDiagnosis.ID).
+                                                                    ToList();
+            }
             patientDetailsViewModel.PatientDrugs = patient.PatientDrugs;
             patientDetailsViewModel.STGQuestionnaires = patient.STGQuestionnaires;
             return patientDetailsViewModel;
         }
-
 
         private void PopulateDiagnosisCategoriesDropDownList(object selectedCategory = null)
         {

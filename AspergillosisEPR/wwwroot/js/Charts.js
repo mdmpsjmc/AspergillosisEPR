@@ -61,11 +61,10 @@
                             }
                         ]
                     };
-                    var ctx = document.getElementById("sgrq-chart-content");
-                    var stackedLine = new Chart(ctx, {
+                    var context = document.getElementById("sgrq-chart-content");
+                    var stackedLine = new Chart(context, {
                         type: 'line',
                         data: chartData,
-                        
                     });
                 }).on('hidden.bs.modal', function () {
                     $('.modal-dialog', this).removeClass('focused');

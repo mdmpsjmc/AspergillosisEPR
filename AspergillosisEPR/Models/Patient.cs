@@ -1,11 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AspergillosisEPR.Lib.Search;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 namespace AspergillosisEPR.Models
 {
-    public class Patient
+    public class Patient : ISearchable
     {
         public int ID { get; set; }
 
@@ -89,5 +90,12 @@ namespace AspergillosisEPR.Models
             return DateOfDeath == null; 
         }
 
+        public List<string> SearchableFields()
+        {
+            return new List<string>()
+            {
+                "FirstName", "LastName", "RM2Number", "DOB", "DateOfDeath", "Status", "Gender"
+            }; 
+        }
     }
 }

@@ -1,0 +1,15 @@
+﻿<p>
+    @if ((User.IsInRole("Admin Role")) || (User.IsInRole("Create Role")))
+            {
+        <a href="javascript:void(0)" class="btn btn-success btn-lg new-patient-modal-show">
+            <i class="fa fa-user-plus"></i>&nbsp;Add new Patient
+        </a>
+    }
+    @if ((User.IsInRole("Read Role")))
+    {
+        <a href="@Url.Action("new", "PatientSearches")" title="Users" class="btn btn-primary btn-lg pull-right">
+            <i class="fa fa-search"></i>
+            <span class="menu-item-parent">&nbsp; Advanced search</span>
+        </a>
+    }
+</p>

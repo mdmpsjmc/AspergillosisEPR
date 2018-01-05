@@ -10,6 +10,12 @@
                     <span class="menu-item-parent">Patients</span>
                 </a>
             </li>
+            <li is-active-route asp-controller="PatientSearches" asp-action="New">
+                <a href="@Url.Action("new", "PatientSearches")" title="Users">
+                    <i class="fa fa-search"></i>
+                    <span class="menu-item-parent">Advanced search</span>
+                </a>
+            </li>
             <li is-active-route asp-controller="Settings" asp-action="Index">
                 <a href="@Url.Action("index", "settings")" title="Settings">
                     <i class="fa fa-gear"></i>

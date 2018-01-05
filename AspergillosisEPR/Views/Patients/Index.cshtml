@@ -1,12 +1,5 @@
 ﻿<section id="widget-grid" class="">
-    <p>
-        @if ((User.IsInRole("Admin Role")) || (User.IsInRole("Create Role")))
-            {
-            <a href="javascript:void(0)" class="btn btn-success btn-lg new-patient-modal-show">
-                <i class="fa fa-user-plus"></i>&nbsp;Add new Patient
-            </a>
-        }       
-    </p>
+    @Html.Partial("~/Views/Patients/_Buttons.cshtml")
     <div class="row">
         <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
             <div class="jarviswidget" id="wid-id-0" data-widget-editbutton="false">

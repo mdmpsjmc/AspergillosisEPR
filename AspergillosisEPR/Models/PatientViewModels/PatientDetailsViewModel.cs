@@ -12,6 +12,7 @@ namespace AspergillosisEPR.Models.PatientViewModels
         public Patient Patient { get; set; }
         public ICollection<PatientDiagnosis> UnderlyingDiseases { get; set; }
         public ICollection<PatientDiagnosis> OtherDiagnoses { get; set; }
+        public ICollection<PatientDiagnosis> PastDiagnoses { get; set; }
         public ICollection<PatientDrug> PatientDrugs { get; set; }
         public ICollection<PatientSTGQuestionnaire> STGQuestionnaires { get; set; }
 
@@ -33,6 +34,11 @@ namespace AspergillosisEPR.Models.PatientViewModels
         public bool HasUnderlyingDeases()
         {
             return UnderlyingDiseases != null && UnderlyingDiseases.Any();
+        }
+
+        public bool HasPastDeseases()
+        {
+            return PastDiagnoses != null && PastDiagnoses.Any();
         }
     }
 }
