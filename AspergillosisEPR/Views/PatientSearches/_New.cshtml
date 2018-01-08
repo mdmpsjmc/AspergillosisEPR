@@ -1,58 +1,15 @@
 ﻿@model AspergillosisEPR.Models.PatientViewModels.PatientSearchViewModel
-<div class="row">
-    <div class="alert alert-block alert-info col col-md-4 col-lg-4 col-sm-4" style="margin-left: 20px">
-        <i class="fa fa-2x fa-info-circle"></i>&nbsp;
-        <a class="close" href="#" onclick="$('.alert').hide();">×</a>
-        You can construct search criteria across different tables in database by selecting values from below fields.
-        To add another criteria click the 'plus' button. 
-    </div>
-</div>
+@Html.Partial("~/Views/Shared/_InfoBox.cshtml", 
+    "You can construct search criteria across different tables in database by selecting values from below fields. To add another criteria click the plus button.")
 <form class="smart-form">
     <header>
         <i class="fa fa-search-plus fa-2x"></i>&nbsp;Search criteria
     </header>
-    <fieldset>
-
-        <section class="col">
-            <h4 class="input" style="font-weight: 600">Search</h4>
-        </section>
-        <section class="col col-1">
-            <label class="select">
-                <label class="select">
-                    @Html.DropDownList("SearchClass", (SelectList)ViewBag.CriteriaClasses, new { @class = "select2" })
-                    <span asp-validation-for="SearchClass" class="text-danger"></span>
-                </label>
-                <i></i>
-            </label>
-        </section>
-        <section class="col col-1">
-            <label class="select">
-                <label class="select">
-                    @Html.DropDownList("Field", (SelectList)ViewBag.PatientFields, new { @class = "select2" })
-                    <span asp-validation-for="SearchCriteria" class="text-danger"></span>
-                </label>
-                <i></i>
-            </label>
-        </section>
-        <section class="col col-1">
-            <label class="select">
-                <label class="select">
-                    @Html.DropDownList("SearchCriteria", (SelectList)ViewBag.CriteriaMatches, new { @class = "select2" })
-                    <span asp-validation-for="SearchCriteria" class="text-danger"></span>
-                </label>
-                <i></i>
-            </label>
-        </section>
-        <section class="col col-2">
-            <label class="input">
-                <input asp-for="@(Model.SearchValue)" placeholder="Search Value">
-            </label>
-        </section>
-        <section class="col col-1">
-            <a href="@Url.Action("new", "PatientSearches")" title="Add criteria" class="btn btn-success" style="padding: 8px">
-                <i class="fa fa-plus"></i>&nbsp; Add
-            </a>
-        </section>
+    <fieldset id="search-form-container">
+      <section class="col">
+          <h4 class="input" style="font-weight: 600">Search</h4>
+      </section>
+      @Html.Partial("~/Views/PatientSearches/_FormFields.cshtml")
     </fieldset>
     <footer>
         <button type="submit" class="btn btn-success pull-left"><i class="fa fa-search"></i>&nbsp; SEARCH</button>

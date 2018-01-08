@@ -7,6 +7,6 @@ namespace AspergillosisEPR.Lib.Search
 {
     interface ISearchable
     {
-        List<string> SearchableFields();
+        Dictionary<string, string> SearchableFields();
     }
 }

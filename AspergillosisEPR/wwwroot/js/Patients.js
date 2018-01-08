@@ -335,7 +335,7 @@
                     var requestUrl = function () {
                         if (whatToRemove === "diagnosis") {
                             return "/PatientDiagnoses/Delete/" + itemId;
-                        } else if (whatToRemove == "drug") {
+                        } else if (whatToRemove === "drug") {
                             return "/PatientDrugs/Delete/" + itemId;
                         } else {
                             return "/PatientSTGQuestionnaires/Delete/" + itemId;

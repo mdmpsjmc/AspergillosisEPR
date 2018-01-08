@@ -7,25 +7,28 @@ namespace AspergillosisEPR.Search
 {
     public class PatientSearch
     {
-        public static IEnumerable<string> CriteriaClasses()
+        public static Dictionary<string, string> CriteriaClasses()
         {
-            return new List<string>()
+            return new Dictionary<string, string>()
             {
-                "Patient", "Diagnosis Type", "Drug", "SGRQ"
-            }.AsEnumerable();
+                { "Patient", "Patient" },
+                { "Diagnosis Name", "DiagnosisType" },
+                { "Drug", "Drug" },
+                { "SGRQ", "PatientSGRQuestionnaire" }
+            };
         }
 
-        public static IEnumerable<string> CriteriaMatches()
+        public static Dictionary<string, string> CriteriaMatches()
         {
-            return new List<string>()
+            return new Dictionary<string, string>()
             {
-                  "Exact",
-                  "Starts With",
-                  "Ends With",
-                  "Contains", 
-                  "Grearter Than",
-                  "Smaller Than"
-            }.AsEnumerable();
+                { "Exact", "Exact" },
+                { "Starts With", "StartsWith" },
+                { "Ends With", "EndsWith" },
+                { "Contains", "Contains" },
+                { "Greater Than", "GrearterThan"},
+                { "Smaller Than", "SmallerThan" }
+            };
         }
     }
 }

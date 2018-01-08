@@ -20,19 +20,19 @@ namespace AspergillosisEPR.Controllers
         }
 
         private SelectList CriteriaClassesDropdownList()
-        {
-            return ViewBag.CriteriaClasses = new SelectList(PatientSearch.CriteriaClasses());
+        {            
+            return ViewBag.CriteriaClasses = new SelectList(PatientSearch.CriteriaClasses().OrderBy(x => x.Value), "Value", "Key", "Patient");
         }
 
         private SelectList CriteriaMatchesDropdownList()
         {
-            return ViewBag.CriteriaMatches = new SelectList(PatientSearch.CriteriaMatches());
+            return ViewBag.CriteriaMatches = new SelectList(PatientSearch.CriteriaMatches().OrderBy(x => x.Value), "Value", "Key", "Exact");
         }
 
         private SelectList PatientFieldsDropdownList()
         {
             var patient = new Patient();
-            return ViewBag.PatientFields = new SelectList(patient.SearchableFields());
+            return ViewBag.PatientFields = new SelectList(patient.SearchableFields(), "Value", "Key", "RM2Number");
         }
     }
 }

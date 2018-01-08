@@ -1,6 +1,5 @@
 ﻿using AspergillosisEPR.Lib.Search;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -90,11 +89,17 @@ namespace AspergillosisEPR.Models
             return DateOfDeath == null; 
         }
 
-        public List<string> SearchableFields()
+        public Dictionary<string, string> SearchableFields()
         {
-            return new List<string>()
+            return new Dictionary<string, string>()
             {
-                "FirstName", "LastName", "RM2Number", "DOB", "DateOfDeath", "Status", "Gender"
+                { "First Name", "FirstName" },
+                { "Last Name", "LastName" },
+                { "RM2 Number", "RM2Number" },
+                {"Date of Birth", "DOB" },
+                { "Date of Death", "DateOfDeath" },
+                { "Status", "PatientStatus" },
+                { "Gender", "Gender" }
             }; 
         }
     }

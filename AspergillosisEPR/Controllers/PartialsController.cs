@@ -67,6 +67,14 @@ namespace AspergillosisEPR.Controllers
             return PartialView();
         }
 
+
+        [Authorize(Roles = "Read Role")]
+        public IActionResult SearchPartial()
+        {
+            ViewBag.Index = (string)Request.Query["index"];
+            return PartialView();
+        }
+
         private void PopulateDiagnosisCategoriesDropDownList(object selectedCategory = null)
         {
             var categoriesQuery = from d in _context.DiagnosisCategories
