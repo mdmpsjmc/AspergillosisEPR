@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using AspergillosisEPR.Search;
 using AspergillosisEPR.Models;
+using AspergillosisEPR.Models.PatientViewModels;
 
 namespace AspergillosisEPR.Controllers
 {
@@ -16,7 +17,7 @@ namespace AspergillosisEPR.Controllers
             CriteriaClassesDropdownList();
             CriteriaMatchesDropdownList();
             PatientFieldsDropdownList();
-            return View();
+            return View(new PatientSearchViewModel());
         }
 
         private SelectList CriteriaClassesDropdownList()

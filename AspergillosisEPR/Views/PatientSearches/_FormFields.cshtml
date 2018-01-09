@@ -1,40 +1,52 @@
 ﻿@model AspergillosisEPR.Models.PatientViewModels.PatientSearchViewModel
-<div class="search-criteria-row">
-    <section class="col col-1">
-        <label class="select">
+<fieldset>
+
+    <div class="search-criteria-row">
+        <section class="col col-1 hide">
             <label class="select">
-                @Html.DropDownList("SearchClass", (SelectList)ViewBag.CriteriaClasses, new { @class = "select2" })
-                <span asp-validation-for="SearchClass" class="text-danger"></span>
+                <label class="select">
+                    @Html.DropDownList("PatientSearchViewModel["+ @Model.Index + "].AndOR", new SelectList(new List<string>() { "AND", "OR" }))
+                    <span asp-validation-for="SearchClass" class="text-danger"></span>
+                </label>
+                <i></i>
             </label>
-            <i></i>
-        </label>
-    </section>
-    <section class="col col-1">
-        <label class="select">
+        </section>
+        <section class="col col-1">
             <label class="select">
-                @Html.DropDownList("Field", (SelectList)ViewBag.PatientFields, new { @class = "select2" })
-                <span asp-validation-for="SearchCriteria" class="text-danger"></span>
+                <label class="select">
+                    @Html.DropDownList("PatientSearchViewModel[" + @Model.Index + "].SearchClass", (SelectList)ViewBag.CriteriaClasses, new { @class = "criteria-class", @data_url = Url.Action("CriteriaPartial", "Partials") })
+                    <span asp-validation-for="SearchClass" class="text-danger"></span>
+                </label>
+                <i></i>
             </label>
-            <i></i>
-        </label>
-    </section>
-    <section class="col col-1">
-        <label class="select">
+        </section>
+        <section class="col col-1">
             <label class="select">
-                @Html.DropDownList("SearchCriteria", (SelectList)ViewBag.CriteriaMatches, new { @class = "select2" })
-                <span asp-validation-for="SearchCriteria" class="text-danger"></span>
+                <label class="select">
+                    @Html.DropDownList("PatientSearchViewModel[" + @Model.Index + "].Field", (SelectList)ViewBag.PatientFields, new { @class = "criteria-field" })
+                    <span asp-validation-for="SearchCriteria" class="text-danger"></span>
+                </label>
+                <i></i>
             </label>
-            <i></i>
-        </label>
-    </section>
-    <section class="col col-2">
-        <label class="input">
-            <input asp-for="@(Model.SearchValue)" placeholder="Search Value">
-        </label>
-    </section>
-    <section class="col col-1">
-        <a href="@Url.Action("SearchPartial", "Partials")" title="Add criteria" class="btn btn-success add-search-criteria disable-default" style="padding: 8px">
-            <i class="fa fa-plus"></i>&nbsp; Add
-        </a>
-    </section>
-</div>
+        </section>
+        <section class="col col-1">
+            <label class="select">
+                <label class="select">
+                    @Html.DropDownList("PatientSearchViewModel[" + @Model.Index + "].SearchCriteria", (SelectList)ViewBag.CriteriaMatches, new { @class = "criteria-match" })
+                    <span asp-validation-for="SearchCriteria" class="text-danger"></span>
+                </label>
+                <i></i>
+            </label>
+        </section>
+        <section class="col col-2 search-value">
+            <label class="input">
+                <input name="PatientSearchViewModel[@Model.Index].SearchValue" id="PatientSearchViewModel__@(Model.Index)__.SearchValue" type="text" placeholder="Search Value">
+            </label>
+        </section>
+        <section class="col col-1">
+            <a href="@Url.Action("SearchPartial", "Partials")" title="Add criteria" class="btn btn-success add-search-criteria disable-default" style="padding: 8px">
+                <i class="fa fa-plus"></i>&nbsp; Add
+            </a>
+        </section>
+    </div>
+</fieldset>

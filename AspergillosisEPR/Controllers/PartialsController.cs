@@ -7,6 +7,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Authorization;
+using AspergillosisEPR.Search;
+using AspergillosisEPR.Models;
+using System;
+using AspergillosisEPR.Models.PatientViewModels;
 
 namespace AspergillosisEPR.Controllers
 {
@@ -72,8 +76,27 @@ namespace AspergillosisEPR.Controllers
         public IActionResult SearchPartial()
         {
             ViewBag.Index = (string)Request.Query["index"];
-            return PartialView();
+            CriteriaClassesDropdownList();
+            CriteriaMatchesDropdownList();
+            PatientFieldsDropdownList();
+            var searchVm = new PatientSearchViewModel();
+            searchVm.Index = (string)Request.Query["index"];
+            return PartialView(searchVm);
         }
+
+        [Authorize(Roles = "Read Role")]
+        public IActionResult CriteriaPartial()
+        {
+            string klassName = Request.Query["searchClass"];
+            Type type = Type.GetType("AspergillosisEPR.Models." + klassName);
+            var searchVm = new PatientSearchViewModel();
+            searchVm.Index = (string) Request.Query["index"];
+            dynamic instance = Activator.CreateInstance(type);
+            Dictionary<string, string> searchableItems = instance.SearchableFields();
+            ViewBag.SearchableItems = new SelectList(searchableItems, "Value", "Key");
+            return PartialView(searchVm);
+        }
+
 
         private void PopulateDiagnosisCategoriesDropDownList(object selectedCategory = null)
         {
@@ -105,6 +128,22 @@ namespace AspergillosisEPR.Controllers
                               orderby se.Name
                               select se;
             ViewBag.SideEffects = new MultiSelectList(sideEffects, "ID", "Name");
+        }
+
+        private SelectList CriteriaClassesDropdownList()
+        {
+            return ViewBag.CriteriaClasses = new SelectList(PatientSearch.CriteriaClasses().OrderBy(x => x.Value), "Value", "Key", "Patient");
+        }
+
+        private SelectList CriteriaMatchesDropdownList()
+        {
+            return ViewBag.CriteriaMatches = new SelectList(PatientSearch.CriteriaMatches().OrderBy(x => x.Value), "Value", "Key", "Exact");
+        }
+
+        private SelectList PatientFieldsDropdownList()
+        {
+            var patient = new Patient();
+            return ViewBag.PatientFields = new SelectList(patient.SearchableFields(), "Value", "Key", "RM2Number");
         }
     }
 

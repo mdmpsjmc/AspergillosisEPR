@@ -12,9 +12,9 @@ namespace AspergillosisEPR.Search
             return new Dictionary<string, string>()
             {
                 { "Patient", "Patient" },
-                { "Diagnosis Name", "DiagnosisType" },
+                { "Diagnosis", "DiagnosisType" },
                 { "Drug", "Drug" },
-                { "SGRQ", "PatientSGRQuestionnaire" }
+                { "SGRQ", "PatientSTGQuestionnaire" }
             };
         }
 

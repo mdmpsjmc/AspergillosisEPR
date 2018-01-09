@@ -11,5 +11,12 @@ namespace AspergillosisEPR.Models.PatientViewModels
         public string SearchClass { get; set; }
         public string Field { get; set; }
         public string SearchValue { get; set; }
+        public string Index { get; set; }
+        public string AndOr { get; set; }
+
+        public PatientSearchViewModel() {
+            AndOr = "AND";
+            Index = "0";
+        }
     }
 }

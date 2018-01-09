@@ -1,17 +1,12 @@
 ﻿@model AspergillosisEPR.Models.PatientViewModels.PatientSearchViewModel
 @Html.Partial("~/Views/Shared/_InfoBox.cshtml", 
     "You can construct search criteria across different tables in database by selecting values from below fields. To add another criteria click the plus button.")
-<form class="smart-form">
-    <header>
-        <i class="fa fa-search-plus fa-2x"></i>&nbsp;Search criteria
-    </header>
-    <fieldset id="search-form-container">
-      <section class="col">
-          <h4 class="input" style="font-weight: 600">Search</h4>
-      </section>
-      @Html.Partial("~/Views/PatientSearches/_FormFields.cshtml")
+<form class="smart-form" id="advanced-search-form">
+    <header><i class="fa fa-search-plus fa-2x"></i>&nbsp;Search criteria</header>
+    <fieldset class="search-form-container">
+        @Html.Partial("~/Views/PatientSearches/_FormFields.cshtml")
     </fieldset>
     <footer>
-        <button type="submit" class="btn btn-success pull-left"><i class="fa fa-search"></i>&nbsp; SEARCH</button>
+        <button type="submit" class="btn btn-success pull-left btn-lg"><i class="fa fa-search"></i>&nbsp; SEARCH</button>
     </footer>
 </form>
