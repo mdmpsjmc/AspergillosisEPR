@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace AspergillosisEPR.Models
 {
-    public class DiagnosisType : ISearchable
+    public class DiagnosisType
     {
         public int ID { get; set; }
 
@@ -17,14 +17,5 @@ namespace AspergillosisEPR.Models
         public ICollection<PatientDiagnosis> PatientDiagnoses { get; set; }
 
         public string KlassName => typeof(DiagnosisType).Name;
-
-        public Dictionary<string, string> SearchableFields()
-        {
-            return new Dictionary<string, string>()
-            {
-                { "Diagnosis Name", "DiagnosisType.Name" },
-                { "Diagnosis Category", "DiagnosisCategory.CategoryName" }
-            };
-        }
     }
 }

@@ -1,10 +1,11 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using AspergillosisEPR.Lib.Search;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-
+using System.Collections.Generic;
 
 namespace AspergillosisEPR.Models
 {
-    public class PatientDiagnosis
+    public class PatientDiagnosis : ISearchable
     {
         [Key]
         public int ID { get; set; }
@@ -20,5 +21,14 @@ namespace AspergillosisEPR.Models
         public Patient Patient { get; set; }
         public DiagnosisType DiagnosisType { get; set; }
         public DiagnosisCategory DiagnosisCategory { get; set; }
+
+        public Dictionary<string, string> SearchableFields()
+        {
+            return new Dictionary<string, string>()
+            {
+                { "Diagnosis Name", "PatientDiagnoses.DiagnosisType.Name" },
+                { "Diagnosis Category", "PatientDiagnoses.DiagnosisCategory.CategoryName" }
+            };
+        }
     }
 }
