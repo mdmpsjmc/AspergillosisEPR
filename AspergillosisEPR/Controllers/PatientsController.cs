@@ -44,7 +44,6 @@ namespace AspergillosisEPR.Controllers
             return View();
         }
 
-        [HttpPost]
         [Authorize(Roles = ("Admin Role, Create Role"))]
         [Audit(EventTypeName = "Patient::Create", IncludeHeaders = true, IncludeModel = true)]
         public IActionResult Create([Bind("LastName,FirstName,DOB,Gender, RM2Number, PatientStatusId, DateOfDeath")] Patient patient,

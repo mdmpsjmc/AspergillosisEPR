@@ -11,6 +11,8 @@ using AspergillosisEPR.Services;
 using System;
 using System.Threading.Tasks;
 using Audit.Core;
+using Newtonsoft.Json.Serialization;
+using Newtonsoft.Json;
 
 namespace AspergillosisEPR
 {
@@ -39,7 +41,10 @@ namespace AspergillosisEPR
             services.AddTransient<IEmailSender, EmailSender>();
             services.AddTransient<PatientViewModel>();
             services.AddMvc();
-
+            services.AddMvc().AddJsonOptions(options => {
+                options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+                options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+            });
             Audit.Core.Configuration.Setup()
                 .UseSqlServer(config => config
                 .ConnectionString(Configuration.GetConnectionString("DefaultConnection"))

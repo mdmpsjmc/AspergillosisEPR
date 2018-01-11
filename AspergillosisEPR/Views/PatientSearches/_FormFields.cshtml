@@ -5,7 +5,7 @@
         <section class="col col-1 hide">
             <label class="select">
                 <label class="select">
-                    @Html.DropDownList("PatientSearchViewModel["+ @Model.Index + "].AndOR", new SelectList(new List<string>() { "AND", "OR" }))
+                    @Html.DropDownList("PatientSearchViewModel["+ @Model.Index + "].AndOR", new SelectList(new List<string>() { "AND", "OR" }, "OR"))
                     <span asp-validation-for="SearchClass" class="text-danger"></span>
                 </label>
                 <i></i>
@@ -40,7 +40,7 @@
         </section>
         <section class="col col-2 search-value">
             <label class="input">
-                <input name="PatientSearchViewModel[@Model.Index].SearchValue" id="PatientSearchViewModel__@(Model.Index)__.SearchValue" type="text" placeholder="Search Value">
+                <input name="PatientSearchViewModel[@Model.Index].SearchValue" id="PatientSearchViewModel_@(Model.Index)__SearchValue" type="text" placeholder="Search Value">
             </label>
         </section>
         <section class="col col-1">

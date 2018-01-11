@@ -1,1 +1,2 @@
-﻿@Html.DropDownList("Field", (SelectList)ViewBag.SearchableItems, new { @class = "select2" })
+﻿@model AspergillosisEPR.Models.PatientViewModels.PatientSearchViewModel
+@Html.DropDownList("PatientSearchViewModel[" + @Model.Index + "].Field", (SelectList)ViewBag.SearchableItems, new { @class = "select2" })

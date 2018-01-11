@@ -440,6 +440,12 @@
             currentUserWithRoles();
         },
 
+        publicSetup: function () {
+            currentUserWithRoles();
+            addFilteringColumns();
+            moveSearchFieldsFromFooterToHead();
+        },
+
         bindPatientsModals: function() {
             newPatientsModalShow();
             bindDiagnosisFormOnClick();

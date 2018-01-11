@@ -1,7 +1,54 @@
 ﻿var Search = function () {
 
     var initializeSearch = function () {
+        $("form#advanced-search-form").on("submit", function (e) {
+            e.preventDefault();
+            LoadingIndicator.show();
+            var data = $(this).serialize();
+            $.getJSON("/PatientSearches/Create?" + data, function (jsonResponse) {
+                LoadingIndicator.hide();
+                $("section.hide").removeClass("hide");
+                initPatientsDataTable(jsonResponse);
+            });
+        });        
+    }
 
+    var initPatientsDataTable = function (tableData) {
+        $("#search_results_datatable").DataTable().destroy();
+        window.patientsTable = $("#search_results_datatable").DataTable({
+            dom: "<'row'<'col-sm-3'l><'col-sm-3'f><'col-sm-6'p>>" +
+            "<'row'<'col-sm-12'tr>>" +
+            "<'row'<'col-sm-5'i><'col-sm-7'p>>",
+            "processing": true,
+            "filter": true,
+            "orderMulti": false,
+            "initComplete": function (settings, json) {
+                Patients.publicSetup()
+            },
+            data: tableData,
+            "columns": [
+                { "data": "rM2Number", "name": "RM2Number", "autoWidth": true },
+                { "data": "firstName", "name": "FirstName", "autoWidth": true },
+                { "data": "lastName", "name": "LastName", "autoWidth": true },
+                { "data": "gender", "name": "Gender", "autoWidth": true },
+                {
+                    "data": "dob", "name": "DOB", "autoWidth": true,
+                    "render": function (data) {
+                        return moment.unix(data).format("MM/DD/YYYY");
+                    }
+                },
+                {
+                    "render": function (data, type, patient, meta) {
+                        return '<a class="btn btn-info patient-details"  style="display: none" data-role="Read Role" href="/Patients/Details/' + patient.id + '"><i class=\'fa fa-eye\'></i>&nbsp;Details</a>&nbsp;' +
+                            '<a class="btn btn-warning patient-edit" style="display: none" data-role="Update Role" href="/Patients/Edit/' + patient.id + '"><i class=\'fa fa-edit\' ></i>&nbsp;Edit</a>&nbsp;' +
+                            '<a class="btn btn-danger patient-delete" style="display: none" data-role="Delete Role" href="javascript:void(0)" data-id="' + patient.id + '"><i class=\'fa fa-trash\' ></i>&nbsp;Delete</a>&nbsp;';
+                    },
+                    "sortable": false,
+                    "width": 250,
+                    "autoWidth": false
+                }
+            ]
+        });
     }
 
     var onAddSearchCriteriaClick = function () {
@@ -36,7 +83,7 @@
         $(document).off("change.select-field").on("change.select-field", "select.criteria-field", function () {
             var selectedText = $(this).find("option:selected").text();
             var searchField = $(this).parents("section").next("section").next("section").find("input[type='text']");
-            searchField.val("");
+            //searchField.val("");
             if (selectedText.match(/Date/) !== null) {
                 searchField.addClass("datepicker");
                 $('input.datepicker').datetimepicker({
