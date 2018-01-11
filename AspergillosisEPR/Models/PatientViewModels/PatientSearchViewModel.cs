@@ -53,13 +53,53 @@ namespace AspergillosisEPR.Models.PatientViewModels
 
         private Expression<Func<Patient, bool>> OrFilterQuery()
         {
-            Predicate = Predicate.Or(m => m.GetType().GetProperty(Field).GetValue(m, null).ToString().Contains(SearchValue));
+            switch(SearchCriteria)
+            {
+                case "Contains":
+                    Predicate = Predicate.Or(m => m.GetType().GetProperty(Field).GetValue(m, null).ToString().Contains(SearchValue));
+                    break;
+                case "EndsWith":
+                    Predicate = Predicate.Or(m => m.GetType().GetProperty(Field).GetValue(m, null).ToString().EndsWith(SearchValue));
+                    break;
+                case "Exact":
+                    Predicate = Predicate.Or(m => m.GetType().GetProperty(Field).GetValue(m, null).ToString() == SearchValue);
+                    break;
+                case "GreaterThan":
+                    Predicate = Predicate.Or(m => DateTime.Parse(m.GetType().GetProperty(Field).GetValue(m, null).ToString()) > DateTime.Parse(SearchValue));
+                    break;
+                case "SmallerThan":
+                    Predicate = Predicate.Or(m => DateTime.Parse(m.GetType().GetProperty(Field).GetValue(m, null).ToString()) < DateTime.Parse(SearchValue));
+                    break;
+                case "StartsWith":
+                    Predicate = Predicate.Or(m => m.GetType().GetProperty(Field).GetValue(m, null).ToString().StartsWith(SearchValue));
+                    break;
+            }
             return Predicate;
         }
 
         private Expression<Func<Patient, bool>> AndFilterQuery()
         {
-            Predicate =  Predicate.And(m =>  m.GetType().GetProperty(Field).GetValue(m, null).ToString().Contains(SearchValue));
+            switch (SearchCriteria)
+            {
+                case "Contains":
+                    Predicate = Predicate.And(m => m.GetType().GetProperty(Field).GetValue(m, null).ToString().Contains(SearchValue));
+                    break;
+                case "EndsWith":
+                    Predicate = Predicate.And(m => m.GetType().GetProperty(Field).GetValue(m, null).ToString().EndsWith(SearchValue));
+                    break;
+                case "Exact":
+                    Predicate = Predicate.And(m => m.GetType().GetProperty(Field).GetValue(m, null).ToString() == SearchValue);
+                    break;
+                case "GreaterThan":
+                    Predicate = Predicate.And(m => DateTime.Parse(m.GetType().GetProperty(Field).GetValue(m, null).ToString()) > DateTime.Parse(SearchValue));
+                    break;
+                case "SmallerThan":
+                    Predicate = Predicate.And(m => DateTime.Parse(m.GetType().GetProperty(Field).GetValue(m, null).ToString()) < DateTime.Parse(SearchValue));
+                    break;
+                case "StartsWith":
+                    Predicate = Predicate.And(m => m.GetType().GetProperty(Field).GetValue(m, null).ToString().StartsWith(SearchValue));
+                    break;
+            }
             return Predicate;
         }
     }

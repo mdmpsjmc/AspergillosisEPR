@@ -1,0 +1,3 @@
+﻿@model AspergillosisEPR.Models.PatientViewModels.PatientSearchViewModel
+@Html.DropDownList("PatientSearchViewModel[" + @Model.Index + "].SearchCriteria", (SelectList)ViewBag.CriteriaItems, new { @class = "criteria-match" })
+<i></i>

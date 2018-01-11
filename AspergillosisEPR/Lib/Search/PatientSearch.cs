@@ -12,8 +12,8 @@ namespace AspergillosisEPR.Search
             return new Dictionary<string, string>()
             {
                 { "Patient", "Patient" },
-                { "Diagnosis", "DiagnosisType" },
-                { "Drug", "Drug" },
+                { "Diagnosis", "PatientDiagnosis" },
+                { "Drug", "PatientDrug" },
                 { "SGRQ", "PatientSTGQuestionnaire" }
             };
         }
@@ -22,12 +22,12 @@ namespace AspergillosisEPR.Search
         {
             return new Dictionary<string, string>()
             {
-                { "Exact", "Exact" },
-                { "Starts With", "StartsWith" },
-                { "Ends With", "EndsWith" },
-                { "Contains", "Contains" },
-                { "Greater Than", "GrearterThan"},
-                { "Smaller Than", "SmallerThan" }
+                { "Exact", "Exact.Date.String" },
+                { "Starts With", "StartsWith.String" },
+                { "Ends With", "EndsWith.String" },
+                { "Contains", "Contains.String" },
+                { "Greater Than", "GreaterThan.Date"},
+                { "Smaller Than", "SmallerThan.Date" }
             };
         }
     }

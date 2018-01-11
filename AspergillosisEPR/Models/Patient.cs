@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
+
 namespace AspergillosisEPR.Models
 {
     public class Patient : ISearchable
@@ -68,8 +70,9 @@ namespace AspergillosisEPR.Models
             age = endDate  - DOB.Year;
             if (endDateDayOfYear < DOB.DayOfYear)
                 age = age - 1;
-
+            
             return age;
+            
         }
 
         public bool IsDeceased()

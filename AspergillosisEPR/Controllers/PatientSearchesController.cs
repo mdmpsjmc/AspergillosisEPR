@@ -48,8 +48,6 @@ namespace AspergillosisEPR.Controllers
                                 .Include(p => p.STGQuestionnaires)
                                 .Where(PatientSearchViewModel.BuildPredicate(patientSearchViewModel))                                
                                 .ToList();
-            
-            
             return Json(patients);
         }
 
@@ -65,7 +63,7 @@ namespace AspergillosisEPR.Controllers
 
         private SelectList CriteriaMatchesDropdownList()
         {
-            return ViewBag.CriteriaMatches = new SelectList(PatientSearch.CriteriaMatches().OrderBy(x => x.Value), "Value", "Key", "Exact");
+            return ViewBag.CriteriaMatches = DropdownSearchHelper.CriteriaMatchesDropdownList("String");
         }
 
         private SelectList PatientFieldsDropdownList()

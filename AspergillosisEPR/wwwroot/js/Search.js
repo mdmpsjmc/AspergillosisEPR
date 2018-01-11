@@ -2,14 +2,25 @@
 
     var initializeSearch = function () {
         $("form#advanced-search-form").on("submit", function (e) {
-            e.preventDefault();
-            LoadingIndicator.show();
+            e.preventDefault();            
             var data = $(this).serialize();
-            $.getJSON("/PatientSearches/Create?" + data, function (jsonResponse) {
-                LoadingIndicator.hide();
-                $("section.hide").removeClass("hide");
-                initPatientsDataTable(jsonResponse);
+            var errors = false;
+            $.each($('section.search-value input:text'), function (index, searchField) {                
+                if ($(searchField).val() === "") {
+                    errors = true;
+                }
             });
+            if (errors) {
+                alert("Search field value cannot be empty");
+                return;
+            } else {
+                LoadingIndicator.show();
+                $.getJSON("/PatientSearches/Create?" + data, function (jsonResponse) {
+                    LoadingIndicator.hide();
+                    $("section.search-results.hide").removeClass("hide");
+                    initPatientsDataTable(jsonResponse);
+                });
+            }
         });        
     }
 
@@ -20,7 +31,7 @@
             "<'row'<'col-sm-12'tr>>" +
             "<'row'<'col-sm-5'i><'col-sm-7'p>>",
             "processing": true,
-            "filter": true,
+            "filter": false,
             "orderMulti": false,
             "initComplete": function (settings, json) {
                 Patients.publicSetup()
@@ -69,7 +80,7 @@
         $(document).off("change.select-searchclass").on("change.select-searchclass", "select.criteria-class", function () {
             var selectedValue = $(this).val();
             var requestUrl = $(this).data("url");
-            var index = $("div.search-criteria-row:visible").length;
+            var index = $("div.search-criteria-row:visible").length-1;
             var nextSelect = $(this).parents("section").next("section").children("label");
 
             $.get(requestUrl + "?searchClass=" + selectedValue + "&index=" + index, function (responseHtml) {
@@ -83,18 +94,28 @@
         $(document).off("change.select-field").on("change.select-field", "select.criteria-field", function () {
             var selectedText = $(this).find("option:selected").text();
             var searchField = $(this).parents("section").next("section").next("section").find("input[type='text']");
-            //searchField.val("");
-            if (selectedText.match(/Date/) !== null) {
-                searchField.addClass("datepicker");
-                $('input.datepicker').datetimepicker({
-                    format: 'YYYY-MM-DD'
-                });
-            } else if (selectedText.match(/Date/) === null) {
-                searchField.removeClass("datepicker");
-                searchField.datetimepicker("destroy");
-            }
-        });
-        
+            searchField.val("");
+            var compareSelect = $(this).parents("section").next("section");
+            var index = $("div.search-criteria-row:visible").length-1;
+            var fieldType = selectedText.match(/Date/) !== null ? "Date" : "String";
+            var requestUrl = "/Partials/SearchCriteria?index=" + index + "&fieldType=" + fieldType;
+            $.get(requestUrl,  function (htmlResponse) {
+                compareSelect.find("label.select").html(htmlResponse);
+                if (selectedText.match(/Date/) !== null) {
+                    searchField.addClass("datepicker");
+                    $('input.datepicker').datetimepicker({
+                        format: 'YYYY-MM-DD'
+                    });
+                } else if (selectedText.match(/Date/) === null) {
+                    compareSelect.find("select option[value='SmallerThan']").remove();
+                    compareSelect.find("select option[value='GreaterThan']").remove();
+                    if (searchField.hasClass("datepicker")) {
+                        searchField.removeClass("datepicker");
+                        searchField.datetimepicker("destroy");
+                    }
+                }
+            });            
+        });        
     }
    
     return {

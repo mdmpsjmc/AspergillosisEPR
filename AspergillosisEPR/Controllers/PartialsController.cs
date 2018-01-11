@@ -11,6 +11,7 @@ using AspergillosisEPR.Search;
 using AspergillosisEPR.Models;
 using System;
 using AspergillosisEPR.Models.PatientViewModels;
+using AspergillosisEPR.Lib.Search;
 
 namespace AspergillosisEPR.Controllers
 {
@@ -97,6 +98,14 @@ namespace AspergillosisEPR.Controllers
             return PartialView(searchVm);
         }
 
+        [Authorize(Roles = "Read Role")]
+        public IActionResult SearchCriteria()
+        {
+            var searchVm = new PatientSearchViewModel();
+            searchVm.Index = (string)Request.Query["index"];
+            ViewBag.CriteriaItems = DropdownSearchHelper.CriteriaMatchesDropdownList(Request.Query["fieldType"]);
+            return PartialView(searchVm);
+        }
 
         private void PopulateDiagnosisCategoriesDropDownList(object selectedCategory = null)
         {
