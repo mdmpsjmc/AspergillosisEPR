@@ -167,8 +167,6 @@
                 format: 'YYYY-MM-DD'
             });
         } else if (selectedText.match(/Date/) === null) {
-            compareSelect.find("select option[value='SmallerThan']").remove();
-            compareSelect.find("select option[value='GreaterThan']").remove();
             if (searchField.hasClass("datepicker")) {
                 searchField.removeClass("datepicker");
                 searchField.datetimepicker("destroy");
