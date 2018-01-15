@@ -13,8 +13,7 @@ namespace AspergillosisEPR.Search
             {
                 { "Patient", "Patient" },
                 { "Diagnosis", "PatientDiagnosis" },
-                { "Drug", "PatientDrug" },
-                { "SGRQ", "PatientSTGQuestionnaire" }
+                { "Drug", "PatientDrug" }
             };
         }
 

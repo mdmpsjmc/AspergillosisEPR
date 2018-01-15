@@ -82,12 +82,15 @@
             var requestUrl = $(this).data("url");
             var index = $("div.search-criteria-row:visible").length-1;
             var nextSelect = $(this).parents("section").next("section").children("label");
-
+            var fieldSelect = $(this).parents("section").next("section").find("select");
             $.get(requestUrl + "?searchClass=" + selectedValue + "&index=" + index, function (responseHtml) {
                 LoadingIndicator.hide();
-                nextSelect.html(responseHtml);
+                fieldSelect.html(responseHtml);
+                $(fieldSelect).val($(fieldSelect).find("option:first").attr("value"));     
+                $(fieldSelect).trigger("change")
             });
         });
+
     }
 
     var onFieldSelectChangeAddDatepicker = function() {
@@ -98,8 +101,9 @@
             var compareSelect = $(this).parents("section").next("section");
             var index = $("div.search-criteria-row:visible").length-1;
             var fieldType = selectedText.match(/Date/) !== null ? "Date" : "String";
-            var requestUrl = "/Partials/SearchCriteria?index=" + index + "&fieldType=" + fieldType;
-            $.get(requestUrl,  function (htmlResponse) {
+            var partialRequestUrl = "/Partials/SearchCriteria?index=" + index + "&fieldType=" + fieldType;            
+            updateSearchCriteria(this);
+            $.get(partialRequestUrl,  function (htmlResponse) {
                 compareSelect.find("label.select").html(htmlResponse);
                 if (selectedText.match(/Date/) !== null) {
                     searchField.addClass("datepicker");
@@ -113,9 +117,35 @@
                         searchField.removeClass("datepicker");
                         searchField.datetimepicker("destroy");
                     }
-                }
+                } 
             });            
         });        
+    }
+
+    var updateSearchCriteria = function (select) {
+        var selectedValue = $(select).find("option:selected").val();
+        var isSelectField = ($.inArray("Select", selectedValue.split(".")) > 0)
+        var compareSection = $("section.criteria-match");
+        var index = $(select).find("select").data("index");
+        if (index === undefined) {
+            index = $("div.search-criteria-row:visible").length - 1;
+        }
+        var searchValueSection = $(select).parents("section").next("section").next("section");
+        var originalHtml = '<label class=\"input\"><input name=\"PatientSearchViewModel[' + index + '].SearchValue\" id=\"PatientSearchViewModel_' + index +'__SearchValue\" type=\"text\" placeholder=\"Search Value\"></label>';
+        if (isSelectField) {
+            var klassName = selectedValue.split(".")[1];
+            var field = selectedValue.split(".")[2];
+            var selectFieldRequestUrl = "/Partials/SearchSelectPartial?index=" + index + "&klass=" + klassName + "&field=" + field;
+            
+
+            $.get(selectFieldRequestUrl, function (htmlResponse) {
+                compareSection.hide();
+                searchValueSection.html(htmlResponse);
+            });
+        } else {
+            searchValueSection.html(originalHtml);
+            compareSection.show();
+        }
     }
    
     return {

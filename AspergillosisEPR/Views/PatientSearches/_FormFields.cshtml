@@ -2,7 +2,7 @@
 <fieldset>
 
     <div class="search-criteria-row">
-        <section class="col col-1 hide">
+        <section class="col col-2 hide">
             <label class="select">
                 <label class="select">
                     @Html.DropDownList("PatientSearchViewModel["+ @Model.Index + "].AndOR", new SelectList(new List<string>() { "AND", "OR" }, "OR"))
@@ -11,7 +11,7 @@
                 <i></i>
             </label>
         </section>
-        <section class="col col-1">
+        <section class="col col-2">
             <label class="select">
                 <label class="select">
                     @Html.DropDownList("PatientSearchViewModel[" + @Model.Index + "].SearchClass", (SelectList)ViewBag.CriteriaClasses, new { @class = "criteria-class", @data_url = Url.Action("CriteriaPartial", "Partials") })
@@ -20,16 +20,16 @@
                 <i></i>
             </label>
         </section>
-        <section class="col col-1">
+        <section class="col col-2">
             <label class="select">
                 <label class="select">
-                    @Html.DropDownList("PatientSearchViewModel[" + @Model.Index + "].Field", (SelectList)ViewBag.PatientFields, new { @class = "criteria-field" })
+                    @Html.DropDownList("PatientSearchViewModel[" + @Model.Index + "].Field", (SelectList)ViewBag.PatientFields, new { @class = "criteria-field", @data_index = Model.Index })
                     <span asp-validation-for="SearchCriteria" class="text-danger"></span>
                 </label>
                 <i></i>
             </label>
         </section>
-        <section class="col col-1">
+        <section class="col col-2 criteria-match">
             <label class="select">
                 <label class="select">
                     @Html.DropDownList("PatientSearchViewModel[" + @Model.Index + "].SearchCriteria", (SelectList)ViewBag.CriteriaMatches, new { @class = "criteria-match" })

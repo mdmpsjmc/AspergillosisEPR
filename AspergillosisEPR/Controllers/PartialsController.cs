@@ -107,12 +107,43 @@ namespace AspergillosisEPR.Controllers
             return PartialView(searchVm);
         }
 
+        [Authorize(Roles ="Read Role")]
+        public IActionResult SearchSelectPartial()
+        {
+            string klass = Request.Query["klass"];
+            ViewBag.Index = (string)Request.Query["index"];
+            switch (klass)
+            {
+                case "DrugId":
+                    PopulateDrugsDropDownList();
+                    break;
+                case "DiagnosisTypeId":
+                    PopulateDiagnosisTypeDropDownList();
+                    break;
+                case "DiagnosisCategoryId":
+                    PopulateDiagnosisCategoriesDropDownList();
+                    break;
+                case "PatientStatusId":
+                    PopulatePatientStatusesDropDownList();
+                    break;
+            }
+            return PartialView();
+        }
+
+        private void PopulatePatientStatusesDropDownList()
+        {
+            var statuses = from se in _context.PatientStatuses
+                           orderby se.Name
+                           select se;
+            ViewBag.SearchSelect = new SelectList(statuses, "ID", "Name");
+        }
+
         private void PopulateDiagnosisCategoriesDropDownList(object selectedCategory = null)
         {
             var categoriesQuery = from d in _context.DiagnosisCategories
                                   orderby d.CategoryName
                                   select d;
-            ViewBag.DiagnosisCategoryId = new SelectList(categoriesQuery.AsNoTracking(), "ID", "CategoryName", selectedCategory);
+            ViewBag.SearchSelect = ViewBag.DiagnosisCategoryId = new SelectList(categoriesQuery.AsNoTracking(), "ID", "CategoryName", selectedCategory);
         }
 
         private void PopulateDiagnosisTypeDropDownList(object selectedDiagnosis = null)
@@ -120,7 +151,7 @@ namespace AspergillosisEPR.Controllers
             var diagnosisTypesQuery = from d in _context.DiagnosisTypes
                                       orderby d.Name
                                       select d;
-            ViewBag.DiagnosisTypeId = new SelectList(diagnosisTypesQuery.AsNoTracking(), "ID", "Name", selectedDiagnosis);
+            ViewBag.SearchSelect = ViewBag.DiagnosisTypeId = new SelectList(diagnosisTypesQuery.AsNoTracking(), "ID", "Name", selectedDiagnosis);
         }
 
         private void PopulateDrugsDropDownList(object selectedDrug = null)
@@ -128,7 +159,7 @@ namespace AspergillosisEPR.Controllers
             var drugsQuery = from d in _context.Drugs
                                       orderby d.Name
                                       select d;
-            ViewBag.DrugId = new SelectList(drugsQuery.AsNoTracking(), "ID", "Name", selectedDrug);
+            ViewBag.SearchSelect = ViewBag.DrugId = new SelectList(drugsQuery.AsNoTracking(), "ID", "Name", selectedDrug);
         }
 
         private void PopulateSideEffectsDropDownList(object selectedIds = null)

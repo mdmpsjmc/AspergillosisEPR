@@ -1,4 +1,5 @@
 ﻿using AspergillosisEPR.Lib.Search;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -13,7 +14,7 @@ namespace AspergillosisEPR.Models
         public string Name { get; set; }
 
         public string ShortName { get; set; }
-
+        [JsonIgnore]
         public ICollection<PatientDiagnosis> PatientDiagnoses { get; set; }
 
         public string KlassName => typeof(DiagnosisType).Name;

@@ -4,6 +4,7 @@
 <form class="smart-form" id="advanced-search-form">
     <header><i class="fa fa-search-plus fa-2x"></i>&nbsp;Search criteria</header>
     <fieldset class="search-form-container">
+        @Html.Partial("/Views/Home/_Spinner.cshtml")
         @Html.Partial("~/Views/PatientSearches/_FormFields.cshtml")
     </fieldset>
     <footer>

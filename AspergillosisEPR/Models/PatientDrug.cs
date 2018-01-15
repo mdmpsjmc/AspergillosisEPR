@@ -1,4 +1,5 @@
 ﻿using AspergillosisEPR.Lib.Search;
+using Newtonsoft.Json;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -14,7 +15,7 @@ namespace AspergillosisEPR.Models
         public int PatientId { get; set; }
         [Required(ErrorMessage = "Drug must be selected required")]
         public int DrugId { get; set; }
-
+        [JsonIgnore]
         public Patient Patient { get; set; }
         public Drug Drug { get; set; }
         public ICollection<PatientDrugSideEffect> SideEffects { get; set; }
@@ -39,19 +40,11 @@ namespace AspergillosisEPR.Models
                 }
             }
         }
-
-        public string DrugName {
-            get
-            {
-                return Drug.Name;
-            }
-        }
-
         public Dictionary<string, string> SearchableFields()
         {
             return new Dictionary<string, string>()
             {
-                { "Drug Name", "PatientDrugs.Drug.Name" },
+                { "Drug Name", "PatientDrugs.DrugId.Select" },
                 { "Start Date", "PatientDrugs.Drug.StartDate" },
                 { "End Date", "PatientDrugs.Drug.EndDate" }
             };

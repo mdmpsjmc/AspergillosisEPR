@@ -99,10 +99,9 @@ namespace AspergillosisEPR.Models
                 { "First Name", "FirstName" },
                 { "Last Name", "LastName" },
                 { "RM2 Number", "RM2Number" },
-                {"Date of Birth", "DOB" },
+                { "Date of Birth", "DOB" },
                 { "Date of Death", "DateOfDeath" },
-                { "Status", "PatientStatus" },
-                { "Gender", "Gender" }
+                { "Status", "PatientStatus.PatientStatusId.Select" }
             }; 
         }
     }

@@ -13,6 +13,8 @@ using System.Linq.Dynamic.Core;
 using AspergillosisEPR.Lib.Search;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
+using System.Net;
+using Newtonsoft.Json;
 
 namespace AspergillosisEPR.Controllers
 {
@@ -32,9 +34,31 @@ namespace AspergillosisEPR.Controllers
             return View(new PatientSearchViewModel());
         }
 
-        public IActionResult Create([Bind("Index, SearchCriteria, SearchClass, Field, SearchValue, AndOr")]  PatientSearchViewModel[] patientSearchViewModel)
-        {        
-            var patients = _aspergillosisContext.Patients
+        public async Task<IActionResult> Create([Bind("Index, SearchCriteria, SearchClass, Field, SearchValue, AndOr")]
+                                     PatientSearchViewModel[] patientSearchViewModel)
+        {
+            for (var index = 0; index < patientSearchViewModel.Count(); index++)
+            {
+                var criteria = patientSearchViewModel[index];
+                criteria.Index = index.ToString();
+                if (index == 0)
+                {
+                    criteria.AndOr = "AND";                    
+                    criteria.Predicate = PredicateBuilder.True<Patient>();
+                }else
+                {
+                    criteria.AndOr = Request.Query["PatientSearchViewModel[" + index + "].AndOr"];
+                    if (criteria.AndOr == "AND")
+                    {
+                        criteria.Predicate = PredicateBuilder.True<Patient>();
+                    } else
+                    {
+                        criteria.Predicate = PredicateBuilder.False<Patient>();
+                    }
+                    
+                }
+            }
+            var patients = await _aspergillosisContext.Patients
                                 .Include(p => p.PatientDiagnoses).
                                     ThenInclude(d => d.DiagnosisType)
                                 .Include(p => p.PatientDrugs).
@@ -46,8 +70,8 @@ namespace AspergillosisEPR.Controllers
                                     .ThenInclude(se => se.SideEffect)
                                 .Include(p => p.PatientStatus)
                                 .Include(p => p.STGQuestionnaires)
-                                .Where(PatientSearchViewModel.BuildPredicate(patientSearchViewModel))                                
-                                .ToList();
+                                .Where(PatientSearchViewModel.BuildPredicate(patientSearchViewModel))
+                                .ToListAsync();            
             return Json(patients);
         }
 
@@ -58,7 +82,8 @@ namespace AspergillosisEPR.Controllers
 
         private SelectList CriteriaClassesDropdownList()
         {            
-            return ViewBag.CriteriaClasses = new SelectList(PatientSearch.CriteriaClasses().OrderBy(x => x.Value), "Value", "Key", "Patient");
+            return ViewBag.CriteriaClasses = new SelectList(PatientSearch.CriteriaClasses().
+                                                                          OrderBy(x => x.Value), "Value", "Key", "Patient");
         }
 
         private SelectList CriteriaMatchesDropdownList()

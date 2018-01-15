@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace AspergillosisEPR.Models
 {
@@ -17,7 +18,6 @@ namespace AspergillosisEPR.Models
         public int DiagnosisCategoryId { get; set; }
         [Column(TypeName = "ntext")]
         public string Description { get; set; }
-
         public Patient Patient { get; set; }
         public DiagnosisType DiagnosisType { get; set; }
         public DiagnosisCategory DiagnosisCategory { get; set; }
@@ -25,9 +25,9 @@ namespace AspergillosisEPR.Models
         public Dictionary<string, string> SearchableFields()
         {
             return new Dictionary<string, string>()
-            {
-                { "Diagnosis Name", "PatientDiagnoses.DiagnosisType.Name" },
-                { "Diagnosis Category", "PatientDiagnoses.DiagnosisCategory.CategoryName" }
+            {//klass.Field.Select (if select present than its a dropdown)
+                { "Diagnosis Name", "PatientDiagnoses.DiagnosisTypeId.Select" },
+                { "Diagnosis Category", "PatientDiagnoses.DiagnosisCategoryId.Select" }
             };
         }
     }

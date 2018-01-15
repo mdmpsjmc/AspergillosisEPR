@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -13,6 +14,7 @@ namespace AspergillosisEPR.Models
 
         [Required(ErrorMessage = "Category Name is required")]
         public string CategoryName { get; set; }
+        [JsonIgnore]
         public ICollection<PatientDiagnosis> PatientDiagnoses { get; set; }
         public string KlassName => typeof(DiagnosisCategory).Name;
 

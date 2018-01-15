@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 using Audit.Core;
 using Newtonsoft.Json.Serialization;
 using Newtonsoft.Json;
+using Microsoft.AspNetCore.Http.Features;
 
 namespace AspergillosisEPR
 {
@@ -36,14 +37,19 @@ namespace AspergillosisEPR
             services.AddIdentity<ApplicationUser, ApplicationRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
-
+            services.Configure<FormOptions>(options =>
+            {
+                options.MultipartBodyLengthLimit = 100000000;
+            });
             // Add application services.
+
             services.AddTransient<IEmailSender, EmailSender>();
             services.AddTransient<PatientViewModel>();
             services.AddMvc();
             services.AddMvc().AddJsonOptions(options => {
                 options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
                 options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+                options.SerializerSettings.MaxDepth = 1;
             });
             Audit.Core.Configuration.Setup()
                 .UseSqlServer(config => config
