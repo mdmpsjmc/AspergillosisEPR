@@ -35,7 +35,7 @@
             "orderMulti": false,
             "pageLength": 50,
             buttons: [
-                'excel', 'pdf'
+                'excel', 'pdf', 'print'
             ],
             "initComplete": function (settings, json) {
                 Patients.publicSetup()
@@ -49,7 +49,7 @@
                 {
                     "data": "dob", "name": "DOB", "autoWidth": true,
                     "render": function (data) {
-                        return moment.unix(data).format("MM/DD/YYYY");
+                        return moment(data).format("MM/DD/YYYY");
                     }
                 },
                 {
