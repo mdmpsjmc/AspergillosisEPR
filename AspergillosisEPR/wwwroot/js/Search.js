@@ -2,10 +2,10 @@
 
     var initializeSearch = function () {
         $("form#advanced-search-form").on("submit", function (e) {
-            e.preventDefault();            
+            e.preventDefault();
             var data = $(this).serialize();
             var errors = false;
-            $.each($('section.search-value input:text'), function (index, searchField) {                
+            $.each($('section.search-value input:text'), function (index, searchField) {
                 if ($(searchField).val() === "") {
                     errors = true;
                 }
@@ -21,7 +21,7 @@
                     initPatientsDataTable(jsonResponse);
                 });
             }
-        });        
+        });
     }
 
     var initPatientsDataTable = function (tableData) {
@@ -33,6 +33,10 @@
             "processing": true,
             "filter": false,
             "orderMulti": false,
+            "pageLength": 50,
+            buttons: [
+                'excel', 'pdf'
+            ],
             "initComplete": function (settings, json) {
                 Patients.publicSetup()
             },
@@ -60,6 +64,14 @@
                 }
             ]
         });
+
+
+        window.patientsTable.on('draw.dt', function () {
+            Patients.publicSetup();
+        }); 
+
+        window.patientsTable.buttons().container()
+            .appendTo($('.col-sm-6:eq(0)', window.patientsTable.table().container()));
     }
 
     var onAddSearchCriteriaClick = function () {
@@ -72,6 +84,7 @@
                 LoadingIndicator.hide();
                 $("fieldset:last").after(responseHtml);
                 $("fieldset:last section:first").removeClass("hide");
+                setupSearchFormLayout();
             });
         });
     }
@@ -80,33 +93,33 @@
         $(document).off("change.select-searchclass").on("change.select-searchclass", "select.criteria-class", function () {
             var selectedValue = $(this).val();
             var requestUrl = $(this).data("url");
-            var index = $("div.search-criteria-row:visible").length-1;
+            var index = $("div.search-criteria-row:visible").length - 1;
             var nextSelect = $(this).parents("section").next("section").children("label");
-            var fieldSelect = $(this).parents("section").next("section").find("select");
+            var fieldSelect = $($(this).parents("section").next("section").find("select")[0]);
             $.get(requestUrl + "?searchClass=" + selectedValue + "&index=" + index, function (responseHtml) {
                 LoadingIndicator.hide();
                 fieldSelect.html(responseHtml);
-                $(fieldSelect).val($(fieldSelect).find("option:first").attr("value"));     
+                $(fieldSelect).val($(fieldSelect).find("option:first").attr("value"));
                 $(fieldSelect).trigger("change")
             });
         });
 
     }
 
-    var onFieldSelectChangeAddDatepicker = function() {
+    var onFieldSelectChangeAddDatepicker = function () {
         $(document).off("change.select-field").on("change.select-field", "select.criteria-field", function () {
             var selectedText = $(this).find("option:selected").text();
             var searchField = $(this).parents("section").next("section").next("section").find("input[type='text']");
             searchField.val("");
             var compareSelect = $(this).parents("section").next("section");
-            var index = $("div.search-criteria-row:visible").length-1;
+            var index = $("div.search-criteria-row:visible").length - 1;
             var fieldType = selectedText.match(/Date/) !== null ? "Date" : "String";
-            var partialRequestUrl = "/Partials/SearchCriteria?index=" + index + "&fieldType=" + fieldType;            
+            var partialRequestUrl = "/Partials/SearchCriteria?index=" + index + "&fieldType=" + fieldType;
             updateSearchCriteria(this);
-            $.get(partialRequestUrl,  function (htmlResponse) {
+            $.get(partialRequestUrl, function (htmlResponse) {
                 compareSelect.find("label.select").html(htmlResponse);
                 if (selectedText.match(/Date/) !== null) {
-                    searchField.addClass("datepicker");
+                    $(searchField[0]).addClass("datepicker");
                     $('input.datepicker').datetimepicker({
                         format: 'YYYY-MM-DD'
                     });
@@ -117,35 +130,65 @@
                         searchField.removeClass("datepicker");
                         searchField.datetimepicker("destroy");
                     }
-                } 
-            });            
-        });        
+                }
+            });
+        });
     }
 
     var updateSearchCriteria = function (select) {
         var selectedValue = $(select).find("option:selected").val();
         var isSelectField = ($.inArray("Select", selectedValue.split(".")) > 0)
         var compareSection = $("section.criteria-match");
-        var index = $(select).find("select").data("index");
+        var index = $(select).data().index;
         if (index === undefined) {
             index = $("div.search-criteria-row:visible").length - 1;
         }
         var searchValueSection = $(select).parents("section").next("section").next("section");
-        var originalHtml = '<label class=\"input\"><input name=\"PatientSearchViewModel[' + index + '].SearchValue\" id=\"PatientSearchViewModel_' + index +'__SearchValue\" type=\"text\" placeholder=\"Search Value\"></label>';
+        var originalHtml = '<label class=\"input\"><input name=\"PatientSearchViewModel[' + index + '].SearchValue\" id=\"PatientSearchViewModel_' + index + '__SearchValue\" type=\"text\" placeholder=\"Search Value\"></label>';
         if (isSelectField) {
             var klassName = selectedValue.split(".")[1];
             var field = selectedValue.split(".")[2];
             var selectFieldRequestUrl = "/Partials/SearchSelectPartial?index=" + index + "&klass=" + klassName + "&field=" + field;
-            
+
 
             $.get(selectFieldRequestUrl, function (htmlResponse) {
-                compareSection.hide();
+                $(compareSection[index]).hide();
                 searchValueSection.html(htmlResponse);
             });
         } else {
             searchValueSection.html(originalHtml);
-            compareSection.show();
+            $(compareSection[index]).show();
         }
+        var searchField = $('#PatientSearchViewModel_' + index + '__SearchValue');
+        var selectedText = $(select).find("option:selected").html();
+        if (selectedText.match(/Date/) !== null) {
+            $(searchField[0]).addClass("datepicker");
+            $('input.datepicker').datetimepicker({
+                format: 'YYYY-MM-DD'
+            });
+        } else if (selectedText.match(/Date/) === null) {
+            compareSelect.find("select option[value='SmallerThan']").remove();
+            compareSelect.find("select option[value='GreaterThan']").remove();
+            if (searchField.hasClass("datepicker")) {
+                searchField.removeClass("datepicker");
+                searchField.datetimepicker("destroy");
+            }
+        }
+    }
+
+    var setupSearchFormLayout = function () {
+        $("a.remove-search-criteria:first").hide();
+        $("a.remove-search-criteria:not(:last)").hide();
+    }
+
+    var onSearchCriteriaRemove = function () {
+        $(document).off("click.crit-remove").on("click.crit-remove", "a.remove-search-criteria", function () {
+            var previousRowFieldset = $($(this).parents("fieldset").prev()[0]);
+            var addCriteriaButton = $(this).prev("a").parent();
+            $($(this).parents("fieldset").prev()[0]).find("section.buttons").html(addCriteriaButton.html());
+            $(this).parents("fieldset")[0].remove();
+            setupSearchFormLayout();
+        });
     }
    
     return {
@@ -154,6 +197,8 @@
             onAddSearchCriteriaClick();
             onSearchClassSelectChange();    
             onFieldSelectChangeAddDatepicker();
+            setupSearchFormLayout();
+            onSearchCriteriaRemove();
         }
     }
 }();

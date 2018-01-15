@@ -444,6 +444,21 @@
             currentUserWithRoles();
             addFilteringColumns();
             moveSearchFieldsFromFooterToHead();
+            newPatientsModalShow();
+            bindDiagnosisFormOnClick();
+            bindDrugsFormOnClick();
+            bindPatientDetailsShow();
+            bindPatientEdit();
+            bindDiagnosisEditFormOnClick();
+            bindDrugsEditFormOnClick();
+            bindOnDeletePatientClick();
+            deletePatientPartialFromPopup();
+            deletePatientDbPartialFromPopup();
+            onPatientStatusChange();
+            bindSTGFormOnClick();
+            onModalClose();
+            bindSTGEditFormOnClick();
+            initPatientsDateTimePickers();
         },
 
         bindPatientsModals: function() {

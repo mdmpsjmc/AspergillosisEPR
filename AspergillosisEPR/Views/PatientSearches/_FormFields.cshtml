@@ -43,9 +43,12 @@
                 <input name="PatientSearchViewModel[@Model.Index].SearchValue" id="PatientSearchViewModel_@(Model.Index)__SearchValue" type="text" placeholder="Search Value">
             </label>
         </section>
-        <section class="col col-1">
+        <section class="col col-2 buttons">
             <a href="@Url.Action("SearchPartial", "Partials")" title="Add criteria" class="btn btn-success add-search-criteria disable-default" style="padding: 8px">
-                <i class="fa fa-plus"></i>&nbsp; Add
+                <i class="fa fa-plus"></i>&nbsp;
+            </a>
+            <a href="javascript;void" title="Remove criteria" class="btn btn-danger remove-search-criteria disable-default" style="padding: 8px">
+                <i class="fa fa-trash"></i>&nbsp;
             </a>
         </section>
     </div>

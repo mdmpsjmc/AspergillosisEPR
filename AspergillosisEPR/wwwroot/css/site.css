@@ -235,3 +235,8 @@ div.sgrq-modal .modal-dialog {
 div.sgrq-modal .modal-content {
     height: 600px;
 }
+
+div.dt-buttons {
+    margin-right: 20px;
+    float: right !important;
+}
