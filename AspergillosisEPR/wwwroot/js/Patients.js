@@ -24,19 +24,19 @@
                     {
                         'extend': 'excel',
                         'exportOptions': {
-                            'columns': [0, 1, 2, 3, 4]
+                            columns: ':visible'
                         }
                     },
                     {
                         'extend': 'pdf',
                         'exportOptions': {
-                            'columns': [0, 1, 2, 3, 4]
+                            columns: ':visible'
                         }
                     },
                     {
                         'extend': 'print',
                         'exportOptions': {
-                            'columns': [0, 1, 2, 3, 4]
+                            columns: ':visible'
                         },
 
                     },
@@ -58,7 +58,7 @@
                     },
                     {
                         "render": function (data, type, patient, meta) {
-                            return '<a class="btn btn-info patient-details"  style="display: none" data-role="Read Role" href="/Patients/Details/' + patient.id + '"><i class=\'fa fa-eye\'></i>&nbsp;Details</a>&nbsp;' +
+                            return '<a class="btn btn-info patient-details" style="display: none" data-role="Read Role" href="/Patients/Details/' + patient.id + '"><i class=\'fa fa-eye\'></i>&nbsp;Details</a>&nbsp;' +
                                 '<a class="btn btn-warning patient-edit" style="display: none" data-role="Update Role" href="/Patients/Edit/' + patient.id + '"><i class=\'fa fa-edit\' ></i>&nbsp;Edit</a>&nbsp;' +
                                 '<a class="btn btn-danger patient-delete" style="display: none" data-role="Delete Role" href="javascript:void(0)" data-id="' + patient.id + '"><i class=\'fa fa-trash\' ></i>&nbsp;Delete</a>&nbsp;';
                         },
@@ -75,7 +75,7 @@
 
 
         window.patientsTable.buttons().container()
-            .appendTo($('.col-sm-6:eq(0)', window.patientsTable.table().container()));
+            .appendTo($('.col-sm-12:eq(0)', window.patientsTable.table().container()));
     }
 
     var submitNewPatient = function () {

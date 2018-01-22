@@ -30,7 +30,7 @@
         var fields = $("div.search-criteria-row").find(":input");
         $.each(fields, function (index, formElement) {
             var tagType = formElement.tagName != 'INPUT' ? formElement.tagName : formElement.type;
-            if (tagType === "SELECT" && $(formElement).is(":visible")) {
+            if (tagType === "SELECT") {
                 pageTitle = pageTitle + " " + $(formElement).find(" option:selected").text();
             } else if (tagType === "INPUT" || tagType === "text") {
                 pageTitle = "  " + pageTitle + " " + $(formElement).val().trim();
@@ -53,19 +53,19 @@
                 {                    
                     'extend': 'excel',
                     'exportOptions': {
-                        'columns': [0, 1, 2, 3, 4]
+                        'columns': ':visible'
                     }
                 },
                 {
                     'extend': 'pdf',
                     'exportOptions': {
-                        'columns': [0, 1, 2, 3, 4]
+                        'columns': ':visible'
                     }
                 },
                 {
                     'extend': 'print',
                     'exportOptions': {
-                        'columns': [0, 1, 2, 3, 4]
+                        'columns': ':visible'
                     },
 
                 },
