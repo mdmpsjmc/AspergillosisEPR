@@ -1,0 +1,12 @@
+﻿@model AspergillosisEPR.Models.PatientImmunoglobulin
+<div class="col-12 row ig-form" style="margin: 0px !important">
+</div>
+@if (User.IsInRole("Create Role") || User.IsInRole("Admin Role"))
+{
+    <a href="@Url.Action("IgForm", "Partials")" class="btn btn-success add-ig-entry add-new-patient-partial" data-insert-into-class="div.ig-form" style="padding: 5px">
+        <i class="fa fa-plus"></i>
+        <span>
+            <strong>Add Patients Ig</strong>
+        </span>
+    </a>
+}
