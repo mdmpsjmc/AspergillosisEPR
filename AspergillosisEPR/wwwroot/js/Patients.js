@@ -20,6 +20,30 @@
                     "type": "POST",
                     "datatype": "json"
                 },
+                buttons: [
+                    {
+                        'extend': 'excel',
+                        'exportOptions': {
+                            'columns': [0, 1, 2, 3, 4]
+                        }
+                    },
+                    {
+                        'extend': 'pdf',
+                        'exportOptions': {
+                            'columns': [0, 1, 2, 3, 4]
+                        }
+                    },
+                    {
+                        'extend': 'print',
+                        'exportOptions': {
+                            'columns': [0, 1, 2, 3, 4]
+                        },
+
+                    },
+                    {
+                        'extend': 'colvis'
+                    }
+                ],
                 "columns": [
                     { "data": "rM2Number", "name": "RM2Number", "autoWidth": true },
                     { "data": "primaryDiagnosis", "name": "Primary Diagnosis", "autoWidth": true, "sortable": false },
@@ -47,7 +71,11 @@
 
         window.patientsTable.on('draw.dt', function () {
             currentUserWithRoles();
-        }); 
+            }); 
+
+
+        window.patientsTable.buttons().container()
+            .appendTo($('.col-sm-6:eq(0)', window.patientsTable.table().container()));
     }
 
     var submitNewPatient = function () {

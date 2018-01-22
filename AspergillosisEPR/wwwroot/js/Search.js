@@ -14,6 +14,7 @@
                 alert("Search field value cannot be empty");
                 return;
             } else {
+                buildPageTitle();
                 LoadingIndicator.show();
                 $.getJSON("/PatientSearches/Create?" + data, function (jsonResponse) {
                     LoadingIndicator.hide();
@@ -24,18 +25,53 @@
         });
     }
 
+    var buildPageTitle = function () {
+        var pageTitle = ""
+        var fields = $("div.search-criteria-row").find(":input");
+        $.each(fields, function (index, formElement) {
+            var tagType = formElement.tagName != 'INPUT' ? formElement.tagName : formElement.type;
+            if (tagType === "SELECT" && $(formElement).is(":visible")) {
+                pageTitle = pageTitle + " " + $(formElement).find(" option:selected").text();
+            } else if (tagType === "INPUT" || tagType === "text") {
+                pageTitle = "  " + pageTitle + " " + $(formElement).val().trim();
+            }
+        });
+        document.title = pageTitle;
+    }
+
     var initPatientsDataTable = function (tableData) {
         $("#search_results_datatable").DataTable().destroy();
         window.patientsTable = $("#search_results_datatable").DataTable({
             dom: "<'row'<'col-sm-3'l><'col-sm-3'f><'col-sm-6'p>>" +
             "<'row'<'col-sm-12'tr>>" +
-            "<'row'<'col-sm-5'i><'col-sm-7'p>>",
+            "B<'row'<'col-sm-5'i><'col-sm-7'p>>",
             "processing": true,
             "filter": false,
             "orderMulti": false,
             "pageLength": 50,
             buttons: [
-                'excel', 'pdf', 'print'
+                {                    
+                    'extend': 'excel',
+                    'exportOptions': {
+                        'columns': [0, 1, 2, 3, 4]
+                    }
+                },
+                {
+                    'extend': 'pdf',
+                    'exportOptions': {
+                        'columns': [0, 1, 2, 3, 4]
+                    }
+                },
+                {
+                    'extend': 'print',
+                    'exportOptions': {
+                        'columns': [0, 1, 2, 3, 4]
+                    },
+
+                },
+                {
+                    'extend': 'colvis'
+                }
             ],
             "initComplete": function (settings, json) {
                 Patients.publicSetup()
