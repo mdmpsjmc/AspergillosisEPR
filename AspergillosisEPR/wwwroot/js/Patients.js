@@ -154,6 +154,18 @@
         });
     }
 
+    var bindNewPartialOnPatientFormClick = function () {
+        $(document).off("click.new-pat-partial").on("click.new-pat-partial", "a.add-new-patient-partial", function (e) {
+            LoadingIndicator.show();
+            e.preventDefault();
+            var insertIntoClass = $(this).data("insert-into-class"); 
+            $.get($(this).attr("href"), function (responseHtml) {
+                LoadingIndicator.hide();             
+                $(insertIntoClass).append(responseHtml);
+            });
+        })
+    }
+
     var bindDiagnosisFormOnClick = function () {
         $(document).off("click.add-diagnosis").on("click.add-diagnosis", "a.add-diagnosis", function (e) {
             LoadingIndicator.show();
@@ -505,6 +517,7 @@
             onModalClose();
             bindSTGEditFormOnClick();
             initPatientsDateTimePickers();
+            bindNewPartialOnPatientFormClick();
         },
 
         setupForm: function() {

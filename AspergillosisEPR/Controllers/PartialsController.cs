@@ -47,6 +47,14 @@ namespace AspergillosisEPR.Controllers
             return PartialView();
         }
 
+        [Authorize(Roles = "Create Role, Admin Role")]
+        public IActionResult IgForm()
+        {
+            return PartialView();
+        }
+
+
+
         [Authorize(Roles = "Update Role, Admin Role")]
         public IActionResult EditDiagnosisForm()
         {

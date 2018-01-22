@@ -240,3 +240,14 @@ div.dt-buttons {
     margin-right: 20px;
     float: right !important;
 }
+
+.tab-styled-custom {
+    font-size: 30px;
+    margin-left: 10px;
+    color: gray;
+    width: 20px;
+    float: left;
+    display: block;
+    margin-top: -4px;
+    opacity: .5;
+}
