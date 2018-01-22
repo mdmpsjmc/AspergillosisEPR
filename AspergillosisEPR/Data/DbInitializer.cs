@@ -131,5 +131,28 @@ namespace AspergillosisEPR.Data
             }
             await context.SaveChangesAsync();
         }
+
+        public static async void AddIgTypes(AspergillosisContext context)
+        {
+            if (context.ImmunoglobulinTypes.Any())
+            {
+                return;
+            }
+
+            var iGType = new ImmunoglobulinType[]
+            {
+                new ImmunoglobulinType {Name = "IgA"},
+                new ImmunoglobulinType { Name = "IgD" },
+                new ImmunoglobulinType {Name = "IgE"},
+                new ImmunoglobulinType { Name = "IgG" },
+                new ImmunoglobulinType { Name = "IgM"}
+            };
+
+            foreach (var ig in iGType)
+            {
+                context.Add(ig);
+            }
+            await context.SaveChangesAsync();
+        }
     }
 }

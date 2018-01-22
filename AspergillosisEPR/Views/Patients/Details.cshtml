@@ -22,6 +22,16 @@
                         <li>
                             <a href="#stg" data-toggle="tab"><i class="fa fa-fw fa-lg fa-file-text"></i> SGRQ</a>
                         </li>
+                        <li>
+                            <a href="#ig" data-toggle="tab">
+                            <span class="icon-blood-transfusion-3870">
+                                <span class="fa-fw fa-lg path1"></span>
+                                <span class="fa-fw fa-lg path2"></span>
+                                <span class="fa-fw fa-lg path3"></span>
+                                <span class="fa-fw fa-lg path4"></span>
+                                <span class="fa-fw fa-lg path5"></span>
+                            </span> Ig</a>
+                        </li>
                     </ul>
 
                     <div id="details-tab-content" class="tab-content padding-10">
@@ -36,6 +46,9 @@
                         </div>
                         <div class="tab-pane fade details" id="stg">     
                            @Html.Partial("/Views/Patients/Details/STGQuestionnaire.cshtml")
+                        </div>
+                        <div class="tab-pane fade ig" id="ig">
+
                         </div>
                     </div>
 
