@@ -22,20 +22,23 @@ namespace AspergillosisEPR.Controllers
     {
         private readonly AspergillosisContext _context;
         private PatientManager _patientManager;
+        private DropdownListsResolver _listResolver;
+
 
         public PatientsController(AspergillosisContext context)
         {
             _patientManager = new PatientManager(context);
             _context = context;
+            _listResolver = new DropdownListsResolver(context, ViewBag);
         }
 
         [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
         [Authorize(Roles =("Admin Role, Create Role"))]
         public IActionResult New()
         {
-            PopulateDiagnosisCategoriesDropDownList();
-            PopulateDiagnosisTypeDropDownList();
-            PopulatePatientStatusesDropdownList();
+            _listResolver.PopulateDiagnosisCategoriesDropDownList();
+            _listResolver.PopulateDiagnosisTypeDropDownList();
+            _listResolver.PopulatePatientStatusesDropdownList();
             return PartialView();
         }
 
@@ -133,7 +136,7 @@ namespace AspergillosisEPR.Controllers
             {
                 return NotFound();
             }
-            BindSelects(patient);
+            _listResolver.BindSelects(patient);
             return PartialView(patient);
         }
 
@@ -158,7 +161,7 @@ namespace AspergillosisEPR.Controllers
             _patientManager.UpdateDrugs(drugs, patientToUpdate, Request);
             _patientManager.UpdateSGRQ(sTGQuestionnaires, patientToUpdate);
             _patientManager.UpdateImmunoglobines(patientImmunoglobulines, patientToUpdate);
-
+            
             if (await TryUpdateModelAsync<Patient>(patientToUpdate,
                 "",
                 p => p.FirstName, p => p.LastName, p => p.DOB, p => p.RM2Number,
@@ -262,114 +265,6 @@ namespace AspergillosisEPR.Controllers
             patientDetailsViewModel.STGQuestionnaires = patient.STGQuestionnaires;
             patientDetailsViewModel.PatientImmunoglobulines = patient.PatientImmunoglobulines;
             return patientDetailsViewModel;
-        }
-
-        private void PopulateDiagnosisCategoriesDropDownList(object selectedCategory = null)
-        {
-            var categoriesQuery = from d in _context.DiagnosisCategories
-                                   orderby d.CategoryName
-                                   select d;
-            ViewBag.DiagnosisCategoryId = new SelectList(categoriesQuery.AsNoTracking(), "ID", "CategoryName", selectedCategory);
-        }
-
-        private void PopulateDiagnosisTypeDropDownList(object selectedCategory = null)
-        {
-            var diagnosisTypesQuery = from d in _context.DiagnosisTypes
-                                  orderby d.Name
-                                  select d;
-            ViewBag.DiagnosisTypeId = new SelectList(diagnosisTypesQuery.AsNoTracking(), "ID", "Name", selectedCategory);
-        }
-
-        private SelectList DiagnosisTypeDropDownList(object selectedCategory = null)
-        {
-            var diagnosisTypesQuery = from d in _context.DiagnosisTypes
-                                      orderby d.Name
-                                      select d;
-            return new SelectList(diagnosisTypesQuery.AsNoTracking(), "ID", "Name", selectedCategory);
-        }
-
-        private SelectList DiagnosisCategoriesDropDownList(object selectedCategory = null)
-        {
-            var categoriesQuery = from d in _context.DiagnosisCategories
-                                  orderby d.CategoryName
-                                  select d;
-            return new SelectList(categoriesQuery.AsNoTracking(), "ID", "CategoryName", selectedCategory);
-        }
-
-        private SelectList DrugsDropDownList(object selectedCategory = null)
-        {
-            var categoriesQuery = from d in _context.Drugs
-                                  orderby d.Name
-                                  select d;
-            return new SelectList(categoriesQuery.AsNoTracking(), "ID", "Name", selectedCategory);
-        }
-
-        private void BindSelects(Patient patient)
-        {
-            List<SelectList> diagnosesTypes = new List<SelectList>();
-            List<SelectList> diagnosesCategories = new List<SelectList>();
-            List<SelectList> drugs = new List<SelectList>();
-            List<MultiSelectList> sideEffects = new List<MultiSelectList>();
-            List<SelectList> patientImmunoglobines = new List<SelectList>();
-            
-            for (int i = 0; i < patient.PatientDiagnoses.Count; i++)
-            {
-                var item = patient.PatientDiagnoses.ToList()[i];
-                diagnosesTypes.Add(DiagnosisTypeDropDownList(item.DiagnosisTypeId));
-                diagnosesCategories.Add(DiagnosisCategoriesDropDownList(item.DiagnosisCategoryId));
-            }
-
-            for (int i = 0; i < patient.PatientDrugs.Count; i++)
-            {
-                var item = patient.PatientDrugs.ToList()[i];
-                drugs.Add(DrugsDropDownList(item.DrugId));
-                if (item.SideEffects.Any())
-                {
-                    MultiSelectList list = PopulateSideEffectsDropDownList(item.SelectedEffectsIds);
-                    sideEffects.Add(list);
-                } else
-                {
-                    MultiSelectList list = PopulateSideEffectsDropDownList(new List<int>());
-                    sideEffects.Add(list);
-                }
-            }
-
-
-            for (int i = 0; i < patient.PatientImmunoglobulines.Count; i++)
-            {
-                var item = patient.PatientImmunoglobulines.ToList()[i];
-                patientImmunoglobines.Add(ImmunoglobinTypesDropdownList(item.ImmunoglobulinTypeId));
-            }
-            ViewBag.DiagnosisTypes = diagnosesTypes;
-            ViewBag.DiagnosisCategories = diagnosesCategories;
-            ViewBag.Drugs = drugs;
-            ViewBag.SideEffects = sideEffects;
-            ViewBag.ImmunoglobulinTypeId = patientImmunoglobines;
-            PopulatePatientStatusesDropdownList(patient.PatientStatusId);
-        }
-
-        private void PopulatePatientStatusesDropdownList(object selectedStatus = null)
-        {
-            var statuses = from se in _context.PatientStatuses
-                              orderby se.Name
-                              select se;
-            ViewBag.PatientStatuses = new SelectList(statuses, "ID", "Name", selectedStatus);
-        }
-
-        private MultiSelectList PopulateSideEffectsDropDownList(List<int> selectedIds)
-        {
-            var sideEffects = from se in _context.SideEffects
-                              orderby se.Name
-                              select se;
-            return new MultiSelectList(sideEffects, "ID", "Name", selectedIds);
-        }
-
-        private SelectList ImmunoglobinTypesDropdownList(object selectedId = null)
-        {
-            var igTypes = from se in _context.ImmunoglobulinTypes
-                          orderby se.Name
-                          select se;
-            return new SelectList(igTypes, "ID", "Name", selectedId);
         }
     }
 }

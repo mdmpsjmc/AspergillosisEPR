@@ -12,6 +12,7 @@ using AspergillosisEPR.Models;
 using System;
 using AspergillosisEPR.Models.PatientViewModels;
 using AspergillosisEPR.Lib.Search;
+using AspergillosisEPR.Lib;
 
 namespace AspergillosisEPR.Controllers
 {
@@ -19,25 +20,26 @@ namespace AspergillosisEPR.Controllers
     public class PartialsController : Controller
     {
         private readonly AspergillosisContext _context;
+        private readonly DropdownListsResolver _listResolver;
 
         public PartialsController(AspergillosisContext context)
         {
-
+            _listResolver = new DropdownListsResolver(context, ViewBag);
             _context = context;
         }
         [Authorize(Roles ="Create Role, Admin Role")]
         public IActionResult DiagnosisForm()
         {
-            PopulateDiagnosisCategoriesDropDownList();
-            PopulateDiagnosisTypeDropDownList();
+            _listResolver.PopulateDiagnosisCategoriesDropDownList();
+            _listResolver.PopulateDiagnosisTypeDropDownList();
             return PartialView();
         }
 
         [Authorize(Roles = "Create Role, Admin Role")]
         public IActionResult DrugForm()
         {
-            PopulateDrugsDropDownList();
-            PopulateSideEffectsDropDownList();
+            ViewBag.DrugId = _listResolver.DrugsDropDownList();
+            ViewBag.SideEffects = _listResolver.PopulateSideEffectsDropDownList(null);
             return PartialView();
         }
 
@@ -50,15 +52,15 @@ namespace AspergillosisEPR.Controllers
         [Authorize(Roles = "Create Role, Admin Role")]
         public IActionResult IgForm()
         {
-            ViewBag.ImmunoglobulinTypeId = ImmunoglobinTypesDropdownList();
+            ViewBag.ImmunoglobulinTypeId = _listResolver.ImmunoglobinTypesDropdownList();
             return PartialView();
         }
 
         [Authorize(Roles = "Update Role, Admin Role")]
         public IActionResult EditDiagnosisForm()
         {
-            PopulateDiagnosisCategoriesDropDownList();
-            PopulateDiagnosisTypeDropDownList();
+            _listResolver.PopulateDiagnosisCategoriesDropDownList();
+            _listResolver.PopulateDiagnosisTypeDropDownList();
             ViewBag.Index = (string)Request.Query["index"];
             return PartialView();
         }
@@ -66,8 +68,8 @@ namespace AspergillosisEPR.Controllers
         [Authorize(Roles = "Update Role, Admin Role")]
         public IActionResult EditDrugForm()
         {
-            PopulateDrugsDropDownList();
-            PopulateSideEffectsDropDownList();
+            ViewBag.DrugId = _listResolver.DrugsDropDownList();
+            ViewBag.SideEffects = _listResolver.PopulateSideEffectsDropDownList(null);
             ViewBag.Index = (string)Request.Query["index"];
             return PartialView();
         }
@@ -83,7 +85,7 @@ namespace AspergillosisEPR.Controllers
         public IActionResult EditIgForm()
         {
             ViewBag.Index = (string)Request.Query["index"];
-            ViewBag.ImmunoglobulinTypeId = ImmunoglobinTypesDropdownList();
+            ViewBag.ImmunoglobulinTypeId = _listResolver.ImmunoglobinTypesDropdownList();
             return PartialView();
         }
 
@@ -130,61 +132,20 @@ namespace AspergillosisEPR.Controllers
             switch (klass)
             {
                 case "DrugId":
-                    PopulateDrugsDropDownList();
+                    ViewBag.SearchSelect = ViewBag.DrugId = _listResolver.DrugsDropDownList();
                     break;
                 case "DiagnosisTypeId":
-                    PopulateDiagnosisTypeDropDownList();
+                    _listResolver.PopulateDiagnosisTypeDropDownList();
                     break;
                 case "DiagnosisCategoryId":
-                    PopulateDiagnosisCategoriesDropDownList();
+                    _listResolver.PopulateDiagnosisCategoriesDropDownList();
                     break;
                 case "PatientStatusId":
-                    PopulatePatientStatusesDropDownList();
+                    _listResolver.PopulatePatientStatusesDropDownList();
                     break;
             }
             return PartialView();
         }
-
-        private void PopulatePatientStatusesDropDownList()
-        {
-            var statuses = from se in _context.PatientStatuses
-                           orderby se.Name
-                           select se;
-            ViewBag.SearchSelect = new SelectList(statuses, "ID", "Name");
-        }
-
-        private void PopulateDiagnosisCategoriesDropDownList(object selectedCategory = null)
-        {
-            var categoriesQuery = from d in _context.DiagnosisCategories
-                                  orderby d.CategoryName
-                                  select d;
-            ViewBag.SearchSelect = ViewBag.DiagnosisCategoryId = new SelectList(categoriesQuery.AsNoTracking(), "ID", "CategoryName", selectedCategory);
-        }
-
-        private void PopulateDiagnosisTypeDropDownList(object selectedDiagnosis = null)
-        {
-            var diagnosisTypesQuery = from d in _context.DiagnosisTypes
-                                      orderby d.Name
-                                      select d;
-            ViewBag.SearchSelect = ViewBag.DiagnosisTypeId = new SelectList(diagnosisTypesQuery.AsNoTracking(), "ID", "Name", selectedDiagnosis);
-        }
-
-        private void PopulateDrugsDropDownList(object selectedDrug = null)
-        {
-            var drugsQuery = from d in _context.Drugs
-                                      orderby d.Name
-                                      select d;
-            ViewBag.SearchSelect = ViewBag.DrugId = new SelectList(drugsQuery.AsNoTracking(), "ID", "Name", selectedDrug);
-        }
-
-        private void PopulateSideEffectsDropDownList(object selectedIds = null)
-        {
-            var sideEffects = from se in _context.SideEffects
-                              orderby se.Name
-                              select se;
-            ViewBag.SideEffects = new MultiSelectList(sideEffects, "ID", "Name");
-        }
-
         private SelectList CriteriaClassesDropdownList()
         {
             return ViewBag.CriteriaClasses = new SelectList(PatientSearch.CriteriaClasses().OrderBy(x => x.Value), "Value", "Key", "Patient");
@@ -201,13 +162,6 @@ namespace AspergillosisEPR.Controllers
             return ViewBag.PatientFields = new SelectList(patient.SearchableFields(), "Value", "Key", "RM2Number");
         }
 
-        private SelectList ImmunoglobinTypesDropdownList()
-        {
-            var igTypes = from se in _context.ImmunoglobulinTypes
-                              orderby se.Name
-                              select se;
-            return new SelectList(igTypes, "ID", "Name");
-        }
     }
 
 
