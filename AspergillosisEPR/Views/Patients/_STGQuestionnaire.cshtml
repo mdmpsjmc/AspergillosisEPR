@@ -3,7 +3,7 @@
 </div>
 @if (User.IsInRole("Create Role") || User.IsInRole("Admin Role"))
 {
-    <a href="@Url.Action("STGForm", "Partials")" class="btn btn-success add-stg-entry" style="padding: 5px">
+    <a href="@Url.Action("STGForm", "Partials")" class="btn btn-success add-stg-entry add-new-patient-partial disable-default"  data-insert-into-class="div.stg-form" data-visible-row="div.stg-row:visible" style="padding: 5px">
         <i class="fa fa-plus"></i>
         <span>
             <strong>Add Entry</strong>

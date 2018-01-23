@@ -1,17 +1,20 @@
 ﻿@model AspergillosisEPR.Models.PatientImmunoglobulin
 @using HtmlHelpers.BeginCollectionItemCore;
-@using (Html.BeginCollectionItem("PatientImmunoglobin"))
+@using (Html.BeginCollectionItem("PatientImmunoglobulin"))
 {
     <fieldset>
         <div class="row">
             <section class="col col-4">
-                <label class="input" asp-for="ImmunoglobinTypeId">
-                    <input asp-for="ImmunoglobinTypeId" placeholder="Date Taken" class="datepicker" />
+                <label class="select">
+                    <label asp-for="ImmunoglobinTypeId" class="select">
+                        @Html.DropDownListFor(m => m.ImmunoglobinTypeId, (SelectList)ViewBag.ImmunoglobulinTypeId, "Select Ig Type")
+                        <span asp-validation-for="ImmunoglobinTypeId" class="text-danger" ></span>
+                    </label>
                 </label>
             </section>
             <section class="col col-4">
                 <label class="input" asp-for="DateTaken">
-                    <input asp-for="DateTaken" placeholder="Date Taken">
+                    <input asp-for="DateTaken" placeholder="Date Taken" class="datepicker" type="text">
                 </label>
             </section>
             <section class="col col-3">
@@ -21,7 +24,7 @@
             </section>
         </div>
         <div class="row">
-            <a href="javascript:void(0)" class="btn btn-danger remove-new-stg pull-right btn-lg" data-what="St Georges Questionnaire" data-toggle="tooltip" data-title="Remove St Georges Questionnaire" style="padding: 5px">
+            <a href="javascript:void(0)" class="btn btn-danger remove-new-ig pull-right btn-lg" data-what="Patients immuglobuline entry" data-toggle="tooltip" data-title="Remove Patients Immuglobuline Entry?" style="padding: 5px">
                 <i class="fa fa-trash"></i>
             </a>
         </div>

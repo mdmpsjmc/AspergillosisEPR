@@ -113,12 +113,15 @@
     var displayErrors = function (errors) {
         for (var i = 0; i < Object.keys(errors).length; i++) {
             var field = Object.keys(errors)[i];
-            if (field.match("diagnoses") || field.match("drugs") || field.match("sTGQuestionnaires")) {
-                field = field.charAt(0).toUpperCase() + field.slice(1).replace("[", "_").replace("].", "__");            
-            }            
-            var htmlCode = "<label for='" + field + "' class='text-danger'></label>";
+            var fieldCapitalized = field.charAt(0).toUpperCase() + field.slice(1);
+            if (field.match("diagnoses") || field.match("drugs") || field.match("sTGQuestionnaires") || field.match("patientImmunoglobulin")) {
+                field = fieldCapitalized.replace("[", "_").replace("].", "__");            
+            } else {
+                field = fieldCapitalized;
+            }           
+            var htmlCode = "<label for='" + fieldCapitalized + "' class='text-danger'></label>";
             var fieldError = errors[Object.keys(errors)[i]];
-            $(htmlCode).html(fieldError).appendTo($("input#" + field + ", select#" + field).parent());
+            $(htmlCode).html(fieldError).appendTo($("input#" + field + ", select#" + field + ", input#" + field.toUpperCase()).parent());
         }
     }
 
@@ -127,7 +130,7 @@
             var field = Object.keys(errors)[i];
             if (field.match("diagnoses") || field.match("drugs") || field.match("sTGQuestionnaires")) {
                 field = field.charAt(0).toUpperCase() + field.slice(1).replace("[", "_").replace("].", "__");          
-            }
+            } 
             var htmlCode = "<label for='" + field + "' class='text-danger'></label>";
             var fieldError = errors[Object.keys(errors)[i]];
             $(htmlCode).html(fieldError).appendTo($("input#" + field + ", select#" + field).parent());
@@ -158,21 +161,19 @@
         $(document).off("click.new-pat-partial").on("click.new-pat-partial", "a.add-new-patient-partial", function (e) {
             LoadingIndicator.show();
             e.preventDefault();
+            var visibleRow = $(this).data("visible-row");
             var insertIntoClass = $(this).data("insert-into-class"); 
-            $.get($(this).attr("href"), function (responseHtml) {
-                LoadingIndicator.hide();             
+            var index = $(visibleRow).length;
+            $.get($(this).attr("href") + "?index=" + index, function (responseHtml) {
+                LoadingIndicator.hide();                          
                 $(insertIntoClass).append(responseHtml);
-            });
-        })
-    }
-
-    var bindDiagnosisFormOnClick = function () {
-        $(document).off("click.add-diagnosis").on("click.add-diagnosis", "a.add-diagnosis", function (e) {
-            LoadingIndicator.show();
-            e.preventDefault();
-            $.get($(this).attr("href"), function (responseHtml) {
-                LoadingIndicator.hide();
-                $("div.diagnosis-form").append(responseHtml);
+                initPatientsDateTimePickers();
+                $("select.select2").select2({
+                    minimumResultsForSearch: -1,
+                    placeholder: function () {
+                        $(this).data('placeholder');
+                    }
+                });
             });
         })
     }
@@ -202,24 +203,6 @@
         })
     }
 
-    var bindDrugsFormOnClick = function () {
-        $(document).off("click.add-drug").on("click.add-drug", "a.add-drug", function (e) {
-            LoadingIndicator.show();
-            e.preventDefault();
-            $.get($(this).attr("href"), function (responseHtml) {
-                LoadingIndicator.hide();
-                $("div.drug-form").append(responseHtml);
-                initPatientsDateTimePickers();
-                $("select.select2").select2({
-                    minimumResultsForSearch: -1,
-                    placeholder: function () {
-                        $(this).data('placeholder');
-                    }
-                });
-            })
-        });
-    }
-
     var bindDrugsEditFormOnClick = function () {
         $(document).off("click.add-edit-drug").on("click.add-edit-drug", "a.add-edit-drug", function (e) {
             LoadingIndicator.show();
@@ -239,23 +222,6 @@
         })
     }
 
-    var bindSTGFormOnClick = function () {
-        $(document).off("click.add-stg").on("click.add-stg", "a.add-stg-entry", function (e) {
-            LoadingIndicator.show();
-            e.preventDefault();
-            $.get($(this).attr("href"), function (responseHtml) {
-                LoadingIndicator.hide();
-                $("div.stg-form").append(responseHtml);
-                initPatientsDateTimePickers();
-                $("select.select2").select2({
-                    minimumResultsForSearch: -1,
-                    placeholder: function () {
-                        $(this).data('placeholder');
-                    }
-                });
-            })
-        });
-    }
 
     var bindPatientDetailsShow = function () {
         $(document).off("click.patient-details").on("click.patient-details", "a.patient-details", function (e) {
@@ -350,7 +316,7 @@
     }
 
     var deletePatientPartialFromPopup = function () {
-        $(document).off("click.delete-partial").on("click.delete-partial", "a.remove-new-diagnosis, a.remove-new-drug, a.remove-new-stg", function () {
+        $(document).off("click.delete-partial").on("click.delete-partial", "a.remove-new-diagnosis, a.remove-new-drug, a.remove-new-stg, a.remove-new-ig", function () {
             var whatToRemove = $(this).data("what");
             var button = $(this);
             var question = "Are you sure you want to remove this " + whatToRemove + "?";
@@ -485,8 +451,6 @@
             addFilteringColumns();
             moveSearchFieldsFromFooterToHead();
             newPatientsModalShow();
-            bindDiagnosisFormOnClick();
-            bindDrugsFormOnClick();
             bindPatientDetailsShow();
             bindPatientEdit();
             bindDiagnosisEditFormOnClick();
@@ -495,7 +459,6 @@
             deletePatientPartialFromPopup();
             deletePatientDbPartialFromPopup();
             onPatientStatusChange();
-            bindSTGFormOnClick();
             onModalClose();
             bindSTGEditFormOnClick();
             initPatientsDateTimePickers();
@@ -503,8 +466,6 @@
 
         bindPatientsModals: function() {
             newPatientsModalShow();
-            bindDiagnosisFormOnClick();
-            bindDrugsFormOnClick();
             bindPatientDetailsShow();
             bindPatientEdit();
             bindDiagnosisEditFormOnClick();
@@ -513,7 +474,6 @@
             deletePatientPartialFromPopup();
             deletePatientDbPartialFromPopup();
             onPatientStatusChange();
-            bindSTGFormOnClick();
             onModalClose();
             bindSTGEditFormOnClick();
             initPatientsDateTimePickers();

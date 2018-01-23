@@ -49,7 +49,8 @@ namespace AspergillosisEPR.Controllers
         public IActionResult Create([Bind("LastName,FirstName,DOB,Gender, RM2Number, PatientStatusId, DateOfDeath")] Patient patient,
                                                  PatientDiagnosis[] diagnoses,
                                                  PatientDrug[] drugs,
-                                                 PatientSTGQuestionnaire[] sTGQuestionnaires)
+                                                 PatientSTGQuestionnaire[] sTGQuestionnaires,
+                                                 PatientImmunoglobulin[] patientImmunoglobulin)
         {
             var existingPatient = _context.Patients.FirstOrDefault(x => x.RM2Number == patient.RM2Number);
             if (existingPatient != null)
@@ -63,6 +64,7 @@ namespace AspergillosisEPR.Controllers
             patient.PatientDiagnoses = diagnoses;
             patient.PatientDrugs = drugs;
             patient.STGQuestionnaires = sTGQuestionnaires;
+            patient.PatientImmunoglobulines = patientImmunoglobulin;
             
             for(var cursor = 0; cursor < Request.Form["Drugs.index"].ToList().Count; cursor++)
             {

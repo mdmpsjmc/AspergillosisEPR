@@ -50,10 +50,9 @@ namespace AspergillosisEPR.Controllers
         [Authorize(Roles = "Create Role, Admin Role")]
         public IActionResult IgForm()
         {
+            ViewBag.ImmunoglobulinTypeId = ImmunoglobinTypesDropdownList();
             return PartialView();
         }
-
-
 
         [Authorize(Roles = "Update Role, Admin Role")]
         public IActionResult EditDiagnosisForm()
@@ -192,6 +191,14 @@ namespace AspergillosisEPR.Controllers
         {
             var patient = new Patient();
             return ViewBag.PatientFields = new SelectList(patient.SearchableFields(), "Value", "Key", "RM2Number");
+        }
+
+        private SelectList ImmunoglobinTypesDropdownList()
+        {
+            var igTypes = from se in _context.ImmunoglobulinTypes
+                              orderby se.Name
+                              select se;
+            return new SelectList(igTypes, "ID", "Name");
         }
     }
 

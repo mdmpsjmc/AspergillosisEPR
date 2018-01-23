@@ -3,7 +3,7 @@
 </div>
 @if (User.IsInRole("Create Role") || User.IsInRole("Admin Role"))
 {
-<a href="@Url.Action("DrugForm", "Partials")" class="btn btn-success add-drug" style="padding: 5px">
+<a href="@Url.Action("DrugForm", "Partials")" class="btn btn-success add-drug add-new-patient-partial disable-default" data-visible-row="div.drug-row:visible" data-insert-into-class="div.drug-form" style="padding: 5px">
     <i class="fa fa-plus"></i>
     <span>
         <strong>Add drug</strong>
