@@ -1,6 +1,7 @@
 ﻿var Patients = function () {
 
     var initPatientsDataTable = function () {
+        $("#patients_datatable").DataTable().destroy();
             window.patientsTable = $("#patients_datatable").DataTable({
                 dom: "<'row'<'col-sm-3'l><'col-sm-3'f><'col-sm-6'p>>" +
                 "<'row'<'col-sm-12'tr>>" +
@@ -14,6 +15,7 @@
                     addFilteringColumns();
                     moveSearchFieldsFromFooterToHead();
                     currentUserWithRoles();
+                    addButtonsToDataTable();
                 },
                 "ajax": {
                     "url": "/DataTablePatients/Load",
@@ -71,11 +73,7 @@
 
         window.patientsTable.on('draw.dt', function () {
             currentUserWithRoles();
-            }); 
-
-
-        window.patientsTable.buttons().container()
-            .appendTo($('.col-sm-12:eq(0)', window.patientsTable.table().container()));
+        }); 
     }
 
     var submitNewPatient = function () {
@@ -377,6 +375,11 @@
         $("input#DOB, input.datepicker, input#DateOfDeath").on("click", function () {
             $(this).datetimepicker("show");
         });
+    }
+
+    var addButtonsToDataTable = function () {
+        window.patientsTable.buttons().container()
+            .appendTo($('.col-sm-6:eq(0)', window.patientsTable.table().container()));
     }
 
     return {
