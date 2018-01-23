@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Authorization;
 using Audit.Mvc;
 using AspergillosisEPR.Models.PatientViewModels;
 using System;
+using AspergillosisEPR.Lib;
 
 namespace AspergillosisEPR.Controllers
 {
@@ -20,10 +21,11 @@ namespace AspergillosisEPR.Controllers
     public class PatientsController : Controller
     {
         private readonly AspergillosisContext _context;
+        private PatientManager _patientManager;
 
         public PatientsController(AspergillosisContext context)
         {
-
+            _patientManager = new PatientManager(context);
             _context = context;
         }
 
@@ -107,22 +109,7 @@ namespace AspergillosisEPR.Controllers
                 return NotFound();
             }
 
-            var patient = await _context.Patients
-                                .Include(p => p.PatientDiagnoses).
-                                    ThenInclude(d => d.DiagnosisType)
-                                .Include(p => p.PatientDrugs).
-                                    ThenInclude(d => d.Drug)
-                                .Include(p => p.PatientDiagnoses)
-                                    .ThenInclude(d => d.DiagnosisCategory)
-                                .Include(p => p.PatientDrugs)
-                                    .ThenInclude(d => d.SideEffects)
-                                    .ThenInclude(se => se.SideEffect)
-                                .Include(p => p.PatientStatus)
-                                .Include(p => p.STGQuestionnaires)
-                                .Include(p => p.PatientImmunoglobulines)
-                                    .ThenInclude(pis => pis.ImmunoglobulinType)
-                                .AsNoTracking()
-                                .SingleOrDefaultAsync(m => m.ID == id);
+            var patient = await _patientManager.FindPatientWithRelationsByIdAsync(id);
 
             if (patient == null)
             {
@@ -131,34 +118,17 @@ namespace AspergillosisEPR.Controllers
 
             var patientDetailsViewModel = BuildPatientViewModel(patient);
             return PartialView(patientDetailsViewModel);
-        }
-
-        
+        }        
 
         [Authorize(Roles = ("Admin Role, Update Role"))]
         [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null)             
+            if (id == null)
             {
                 return NotFound();
             }
-
-            var patient = await _context.Patients
-                                .Include(p => p.PatientDiagnoses).
-                                    ThenInclude(d => d.DiagnosisType)
-                                .Include(p => p.PatientDrugs).
-                                    ThenInclude(d => d.Drug)
-                                .Include(p => p.PatientDiagnoses)
-                                    .ThenInclude(d => d.DiagnosisCategory)
-                                 .Include(p => p.PatientDrugs)
-                                    .ThenInclude(d => d.SideEffects)
-                                    .ThenInclude(se => se.SideEffect)
-                                .Include(p => p.STGQuestionnaires)
-                                .Include(p => p.PatientImmunoglobulines)
-                                    .ThenInclude(pis => pis.ImmunoglobulinType)
-                                .AsNoTracking()
-                                .SingleOrDefaultAsync(m => m.ID == id);
+            Patient patient = await _patientManager.FindPatientWithRelationsByIdAsync(id);
             if (patient == null)
             {
                 return NotFound();
@@ -171,30 +141,23 @@ namespace AspergillosisEPR.Controllers
         [Authorize(Roles = ("Admin Role, Update Role"))]
         [HttpPost, ActionName("Edit")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditPatient(int? id, [Bind("ID,DiagnosisCategoryId,DiagnosisTypeId,Description")] PatientDiagnosis[] diagnoses, 
-                                                              [Bind("ID,DrugId,StartDate,EndDate")] PatientDrug[] drugs, 
-                                                              [Bind("ID, ActivityScore, SymptomScore, ImpactScore, TotalScore")] PatientSTGQuestionnaire[] sTGQuestionnaires, 
+        public async Task<IActionResult> EditPatient(int? id, [Bind("ID,DiagnosisCategoryId,DiagnosisTypeId,Description")] PatientDiagnosis[] diagnoses,
+                                                              [Bind("ID,DrugId,StartDate,EndDate")] PatientDrug[] drugs,
+                                                              [Bind("ID, ActivityScore, SymptomScore, ImpactScore, TotalScore")] PatientSTGQuestionnaire[] sTGQuestionnaires,
                                                               [Bind("ID, DateTaken, Value, ImmunoglobulinTypeId")] PatientImmunoglobulin[] patientImmunoglobulines)
         {
             if (id == null)
             {
                 return NotFound();
             }
-
-            var patientToUpdate = await _context.Patients
-                                .Include(p => p.PatientDiagnoses)
-                                .Include(p => p.PatientDrugs)
-                                .Include(p => p.STGQuestionnaires)
-                                .Include(p => p.PatientImmunoglobulines)
-                                .AsNoTracking()
-                                .SingleOrDefaultAsync(m => m.ID == id);
+            Patient patientToUpdate = await _patientManager.FindPatientWithFirstLevelRelationsByIdAsync(id);
 
             _context.Entry(patientToUpdate).State = EntityState.Modified;
 
-            UpdateImmunoglobines(patientImmunoglobulines, patientToUpdate);
-            UpdateDiagnoses(diagnoses, patientToUpdate);
-            UpdateSGRQ(sTGQuestionnaires, patientToUpdate);
-            UpdateDrugs(drugs, patientToUpdate);
+            _patientManager.UpdateDiagnoses(diagnoses, patientToUpdate);
+            _patientManager.UpdateDrugs(drugs, patientToUpdate, Request);
+            _patientManager.UpdateSGRQ(sTGQuestionnaires, patientToUpdate);
+            _patientManager.UpdateImmunoglobines(patientImmunoglobulines, patientToUpdate);
 
             if (await TryUpdateModelAsync<Patient>(patientToUpdate,
                 "",
@@ -221,130 +184,10 @@ namespace AspergillosisEPR.Controllers
             return Json(new { result = "ok" });
         }
 
-        private void UpdateImmunoglobines(PatientImmunoglobulin[] patientImmunoglobulines, Patient patientToUpdate)
-        {
-            foreach (var patientImmunoglobin in patientImmunoglobulines)
-            {
-                if (patientImmunoglobin.ID == 0)
-                {
-                    patientImmunoglobin.PatientId = patientToUpdate.ID;
-                    _context.Update(patientImmunoglobin);
-                }
-                else
-                {
-                    var patientImmunoglobinToUpdate = patientToUpdate.PatientImmunoglobulines.SingleOrDefault(pd => pd.ID == patientImmunoglobin.ID);
-                    patientImmunoglobinToUpdate.ImmunoglobulinTypeId = patientImmunoglobin.ImmunoglobulinTypeId;
-                    patientImmunoglobinToUpdate.DateTaken = patientImmunoglobin.DateTaken;
-                    patientImmunoglobinToUpdate.Value = patientImmunoglobin.Value;
-                    _context.Update(patientImmunoglobinToUpdate);
-                }
-            }
-        }
-
-        private void UpdateDiagnoses(PatientDiagnosis[] diagnoses, Patient patientToUpdate)
-        {
-            foreach (var diagnosis in diagnoses)
-            {
-                if (diagnosis.ID == 0)
-                {
-                    diagnosis.PatientId = patientToUpdate.ID;
-                    _context.Update(diagnosis);
-                }
-                else
-                {
-                    var diagnosisToUpdate = patientToUpdate.PatientDiagnoses.SingleOrDefault(pd => pd.ID == diagnosis.ID);
-                    diagnosisToUpdate.DiagnosisCategoryId = diagnosis.DiagnosisCategoryId;
-                    diagnosisToUpdate.DiagnosisTypeId = diagnosis.DiagnosisTypeId;
-                    diagnosisToUpdate.Description = diagnosis.Description;
-                    _context.Update(diagnosisToUpdate);
-                }
-            }
-        }
-
-        private void UpdateSGRQ(PatientSTGQuestionnaire[] sTGQuestionnaires, Patient patientToUpdate)
-        {
-            foreach (var stg in sTGQuestionnaires)
-            {
-                if (stg.ID == 0)
-                {
-                    stg.PatientId = patientToUpdate.ID;
-                    _context.Update(stg);
-                }
-                else
-                {
-                    var stgToUpdate = patientToUpdate.STGQuestionnaires.SingleOrDefault(s => s.ID == stg.ID);
-                    stgToUpdate.ActivityScore = stg.ActivityScore;
-                    stgToUpdate.SymptomScore = stg.SymptomScore;
-                    stgToUpdate.ImpactScore = stg.ImpactScore;
-                    stgToUpdate.TotalScore = stg.TotalScore;
-                    stgToUpdate.DateTaken = stg.DateTaken;
-                    _context.Update(stgToUpdate);
-                }
-
-
-            }
-        }
-
-        private void UpdateDrugs(PatientDrug[] drugs, Patient patientToUpdate)
-        {
-            for (var cursor = 0; cursor < drugs.Length; cursor++)
-            {
-                PatientDrug drug = drugs[cursor];
-                string[] sideEffectsIDs = Request.Form["Drugs[" + cursor + "].SideEffects"];
-                if (drug.ID == 0)
-                {
-                    drug.PatientId = patientToUpdate.ID;
-                    var sideEffectsItems = _context.SideEffects.Where(se => sideEffectsIDs.Contains(se.ID.ToString()));
-                    foreach (var sideEffect in sideEffectsItems)
-                    {
-                        PatientDrugSideEffect drugSideEffect = new PatientDrugSideEffect();
-                        drugSideEffect.PatientDrug = drugs[cursor];
-                        drugSideEffect.SideEffect = sideEffect;
-                        drugs[cursor].SideEffects.Add(drugSideEffect);
-                    }
-                    _context.Update(drug);
-                }
-                else
-                {
-                    //var drugToUpdate = patientToUpdate.PatientDrugs.SingleOrDefault(pd => pd.ID == drug.ID);
-                    var drugToUpdate = _context.PatientDrugs.Include(pd => pd.SideEffects).
-                                          SingleOrDefault(pd => pd.ID == drug.ID);
-                    var sideEffectsItems = _context.SideEffects.Where(se => sideEffectsIDs.Contains(se.ID.ToString()));
-                    var uiSelectedIds = sideEffectsIDs.Select(int.Parse).ToList();
-                    var toDeleteEffectIds = drugToUpdate.SelectedEffectsIds.Except(uiSelectedIds);
-                    var toInsertEffectIds = uiSelectedIds.Except(drugToUpdate.SelectedEffectsIds);
-
-                    if (toDeleteEffectIds.Count() > 0)
-                    {
-                        _context.PatientDrugSideEffects.
-                                RemoveRange(_context.PatientDrugSideEffects.
-                                    Where(pdse => toDeleteEffectIds.Contains(pdse.SideEffectId) && pdse.PatientDrugId == drugToUpdate.ID));
-                    }
-
-                    if (toInsertEffectIds.Count() > 0)
-                    {
-                        var sideEffectsNewItems = _context.SideEffects.Where(se => toInsertEffectIds.Contains(se.ID));
-                        foreach (var sideEffect in sideEffectsNewItems)
-                        {
-                            PatientDrugSideEffect drugSideEffect = new PatientDrugSideEffect();
-                            drugSideEffect.PatientDrug = drugs[cursor];
-                            drugSideEffect.SideEffect = sideEffect;
-                            drugToUpdate.SideEffects.Add(drugSideEffect);
-                        }
-                    }
-                    drugToUpdate.StartDate = drug.StartDate;
-                    drugToUpdate.EndDate = drug.EndDate;
-                    drugToUpdate.DrugId = drug.DrugId;
-                    _context.Update(drugToUpdate);
-                }
-            }
-        }
-
         [AllowAnonymous]
         public JsonResult HasRM2Number(string RM2Number, int? Id, string initialRM2Number)
         {
             var validateName = _context.Patients.FirstOrDefault(x => x.RM2Number == RM2Number && x.ID != Id);
-
             if (validateName != null && initialRM2Number == "undefined")
             {
                 return Json(false);
