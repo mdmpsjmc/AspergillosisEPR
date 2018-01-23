@@ -9,8 +9,10 @@ namespace AspergillosisEPR.Models
     {
         public int ID { get; set; }
         public int PatientId { get; set; }
-        public int ImmunoglobinTypeId { get; set; }
+        public int ImmunoglobulinTypeId { get; set; }
         public DateTime DateTaken { get; set; }
         public decimal Value { get; set;  }
+        public ImmunoglobulinType ImmunoglobulinType { get; set; }
+
     }
 }

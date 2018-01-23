@@ -11,9 +11,10 @@ using System;
 namespace AspergillosisEPR.Migrations.Aspergillosis
 {
     [DbContext(typeof(AspergillosisContext))]
-    partial class AspergillosisContextModelSnapshot : ModelSnapshot
+    [Migration("20180123103954_ChangeImmoglobulinTypeColumn")]
+    partial class ChangeImmoglobulinTypeColumn
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -210,7 +211,9 @@ namespace AspergillosisEPR.Migrations.Aspergillosis
 
                     b.Property<DateTime>("DateTaken");
 
-                    b.Property<int>("ImmunoglobulinTypeId");
+                    b.Property<int>("ImmunoglobinTypeID");
+
+                    b.Property<int?>("ImmunoglobulinTypeID");
 
                     b.Property<int>("PatientId");
 
@@ -218,7 +221,7 @@ namespace AspergillosisEPR.Migrations.Aspergillosis
 
                     b.HasKey("ID");
 
-                    b.HasIndex("ImmunoglobulinTypeId");
+                    b.HasIndex("ImmunoglobulinTypeID");
 
                     b.HasIndex("PatientId");
 
@@ -333,8 +336,7 @@ namespace AspergillosisEPR.Migrations.Aspergillosis
                 {
                     b.HasOne("AspergillosisEPR.Models.ImmunoglobulinType", "ImmunoglobulinType")
                         .WithMany()
-                        .HasForeignKey("ImmunoglobulinTypeId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("ImmunoglobulinTypeID");
 
                     b.HasOne("AspergillosisEPR.Models.Patient")
                         .WithMany("PatientImmunoglobulines")

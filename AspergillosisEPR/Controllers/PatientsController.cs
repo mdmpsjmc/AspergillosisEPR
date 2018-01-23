@@ -119,6 +119,8 @@ namespace AspergillosisEPR.Controllers
                                     .ThenInclude(se => se.SideEffect)
                                 .Include(p => p.PatientStatus)
                                 .Include(p => p.STGQuestionnaires)
+                                .Include(p => p.PatientImmunoglobulines)
+                                    .ThenInclude(pis => pis.ImmunoglobulinType)
                                 .AsNoTracking()
                                 .SingleOrDefaultAsync(m => m.ID == id);
 
@@ -371,6 +373,7 @@ namespace AspergillosisEPR.Controllers
             }
             patientDetailsViewModel.PatientDrugs = patient.PatientDrugs;
             patientDetailsViewModel.STGQuestionnaires = patient.STGQuestionnaires;
+            patientDetailsViewModel.PatientImmunoglobulines = patient.PatientImmunoglobulines;
             return patientDetailsViewModel;
         }
 
