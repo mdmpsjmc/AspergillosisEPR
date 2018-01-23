@@ -27,11 +27,11 @@
                     </section>                   
                 </div>
                 <div class="row">
-                    <a href="javascript:void(0)" class="btn btn-danger remove-existing-ig pull-right btn-lg" data-id="@(ig.ID)" data-what="Patients immuglobuline entry" data-toggle="tooltip" data-title="Remove Patients Immuglobuline Entry?" style="padding: 5px">
+                    <a href="@Url.Action("Delete", "PatientsImmunoglobulines", new { id=ig.ID})" class="btn btn-danger remove-existing-item pull-right btn-lg" data-id="@(ig.ID)" data-what="Patients immuglobuline entry" data-toggle="tooltip" data-title="Remove Patients Immuglobuline Entry?" style="padding: 5px">
                         <i class="fa fa-trash"></i>
                     </a>
                 </div>
-            </fieldset>
+            </fieldset>         
         </div>
     }
 </div>

@@ -276,26 +276,18 @@
     }
 
     var deletePatientDbPartialFromPopup = function () {
-        $(document).off("click.delete-db-partial").on("click.delete-db-partial", "a.remove-existing-diagnosis, a.remove-existing-drug, a.remove-existing-stg", function () {
+        $(document).off("click.delete-db-partial").on("click.delete-db-partial", "a.remove-existing-diagnosis, a.remove-existing-drug, a.remove-existing-stg, a.remove-existing-item", function (e) {
             var itemId = $(this).data("id");
             var whatToRemove = $(this).data("what");
             var button = $(this);
             var question = "Are you sure you want to remove this " + whatToRemove + "?";
-
-
+            var requestUrl = $(this).attr("url");
+            e.preventDefault();
             BootstrapDialog.confirm(question, function (result, dialog) {
-                if (result) {
-                    var requestUrl = function () {
-                        if (whatToRemove === "diagnosis") {
-                            return "/PatientDiagnoses/Delete/" + itemId;
-                        } else if (whatToRemove === "drug") {
-                            return "/PatientDrugs/Delete/" + itemId;
-                        } else {
-                            return "/PatientSTGQuestionnaires/Delete/" + itemId;
-                        }
-                    }
+                if (result) {     
+                    debugger;
                     $.ajax({
-                        url: requestUrl(),
+                        url: $(button).attr("href"),
                         type: "POST",
                         contentType: "application/x-www-form-urlencoded",
                         dataType: 'json'
@@ -386,7 +378,18 @@
             $(this).datetimepicker("show");
         });
     }
-
+    /*
+      var requestUrl = function () {
+                        if (whatToRemove === "diagnosis") {
+                            return "/PatientDiagnoses/Delete/" + itemId;
+                        } else if (whatToRemove === "drug") {
+                            return "/PatientDrugs/Delete/" + itemId;
+                        } else if (whatToRemove === "")
+                        } else {
+                            return "/PatientSTGQuestionnaires/Delete/" + itemId;
+                        }
+                    }
+    */
     return {
 
         loadDataTableWithForCurrentUserRoles: function () {
