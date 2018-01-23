@@ -14,22 +14,22 @@
                     </section>
                     <section class="col col-2">
                         <label class="input" asp-for="@stg.SymptomScore">
-                            <input asp-for="@stg.SymptomScore" name="STGQuestionnaires[@(i.ToString())].SymptomScore" placeholder="Symptoms">
+                            <input asp-for="@stg.SymptomScore" id="STGQuestionnaires_@(i.ToString())__SymptomScore" name="STGQuestionnaires[@(i.ToString())].SymptomScore" placeholder="Symptoms">
                         </label>
                     </section>
                     <section class="col col-2">
                         <label class="input" asp-for="@stg.ImpactScore">
-                            <input asp-for="@stg.ImpactScore" name="STGQuestionnaires[@(i.ToString())].ImpactScore" placeholder="Impact">
+                            <input asp-for="@stg.ImpactScore"  id="STGQuestionnaires_@(i.ToString())__ImpactScore" name="STGQuestionnaires[@(i.ToString())].ImpactScore" placeholder="Impact">
                         </label>
                     </section>
                     <section class="col col-2">
                         <label class="input" asp-for="@stg.ActivityScore">
-                            <input asp-for="@stg.ActivityScore" name="STGQuestionnaires[@(i.ToString())].ActivityScore" placeholder="Activity" />
+                            <input asp-for="@stg.ActivityScore" id="STGQuestionnaires_@(i.ToString())__ActivityScore" name="STGQuestionnaires[@(i.ToString())].ActivityScore" placeholder="Activity" />
                         </label>
                     </section>
                     <section class="col col-2">
                         <label class="input" asp-for="@stg.TotalScore">
-                            <input asp-for="@stg.TotalScore" placeholder="Total" name="STGQuestionnaires[@(i.ToString())].TotalScore">
+                            <input asp-for="@stg.TotalScore" id="STGQuestionnaires_@(i.ToString())__TotalScore" placeholder="Total" name="STGQuestionnaires[@(i.ToString())].TotalScore">
                         </label>
                     </section>
                 </div>

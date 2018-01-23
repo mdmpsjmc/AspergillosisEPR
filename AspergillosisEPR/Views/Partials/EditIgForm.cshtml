@@ -13,12 +13,12 @@
             <section class="col col-4">
                 <label asp-for="DateTaken" class="input">
                 <i class="icon-append fa fa-calendar"></i>
-                <input asp-for="@(Model.DateTaken)" name="PatientImmunoglobulines[@((string)ViewBag.Index)].DateTaken" placeholder="Start Date" class="datepicker" />
+                <input asp-for="@(Model.DateTaken)" name="PatientImmunoglobulines[@((string)ViewBag.Index)].DateTaken"  id="PatientImmunoglobulines_@((string)ViewBag.Index)__DateTaken" placeholder="Start Date" class="datepicker" />
                 </label>
             </section>
             <section class="col col-3">
                 <label class="input" asp-for="Value">
-                    <input asp-for="@(Model.Value)" name="PatientImmunoglobulines[@((string)ViewBag.Index)].Value" placeholder="Value" />
+                    <input asp-for="@(Model.Value)" name="PatientImmunoglobulines[@((string)ViewBag.Index)].Value" id="PatientImmunoglobulines_@((string)ViewBag.Index)__Value" placeholder="Value" />
                 </label>
             </section>
         </div>

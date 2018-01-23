@@ -13,13 +13,15 @@
     <section class="col col-6">
         <label asp-for="StartDate" class="input">
             <i class="icon-append fa fa-calendar"></i>
-            <input asp-for="@(Model.StartDate)" name="Drugs[@((string)ViewBag.Index)].StartDate" placeholder="Start Date" class="datepicker" />
+            <input asp-for="StartDate" id="Drugs_@((string)ViewBag.Index)__StartDate" name="Drugs[@((string)ViewBag.Index)].StartDate" placeholder="Start Date" class="datepicker" />
+            <span asp-validation-for="StartDate" class="text-danger"></span>
         </label>
     </section>
     <section class="col col-6">
         <label asp-for="EndDate" class="input">
             <i class="icon-append fa fa-calendar"></i>
-            <input asp-for="@(Model.EndDate)" name="Drugs[@((string)ViewBag.Index)].EndDate" placeholder="End Date" class="datepicker"/>
+            <input asp-for="EndDate" id="Drugs_@((string)ViewBag.Index)__EndDate" name="Drugs[@((string)ViewBag.Index)].EndDate" placeholder="End Date" class="datepicker"/>
+            <span asp-validation-for="EndDate" class="text-danger"></span>
         </label>
     </section>
     <div class="row">
