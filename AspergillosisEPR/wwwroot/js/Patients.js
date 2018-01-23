@@ -378,18 +378,7 @@
             $(this).datetimepicker("show");
         });
     }
-    /*
-      var requestUrl = function () {
-                        if (whatToRemove === "diagnosis") {
-                            return "/PatientDiagnoses/Delete/" + itemId;
-                        } else if (whatToRemove === "drug") {
-                            return "/PatientDrugs/Delete/" + itemId;
-                        } else if (whatToRemove === "")
-                        } else {
-                            return "/PatientSTGQuestionnaires/Delete/" + itemId;
-                        }
-                    }
-    */
+
     return {
 
         loadDataTableWithForCurrentUserRoles: function () {

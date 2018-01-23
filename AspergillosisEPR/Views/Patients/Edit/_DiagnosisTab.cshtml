@@ -34,7 +34,7 @@
                 </div>
             </fieldset>
             <div class="row">
-                <a href="javascript:void(0)" class="btn btn-danger remove-existing-diagnosis pull-right btn-lg" data-id="@diagnosis.ID" data-what="diagnosis" data-toggle="tooltip" data-title="Remove diagnosis" style="padding: 5px">
+                <a href="@Url.Action("Delete", "PatientDiagnoses", new { id = diagnosis.ID})" class="btn btn-danger remove-existing-item pull-right btn-lg" data-id="@diagnosis.ID" data-what="diagnosis" data-toggle="tooltip" data-title="Remove diagnosis" style="padding: 5px">
                     <i class="fa fa-trash"></i>
                 </a>
             </div>
