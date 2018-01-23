@@ -155,6 +155,8 @@ namespace AspergillosisEPR.Controllers
                                     .ThenInclude(d => d.SideEffects)
                                     .ThenInclude(se => se.SideEffect)
                                 .Include(p => p.STGQuestionnaires)
+                                .Include(p => p.PatientImmunoglobulines)
+                                    .ThenInclude(pis => pis.ImmunoglobulinType)
                                 .AsNoTracking()
                                 .SingleOrDefaultAsync(m => m.ID == id);
             if (patient == null)
@@ -171,7 +173,8 @@ namespace AspergillosisEPR.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> EditPatient(int? id, [Bind("ID,DiagnosisCategoryId,DiagnosisTypeId,Description")] PatientDiagnosis[] diagnoses, 
                                                               [Bind("ID,DrugId,StartDate,EndDate")] PatientDrug[] drugs, 
-                                                              [Bind("ID, ActivityScore, SymptomScore, ImpactScore, TotalScore")] PatientSTGQuestionnaire[] sTGQuestionnaires)
+                                                              [Bind("ID, ActivityScore, SymptomScore, ImpactScore, TotalScore")] PatientSTGQuestionnaire[] sTGQuestionnaires, 
+                                                              [Bind("ID, DateTaken, Value, ImmunoglobulinTypeId")] PatientImmunoglobulin[] patientImmunoglobulines)
         {
             if (id == null)
             {
@@ -179,19 +182,75 @@ namespace AspergillosisEPR.Controllers
             }
 
             var patientToUpdate = await _context.Patients
-                                .Include(p => p.PatientDiagnoses)       
+                                .Include(p => p.PatientDiagnoses)
                                 .Include(p => p.PatientDrugs)
                                 .Include(p => p.STGQuestionnaires)
+                                .Include(p => p.PatientImmunoglobulines)
                                 .AsNoTracking()
                                 .SingleOrDefaultAsync(m => m.ID == id);
+
             _context.Entry(patientToUpdate).State = EntityState.Modified;
+
+            UpdateImmunoglobines(patientImmunoglobulines, patientToUpdate);
+            UpdateDiagnoses(diagnoses, patientToUpdate);
+            UpdateSGRQ(sTGQuestionnaires, patientToUpdate);
+            UpdateDrugs(drugs, patientToUpdate);
+
+            if (await TryUpdateModelAsync<Patient>(patientToUpdate,
+                "",
+                p => p.FirstName, p => p.LastName, p => p.DOB, p => p.RM2Number,
+                p => p.Gender, p => p.PatientStatusId, p => p.DateOfDeath))
+            {
+                try
+                {
+                    _context.SaveChanges();
+                }
+                catch (DbUpdateException /* ex */)
+                {
+                    ModelState.AddModelError("", "Unable to save changes. " +
+                        "Try again, and if the problem persists, " +
+                        "see your system administrator.");
+                }
+            }
+            else
+            {
+                Hashtable errors = ModelStateHelper.Errors(ModelState);
+                return Json(new { success = false, errors });
+            }
+
+            return Json(new { result = "ok" });
+        }
+
+        private void UpdateImmunoglobines(PatientImmunoglobulin[] patientImmunoglobulines, Patient patientToUpdate)
+        {
+            foreach (var patientImmunoglobin in patientImmunoglobulines)
+            {
+                if (patientImmunoglobin.ID == 0)
+                {
+                    patientImmunoglobin.PatientId = patientToUpdate.ID;
+                    _context.Update(patientImmunoglobin);
+                }
+                else
+                {
+                    var patientImmunoglobinToUpdate = patientToUpdate.PatientImmunoglobulines.SingleOrDefault(pd => pd.ID == patientImmunoglobin.ID);
+                    patientImmunoglobinToUpdate.ImmunoglobulinTypeId = patientImmunoglobin.ImmunoglobulinTypeId;
+                    patientImmunoglobinToUpdate.DateTaken = patientImmunoglobin.DateTaken;
+                    patientImmunoglobinToUpdate.Value = patientImmunoglobin.Value;
+                    _context.Update(patientImmunoglobinToUpdate);
+                }
+            }
+        }
+
+        private void UpdateDiagnoses(PatientDiagnosis[] diagnoses, Patient patientToUpdate)
+        {
             foreach (var diagnosis in diagnoses)
             {
                 if (diagnosis.ID == 0)
                 {
                     diagnosis.PatientId = patientToUpdate.ID;
                     _context.Update(diagnosis);
-                } else
+                }
+                else
                 {
                     var diagnosisToUpdate = patientToUpdate.PatientDiagnoses.SingleOrDefault(pd => pd.ID == diagnosis.ID);
                     diagnosisToUpdate.DiagnosisCategoryId = diagnosis.DiagnosisCategoryId;
@@ -200,14 +259,18 @@ namespace AspergillosisEPR.Controllers
                     _context.Update(diagnosisToUpdate);
                 }
             }
+        }
 
+        private void UpdateSGRQ(PatientSTGQuestionnaire[] sTGQuestionnaires, Patient patientToUpdate)
+        {
             foreach (var stg in sTGQuestionnaires)
             {
                 if (stg.ID == 0)
                 {
                     stg.PatientId = patientToUpdate.ID;
                     _context.Update(stg);
-                } else
+                }
+                else
                 {
                     var stgToUpdate = patientToUpdate.STGQuestionnaires.SingleOrDefault(s => s.ID == stg.ID);
                     stgToUpdate.ActivityScore = stg.ActivityScore;
@@ -220,7 +283,11 @@ namespace AspergillosisEPR.Controllers
 
 
             }
-            for(var cursor = 0; cursor < drugs.Length; cursor++)
+        }
+
+        private void UpdateDrugs(PatientDrug[] drugs, Patient patientToUpdate)
+        {
+            for (var cursor = 0; cursor < drugs.Length; cursor++)
             {
                 PatientDrug drug = drugs[cursor];
                 string[] sideEffectsIDs = Request.Form["Drugs[" + cursor + "].SideEffects"];
@@ -257,13 +324,13 @@ namespace AspergillosisEPR.Controllers
                     if (toInsertEffectIds.Count() > 0)
                     {
                         var sideEffectsNewItems = _context.SideEffects.Where(se => toInsertEffectIds.Contains(se.ID));
-                        foreach(var sideEffect in sideEffectsNewItems)
+                        foreach (var sideEffect in sideEffectsNewItems)
                         {
                             PatientDrugSideEffect drugSideEffect = new PatientDrugSideEffect();
                             drugSideEffect.PatientDrug = drugs[cursor];
                             drugSideEffect.SideEffect = sideEffect;
                             drugToUpdate.SideEffects.Add(drugSideEffect);
-                        }                    
+                        }
                     }
                     drugToUpdate.StartDate = drug.StartDate;
                     drugToUpdate.EndDate = drug.EndDate;
@@ -271,29 +338,6 @@ namespace AspergillosisEPR.Controllers
                     _context.Update(drugToUpdate);
                 }
             }
-
-            if (await TryUpdateModelAsync<Patient>(patientToUpdate,
-                "",
-                p => p.FirstName, p => p.LastName, p => p.DOB, p => p.RM2Number, 
-                p => p.Gender, p => p.PatientStatusId, p => p.DateOfDeath))
-            {
-                try
-                {
-                    _context.SaveChanges();
-                }
-                catch (DbUpdateException /* ex */)
-                {
-                    ModelState.AddModelError("", "Unable to save changes. " +
-                        "Try again, and if the problem persists, " +
-                        "see your system administrator.");
-                }
-            } else
-            {
-                Hashtable errors = ModelStateHelper.Errors(ModelState);
-                return Json(new { success = false, errors });
-            }
-            
-            return Json(new { result = "ok" });
         }
 
         [AllowAnonymous]
@@ -423,6 +467,7 @@ namespace AspergillosisEPR.Controllers
             List<SelectList> diagnosesCategories = new List<SelectList>();
             List<SelectList> drugs = new List<SelectList>();
             List<MultiSelectList> sideEffects = new List<MultiSelectList>();
+            List<SelectList> patientImmunoglobines = new List<SelectList>();
             
             for (int i = 0; i < patient.PatientDiagnoses.Count; i++)
             {
@@ -445,10 +490,18 @@ namespace AspergillosisEPR.Controllers
                     sideEffects.Add(list);
                 }
             }
+
+
+            for (int i = 0; i < patient.PatientImmunoglobulines.Count; i++)
+            {
+                var item = patient.PatientImmunoglobulines.ToList()[i];
+                patientImmunoglobines.Add(ImmunoglobinTypesDropdownList(item.ImmunoglobulinTypeId));
+            }
             ViewBag.DiagnosisTypes = diagnosesTypes;
             ViewBag.DiagnosisCategories = diagnosesCategories;
             ViewBag.Drugs = drugs;
             ViewBag.SideEffects = sideEffects;
+            ViewBag.ImmunoglobulinTypeId = patientImmunoglobines;
             PopulatePatientStatusesDropdownList(patient.PatientStatusId);
         }
 
@@ -466,6 +519,14 @@ namespace AspergillosisEPR.Controllers
                               orderby se.Name
                               select se;
             return new MultiSelectList(sideEffects, "ID", "Name", selectedIds);
+        }
+
+        private SelectList ImmunoglobinTypesDropdownList(object selectedId = null)
+        {
+            var igTypes = from se in _context.ImmunoglobulinTypes
+                          orderby se.Name
+                          select se;
+            return new SelectList(igTypes, "ID", "Name", selectedId);
         }
     }
 }

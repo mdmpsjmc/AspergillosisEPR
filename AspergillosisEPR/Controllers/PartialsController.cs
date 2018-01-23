@@ -79,6 +79,14 @@ namespace AspergillosisEPR.Controllers
             return PartialView();
         }
 
+        [Authorize(Roles = "Update Role, Admin Role")]
+        public IActionResult EditIgForm()
+        {
+            ViewBag.Index = (string)Request.Query["index"];
+            ViewBag.ImmunoglobulinTypeId = ImmunoglobinTypesDropdownList();
+            return PartialView();
+        }
+
 
         [Authorize(Roles = "Read Role")]
         public IActionResult SearchPartial()

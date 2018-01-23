@@ -44,7 +44,7 @@
 </div>
 @if (User.IsInRole("Update Role") || User.IsInRole("Admin Role"))
 {
-    <a href="@Url.Action("EditSTGForm", "Partials")" class="btn btn-success add-edit-stg" style="padding: 5px">
+    <a href="@Url.Action("EditSTGForm", "Partials")" class="btn btn-success edit-patient-partial" data-visible-row="div.stg-row:visible" data-insert-into-class="div.stg-form" style="padding: 5px">
         <i class="fa fa-plus"></i>
         <span>
             <strong>Add item</strong>

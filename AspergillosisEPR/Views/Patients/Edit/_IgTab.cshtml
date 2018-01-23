@@ -1,0 +1,46 @@
+﻿@model AspergillosisEPR.Models.Patient
+<div class="col-12 row ig-form" style="margin: 0px !important">
+    @for (int i = 0; i < Model.PatientImmunoglobulines.Count; i++)
+    {
+        PatientImmunoglobulin ig = Model.PatientImmunoglobulines.OrderByDescending(q => q.DateTaken).ToList()[i];
+        <div class="ig-row">
+            <input type="hidden" value="@ig.ID" name="PatientImmunoglobulines[@(i.ToString())].ID" />
+            <fieldset>
+                <div class="row">
+                    <section class="col col-4">
+                        <label class="select">
+                            <label asp-for="@(ig.ImmunoglobulinTypeId)" class="select">
+                                @Html.DropDownList("PatientImmunoglobulines[" + i.ToString() + "].ImmunoglobulinTypeId", (SelectList)ViewBag.ImmunoglobulinTypeId[i], "Select Ig Type")
+                                <span asp-validation-for="@(ig.ImmunoglobulinTypeId)" class="text-danger"></span>
+                            </label>
+                        </label>
+                    </section>
+                    <section class="col col-4">
+                        <label class="input" asp-for="@ig.DateTaken">
+                            <input asp-for="@ig.DateTaken" name="PatientImmunoglobulines[@(i.ToString())].DateTaken" id="PatientImmunoglobulines@(i.ToString())__DateTaken" placeholder="Date Taken" class="datepicker" />
+                        </label>
+                    </section>
+                    <section class="col col-3">
+                        <label class="input" asp-for="@ig.Value">
+                            <input asp-for="@ig.Value" name="PatientImmunoglobulines[@(i.ToString())].Value" placeholder="Value">
+                        </label>
+                    </section>                   
+                </div>
+                <div class="row">
+                    <a href="javascript:void(0)" class="btn btn-danger remove-existing-ig pull-right btn-lg" data-id="@(ig.ID)" data-what="Patients immuglobuline entry" data-toggle="tooltip" data-title="Remove Patients Immuglobuline Entry?" style="padding: 5px">
+                        <i class="fa fa-trash"></i>
+                    </a>
+                </div>
+            </fieldset>
+        </div>
+    }
+</div>
+@if (User.IsInRole("Update Role") || User.IsInRole("Admin Role"))
+{
+    <a href="@Url.Action("EditIgForm", "Partials")" class="btn btn-success edit-ig edit-patient-partial" data-visible-row="div.ig-row:visible" data-insert-into-class="div.ig-form" style="padding: 5px">
+        <i class="fa fa-plus"></i>
+        <span>
+            <strong>Add Patients Ig</strong>
+        </span>
+    </a>
+}

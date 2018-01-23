@@ -126,15 +126,7 @@
     }
 
     var displayUpdateErrors = function (errors) {
-        for (var i = 0; i < Object.keys(errors).length; i++) {
-            var field = Object.keys(errors)[i];
-            if (field.match("diagnoses") || field.match("drugs") || field.match("sTGQuestionnaires")) {
-                field = field.charAt(0).toUpperCase() + field.slice(1).replace("[", "_").replace("].", "__");          
-            } 
-            var htmlCode = "<label for='" + field + "' class='text-danger'></label>";
-            var fieldError = errors[Object.keys(errors)[i]];
-            $(htmlCode).html(fieldError).appendTo($("input#" + field + ", select#" + field).parent());
-        }
+        displayErrors(errors);
     }
 
     var enableAntiForgeryProtectionWithAjax = function () {
@@ -142,7 +134,7 @@
             .ajaxSend(function (event, jqxhr, settings) {
                 if (settings.type.toUpperCase() !== "POST") return;
                 jqxhr.setRequestHeader('RequestVerificationToken', $(".AntiForge" + " input").val())
-            })
+            });
     };
 
     var newPatientsModalShow = function () {
@@ -158,7 +150,7 @@
     }
 
     var bindNewPartialOnPatientFormClick = function () {
-        $(document).off("click.new-pat-partial").on("click.new-pat-partial", "a.add-new-patient-partial", function (e) {
+        $(document).off("click.new-pat-partial").on("click.new-pat-partial", "a.add-new-patient-partial, a.edit-patient-partial", function (e) {
             LoadingIndicator.show();
             e.preventDefault();
             var visibleRow = $(this).data("visible-row");
@@ -177,51 +169,6 @@
             });
         })
     }
-
-    var bindDiagnosisEditFormOnClick = function () {
-        $(document).off("click.add-edit-diagnosis").on("click.add-edit-diagnosis", "a.add-edit-diagnosis", function (e) {
-            LoadingIndicator.show();
-            e.preventDefault();
-            var index = $("div.diagnosis-row:visible").length;
-            $.get($(this).attr("href") + "?index=" + index, function (responseHtml) {
-                LoadingIndicator.hide();
-                $("div.diagnosis-form").append(responseHtml);
-            });
-        })
-    }
-
-    var bindSTGEditFormOnClick = function () {
-        $(document).off("click.add-edit-stg").on("click.add-edit-stg", "a.add-edit-stg", function (e) {
-            LoadingIndicator.show();
-            e.preventDefault();
-            var index = $("div.stg-row:visible").length;
-            $.get($(this).attr("href") + "?index=" + index, function (responseHtml) {
-                LoadingIndicator.hide();
-                $("div.stg-form").append(responseHtml);
-                initPatientsDateTimePickers();
-            });
-        })
-    }
-
-    var bindDrugsEditFormOnClick = function () {
-        $(document).off("click.add-edit-drug").on("click.add-edit-drug", "a.add-edit-drug", function (e) {
-            LoadingIndicator.show();
-            e.preventDefault();
-            var index = $("div.drug-row:visible").length;
-            $.get($(this).attr("href") + "?index=" + index, function (responseHtml) {
-                LoadingIndicator.hide();
-                $("div.drug-form").append(responseHtml);
-                initPatientsDateTimePickers();
-                $("select.select2").select2({
-                    minimumResultsForSearch: -1,
-                    placeholder: function () {
-                        $(this).data('placeholder');
-                    }
-                });
-            });
-        })
-    }
-
 
     var bindPatientDetailsShow = function () {
         $(document).off("click.patient-details").on("click.patient-details", "a.patient-details", function (e) {
@@ -453,14 +400,11 @@
             newPatientsModalShow();
             bindPatientDetailsShow();
             bindPatientEdit();
-            bindDiagnosisEditFormOnClick();
-            bindDrugsEditFormOnClick();
             bindOnDeletePatientClick();
             deletePatientPartialFromPopup();
             deletePatientDbPartialFromPopup();
             onPatientStatusChange();
             onModalClose();
-            bindSTGEditFormOnClick();
             initPatientsDateTimePickers();
         },
 
@@ -468,14 +412,11 @@
             newPatientsModalShow();
             bindPatientDetailsShow();
             bindPatientEdit();
-            bindDiagnosisEditFormOnClick();
-            bindDrugsEditFormOnClick();
             bindOnDeletePatientClick();
             deletePatientPartialFromPopup();
             deletePatientDbPartialFromPopup();
             onPatientStatusChange();
             onModalClose();
-            bindSTGEditFormOnClick();
             initPatientsDateTimePickers();
             bindNewPartialOnPatientFormClick();
         },
@@ -493,7 +434,6 @@
             initPatientsDataTable();
             submitNewPatient();
             enableAntiForgeryProtectionWithAjax();
-
         }
     }
 }();
