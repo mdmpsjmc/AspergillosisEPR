@@ -50,28 +50,40 @@
             "orderMulti": false,
             "pageLength": 50,
             buttons: [
-                {                    
+                {
                     'extend': 'excel',
+                    'className': 'btn btn-success btn-excel',
+                    'titleAttr': 'Export to Excel',
+                    'text': '<i class="fa fa-file-excel-o"></i>',
                     'exportOptions': {
-                        'columns': ':visible'
+                        columns: ':visible'
                     }
                 },
                 {
                     'extend': 'pdf',
+                    'className': 'btn btn-danger btn-pdf',
+                    'titleAttr': 'Export to PDF',
+                    'text': '<i class="fa fa-file-pdf-o"></i>',
                     'exportOptions': {
-                        'columns': ':visible'
+                        columns: ':visible'
                     }
                 },
                 {
                     'extend': 'print',
+                    'className': 'btn btn-warning btn-print',
+                    'titleAttr': 'Print',
+                    'text': '<i class="fa fa-print"></i>',
                     'exportOptions': {
-                        'columns': ':visible'
-                    },
+                        columns: ':visible'
+                    }
 
                 },
                 {
-                    'extend': 'colvis'
-                }
+                    'extend': 'colvis',
+                    'className': 'btn btn-info btn-vis',
+                    'titleAttr': 'Column visibility',
+                    'text': '<i class="fa fa-eye"></i>',
+                }            
             ],
             "initComplete": function (settings, json) {
                 Patients.publicSetup()
