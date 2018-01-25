@@ -1,0 +1,28 @@
+﻿@model AspergillosisEPR.Models.PatientViewModels.PatientDetailsViewModel
+<div class="modal fade" tabindex="-1" role="dialog" id="export-options-modal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 style="color:deepskyblue;"><span class="fa fa-gear"></span> Export</h4>
+            </div>
+            <div class="modal-body">
+                <div class="widget-body">                   
+                    <form class="smart-form" id="export-options-form">
+                        <fieldset>
+                            <section>
+                                <label class="label">Select which information would you like to export</label>
+                                <div class="inline-group labels"></div>
+                            </section>
+                        </fieldset>
+                    </form>
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-primary btn-default" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> Cancel</button>
+                <button type="submit" class="btn btn-primary btn-success download-details-pdf" data-id="@Model.Patient.ID"><span class="fa fa-upload"></span> Export</button>
+            </div>
+        </div>
+    </div>
+</div>

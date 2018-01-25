@@ -4,15 +4,10 @@ using AspergillosisEPR.Models.PatientViewModels;
 using DinkToPdf;
 using DinkToPdf.Contracts;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.NodeServices;
-using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Net;
 using System.Threading.Tasks;
 using static AspergillosisEPR.Services.ViewToString;
 namespace AspergillosisEPR.Controllers
@@ -24,6 +19,9 @@ namespace AspergillosisEPR.Controllers
         private PatientManager _patientManager;
         private AspergillosisContext _context;
         private IHostingEnvironment _hostingEnvironment;
+
+        private static string SAVED_CHARTS_DIRECTORY = @"\wwwroot\Files\Charts\";
+        private static string EXPORTED_PDFS_DIRECTORY = @"\wwwroot\Files\Exported\PDF\";
 
         public PatientPdfExportsController(IConverter converter, 
                                            IViewRenderService htmlRenderService, 
@@ -44,15 +42,18 @@ namespace AspergillosisEPR.Controllers
             var sgrqChartFileName = "SGRQ_Chart_" + id.ToString() + "_";
             patientDetailsViewModel.ShowButtons = false;
             string base64String = sgrqChart.Replace("data:image/png;base64,", String.Empty);
-            SaveImage(base64String, sgrqChartFileName);
+            SavePNGChart(base64String, sgrqChartFileName);
             patientDetailsViewModel.SgrqImageChartFile = sgrqChartFileName;
+            var displayControlKeys = Request.Form.Keys.Where(k => k.Contains("Show")).ToList();
+           
+
             string htmlView = await _htmlRenderService.RenderToStringAsync("Patients/PdfDetails", patientDetailsViewModel);          
-            var doc = new HtmlToPdfDocument()
+            var htmlToPdfDocument = new HtmlToPdfDocument()
             {
                 GlobalSettings = {
                 ColorMode = ColorMode.Color,
                 Orientation = Orientation.Portrait,
-                PaperSize = PaperKind.A4Plus,
+                PaperSize = PaperKind.A4
                  },
                 Objects = {
                     new ObjectSettings() {
@@ -63,8 +64,8 @@ namespace AspergillosisEPR.Controllers
                     }
                 }
             };
-            byte[] pdf = _pdfConverter.Convert(doc);
-            using (FileStream stream = new FileStream(_hostingEnvironment.ContentRootPath + @"\wwwroot\Files\Exported\PDF\" + DateTime.UtcNow.Ticks.ToString() + ".pdf", FileMode.Create))
+            byte[] pdf = _pdfConverter.Convert(htmlToPdfDocument);
+            using (FileStream stream = new FileStream(_hostingEnvironment.ContentRootPath + EXPORTED_PDFS_DIRECTORY + DateTime.UtcNow.Ticks.ToString() + ".pdf", FileMode.Create))
             {
                 stream.Write(pdf, 0, pdf.Length);
             }
@@ -72,9 +73,9 @@ namespace AspergillosisEPR.Controllers
             return fileContentResult;
         }
 
-        private bool SaveImage(string ImgStr, string ImgName)
+        private bool SavePNGChart(string ImgStr, string ImgName)
         {
-            String path = _hostingEnvironment.ContentRootPath + @"\wwwroot\Files\Charts\";
+            String path = _hostingEnvironment.ContentRootPath + SAVED_CHARTS_DIRECTORY;
 
             if (!Directory.Exists(path))
             {

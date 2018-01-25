@@ -91,7 +91,7 @@
                 onComplete: function (animation) {
                     var imageUrl = stackedLine.toBase64Image();
                     $("img#sgrq-chart-image").attr("src", imageUrl);
-                    $("a.download-details-pdf").removeAttr("disabled");
+                    $("a.export-trigger").removeAttr("disabled");
                 }
             },
 

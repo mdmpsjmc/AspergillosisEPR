@@ -399,13 +399,40 @@
             .appendTo($('.col-sm-6:eq(0)', window.patientsTable.table().container()));
     }
 
+    var onExportOptionsShow = function () {
+        $(document).off("click.export-trigger").on("click.export-trigger", "a.export-trigger", function (e) {
+            e.preventDefault();
+            var tabs = $(this).parents("div.modal-content").find("ul#details-tab li a");
+            var container = $("div.inline-group.labels");
+            container.html("");
+            $.each(tabs, function (index, element) {
+                var tabHtml = $(element).html();
+                var tmp = document.createElement("DIV");
+                tmp.innerHTML = tabHtml;
+                var tabName = tmp.textContent.trim();
+                var tabCapitalized = tabName.charAt(0).toUpperCase() + tabName.slice(1);
+                var isChecked = index == 0 ? "checked=\"checked\"" : "";
+                var htmlOption = '<label class=\"checkbox\"><input type= \"checkbox\" name= \"Show' + tabCapitalized + '\" ' + isChecked + '/><i></i> <span class=\"checkbox-label\"> ' + tabName + '</span></label>'
+                container.append(htmlOption);
+            });
+            $("div#export-options-modal").modal("show"); 
+
+            $("div#export-options-modal").on('shown.bs.modal', function (e) {
+                onDownloadPatientDetailsPdf();
+            });
+        });
+    }
+
+
+        
     var onDownloadPatientDetailsPdf = function () {
-        $(document).off("click.pdf-details-download").on("click.pdf-details-download", "a.download-details-pdf", function (e) {
+        $(document).off("click.pdf-details-download").on("click.pdf-details-download", ".download-details-pdf", function (e) {
             e.preventDefault();
             var sgrqChartImage = encodeURIComponent($("img#sgrq-chart-image").attr("src"));
             var patientId = $(this).data("id");
             var requestUrl = "/PatientPdfExports/Details/" + patientId;
-            AjaxFileDownload.execute(requestUrl, "sgrqChart=" + sgrqChartImage, "Patient_Details_" + patientId + ".pdf", "application/pdf");            
+            var requestData = $("form#export-options-form").serialize()+"&sgrqChart=" + sgrqChartImage;
+            AjaxFileDownload.execute(requestUrl, requestData, "Patient_Details_" + patientId + ".pdf", "application/pdf");  
         });
     }
 
@@ -428,7 +455,7 @@
             onPatientStatusChange();
             onModalClose();
             initPatientsDateTimePickers();
-            onDownloadPatientDetailsPdf();
+            onExportOptionsShow();
         },
 
         bindPatientsModals: function() {
@@ -442,7 +469,7 @@
             onModalClose();
             initPatientsDateTimePickers();
             bindNewPartialOnPatientFormClick();
-            onDownloadPatientDetailsPdf();
+            onExportOptionsShow();
         },
 
         setupForm: function() {
