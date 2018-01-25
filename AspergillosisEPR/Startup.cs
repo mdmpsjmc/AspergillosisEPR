@@ -14,14 +14,23 @@ using Audit.Core;
 using Newtonsoft.Json.Serialization;
 using Newtonsoft.Json;
 using Microsoft.AspNetCore.Http.Features;
+using DinkToPdf;
+using DinkToPdf.Contracts;
+using System.Runtime.Loader;
+using System.Reflection;
+using static AspergillosisEPR.Services.ViewToString;
 
 namespace AspergillosisEPR
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+
+
+        public IHostingEnvironment HostingEnvironment { get; }
+        public Startup(IConfiguration configuration, IHostingEnvironment env)
         {
             Configuration = configuration;
+            HostingEnvironment = env;
         }
 
         public IConfiguration Configuration { get; }
@@ -46,7 +55,8 @@ namespace AspergillosisEPR
             services.AddTransient<IEmailSender, EmailSender>();
             services.AddTransient<PatientViewModel>();
             services.AddMvc();
-            services.AddMvc().AddJsonOptions(options => {
+            services.AddMvc().AddJsonOptions(options =>
+            {
                 options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
                 options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
                 options.SerializerSettings.MaxDepth = 1;
@@ -59,7 +69,17 @@ namespace AspergillosisEPR
                 .IdColumnName("ID")
                 .JsonColumnName("Data")
                 .LastUpdatedColumnName("LastUpdatedDate"));
+            ConfigurePdfService(services);
+            services.AddScoped<IViewRenderService, ViewRenderService>();
+        }
 
+        private void ConfigurePdfService(IServiceCollection services)
+        {
+            CustomAssemblyLoadContext context = new CustomAssemblyLoadContext();
+            string path = HostingEnvironment.ContentRootPath + "/" + "libwkhtmltox.dll";
+            context.LoadUnmanagedLibrary(path);
+            services.AddSingleton(typeof(IConverter),
+                                         new SynchronizedConverter(new PdfTools()));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -72,7 +92,7 @@ namespace AspergillosisEPR
             }
             else
             {
-                app.UseExceptionHandler("/Home/Error");
+                app.UseExceptionHandler(" / Home/Error");
             }
 
             app.UseStaticFiles();
@@ -135,7 +155,22 @@ namespace AspergillosisEPR
             }
         }
 
-    
+        internal class CustomAssemblyLoadContext : AssemblyLoadContext
+        {
+            public IntPtr LoadUnmanagedLibrary(string absolutePath)
+            {
+                return LoadUnmanagedDll(absolutePath);
+            }
+            protected override IntPtr LoadUnmanagedDll(String unmanagedDllName)
+            {
+                return LoadUnmanagedDllFromPath(unmanagedDllName);
+            }
+      
+            protected override Assembly Load(AssemblyName assemblyName)
+            {
+                throw new NotImplementedException();
+            }
+        }
 
     }
 

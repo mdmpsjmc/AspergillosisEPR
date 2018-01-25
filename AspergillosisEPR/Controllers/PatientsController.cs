@@ -119,9 +119,29 @@ namespace AspergillosisEPR.Controllers
                 return NotFound();
             }
 
-            var patientDetailsViewModel = BuildPatientViewModel(patient);
+            var patientDetailsViewModel = PatientDetailsViewModel.BuildPatientViewModel(_context, patient);
             return PartialView(patientDetailsViewModel);
-        }        
+        }
+
+        [Authorize(Roles = ("Admin Role, Read Role"))]
+        [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
+        public async Task<IActionResult> PdfDetails(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var patient = await _patientManager.FindPatientWithRelationsByIdAsync(id);
+
+            if (patient == null)
+            {
+                return NotFound();
+            }
+
+            var patientDetailsViewModel = PatientDetailsViewModel.BuildPatientViewModel(_context, patient);
+            return View(patientDetailsViewModel);
+        }
 
         [Authorize(Roles = ("Admin Role, Update Role"))]
         [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
@@ -216,55 +236,6 @@ namespace AspergillosisEPR.Controllers
             _context.Patients.Remove(patient);
             await _context.SaveChangesAsync();
             return Json(new { ok = "ok" });
-        }
-
-        private PatientDetailsViewModel BuildPatientViewModel(Patient patient)
-        {
-            var primaryDiagnosis = _context.DiagnosisCategories.Where(dc => dc.CategoryName == "Primary").FirstOrDefault();
-            var secondaryDiagnosis = _context.DiagnosisCategories.Where(dc => dc.CategoryName == "Secondary").FirstOrDefault();
-            var otherDiagnosis = _context.DiagnosisCategories.Where(dc => dc.CategoryName == "Other").FirstOrDefault();
-            var underlyingDiagnosis = _context.DiagnosisCategories.Where(dc => dc.CategoryName == "Underlying diagnosis").FirstOrDefault();
-            var pastDiagnosis = _context.DiagnosisCategories.Where(dc => dc.CategoryName == "Past Diagnosis").FirstOrDefault();
-
-            var patientDetailsViewModel = new PatientDetailsViewModel();
-
-            patientDetailsViewModel.Patient = patient;
-
-            if (primaryDiagnosis != null)
-            {
-                patientDetailsViewModel.PrimaryDiagnoses = patient.PatientDiagnoses.
-                                                                    Where(pd => pd.DiagnosisCategoryId == primaryDiagnosis.ID).
-                                                                    ToList();
-            }
-            if (secondaryDiagnosis != null)
-            {
-                patientDetailsViewModel.SecondaryDiagnoses = patient.PatientDiagnoses.
-                                                                    Where(pd => pd.DiagnosisCategoryId == secondaryDiagnosis.ID).
-                                                                    ToList();
-            }
-            if (otherDiagnosis != null)
-            {
-                patientDetailsViewModel.OtherDiagnoses = patient.PatientDiagnoses.
-                                                                 Where(pd => pd.DiagnosisCategoryId == otherDiagnosis.ID).
-                                                                 ToList();
-            }
-            if (underlyingDiagnosis != null)
-            {
-                patientDetailsViewModel.UnderlyingDiseases = patient.PatientDiagnoses.
-                                                                    Where(pd => pd.DiagnosisCategoryId == underlyingDiagnosis.ID).
-                                                                    ToList();
-            }
-
-            if (pastDiagnosis != null)
-            {
-                patientDetailsViewModel.PastDiagnoses = patient.PatientDiagnoses.
-                                                                    Where(pd => pd.DiagnosisCategoryId == pastDiagnosis.ID).
-                                                                    ToList();
-            }
-            patientDetailsViewModel.PatientDrugs = patient.PatientDrugs;
-            patientDetailsViewModel.STGQuestionnaires = patient.STGQuestionnaires;
-            patientDetailsViewModel.PatientImmunoglobulines = patient.PatientImmunoglobulines;
-            return patientDetailsViewModel;
-        }
+        }        
     }
 }

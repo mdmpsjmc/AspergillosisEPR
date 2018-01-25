@@ -184,10 +184,15 @@
         $(document).off("click.patient-details").on("click.patient-details", "a.patient-details", function (e) {
             LoadingIndicator.show();
             e.preventDefault();
-            $.get($(this).attr("href"), function (responseHtml) {
+            var url = $(this).attr("href")
+            $.get(url, function (responseHtml) {
                 LoadingIndicator.hide();
                 $("div#modal-container").html(responseHtml);
                 $("div#details-modal").modal("show");
+                var patientId = url.split("/")[3];
+                $.getJSON("PatientCharts/SGRQ?patientId=" + patientId, function (response) {
+                    Charts.chartFromResponse(response);
+                });
             });
         });
     }
@@ -394,6 +399,16 @@
             .appendTo($('.col-sm-6:eq(0)', window.patientsTable.table().container()));
     }
 
+    var onDownloadPatientDetailsPdf = function () {
+        $(document).off("click.pdf-details-download").on("click.pdf-details-download", "a.download-details-pdf", function (e) {
+            e.preventDefault();
+            var sgrqChartImage = encodeURIComponent($("img#sgrq-chart-image").attr("src"));
+            var patientId = $(this).data("id");
+            var requestUrl = "/PatientPdfExports/Details/" + patientId;
+            AjaxFileDownload.execute(requestUrl, "sgrqChart=" + sgrqChartImage, "Patient_Details_" + patientId + ".pdf", "application/pdf");            
+        });
+    }
+
     return {
 
         loadDataTableWithForCurrentUserRoles: function () {
@@ -413,6 +428,7 @@
             onPatientStatusChange();
             onModalClose();
             initPatientsDateTimePickers();
+            onDownloadPatientDetailsPdf();
         },
 
         bindPatientsModals: function() {
@@ -426,6 +442,7 @@
             onModalClose();
             initPatientsDateTimePickers();
             bindNewPartialOnPatientFormClick();
+            onDownloadPatientDetailsPdf();
         },
 
         setupForm: function() {

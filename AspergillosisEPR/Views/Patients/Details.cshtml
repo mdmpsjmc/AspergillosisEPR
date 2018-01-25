@@ -53,9 +53,17 @@
                 </div>
             </div>
             <div class="modal-footer">
+                @if (Model.ShowButtons)
+                {
+                <a href="@Url.Action("Details", "PatientPdfExports", new { id = Model.Patient.ID })" disabled="disabled" class="btn btn-danger download-details-pdf" data-id="@Model.Patient.ID" >
+                    <i class="fa fa-file-pdf-o"></i>&nbsp; PDF
+                </a>
+                }
                 <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="$('div.modal-backdrop.in').remove()">Close Window</button>
             </div>
         </div>
     </div>
 </div>
+<img src="" class="chart-image hide" id="sgrq-chart-image" />
+<canvas id="sgrq-chart-content" width="800" height="400" class="hide"></canvas>
 @Html.Partial("/Views/PatientCharts/_SGRQ.cshtml")

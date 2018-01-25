@@ -8,6 +8,8 @@ using System.Collections.Generic;
 using AspergillosisEPR.Models.PatientViewModels;
 using System.Linq;
 using AspergillosisEPR.Helpers;
+using System.IO;
+using Microsoft.AspNetCore.NodeServices;
 
 namespace AspergillosisEPR.Controllers
 {
@@ -27,30 +29,8 @@ namespace AspergillosisEPR.Controllers
                                 .SingleOrDefaultAsync(m => m.ID == patientId);
 
             var questionariesList = patient.STGQuestionnaires.OrderBy(q => q.DateTaken).ToList();
-            var chartData = BuildSTRQViewModel(patient, questionariesList);
+            var chartData = PatientSGRQViewModel.Build(patient, questionariesList);
             return Json(chartData);
-        }
-
-        private List<PatientSGRQViewModel> BuildSTRQViewModel(Patient patient, ICollection<PatientSTGQuestionnaire> sTGQuestionnaires)
-        {
-            var questionariesChartData = new List<PatientSGRQViewModel>();
-            foreach(var sgrq in sTGQuestionnaires)
-            {                
-                var viewModel = new PatientSGRQViewModel() {
-                    DateTaken = DateHelper.DateTimeToUnixTimestamp(sgrq.DateTaken),
-                    TotalScore = sgrq.TotalScore.ToString(),
-                    PatientId = sgrq.PatientId,
-                    RM2Number = patient.RM2Number,
-                    PatientName = patient.FullName,
-                    ActivityScore = sgrq.ActivityScore.ToString(),
-                    ImpactScore = sgrq.ImpactScore.ToString(),
-                    SymptomScore = sgrq.SymptomScore.ToString()
-                };
-
-                questionariesChartData.Add(viewModel);
-            }
-            
-            return questionariesChartData;
-        }
+        }        
     }
 }

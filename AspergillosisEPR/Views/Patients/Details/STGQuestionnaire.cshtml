@@ -1,9 +1,13 @@
 ﻿@model AspergillosisEPR.Models.PatientViewModels.PatientDetailsViewModel
-<div class="col-sm-12" id="sgrq-chart">
-    <a href="@Url.Action("SGRQ", "PatientCharts", new { patientId= Model.Patient.ID})" data-id="@(Model.Patient.ID)" class="btn-lg disable-default btn btn-primary show-sgrq-chart" style="padding: 5px">
-        <i class="fa fa-line-chart"></i>&nbsp; Show Chart
-    </a>
-</div>
+@if (Model.ShowButtons)
+{
+    <div class="col-sm-12" id="sgrq-chart">
+        <a href="@Url.Action("SGRQ", "PatientCharts", new { patientId= Model.Patient.ID})" data-id="@(Model.Patient.ID)" class="pdf-hide btn-hide btn-lg disable-default btn btn-primary show-sgrq-chart" style="padding: 5px">
+            <i class="fa fa-line-chart"></i>&nbsp; Show Chart
+        </a>
+    </div>
+
+}
 @if (Model.STGQuestionnaires != null && Model.STGQuestionnaires.Any())
 {
     <div class="col-sm-12">
