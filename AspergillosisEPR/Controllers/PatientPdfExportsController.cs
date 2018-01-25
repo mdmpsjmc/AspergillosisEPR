@@ -44,10 +44,9 @@ namespace AspergillosisEPR.Controllers
             string base64String = sgrqChart.Replace("data:image/png;base64,", String.Empty);
             SavePNGChart(base64String, sgrqChartFileName);
             patientDetailsViewModel.SgrqImageChartFile = sgrqChartFileName;
-            var displayControlKeys = Request.Form.Keys.Where(k => k.Contains("Show")).ToList();
-           
+            SetItemsToShowInPdf(patientDetailsViewModel);
 
-            string htmlView = await _htmlRenderService.RenderToStringAsync("Patients/PdfDetails", patientDetailsViewModel);          
+            string htmlView = await _htmlRenderService.RenderToStringAsync("Patients/PdfDetails", patientDetailsViewModel);
             var htmlToPdfDocument = new HtmlToPdfDocument()
             {
                 GlobalSettings = {
@@ -71,6 +70,27 @@ namespace AspergillosisEPR.Controllers
             }
             var fileContentResult = new FileContentResult(pdf, "application/pdf");
             return fileContentResult;
+        }
+
+        private void SetItemsToShowInPdf(PatientDetailsViewModel patientDetailsViewModel)
+        {
+            var displayControlKeys = Request.Form.Keys.Where(k => k.Contains("Show")).ToList();
+            var displayControlProps = typeof(PatientDetailsViewModel).GetProperties().
+                                                                      Where(p => p.Name.ToString().Contains("Show")).
+                                                                      ToList();
+            foreach (var key in displayControlProps)
+            {
+                var displayKeyValue = Request.Form[key.Name];
+                var propertyInfo = patientDetailsViewModel.GetType().GetProperty(key.Name);
+                if (displayKeyValue == "on")
+                {
+                    propertyInfo.SetValue(patientDetailsViewModel, true);
+                }
+                else
+                {
+                    propertyInfo.SetValue(patientDetailsViewModel, false);
+                }
+            }
         }
 
         private bool SavePNGChart(string ImgStr, string ImgName)
