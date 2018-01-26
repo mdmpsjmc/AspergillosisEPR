@@ -12,35 +12,28 @@ using System.Threading.Tasks;
 using static AspergillosisEPR.Services.ViewToString;
 namespace AspergillosisEPR.Controllers
 {
-    public class PatientPdfExportsController : Controller
+    public class PatientPdfExportsController : PatientExportsController
     {
         private IConverter _pdfConverter;
         private IViewRenderService _htmlRenderService;
-        private PatientManager _patientManager;
-        private AspergillosisContext _context;
-        private IHostingEnvironment _hostingEnvironment;
 
         private static string SAVED_CHARTS_DIRECTORY = @"\wwwroot\Files\Charts\";
         private static string EXPORTED_PDFS_DIRECTORY = @"\wwwroot\Files\Exported\PDF\";
 
         public PatientPdfExportsController(IConverter converter, 
                                            IViewRenderService htmlRenderService, 
-                                           IHostingEnvironment hostingEnvironment,
-                                           AspergillosisContext context)
+                                           IHostingEnvironment hostingEnvironment, 
+                                           AspergillosisContext context) : base(context, hostingEnvironment)
         {
             _pdfConverter = converter;
             _htmlRenderService = htmlRenderService;
-            _context = context;
-            _patientManager = new PatientManager(context);
-            _hostingEnvironment = hostingEnvironment;
+            _fileStoragePath = _hostingEnvironment.ContentRootPath + EXPORTED_PDFS_DIRECTORY;
         }
         [HttpPost]
         public async Task<IActionResult> Details(int id, string sgrqChart)
         {
-            var patient = await _patientManager.FindPatientWithRelationsByIdAsync(id);
-            var patientDetailsViewModel = PatientDetailsViewModel.BuildPatientViewModel(_context, patient);
+            PatientDetailsViewModel patientDetailsViewModel = await GetExportViewModel(id);
             ProcessPdfChart(id, sgrqChart, patientDetailsViewModel);
-            SetItemsToShowInPdf(patientDetailsViewModel);
             string htmlView = await _htmlRenderService.RenderToStringAsync("/Views/Patients/PdfDetails.cshtml", patientDetailsViewModel);
             return GeneratePdfFromHtml(htmlView);
         }
@@ -63,19 +56,10 @@ namespace AspergillosisEPR.Controllers
                     }
                 }
             };
-            byte[] pdf = _pdfConverter.Convert(htmlToPdfDocument);
-            string pdfStoragePath = _hostingEnvironment.ContentRootPath + EXPORTED_PDFS_DIRECTORY;
-            if (!Directory.Exists(pdfStoragePath))
-            {
-                Directory.CreateDirectory(pdfStoragePath);
-            }
-            using (FileStream stream = new FileStream(pdfStoragePath + DateTime.UtcNow.Ticks.ToString() + ".pdf", FileMode.Create))
-            {
-                stream.Write(pdf, 0, pdf.Length);
-            }
-            var fileContentResult = new FileContentResult(pdf, "application/pdf");
+            byte[] outputFileBytes = _pdfConverter.Convert(htmlToPdfDocument);
+            FileContentResult fileContentResult = GetFileContentResult(outputFileBytes, ".pdf", "application/pdf");
             return fileContentResult;
-        }
+        }        
 
         private void ProcessPdfChart(int id, string sgrqChart, PatientDetailsViewModel patientDetailsViewModel)
         {
@@ -84,28 +68,7 @@ namespace AspergillosisEPR.Controllers
             string base64String = sgrqChart.Replace("data:image/png;base64,", String.Empty);
             SavePNGChart(base64String, sgrqChartFileName);
             patientDetailsViewModel.SgrqImageChartFile = sgrqChartFileName;
-        }
-
-        private void SetItemsToShowInPdf(PatientDetailsViewModel patientDetailsViewModel)
-        {
-            var displayControlKeys = Request.Form.Keys.Where(k => k.Contains("Show")).ToList();
-            var displayControlProps = typeof(PatientDetailsViewModel).GetProperties().
-                                                                      Where(p => p.Name.ToString().Contains("Show")).
-                                                                      ToList();
-            foreach (var key in displayControlProps)
-            {
-                var displayKeyValue = Request.Form[key.Name];
-                var propertyInfo = patientDetailsViewModel.GetType().GetProperty(key.Name);
-                if (displayKeyValue == "on")
-                {
-                    propertyInfo.SetValue(patientDetailsViewModel, true);
-                }
-                else
-                {
-                    propertyInfo.SetValue(patientDetailsViewModel, false);
-                }
-            }
-        }
+        }       
 
         private bool SavePNGChart(string ImgStr, string ImgName)
         {
