@@ -190,7 +190,7 @@
                 $("div#modal-container").html(responseHtml);
                 $("div#details-modal").modal("show");
                 var patientId = url.split("/")[3];
-                $.getJSON("PatientCharts/SGRQ?patientId=" + patientId, function (response) {
+                $.getJSON("/PatientCharts/SGRQ?patientId=" + patientId, function (response) {
                     Charts.chartFromResponse(response);
                 });
             });
@@ -412,7 +412,8 @@
                 var tabName = tmp.textContent.trim();
                 var tabCapitalized = tabName.charAt(0).toUpperCase() + tabName.slice(1);
                 var isChecked = index == 0 ? "checked=\"checked\"" : "";
-                var htmlOption = '<label class=\"checkbox\"><input type= \"checkbox\" name= \"Show' + tabCapitalized + '\" ' + isChecked + '/><i></i> <span class=\"checkbox-label\"> ' + tabName + '</span></label>'
+                var isDisabled = index == 0 ? "disabled=\"disabled\"" : "";
+                var htmlOption = '<label class=\"checkbox\"><input type= \"checkbox\" ' + isDisabled + ' name= \"Show' + tabCapitalized + '\" ' + isChecked + '/><i></i> <span class=\"checkbox-label\"> ' + tabName + '</span></label>'
                 container.append(htmlOption);
             });
             $("div#export-options-modal").modal("show"); 

@@ -39,14 +39,14 @@ namespace AspergillosisEPR.Controllers
         {
             var patient = await _patientManager.FindPatientWithRelationsByIdAsync(id);
             var patientDetailsViewModel = PatientDetailsViewModel.BuildPatientViewModel(_context, patient);
-            var sgrqChartFileName = "SGRQ_Chart_" + id.ToString() + "_";
-            patientDetailsViewModel.ShowButtons = false;
-            string base64String = sgrqChart.Replace("data:image/png;base64,", String.Empty);
-            SavePNGChart(base64String, sgrqChartFileName);
-            patientDetailsViewModel.SgrqImageChartFile = sgrqChartFileName;
+            ProcessPdfChart(id, sgrqChart, patientDetailsViewModel);
             SetItemsToShowInPdf(patientDetailsViewModel);
-
             string htmlView = await _htmlRenderService.RenderToStringAsync("Patients/PdfDetails", patientDetailsViewModel);
+            return GeneratePdfFromHtml(htmlView);
+        }
+
+        private FileContentResult GeneratePdfFromHtml(string htmlView)
+        {
             var htmlToPdfDocument = new HtmlToPdfDocument()
             {
                 GlobalSettings = {
@@ -64,12 +64,26 @@ namespace AspergillosisEPR.Controllers
                 }
             };
             byte[] pdf = _pdfConverter.Convert(htmlToPdfDocument);
-            using (FileStream stream = new FileStream(_hostingEnvironment.ContentRootPath + EXPORTED_PDFS_DIRECTORY + DateTime.UtcNow.Ticks.ToString() + ".pdf", FileMode.Create))
+            string pdfStoragePath = _hostingEnvironment.ContentRootPath + EXPORTED_PDFS_DIRECTORY;
+            if (!Directory.Exists(pdfStoragePath))
+            {
+                Directory.CreateDirectory(pdfStoragePath);
+            }
+            using (FileStream stream = new FileStream(pdfStoragePath + DateTime.UtcNow.Ticks.ToString() + ".pdf", FileMode.Create))
             {
                 stream.Write(pdf, 0, pdf.Length);
             }
             var fileContentResult = new FileContentResult(pdf, "application/pdf");
             return fileContentResult;
+        }
+
+        private void ProcessPdfChart(int id, string sgrqChart, PatientDetailsViewModel patientDetailsViewModel)
+        {
+            var sgrqChartFileName = "SGRQ_Chart_" + id.ToString() + "_";
+            patientDetailsViewModel.ShowButtons = false;
+            string base64String = sgrqChart.Replace("data:image/png;base64,", String.Empty);
+            SavePNGChart(base64String, sgrqChartFileName);
+            patientDetailsViewModel.SgrqImageChartFile = sgrqChartFileName;
         }
 
         private void SetItemsToShowInPdf(PatientDetailsViewModel patientDetailsViewModel)
