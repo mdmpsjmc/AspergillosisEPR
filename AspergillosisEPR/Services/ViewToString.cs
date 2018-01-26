@@ -41,7 +41,7 @@ namespace AspergillosisEPR.Services
 
                 using (var sw = new StringWriter())
                 {
-                    var viewResult = _razorViewEngine.FindView(actionContext, viewName, false);
+                    var viewResult = _razorViewEngine.GetView(null, viewName, true);
 
                     if (viewResult.View == null)
                     {

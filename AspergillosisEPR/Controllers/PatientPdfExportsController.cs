@@ -41,7 +41,7 @@ namespace AspergillosisEPR.Controllers
             var patientDetailsViewModel = PatientDetailsViewModel.BuildPatientViewModel(_context, patient);
             ProcessPdfChart(id, sgrqChart, patientDetailsViewModel);
             SetItemsToShowInPdf(patientDetailsViewModel);
-            string htmlView = await _htmlRenderService.RenderToStringAsync("Patients/PdfDetails", patientDetailsViewModel);
+            string htmlView = await _htmlRenderService.RenderToStringAsync("/Views/Patients/PdfDetails.cshtml", patientDetailsViewModel);
             return GeneratePdfFromHtml(htmlView);
         }
 

@@ -76,7 +76,7 @@ namespace AspergillosisEPR
         private void ConfigurePdfService(IServiceCollection services)
         {
             CustomAssemblyLoadContext context = new CustomAssemblyLoadContext();
-            string path = HostingEnvironment.ContentRootPath + "/" + "libwkhtmltox.dll";
+            string path = @"C:\"+"libwkhtmltox.dll";
             context.LoadUnmanagedLibrary(path);
             services.AddSingleton(typeof(IConverter),
                                          new SynchronizedConverter(new PdfTools()));
@@ -92,7 +92,7 @@ namespace AspergillosisEPR
             }
             else
             {
-                app.UseExceptionHandler(" / Home/Error");
+                app.UseExceptionHandler("/Home/Error");
             }
 
             app.UseStaticFiles();
