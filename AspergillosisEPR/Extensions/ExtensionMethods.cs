@@ -26,6 +26,11 @@ namespace AspergillosisEPR.Extensions
             );
         }
 
+        public static string[] SplitCamelCaseArray(this string source)
+        {
+            return Regex.Split(source, @"(?<!^)(?=[A-Z])");
+        }
+
         public static string FirstCharacterToLower(this string str)
         {
             if (string.IsNullOrEmpty(str))

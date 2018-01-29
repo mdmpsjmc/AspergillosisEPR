@@ -45,7 +45,7 @@ namespace AspergillosisEPR.Controllers
                 var propertyInfo = patientDetailsViewModel.GetType().GetProperty(key.Name);
                 if (displayKeyValue == "on")
                 {
-                    propertyInfo.SetValue(patientDetailsViewModel, true);
+                    propertyInfo.SetValue(patientDetailsViewModel, true);                    
                 }
                 else
                 {

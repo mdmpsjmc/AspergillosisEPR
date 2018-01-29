@@ -373,7 +373,6 @@
             } else {
                 $("div.death").addClass("hidden");
                 $("input#DateOfDeath").val("")
-
             }
         });
     }
@@ -402,9 +401,11 @@
     var onExportOptionsShow = function () {
         $(document).off("click.export-trigger").on("click.export-trigger", "a.export-trigger", function (e) {
             e.preventDefault();
+            var exportToFile = $(this).data("file");
+            $("button.download-details").attr("id", exportToFile);
             var tabs = $(this).parents("div.modal-content").find("ul#details-tab li a");
             var container = $("div.inline-group.labels");
-            container.html("");
+            container.html("");            
             $.each(tabs, function (index, element) {
                 var tabHtml = $(element).html();
                 var tmp = document.createElement("DIV");
@@ -420,14 +421,13 @@
 
             $("div#export-options-modal").on('shown.bs.modal', function (e) {
                 onDownloadPatientDetailsPdf();
+                onDownloadPatientDetailsExcel();
             });
         });
     }
-
-
         
     var onDownloadPatientDetailsPdf = function () {
-        $(document).off("click.pdf-details-download").on("click.pdf-details-download", ".download-details-pdf", function (e) {
+        $(document).off("click.pdf-details-download").on("click.pdf-details-download", "button#pdf.download-details", function (e) {
             e.preventDefault();
             var sgrqChartImage = encodeURIComponent($("img#sgrq-chart-image").attr("src"));
             var patientId = $(this).data("id");
@@ -436,6 +436,18 @@
             AjaxFileDownload.execute(requestUrl, requestData, "Patient_Details_" + patientId + ".pdf", "application/pdf");  
         });
     }
+
+    var onDownloadPatientDetailsExcel = function () {
+        $(document).off("click.xls-details-download").on("click.xls-details-download", "button#excel.download-details", function (e) {
+            e.preventDefault();
+            var sgrqChartImage = encodeURIComponent($("img#sgrq-chart-image").attr("src"));
+            var patientId = $(this).data("id");
+            var requestUrl = "/PatientExcelExports/Details/" + patientId;
+            var requestData = $("form#export-options-form").serialize();
+            AjaxFileDownload.execute(requestUrl, requestData, "Patient_Details_" + patientId + ".xlsx", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+        });
+    }
+
 
     return {
 
