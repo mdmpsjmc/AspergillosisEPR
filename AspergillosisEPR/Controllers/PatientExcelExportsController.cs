@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Collections;
 using AspergillosisEPR.Extensions;
 using System;
+using System.Linq;
 
 namespace AspergillosisEPR.Controllers
 {
@@ -21,10 +22,10 @@ namespace AspergillosisEPR.Controllers
 
         private XSSFWorkbook _outputWorkbook;
 
-        public PatientExcelExportsController(AspergillosisContext context, 
+        public PatientExcelExportsController(AspergillosisContext context,
                                              IHostingEnvironment hostingEnvironment) : base(context, hostingEnvironment)
         {
-            _fileStoragePath = _hostingEnvironment.ContentRootPath + EXPORTED_EXCEL_DIRECTORY;           
+            _fileStoragePath = _hostingEnvironment.ContentRootPath + EXPORTED_EXCEL_DIRECTORY;
         }
 
         public async Task<IActionResult> Details(int id)
@@ -49,7 +50,75 @@ namespace AspergillosisEPR.Controllers
                 if (displayKeyValue == "on")
                 {
                     ISheet currentSheet = _outputWorkbook.CreateSheet(propertyName);
-                }                
+                    var items = GetCollectionFromTabName(patientDetailsVM, propertyName);
+                    _outputWorkbook.SetActiveSheet(1); 
+                    AddCollectionDataToCurrentSheet(items, currentSheet);
+                }
+            }
+        }
+
+        private void AddCollectionDataToCurrentSheet(List<object> items, ISheet currentSheet)
+        {
+            if (items.Count == 0) return;
+            for(var cursor = 0; cursor < items.Count; cursor++)
+            {
+                if (cursor == 0)
+                {
+                    currentSheet = CreateHeaders(items[cursor], currentSheet);
+                }
+                AddRowFrom(items[cursor], currentSheet, cursor);
+            }
+        }
+
+        private ISheet CreateHeaders(object item, ISheet currentSheet)
+        {
+            var currentRow = currentSheet.CreateRow(0);
+            var objectProperties = item.GetType().GetProperties();
+            for (var cursor = 0; cursor < objectProperties.Length; cursor++)
+            {
+                var property = objectProperties[cursor];
+                var headerCell = currentRow.CreateCell(cursor);
+                var cellValue = property.Name;                
+                headerCell.SetCellType(CellType.String);
+                ApplyBoldCellStyle(headerCell);
+                headerCell.SetCellValue(headerValue(cellValue));
+            }
+            return currentSheet;
+        }
+
+        private void AddRowFrom(object item, ISheet currentSheet, int currentCursor)
+        {
+            var currentRow = currentSheet.CreateRow(currentCursor+1);
+            var objectProperties = item.GetType().GetProperties();
+            for (var cursor = 0; cursor < objectProperties.Length; cursor++)
+            {
+                var property = objectProperties[cursor];
+                var valueCell = currentRow.CreateCell(cursor);
+                var currentType = property.PropertyType;
+                if (property.PropertyType == typeof(String))
+                {
+                    var propertyValue = property.GetValue(item)?.ToString();
+                    valueCell.SetCellType(CellType.String);
+                    valueCell.SetCellValue(propertyValue);
+                }
+                else if (property.PropertyType == typeof(DateTime))
+                {
+                    var propertyValue = Convert.ToDateTime(property.GetValue(item));                   
+                    valueCell.SetCellValue(propertyValue);                    
+                }
+                else if (property.PropertyType == typeof(Decimal))
+                {
+                    var propertyValue = property.GetValue(item);
+                    var fromatted = String.Format("{0:0.00}", propertyValue);
+                    valueCell.SetCellType(CellType.String);
+                    valueCell.SetCellValue(fromatted);
+                }
+                else if (property.PropertyType == typeof(Int32))
+                {
+                    var propertyValue = Convert.ToInt32(property.GetValue(item));
+                    valueCell.SetCellValue(propertyValue);
+                    valueCell.SetCellType(CellType.Numeric);
+                }
             }
         }
 
@@ -72,8 +141,6 @@ namespace AspergillosisEPR.Controllers
         public void SetHorizontalCellValuesFromProperties(object objectToQuery, ISheet currentSheet)
         {
             var objectProperties = objectToQuery.GetType().GetProperties();
-            currentSheet.AutoSizeColumn(0);
-            currentSheet.AutoSizeColumn(1);
             for (var cursor = 0; cursor < objectProperties.Length; cursor++)
             {
                 string propertyName = objectProperties[cursor].Name;
@@ -89,6 +156,8 @@ namespace AspergillosisEPR.Controllers
                     currentRow.CreateCell(1).SetCellValue(propertyValue);
                 }
             }
+            currentSheet.AutoSizeColumn(0);
+            currentSheet.AutoSizeColumn(1);
         }
 
         private bool PropertyInvalid(System.Reflection.PropertyInfo[] objectProperties, int cursor, string propertyValue)
@@ -104,7 +173,7 @@ namespace AspergillosisEPR.Controllers
             } else
             {
                 return propertyName;
-            }            
+            }
         }
 
         private void ApplyBoldCellStyle(ICell cell)
@@ -114,6 +183,21 @@ namespace AspergillosisEPR.Controllers
             boldFont.IsBold = true;
             boldFontCellStyle.SetFont(boldFont);
             cell.CellStyle = boldFontCellStyle;
+        }
+
+        private List<object> GetCollectionFromTabName(PatientDetailsViewModel patientDetailsVM, string tabName)
+        {
+            var allDx = patientDetailsVM.PrimaryDiagnoses.
+                                         Concat(patientDetailsVM.SecondaryDiagnoses).
+                                         Concat(patientDetailsVM.OtherDiagnoses).
+                                         Concat(patientDetailsVM.PastDiagnoses).
+                                         ToList();
+            var dictionary = new Dictionary<string, List<object>>();
+            dictionary.Add("Diagnoses", allDx.ToList<object>());
+            dictionary.Add("Drugs", patientDetailsVM.PatientDrugs.ToList<object>());
+            dictionary.Add("SGRQ",patientDetailsVM.STGQuestionnaires.ToList<object>());
+            dictionary.Add("Ig", patientDetailsVM.PatientImmunoglobulines.ToList<object>());
+            return dictionary[tabName];
         }
     }
 }
