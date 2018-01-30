@@ -44,6 +44,19 @@ namespace AspergillosisEPR.Models
             }
         }
 
+        public string SideEffectsNames
+        {
+            get
+            {
+                if (SideEffects != null)
+                    return string.Join(", ", SideEffects.Select(x => x.SideEffect.Name).ToList());
+                else
+                {
+                    return "";
+                }
+            }
+        }
+
         override public List<string> ExcludedProperties()
         {
             return new List<string>()
