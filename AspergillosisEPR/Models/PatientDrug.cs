@@ -1,13 +1,16 @@
-﻿using AspergillosisEPR.Lib.Search;
+﻿using AspergillosisEPR.Lib.Exporters;
+using AspergillosisEPR.Lib.Search;
 using Newtonsoft.Json;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Reflection;
+
 namespace AspergillosisEPR.Models
 {
-    public class PatientDrug : ISearchable
+    public class PatientDrug : Exportable, ISearchable
     {
         [Key]
         public int ID { get; set; }
@@ -40,6 +43,15 @@ namespace AspergillosisEPR.Models
                 }
             }
         }
+
+        override public List<string> ExcludedProperties()
+        {
+            return new List<string>()
+            {
+                "PatientId", "Patient", "SideEffects", "SelectedEffectsIds", "Drug"
+            };
+        }
+
         public Dictionary<string, string> SearchableFields()
         {
             return new Dictionary<string, string>()

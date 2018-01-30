@@ -70,12 +70,13 @@ namespace AspergillosisEPR.Lib.Exporters
         private ISheet CreateHeaders(object item, ISheet currentSheet)
         {
             var currentRow = currentSheet.CreateRow(0);
-            var objectProperties = item.GetType().GetProperties();
-            for (var cursor = 0; cursor < objectProperties.Length; cursor++)
+            var exportableItem = (Exportable)item;
+            for (var cursor = 0; cursor < exportableItem.ExportableProperties().Count; cursor++)
             {
-                var property = objectProperties[cursor];
+                var property = exportableItem.ExportableProperties()[cursor];
+                var cellValue = property.Name;                 
                 var headerCell = currentRow.CreateCell(cursor);
-                var cellValue = property.Name;
+                if (cellValue.Contains("Id")) cellValue = property.Name.Replace("Id", "");
                 headerCell.SetCellType(CellType.String);
                 ApplyBoldCellStyle(headerCell);
                 headerCell.SetCellValue(headerValue(cellValue));
@@ -83,48 +84,62 @@ namespace AspergillosisEPR.Lib.Exporters
             return currentSheet;
         }
 
-        private void AddRowFrom(object item, ISheet currentSheet, int currentCursor)
+        private void AddRowFrom(dynamic item, ISheet currentSheet, int currentCursor)
         {
             var currentRow = currentSheet.CreateRow(currentCursor + 1);
-            var objectProperties = item.GetType().GetProperties();
-            for (var cursor = 0; cursor < objectProperties.Length; cursor++)
-            {
-                var property = objectProperties[cursor];
+            var exportableItem = (Exportable)item;
+            for (var cursor = 0; cursor < exportableItem.ExportableProperties().Count; cursor++)
+            {            
+                var property = exportableItem.ExportableProperties()[cursor];
                 var valueCell = currentRow.CreateCell(cursor);
                 var currentType = property.PropertyType;
-
-                SetCellValueFromProperty(item, property, valueCell);
+                SetCellValueFromProperty(exportableItem, property, valueCell);
             }
         }
 
         private void SetCellValueFromProperty(object item, PropertyInfo property, ICell valueCell)
         {
-            
-
-            switch (Type.GetTypeCode(property.PropertyType))
+           
+            var propertyName = property.Name;
+            if (propertyName == "PatientId") return;
+            if (propertyName.Contains("Id") && !propertyName.Contains("Ids"))
             {
-                case TypeCode.Decimal:
-                    var propertyValue = property.GetValue(item);
-                    var fromatted = String.Format("{0:0.00}", propertyValue);
-                    valueCell.SetCellType(CellType.String);
-                    valueCell.SetCellValue(fromatted);
-                    break;
+                var navigationPropertyName = propertyName.Replace("Id", "");
+                var navigationProperty = item.GetType().GetProperty(navigationPropertyName);
+                var nameValue = ExtensionMethods.GetValueFromProperty(item, navigationPropertyName+".Name");
+                if (nameValue == "")
+                {
+                    nameValue = ExtensionMethods.GetValueFromProperty(item, navigationPropertyName + ".CategoryName");
+                }
+                valueCell.SetCellType(CellType.String);
+                valueCell.SetCellValue(nameValue);
+            } else
+            {
+                switch (Type.GetTypeCode(property.PropertyType))
+                {
+                    case TypeCode.Decimal:
+                        var propertyValue = property.GetValue(item);
+                        var fromatted = String.Format("{0:0.00}", propertyValue);
+                        valueCell.SetCellType(CellType.String);
+                        valueCell.SetCellValue(fromatted);
+                        break;
 
-                case TypeCode.Int32:
-                    var integerPropertyValue = Convert.ToInt32(property.GetValue(item));
-                    valueCell.SetCellValue(integerPropertyValue);
-                    valueCell.SetCellType(CellType.Numeric);
-                    break;
-                case TypeCode.String:
-                    var stringPropertyValue = property.GetValue(item)?.ToString();
-                    valueCell.SetCellType(CellType.String);
-                    valueCell.SetCellValue(stringPropertyValue);
-                    break;
-                case TypeCode.DateTime:
-                    var datePropertyValue = Convert.ToDateTime(property.GetValue(item));
-                    valueCell.SetCellValue(datePropertyValue.ToString("dd/MM/yyyy"));
-                    break;
-            }       
+                    case TypeCode.Int32:
+                        var integerPropertyValue = Convert.ToInt32(property.GetValue(item));
+                        valueCell.SetCellValue(integerPropertyValue);
+                        valueCell.SetCellType(CellType.Numeric);
+                        break;
+                    case TypeCode.String:
+                        var stringPropertyValue = property.GetValue(item)?.ToString();
+                        valueCell.SetCellType(CellType.String);
+                        valueCell.SetCellValue(stringPropertyValue);
+                        break;
+                    case TypeCode.DateTime:
+                        var datePropertyValue = Convert.ToDateTime(property.GetValue(item));
+                        valueCell.SetCellValue(datePropertyValue.ToString("dd/MM/yyyy"));
+                        break;
+                }
+            }           
         }
 
         public byte[] SerializeWorkbook()

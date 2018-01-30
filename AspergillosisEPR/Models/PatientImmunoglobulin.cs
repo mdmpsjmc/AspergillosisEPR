@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AspergillosisEPR.Lib.Exporters;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -6,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace AspergillosisEPR.Models
 {
-    public class PatientImmunoglobulin
+    public class PatientImmunoglobulin : Exportable
     {
         public int ID { get; set; }
         public int PatientId { get; set; }
@@ -18,5 +19,12 @@ namespace AspergillosisEPR.Models
         public decimal Value { get; set;  }
         public ImmunoglobulinType ImmunoglobulinType { get; set; }
 
+        override public List<string> ExcludedProperties()
+        {
+            return new List<string>()
+            {
+                "PatientId", "Patient", "ImmunoglobulinType"
+            };
+        }
     }
 }

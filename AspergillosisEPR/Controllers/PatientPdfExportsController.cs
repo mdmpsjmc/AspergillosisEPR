@@ -86,7 +86,5 @@ namespace AspergillosisEPR.Controllers
 
             return true;
         }
-    }
-
-    
+    }    
 }

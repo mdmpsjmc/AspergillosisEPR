@@ -1,11 +1,12 @@
-﻿using AspergillosisEPR.Lib.Search;
+﻿using AspergillosisEPR.Lib.Exporters;
+using AspergillosisEPR.Lib.Search;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace AspergillosisEPR.Models
 {
-    public class PatientSTGQuestionnaire : ISearchable
+    public class PatientSTGQuestionnaire : Exportable, ISearchable
     {
         public int ID { get; set;  }
         public int PatientId { get; set;  }
@@ -17,6 +18,14 @@ namespace AspergillosisEPR.Models
         [Display(Name = "Date Taken")]
         [DisplayFormat(DataFormatString = "{dd-MM-yyyy}")]
         public DateTime DateTaken { get; set;  }
+
+        override public List<string> ExcludedProperties()
+        {
+            return new List<string>()
+            {
+                "PatientId", "Patient"
+            };
+        }
 
         public bool IsValid()
         {
