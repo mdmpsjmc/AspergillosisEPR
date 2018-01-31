@@ -9,13 +9,14 @@
             "filter": true,
             "responsive": true, 
             "orderMulti": false,
+            "pageSize": 50,
             rowGroup: {
                 dataSrc: "name",
                 startRender: function (rows, group) {
                     var ids = [];
                     $.each(rows.data(), function (index, el) {
                         ids.push(el.id);
-                    });
+                    });                    
                     return $('<tr/>')
                         .append('<td>' + group + '</td>')
                         .append('<td>' + '<a class="btn btn-primary edit-radiology-result edit-link disable-default" data- role="Update Role" href="/RadiologyResults/Edit/' + ids.join(',') + '" data- id="' + ids.join(',') + '" > <i class=\'fa fa-edit\' ></i>&nbsp;Edit</a>' + '&nbsp;<a class="btn btn-danger edit-radiology-result delete-link disable-default" data-tab="radiology-results" data-warning="All patient diagnoses related to this diagnosis will be also irreversibly lost from database if you remove this item" style="display: none" data-role="Delete Role" href="/radiologyResults/Delete/' + ids.join(',') + '" data-id="' + ids.join(',') + '"><i class=\'fa fa-trash\' ></i>&nbsp;Delete</a>&nbsp;' + '</td>');
