@@ -141,9 +141,9 @@ namespace AspergillosisEPR.Data
 
             var iGType = new ImmunoglobulinType[]
             {
-                new ImmunoglobulinType {Name = "IgA"},
+                new ImmunoglobulinType { Name = "IgA"},
                 new ImmunoglobulinType { Name = "IgD" },
-                new ImmunoglobulinType {Name = "IgE"},
+                new ImmunoglobulinType { Name = "IgE"},
                 new ImmunoglobulinType { Name = "IgG" },
                 new ImmunoglobulinType { Name = "IgM"}
             };
@@ -151,6 +151,54 @@ namespace AspergillosisEPR.Data
             foreach (var ig in iGType)
             {
                 context.Add(ig);
+            }
+            await context.SaveChangesAsync();
+        }
+
+        public static async void AddRadiologyFindingSelect(AspergillosisContext context)
+        {
+            if (context.RadiologyFindingSelect.Any())
+            {
+                return;
+            }
+
+            var radiologyFindingSelects = new RadiologyFindingSelect[]
+            {
+                new RadiologyFindingSelect { Name = "Aspergilloma"},
+                new RadiologyFindingSelect { Name = "Pleural Thickening" },
+                new RadiologyFindingSelect { Name = "Lesion"},
+                new RadiologyFindingSelect { Name = "Cavitation" },
+                new RadiologyFindingSelect { Name = "Lobe Involved"}
+            };
+
+            foreach (var radiologyFindingSelect in radiologyFindingSelects)
+            {
+                context.Add(radiologyFindingSelect);
+            }
+            await context.SaveChangesAsync();
+        }
+
+        public static async void AddRadiologyFindingSelectOptions(AspergillosisContext context)
+        {
+            if (context.RadiologyFindingSelectOption.Any())
+            {
+                return;
+            }
+
+            var radiologyFindingSelectOptions = new RadiologyFindingSelectOption[]
+            {
+                new RadiologyFindingSelectOption { Name = "Yes"},
+                new RadiologyFindingSelectOption { Name = "No"},
+                new RadiologyFindingSelectOption { Name = "Unilateral"},
+                new RadiologyFindingSelectOption { Name = "Bilateral" },
+                new RadiologyFindingSelectOption { Name = "Right"},
+                new RadiologyFindingSelectOption { Name = "Left"},
+                new RadiologyFindingSelectOption { Name = "Multicavitry"}
+            };
+
+            foreach (var radiologyFindingSelectOption in radiologyFindingSelectOptions)
+            {
+                context.Add(radiologyFindingSelectOption);
             }
             await context.SaveChangesAsync();
         }

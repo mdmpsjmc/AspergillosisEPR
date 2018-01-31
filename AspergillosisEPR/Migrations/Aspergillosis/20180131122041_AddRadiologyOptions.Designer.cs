@@ -11,9 +11,10 @@ using System;
 namespace AspergillosisEPR.Migrations.Aspergillosis
 {
     [DbContext(typeof(AspergillosisContext))]
-    partial class AspergillosisContextModelSnapshot : ModelSnapshot
+    [Migration("20180131122041_AddRadiologyOptions")]
+    partial class AddRadiologyOptions
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -270,6 +271,8 @@ namespace AspergillosisEPR.Migrations.Aspergillosis
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<bool>("IsMultiple");
+
                     b.Property<string>("Name");
 
                     b.HasKey("ID");
@@ -293,8 +296,6 @@ namespace AspergillosisEPR.Migrations.Aspergillosis
                 {
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd();
-
-                    b.Property<bool>("IsMultiple");
 
                     b.Property<int>("RadiologyFindingSelectId");
 

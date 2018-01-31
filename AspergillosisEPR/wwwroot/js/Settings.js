@@ -13,6 +13,15 @@
                 LoadingIndicator.hide();
                 $("div#modal-container").html(html);
                 $("div.new-settings-modal").modal("show");
+
+                $("div.new-settings-modal").on('shown.bs.modal', function (e) {
+                    $("select.select2").select2({
+                        minimumResultsForSearch: -1,
+                        placeholder: function () {
+                            $(this).data('placeholder');
+                        }
+                    });    
+                });                
             });
         });
     }

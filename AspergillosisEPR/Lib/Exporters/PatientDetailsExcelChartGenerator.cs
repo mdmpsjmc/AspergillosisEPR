@@ -27,7 +27,7 @@ namespace AspergillosisEPR.Lib.Exporters
 
         public byte[] GenerateDocumentWithChart()
         {
-            ByteArrayToExcelPackage(_spreadsheetToAppendChart);
+            ByteArrayToExcelPackage();
             CreatePatientDetailsChart();
             return SerializeWorkbook();          
         }
@@ -55,9 +55,9 @@ namespace AspergillosisEPR.Lib.Exporters
             }            
         }
 
-        private ExcelPackage ByteArrayToExcelPackage(byte[] arrBytes)
+        private ExcelPackage ByteArrayToExcelPackage()
         {
-            using (MemoryStream memStream = new MemoryStream(arrBytes))
+            using (MemoryStream memStream = new MemoryStream(_spreadsheetToAppendChart))
             {
                 memStream.Seek(0, SeekOrigin.Begin);
                 _package = new ExcelPackage(memStream);

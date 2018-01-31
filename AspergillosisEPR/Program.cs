@@ -22,7 +22,9 @@ namespace AspergillosisEPR
                     DbInitializer.Initialize(context);
                     DbInitializer.AddDefaultPatientStatuses(context);
                     DbInitializer.CreateDbImportTypes(context);
-                    DbInitializer.AddIgTypes(context); 
+                    DbInitializer.AddIgTypes(context);
+                    DbInitializer.AddRadiologyFindingSelect(context);
+                    DbInitializer.AddRadiologyFindingSelectOptions(context);
                     var context2 = services.GetRequiredService<ApplicationDbContext>();
                     AppDbInitializer.Iniitalize(context2);
                 }

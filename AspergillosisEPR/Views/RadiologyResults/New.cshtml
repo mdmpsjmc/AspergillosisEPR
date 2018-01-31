@@ -1,0 +1,47 @@
+﻿@model AspergillosisEPR.Models.SettingsViewModels.NewRadiologyResultViewModel
+<div class="modal fade new-settings-modal" tabindex="-1" role="dialog" id="new-radiology-result-modal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">Add New Radiology Result</h4>
+            </div>
+            <div class="modal-body">
+                <div class="widget-body">
+                    <form asp-controller="/RadiologyResults" asp-action="Create" class="smart-form settings-form" data-ajax="true" data-ajax-method="POST" id="new-radiology_result-form">
+                        <fieldset>
+                            <div class="row">
+                                <div class="inline-group labels">
+                                    <label class="checkbox">
+                                        <input asp-for="@Model.IsMultiple" />
+                                        <span asp-validation-for="@(Model.IsMultiple)" class="text-danger"></span>
+                                        <i></i>&nbsp;This is a multi select field
+                                    </label>
+                                </div>
+                                <label class="select">
+                                    <label asp-for="@(Model.RadiologyFindingSelectId)" class="select">
+                                        @Html.DropDownList("RadiologyFindingSelectId", (SelectList)ViewBag.RadiologyResultName, "Select Radiology Result Name")
+                                        <i></i>
+                                    </label>
+                                    <span asp-validation-for="@(Model.RadiologyFindingSelectId)" class="text-danger"></span>
+                                </label>                                
+                                    <label class="select">
+                                        <label asp-for="@(Model.RadiologyFindingSelectOptionsIds)" class="select">
+                                            @Html.DropDownList("RadiologyFindingSelectOptionsIds", (SelectList)ViewBag.RadiologyResultOptions, "", new { @class = "select2", @multiple = "multiple" })
+                                        </label>
+                                        <span asp-validation-for="@(Model.RadiologyFindingSelectOptionsIds)" class="text-danger"></span>
+                                    </label>
+                                </div>
+                        </fieldset>
+                    </form>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-success submit-settings-item" data-tab="radiology-results">SAVE</button>
+            </div>
+        </div>
+    </div>
+</div>

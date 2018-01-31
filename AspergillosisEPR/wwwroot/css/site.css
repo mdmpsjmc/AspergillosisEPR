@@ -272,3 +272,24 @@ div.dt-button-collection .dt-button {
     color: black !important;
     font-size: 16px !important;
 }
+
+.settings-tab-styled {
+    font-size: 43px;
+    margin-left: 34px;
+    color: gray;
+    width: 0px;
+    float: left;
+    display: block;
+    margin-top: -9px;
+    opacity: .5;
+    font-weight: bold;
+    height: 40px
+}
+
+
+span.tab-label {
+    margin-top: 8px;
+    display: block;
+    width: 125px;
+    float: left;
+}

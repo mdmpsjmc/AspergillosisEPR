@@ -24,8 +24,9 @@ namespace AspergillosisEPR.Data
         public DbSet<DbImportType> DBImportTypes { get; set; }
         public DbSet<ImmunoglobulinType> ImmunoglobulinTypes { get; set; }
         public DbSet<PatientImmunoglobulin> PatientImmunoglobulins { get; set; }
-
-
+        public DbSet<RadiologyFindingSelect> RadiologyFindingSelect { get; set; }
+        public DbSet<RadiologyFindingSelectOption> RadiologyFindingSelectOption { get; set; }
+        public DbSet<RadiologyResult> RadiologyResult { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -47,6 +48,9 @@ namespace AspergillosisEPR.Data
             modelBuilder.Entity<DbImportType>().ToTable("DbImportTypes");
             modelBuilder.Entity<ImmunoglobulinType>().ToTable("ImmunoglobulinTypes");
             modelBuilder.Entity<PatientImmunoglobulin>().ToTable("PatientImmunoglobulins");
+            modelBuilder.Entity<RadiologyFindingSelect>().ToTable("RadiologyFindingSelects");
+            modelBuilder.Entity<RadiologyFindingSelectOption>().ToTable("RadiologyFindingSelectOptions");
+            modelBuilder.Entity<RadiologyResult>().ToTable("RadiologyResults");
         }
     }
 

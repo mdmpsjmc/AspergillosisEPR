@@ -1,0 +1,21 @@
+﻿@model AspergillosisEPR.Models.SettingsViewModels.SettingsViewModel
+<div class="table-responsive">
+@if (User.IsInRole("Create Role") || User.IsInRole("Admin Role"))
+{
+    <div class="button">
+        <a href="@Url.Action("New", "RadiologyResults")" class="btn btn-success add-radiology-result add-settings-item disable-default" data-klass="RadiologyResult" data-tab="radiology-results">
+            <i class="fa fa-plus"></i> Add new radiology result
+        </a>
+    </div>
+}
+    <table class="table table-bordered table-hover" id="radiology_results_datatable" style="width: 100%">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Option</th>                
+            </tr>
+        </thead>
+        <tbody>          
+        </tbody>
+    </table>
+</div>
