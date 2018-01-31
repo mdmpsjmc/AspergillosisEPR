@@ -118,10 +118,13 @@ namespace AspergillosisEPR.Lib.Exporters
                 switch (Type.GetTypeCode(property.PropertyType))
                 {
                     case TypeCode.Decimal:
+                        IDataFormat format = _outputWorkbook.CreateDataFormat();
                         var propertyValue = property.GetValue(item);
                         var fromatted = String.Format("{0:0.00}", propertyValue);
-                        valueCell.SetCellType(CellType.String);
-                        valueCell.SetCellValue(fromatted);
+                     //   valueCell.SetCellType(CellType.Numeric);
+                       // valueCell.SetCellValue(fromatted);
+                        //valueCell.CellStyle.DataFormat = _outputWorkbook.CreateDataFormat().GetFormat("#,##0");
+                        SetValueAndFormat(valueCell, Convert.ToDouble(fromatted), format.GetFormat("0.00"));
                         break;
 
                     case TypeCode.Int32:
@@ -155,6 +158,7 @@ namespace AspergillosisEPR.Lib.Exporters
                 var byteArray = tempStream.ToArray();
                 ms.Write(byteArray, 0, byteArray.Length);
                 return ms.ToArray();
+                
             }
         }
 
@@ -219,6 +223,14 @@ namespace AspergillosisEPR.Lib.Exporters
             dictionary.Add("SGRQ", _patientDetailsVM.STGQuestionnaires.ToList<object>());
             dictionary.Add("Ig", _patientDetailsVM.PatientImmunoglobulines.ToList<object>());
             return dictionary[tabName];
+        }
+
+        private void SetValueAndFormat(ICell cell, double value, short formatId)
+        {
+            cell.SetCellValue(value);
+            ICellStyle cellStyle = _outputWorkbook.CreateCellStyle();
+            cellStyle.DataFormat = formatId;
+            cell.CellStyle = cellStyle;
         }
     }
 }
