@@ -124,7 +124,7 @@ namespace AspergillosisEPR.Lib.Exporters
                         IDataFormat format = _outputWorkbook.CreateDataFormat();
                         var propertyValue = property.GetValue(item);
                         var fromatted = String.Format("{0:0.00}", propertyValue);
-                        SetValueAndFormat(valueCell, Convert.ToDouble(fromatted), format.GetFormat("0.00"));
+                        SetNumericValueAndFormat(valueCell, Convert.ToDouble(fromatted), format.GetFormat("0.00"));
                         break;
 
                     case TypeCode.Int32:
@@ -208,7 +208,7 @@ namespace AspergillosisEPR.Lib.Exporters
             return dictionary[tabName];
         }
 
-        private void SetValueAndFormat(ICell cell, double value, short formatId)
+        private void SetNumericValueAndFormat(ICell cell, double value, short formatId)
         {
             cell.SetCellValue(value);
             ICellStyle cellStyle = _outputWorkbook.CreateCellStyle();
@@ -236,7 +236,6 @@ namespace AspergillosisEPR.Lib.Exporters
                 else
                 {
                     return ms.ToArray();
-
                 }
             }
         }
