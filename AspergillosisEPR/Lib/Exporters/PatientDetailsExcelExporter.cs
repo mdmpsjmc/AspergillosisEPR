@@ -77,7 +77,7 @@ namespace AspergillosisEPR.Lib.Exporters
             for (var cursor = 0; cursor < exportableItem.ExportableProperties().Count; cursor++)
             {
                 var property = exportableItem.ExportableProperties()[cursor];
-                var cellValue = property.Name;                 
+                var cellValue = property.Name;
                 var headerCell = currentRow.CreateCell(cursor);
                 if (cellValue.Contains("Id")) cellValue = property.Name.Replace("Id", "");
                 headerCell.SetCellType(CellType.String);
@@ -143,30 +143,6 @@ namespace AspergillosisEPR.Lib.Exporters
                         break;
                 }
             }           
-        }
-
-        public byte[] SerializeWorkbook()
-        {
-            NpoiMemoryStream ms = new NpoiMemoryStream();
-            using (NpoiMemoryStream tempStream = new NpoiMemoryStream())
-            {
-                tempStream.AllowClose = false;
-                _outputWorkbook.Write(tempStream);
-                tempStream.Flush();
-                tempStream.Seek(0, SeekOrigin.Begin);
-                tempStream.AllowClose = true;
-                var byteArray = tempStream.ToArray();
-                ms.Write(byteArray, 0, byteArray.Length);
-                if (isChartIncluded)
-                {
-                    _chartGenerator = new PatientDetailsExcelChartGenerator(ms.ToArray(), "SGRQ", _patientDetailsVM.STGQuestionnaires.Count + 1);
-                    return _chartGenerator.Generate();
-                } else
-                {
-                    return ms.ToArray();
-
-                }
-            }
         }
 
         public void SetHorizontalCellValuesFromProperties(object objectToQuery, ISheet currentSheet)
@@ -238,6 +214,31 @@ namespace AspergillosisEPR.Lib.Exporters
             ICellStyle cellStyle = _outputWorkbook.CreateCellStyle();
             cellStyle.DataFormat = formatId;
             cell.CellStyle = cellStyle;
+        }
+
+        public byte[] SerializeWorkbook()
+        {
+            NpoiMemoryStream ms = new NpoiMemoryStream();
+            using (NpoiMemoryStream tempStream = new NpoiMemoryStream())
+            {
+                tempStream.AllowClose = false;
+                _outputWorkbook.Write(tempStream);
+                tempStream.Flush();
+                tempStream.Seek(0, SeekOrigin.Begin);
+                tempStream.AllowClose = true;
+                var byteArray = tempStream.ToArray();
+                ms.Write(byteArray, 0, byteArray.Length);
+                if (isChartIncluded)
+                {
+                    _chartGenerator = new PatientDetailsExcelChartGenerator(ms.ToArray(), "SGRQ", _patientDetailsVM.STGQuestionnaires.Count + 1);
+                    return _chartGenerator.GenerateDocumentWithChart();
+                }
+                else
+                {
+                    return ms.ToArray();
+
+                }
+            }
         }
     }
 }

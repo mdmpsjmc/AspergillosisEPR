@@ -14,7 +14,7 @@ namespace AspergillosisEPR.Lib.Exporters
     {
         private byte[] _spreadsheetToAppendChart;
         private string _sheetChartName;
-        private ExcelWorkbook _workbook;
+        private ExcelWorksheet _worksheet;
         private ExcelPackage _package;
         private int _lastChartDataRowIndex;
 
@@ -25,33 +25,24 @@ namespace AspergillosisEPR.Lib.Exporters
             _lastChartDataRowIndex = lastChartDataRowIndex;
         }
 
-        public byte[] SerializeWorkbook()
+        public byte[] GenerateDocumentWithChart()
         {
-            return _package.GetAsByteArray();
-        }
-
-        public byte[] Generate()
-        {
-            using (_package = ByteArrayToObject(_spreadsheetToAppendChart))
-            {
-                _workbook = _package.Workbook;                       
-                CreatePatientDetailsChart();
-                var serialized = SerializeWorkbook();
-                return serialized;
-            }
+            ByteArrayToExcelPackage(_spreadsheetToAppendChart);
+            CreatePatientDetailsChart();
+            return SerializeWorkbook();          
         }
 
         private void CreatePatientDetailsChart()
         {
-            var worksheet = _workbook.Worksheets[_sheetChartName];
-            var chart = (ExcelLineChart)worksheet.Drawings.AddChart(_sheetChartName + "_Chart", eChartType.Line3D);
+            _worksheet = _package.Workbook.Worksheets[_sheetChartName];
+            var chart = (ExcelLineChart)_worksheet.Drawings.AddChart(_sheetChartName + "_Chart", eChartType.Line3D);
             chart.SetSize(800, 600);
             chart.SetPosition(10, 500);
             chart.Title.Text = _sheetChartName;
-            AddPatientDetailsSeries(worksheet, chart);
+            AddPatientDetailsSeries(chart);
         }
 
-        private void AddPatientDetailsSeries(ExcelWorksheet worksheet, ExcelLineChart chart)
+        private void AddPatientDetailsSeries(ExcelLineChart chart)
         {
             var seriesLabel = ExcelRange.GetAddress(2, 6, _lastChartDataRowIndex, 6);
             var addressesColumn = new string[]{ "B", "C", "D", "E" };
@@ -60,19 +51,23 @@ namespace AspergillosisEPR.Lib.Exporters
                 var fromColumn = cursor + 2;
                 chart.Series.Add(ExcelRange.GetAddress(2, fromColumn, _lastChartDataRowIndex, fromColumn), seriesLabel);
                 var addressLetter = addressesColumn[cursor];
-                chart.Series[cursor].Header = worksheet.Cells[addressLetter + "1"].GetValue<string>();
+                chart.Series[cursor].Header = _worksheet.Cells[addressLetter + "1"].GetValue<string>();
             }            
         }
 
-        private ExcelPackage ByteArrayToObject(byte[] arrBytes)
+        private ExcelPackage ByteArrayToExcelPackage(byte[] arrBytes)
         {
             using (MemoryStream memStream = new MemoryStream(arrBytes))
             {
                 memStream.Seek(0, SeekOrigin.Begin);
-                ExcelPackage package = new ExcelPackage(memStream);
-                return package;
+                _package = new ExcelPackage(memStream);
+                return _package;
             }
         }
 
+        private byte[] SerializeWorkbook()
+        {
+            return _package.GetAsByteArray();
+        }
     }
 }
