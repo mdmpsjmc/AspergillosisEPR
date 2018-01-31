@@ -29,14 +29,10 @@ namespace AspergillosisEPR.Controllers
 
         public async Task<IActionResult> Details(int id)
         {
-
             PatientDetailsViewModel patientDetailsVM = await GetExportViewModel(id);
             patientDetailsVM.STGQuestionnaires = patientDetailsVM.STGQuestionnaires.OrderBy((q => q.DateTaken)).ToList();
             var exporter = new PatientDetailsExcelExporter(patientDetailsVM, DetailsDisplayControlProperties(), Request.Form);
-            var generator = new PatientDetailsExcelChartGenerator(exporter.ToOutputBytes(), "SGRQ", patientDetailsVM.STGQuestionnaires.Count+1);
-            return GetFileContentResult(generator.Generate(), ".xlsx", EXCEL_2007_CONTENT_TYPE);
-        }
-
-       
+            return GetFileContentResult(exporter.ToOutputBytes(), ".xlsx", EXCEL_2007_CONTENT_TYPE);
+        }       
     }
 }

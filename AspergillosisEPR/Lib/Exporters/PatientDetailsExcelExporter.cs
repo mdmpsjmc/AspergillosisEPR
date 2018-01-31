@@ -18,6 +18,8 @@ namespace AspergillosisEPR.Lib.Exporters
         private PatientDetailsViewModel _patientDetailsVM;
         private List<PropertyInfo> _controlDisplayProperties;
         private IFormCollection _form;
+        private bool isChartIncluded;
+        private PatientDetailsExcelChartGenerator _chartGenerator;
         public static string EXPORTED_EXCEL_DIRECTORY = @"\wwwroot\Files\Exported\Excel\";
         public static string EXCEL_2007_CONTENT_TYPE = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
 
@@ -47,6 +49,7 @@ namespace AspergillosisEPR.Lib.Exporters
 
                 if (displayKeyValue == "on")
                 {
+                    if (propertyName == "SGRQ") isChartIncluded = true;
                     ISheet currentSheet = _outputWorkbook.CreateSheet(propertyName);
                     var items = GetCollectionFromTabName(propertyName);
                     AddCollectionDataToCurrentSheet(items, currentSheet);
@@ -121,9 +124,6 @@ namespace AspergillosisEPR.Lib.Exporters
                         IDataFormat format = _outputWorkbook.CreateDataFormat();
                         var propertyValue = property.GetValue(item);
                         var fromatted = String.Format("{0:0.00}", propertyValue);
-                     //   valueCell.SetCellType(CellType.Numeric);
-                       // valueCell.SetCellValue(fromatted);
-                        //valueCell.CellStyle.DataFormat = _outputWorkbook.CreateDataFormat().GetFormat("#,##0");
                         SetValueAndFormat(valueCell, Convert.ToDouble(fromatted), format.GetFormat("0.00"));
                         break;
 
@@ -157,8 +157,15 @@ namespace AspergillosisEPR.Lib.Exporters
                 tempStream.AllowClose = true;
                 var byteArray = tempStream.ToArray();
                 ms.Write(byteArray, 0, byteArray.Length);
-                return ms.ToArray();
-                
+                if (isChartIncluded)
+                {
+                    _chartGenerator = new PatientDetailsExcelChartGenerator(ms.ToArray(), "SGRQ", _patientDetailsVM.STGQuestionnaires.Count + 1);
+                    return _chartGenerator.Generate();
+                } else
+                {
+                    return ms.ToArray();
+
+                }
             }
         }
 
