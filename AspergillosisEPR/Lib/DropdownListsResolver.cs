@@ -20,21 +20,7 @@ namespace AspergillosisEPR.Lib
             _viewBag = viewBag;
         }
 
-        public SelectList RadiologyResultDropdownList(object selectedResult = null)
-        {
-            var resultsQuery = from d in _context.RadiologyFindingSelect
-                                  orderby d.Name
-                                  select d;
-            return new SelectList(resultsQuery.AsNoTracking(), "ID", "Name", selectedResult);
-        }
 
-        public MultiSelectList RadiologyResultOptionsDropdownList(object selectedResults = null)
-        {
-            var resultsQuery = from d in _context.RadiologyFindingSelectOption
-                               orderby d.Name
-                               select d;
-            return new SelectList(resultsQuery.AsNoTracking(), "ID", "Name", selectedResults);
-        }
 
         public void PopulateDiagnosisCategoriesDropDownList(object selectedCategory = null)
         {

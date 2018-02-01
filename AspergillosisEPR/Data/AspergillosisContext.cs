@@ -24,9 +24,14 @@ namespace AspergillosisEPR.Data
         public DbSet<DbImportType> DBImportTypes { get; set; }
         public DbSet<ImmunoglobulinType> ImmunoglobulinTypes { get; set; }
         public DbSet<PatientImmunoglobulin> PatientImmunoglobulins { get; set; }
-        public DbSet<RadiologyFindingSelect> RadiologyFindingSelect { get; set; }
-        public DbSet<RadiologyFindingSelectOption> RadiologyFindingSelectOption { get; set; }
-        public DbSet<RadiologyResult> RadiologyResult { get; set; }
+        public DbSet<Finding> Findings { get; set; }
+        public DbSet<ChestLocation> ChestLocations { get; set; }
+        public DbSet<ChestDistribution> ChestDistributions { get; set; }
+        public DbSet<Grade> Grades { get; set; }
+        public DbSet<TreatmentResponse> TreatmentResponses { get; set; }
+        public DbSet<RadiologyType> RadiologyTypes { get; set; }
+
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -48,9 +53,12 @@ namespace AspergillosisEPR.Data
             modelBuilder.Entity<DbImportType>().ToTable("DbImportTypes");
             modelBuilder.Entity<ImmunoglobulinType>().ToTable("ImmunoglobulinTypes");
             modelBuilder.Entity<PatientImmunoglobulin>().ToTable("PatientImmunoglobulins");
-            modelBuilder.Entity<RadiologyFindingSelect>().ToTable("RadiologyFindingSelects");
-            modelBuilder.Entity<RadiologyFindingSelectOption>().ToTable("RadiologyFindingSelectOptions");
-            modelBuilder.Entity<RadiologyResult>().ToTable("RadiologyResults");
+            modelBuilder.Entity<Finding>().ToTable("Findings");
+            modelBuilder.Entity<ChestLocation>().ToTable("ChestLocations");
+            modelBuilder.Entity<ChestDistribution>().ToTable("ChestDistributions");
+            modelBuilder.Entity<Grade>().ToTable("Grades");
+            modelBuilder.Entity<TreatmentResponse>().ToTable("TreatmentResponses");
+            modelBuilder.Entity<RadiologyType>().ToTable("RadiologyTypes");
         }
     }
 

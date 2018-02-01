@@ -1,0 +1,21 @@
+﻿@model AspergillosisEPR.Models.SettingsViewModels.SettingsViewModel
+<div class="table-responsive">
+    @if (User.IsInRole("Create Role") || User.IsInRole("Admin Role"))
+    {
+    <div class="button">
+        <a href="@Url.Action(" New", "ChestLocations" )" class="btn btn-success add-chest-location add-settings-item disable-default" data-klass="ChestLocation" data-tab="chest-locations">
+            <i class="fa fa-plus"></i> Add New Chest Location
+        </a>
+    </div>
+    }
+    <table class="table table-bordered table-hover" id="chest_locations_datatable" data-url="/DataTableRadiology/Load?collection=ChestLocation" style="width: 100%">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+</div>

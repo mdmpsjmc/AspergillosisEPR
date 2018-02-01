@@ -12,16 +12,7 @@
             $.get((this).href + "?klass=" + $(this).data("klass"), function(html) {
                 LoadingIndicator.hide();
                 $("div#modal-container").html(html);
-                $("div.new-settings-modal").modal("show");
-
-                $("div.new-settings-modal").on('shown.bs.modal', function (e) {
-                    $("select.select2").select2({
-                        minimumResultsForSearch: -1,
-                        placeholder: function () {
-                            $(this).data('placeholder');
-                        }
-                    });    
-                });                
+                $("div.new-settings-modal").modal("show");           
             });
         });
     }
@@ -32,7 +23,7 @@
             $.get((this).href, function (html) {
                 LoadingIndicator.hide();
                 $("div#modal-container").html(html);
-                $("div.edit-settings-modal").modal("show");
+                $("div.edit-settings-modal").modal("show");                              
             });
         });
     }
@@ -86,7 +77,7 @@
             var field = Object.keys(errors)[i];
             var htmlCode = "<label for='" + field + "' class='text-danger'></label>";
             var fieldError = errors[Object.keys(errors)[i]];
-            var fieldInput = $("input[name='" + capitalizeFirstLetter(field) + "']");
+            var fieldInput = $("input[name='" + capitalizeFirstLetter(field) + "'], select[name='" + capitalizeFirstLetter(field) + "']");
             $(htmlCode).html(fieldError).appendTo(fieldInput.parent());
         }
     }
