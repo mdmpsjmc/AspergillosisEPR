@@ -1,0 +1,12 @@
+﻿@model AspergillosisEPR.Models.PatientRadiologyFinding
+<div class="col-12 row radiology-form" style="margin: 0px !important">
+</div>
+@if (User.IsInRole("Create Role") || User.IsInRole("Admin Role"))
+{
+    <a href="@Url.Action("RadiologyForm", "Partials")" class="btn btn-success add-radiology-entry add-new-patient-partial" data-insert-into-class="div.radiology-form" style="padding: 5px">
+        <i class="fa fa-plus"></i>
+        <span>
+            <strong>Add Patients Radiology Entry</strong>
+        </span>
+    </a>
+}

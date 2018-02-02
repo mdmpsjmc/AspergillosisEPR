@@ -124,7 +124,7 @@
         for (var i = 0; i < Object.keys(errors).length; i++) {
             var field = Object.keys(errors)[i];
             var fieldCapitalized = field.charAt(0).toUpperCase() + field.slice(1);
-            if (field.match("diagnoses") || field.match("drugs") || field.match("sTGQuestionnaires") || field.match("patientImmunoglobulin")) {
+            if (field.match("diagnoses") || field.match("drugs") || field.match("sTGQuestionnaires") || field.match("patientImmunoglobulin") || field.match("patientRadiologyFinding")) {
                 field = fieldCapitalized.replace("[", "_").replace("].", "__");            
             } else {
                 field = fieldCapitalized;

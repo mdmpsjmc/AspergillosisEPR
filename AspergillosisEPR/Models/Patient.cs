@@ -44,7 +44,7 @@ namespace AspergillosisEPR.Models
         public ICollection<PatientDrug> PatientDrugs { get; set; }
         public ICollection<PatientSTGQuestionnaire> STGQuestionnaires { get; set; }
         public ICollection<PatientImmunoglobulin> PatientImmunoglobulines { get; set; }
-
+        public ICollection<PatientRadiologyFinding> PatientRadiologyFindings { get; set; }
 
         public PatientStatus PatientStatus { get; set; }
 

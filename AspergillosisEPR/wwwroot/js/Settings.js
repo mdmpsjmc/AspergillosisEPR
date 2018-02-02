@@ -81,6 +81,10 @@
         });
     }
 
+    var loadRadiologySubitem = function () {
+
+    }
+
     var displayErrors = function (errors) {
         for (var i = 0; i < Object.keys(errors).length; i++) {
             var field = Object.keys(errors)[i];

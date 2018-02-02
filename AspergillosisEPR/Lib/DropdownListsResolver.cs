@@ -13,6 +13,7 @@ namespace AspergillosisEPR.Lib
     {
         private readonly AspergillosisContext _context;
         private dynamic _viewBag;
+        private RadiologyDbCollectionResolver _radiologyDbCollectionResolver;
 
         public DropdownListsResolver(AspergillosisContext context, dynamic viewBag)
         {
@@ -20,7 +21,18 @@ namespace AspergillosisEPR.Lib
             _viewBag = viewBag;
         }
 
+        public SelectList PopulateRadiologyDropdownList(string collectionName, object selectedItem = null)
+        {
+            _radiologyDbCollectionResolver = new RadiologyDbCollectionResolver(_context, collectionName);
+            var foundItems = _radiologyDbCollectionResolver.Resolve();
+            var results = new List<dynamic>();
+            foreach (var result in foundItems)
+            {
+                results.Add(result);
+            }
 
+            return new SelectList(foundItems, "ID", "Name", selectedItem);
+        }
 
         public void PopulateDiagnosisCategoriesDropDownList(object selectedCategory = null)
         {

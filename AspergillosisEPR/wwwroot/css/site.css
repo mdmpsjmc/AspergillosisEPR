@@ -179,7 +179,7 @@ div#details-tab-content {
 }
 
 div#new-patient-modal .modal-dialog {
-    min-width: 700px !important;
+    min-width: 850px !important;
 }
 
 div#details-tab-content div#stg {

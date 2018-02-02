@@ -56,6 +56,19 @@ namespace AspergillosisEPR.Controllers
             return PartialView();
         }
 
+        [Authorize(Roles = "Create Role, Admin Role")]
+        public IActionResult RadiologyForm()
+        {
+
+            ViewBag.RadiologyTypeId = _listResolver.PopulateRadiologyDropdownList("RadiologyType");
+            ViewBag.ChestLocationId = _listResolver.PopulateRadiologyDropdownList("ChestLocation");
+            ViewBag.ChestDistributionId = _listResolver.PopulateRadiologyDropdownList("ChestDistribution");
+            ViewBag.GradeId = _listResolver.PopulateRadiologyDropdownList("Grade");
+            ViewBag.TreatmentResponseId = _listResolver.PopulateRadiologyDropdownList("TreatmentResponse");
+            ViewBag.FindingId = _listResolver.PopulateRadiologyDropdownList("Finding");
+            return PartialView();
+        }
+
         [Authorize(Roles = "Update Role, Admin Role")]
         public IActionResult EditDiagnosisForm()
         {

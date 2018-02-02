@@ -30,9 +30,8 @@ namespace AspergillosisEPR.Data
         public DbSet<Grade> Grades { get; set; }
         public DbSet<TreatmentResponse> TreatmentResponses { get; set; }
         public DbSet<RadiologyType> RadiologyTypes { get; set; }
-
-
-
+        public DbSet<PatientRadiologyFinding> PatientRadiologyFindings { get; set; }
+       
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Patient>().ToTable("Patients");
@@ -59,6 +58,7 @@ namespace AspergillosisEPR.Data
             modelBuilder.Entity<Grade>().ToTable("Grades");
             modelBuilder.Entity<TreatmentResponse>().ToTable("TreatmentResponses");
             modelBuilder.Entity<RadiologyType>().ToTable("RadiologyTypes");
+            modelBuilder.Entity<PatientRadiologyFinding>().ToTable("PatientRadiologyFindings");
         }
     }
 

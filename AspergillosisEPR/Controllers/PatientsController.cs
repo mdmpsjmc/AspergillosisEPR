@@ -39,6 +39,7 @@ namespace AspergillosisEPR.Controllers
             _listResolver.PopulateDiagnosisCategoriesDropDownList();
             _listResolver.PopulateDiagnosisTypeDropDownList();
             _listResolver.PopulatePatientStatusesDropdownList();
+            _listResolver.PopulateRadiologyDropdownList("RadiologyType");
             return PartialView();
         }
 
@@ -55,52 +56,35 @@ namespace AspergillosisEPR.Controllers
                                                  PatientDiagnosis[] diagnoses,
                                                  PatientDrug[] drugs,
                                                  PatientSTGQuestionnaire[] sTGQuestionnaires,
-                                                 PatientImmunoglobulin[] patientImmunoglobulin)
+                                                 PatientImmunoglobulin[] patientImmunoglobulin,
+                                                 PatientRadiologyFinding[] patientRadiologyFinding)
         {
             var existingPatient = _context.Patients.FirstOrDefault(x => x.RM2Number == patient.RM2Number);
             if (existingPatient != null)
             {
                 ModelState.AddModelError("RM2Number", "Patient with this RM2 Number already exists in database");
             }
-            sTGQuestionnaires = sTGQuestionnaires.Where(q => q != null).ToArray();
-            diagnoses = diagnoses.Where(d => d != null).ToArray();
-            drugs = drugs.Where(dr => dr != null).ToArray();
-
-            patient.PatientDiagnoses = diagnoses;
-            patient.PatientDrugs = drugs;
-            patient.STGQuestionnaires = sTGQuestionnaires;
-            patient.PatientImmunoglobulines = patientImmunoglobulin;
-            
-            for(var cursor = 0; cursor < Request.Form["Drugs.index"].ToList().Count; cursor++)
-            {
-                string stringIndex = Request.Form["Drugs.index"][cursor];
-                string sideEffectsIds = Request.Form["Drugs[" + stringIndex + "].SideEffects"];
-                var sideEffects = _context.SideEffects.Where(se => sideEffectsIds.Contains(se.ID.ToString()));
-                foreach(var sideEffect in sideEffects)
-                {
-                    PatientDrugSideEffect drugSideEffect = new PatientDrugSideEffect();
-                    drugSideEffect.PatientDrug = drugs[cursor];
-                    drugSideEffect.SideEffect = sideEffect;
-                    drugs[cursor].SideEffects.Add(drugSideEffect);
-                }                
-            }
+            AddCollectionsFromFormToPatients(patient, ref diagnoses, ref drugs, 
+                                                      ref sTGQuestionnaires, patientImmunoglobulin, 
+                                                      ref patientRadiologyFinding);
             try
             {
                 if (ModelState.IsValid)
-                {                  
+                {
                     _context.Add(patient);
                     _context.SaveChanges();
-                   return Json(new { result = "ok" });
-                }else
-                  {
-                   Hashtable errors = ModelStateHelper.Errors(ModelState);
-                   return Json(new { success = false, errors });
-                  }
+                    return Json(new { result = "ok" });
+                }
+                else
+                {
+                    Hashtable errors = ModelStateHelper.Errors(ModelState);
+                    return Json(new { success = false, errors });
+                }
             }
             catch (DbUpdateException ex)
             {
                 return null;
-            }        
+            }
         }
 
         [Authorize(Roles = ("Admin Role, Read Role"))]
@@ -228,14 +212,54 @@ namespace AspergillosisEPR.Controllers
         {
             var patient = await _context.Patients.
                 Include(p => p.STGQuestionnaires).
+                Include(p => p.PatientRadiologyFindings).
                 SingleOrDefaultAsync(p => p.ID == id);
             if (patient.STGQuestionnaires != null)
             {
                 _context.PatientSTGQuestionnaires.RemoveRange(patient.STGQuestionnaires);
             }
+            if (patient.PatientRadiologyFindings != null)
+            {
+                _context.PatientRadiologyFindings.RemoveRange(patient.PatientRadiologyFindings);
+            }
             _context.Patients.Remove(patient);
             await _context.SaveChangesAsync();
             return Json(new { ok = "ok" });
-        }        
+        }
+
+        private void AddSideEffectsToDrugs(PatientDrug[] drugs)
+        {
+            for (var cursor = 0; cursor < Request.Form["Drugs.index"].ToList().Count; cursor++)
+            {
+                string stringIndex = Request.Form["Drugs.index"][cursor];
+                string sideEffectsIds = Request.Form["Drugs[" + stringIndex + "].SideEffects"];
+                var sideEffects = _context.SideEffects.Where(se => sideEffectsIds.Contains(se.ID.ToString()));
+                foreach (var sideEffect in sideEffects)
+                {
+                    PatientDrugSideEffect drugSideEffect = new PatientDrugSideEffect();
+                    drugSideEffect.PatientDrug = drugs[cursor];
+                    drugSideEffect.SideEffect = sideEffect;
+                    drugs[cursor].SideEffects.Add(drugSideEffect);
+                }
+            }
+        }
+
+        private void AddCollectionsFromFormToPatients(Patient patient, ref PatientDiagnosis[] diagnoses, 
+                                                                       ref PatientDrug[] drugs, ref PatientSTGQuestionnaire[] sTGQuestionnaires, 
+                                                                       PatientImmunoglobulin[] patientImmunoglobulin, 
+                                                                       ref PatientRadiologyFinding[] patientRadiologyFinding)
+        {
+            sTGQuestionnaires = sTGQuestionnaires.Where(q => q != null).ToArray();
+            diagnoses = diagnoses.Where(d => d != null).ToArray();
+            drugs = drugs.Where(dr => dr != null).ToArray();
+            patientRadiologyFinding = patientRadiologyFinding.Where(rf => rf != null).ToArray();
+
+            patient.PatientDiagnoses = diagnoses;
+            patient.PatientDrugs = drugs;
+            patient.STGQuestionnaires = sTGQuestionnaires;
+            patient.PatientImmunoglobulines = patientImmunoglobulin;
+            patient.PatientRadiologyFindings = patientRadiologyFinding;
+            AddSideEffectsToDrugs(drugs);
+        }
     }
 }
