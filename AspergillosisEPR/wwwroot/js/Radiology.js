@@ -25,8 +25,8 @@
                 { "data": "name", "name": "Name", "autoWidth": true },
                 {
                     "render": function (data, type, object, meta) {
-                        return '<a class="btn btn-primary edit-side-effect edit-link disable-default" style="display: none" data-role="Update Role" href="/' + collection + '/Edit/' + object.id + '" data-id="' + object.id + '"><i class=\'fa fa-edit\' ></i>&nbsp;Edit</a>&nbsp;' +
-                            '<a class="btn btn-danger edit-side-effect delete-link disable-default" data-tab="side-effects" data-warning="All patient diagnoses related to this diagnosis will be also irreversibly lost from database if you remove this item" style="display: none" data-role="Delete Role" href="/' + collection + '/Delete/' + object.id + '" data-id="' + object.id + '"><i class=\'fa fa-trash\' ></i>&nbsp;Delete</a>&nbsp;'
+                        return '<a class="btn btn-primary edit-side-effect edit-link disable-default" data-klass="' + collection +'" style="display: none" data-role="Update Role" href="/Radiology/Edit/' + object.id + '" data-id="' + object.id + '"><i class=\'fa fa-edit\' ></i>&nbsp;Edit</a>&nbsp;' +
+                            '<a class="btn btn-danger edit-side-effect delete-link disable-default" data-what="item" data-klass="' + collection +'" data-tab="side-effects" data-warning="All patient information related to this items will be  irreversibly lost from database if you remove it" style="display: none" data-role="Delete Role" href="/Radiology/Delete/' + object.id + '" data-id="' + object.id + '"><i class=\'fa fa-trash\' ></i>&nbsp;Delete</a>&nbsp;'
                     },
                     "sortable": false,
                     "width": 250,
@@ -48,7 +48,6 @@
             initializeDataTable("gradesDT", "table#grades_datatable", "Grade");
             initializeDataTable("responsesDT", "table#responses_datatable", "Response");
             initializeDataTable("radiologyTypesDT", "table#radiology_types_datatable", "RadiologyType");
-
         }
     }
 }();

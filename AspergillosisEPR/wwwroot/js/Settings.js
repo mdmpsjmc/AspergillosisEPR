@@ -20,7 +20,8 @@
     var showSettingsEditModal = function () {
         $(document).off("click.edit-settings-modal").on("click.edit-settings-modal", "a.edit-link", function () {
             LoadingIndicator.show();
-            $.get((this).href, function (html) {
+            var klass = $(this).data("klass");
+            $.get((this).href+ "?klass="+klass, function (html) {
                 LoadingIndicator.hide();
                 $("div#modal-container").html(html);
                 $("div.edit-settings-modal").modal("show");                              
@@ -44,11 +45,19 @@
         $(document).off("click.save-settings-item").on("click.save-settings-item", "button.submit-settings-item", function () {
             LoadingIndicator.show();
             var loadTab = $(this).data("tab");
+            var klass = $(this).data("klass");
+            var requestData = function () {
+                if (klass === undefined) {
+                    return $("form.settings-form").serialize();
+                } else {
+                    return $("form.settings-form").serialize() + "&klass=" + klass;
+                }
+            }();
             $("label.text-danger").remove();
             $.ajax({
                 url: $("form.settings-form").attr("action"),
                 type: "POST",
-                data: $("form.settings-form").serialize(),
+                data: requestData,
                 contentType: "application/x-www-form-urlencoded",
                 dataType: 'json'
             }).done(function (data, textStatus) {
@@ -77,7 +86,7 @@
             var field = Object.keys(errors)[i];
             var htmlCode = "<label for='" + field + "' class='text-danger'></label>";
             var fieldError = errors[Object.keys(errors)[i]];
-            var fieldInput = $("input[name='" + capitalizeFirstLetter(field) + "'], select[name='" + capitalizeFirstLetter(field) + "']");
+            var fieldInput = $("input[name='" + capitalizeFirstLetter(field) + "'], select[name='" + capitalizeFirstLetter(field) + "'], input[name='RadiologyViewModel.Name']");
             $(htmlCode).html(fieldError).appendTo(fieldInput.parent());
         }
     }
@@ -92,14 +101,22 @@
             var deleteUrl = $(this).attr("href");
             var whatToDelete = $(this).data("what");
             var warningMessage = $(this).data("warning");
+            var klass = $(this).data("klass");
             window.openedTab = $(this).data("tab");
             var question = 'Are you sure you want to irreversibly delete this ' + whatToDelete +' and all related data?<br><br><div class=\'alert alert-danger\' style=\'padding: 10px\'>'+warningMessage+ '</div>';
+            var requestData = function () {
+                if (klass !== undefined) {
+                    return deleteUrl = deleteUrl + "?klass=" + klass;
+                } else {
+                    return deleteUrl;
+                }
+            }();
             BootstrapDialog.confirm(question, function (result, dialog) {
                 LoadingIndicator.hide();
 
                 if (result) {
                     $.ajax({
-                        url: deleteUrl,
+                        url: requestData,
                         type: "POST",
                         contentType: "application/x-www-form-urlencoded",
                         dataType: 'json'

@@ -14,6 +14,7 @@ namespace AspergillosisEPR.Controllers.DataTables
 {
     public class DataTableRadiologyController : DataTablesController
     {
+        private RadiologyDbCollectionResolver _collectionResolver;
 
         public DataTableRadiologyController(AspergillosisContext context)
         {
@@ -26,7 +27,7 @@ namespace AspergillosisEPR.Controllers.DataTables
         {
             Action queriesAction = () =>
             {
-                var results = QuerySideEffectsData(collection);
+                var results = QueryRadiologyData(collection);
                 foreach(var result in results)
                 {
                     _list.Add(result);
@@ -38,26 +39,11 @@ namespace AspergillosisEPR.Controllers.DataTables
         }
 
 
-        public IQueryable QuerySideEffectsData(string collection)
-        {            
-            switch (collection)
-            {
-                case "Finding":
-                    return _aspergillosisContext.Query(typeof(Finding));
-                case "ChestLocation":
-                    return _aspergillosisContext.Query(typeof(ChestLocation));
-                case "ChestDistribution":
-                    return _aspergillosisContext.Query(typeof(ChestDistribution));
-                case "Grade":
-                    return _aspergillosisContext.Query(typeof(Grade));
-                case "TreatmentResponse":
-                    return _aspergillosisContext.Query(typeof(TreatmentResponse));
-                case "RadiologyType":
-                    return _aspergillosisContext.Query(typeof(RadiologyType));
-            }
-            return null;
+        public IQueryable QueryRadiologyData(string collection)
+        {
+            _collectionResolver = new RadiologyDbCollectionResolver(_aspergillosisContext, collection);
+            return _collectionResolver.Resolve();           
         }
-
         
         private void SingleSearch()
         {

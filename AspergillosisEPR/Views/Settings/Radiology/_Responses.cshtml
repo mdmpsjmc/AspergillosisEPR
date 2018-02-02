@@ -3,7 +3,7 @@
     @if (User.IsInRole("Create Role") || User.IsInRole("Admin Role"))
     {
         <div class="button">
-            <a href="@Url.Action("New", "Responses")" class="btn btn-success add-response add-settings-item disable-default" data-klass="Response" data-tab="responses">
+            <a href="@Url.Action("New", "Radiology")" class="btn btn-success add-response add-settings-item disable-default" data-klass="TreatmentResponse" data-tab="responses">
                 <i class="fa fa-plus"></i> Add New Treatment Response
             </a>
         </div>
