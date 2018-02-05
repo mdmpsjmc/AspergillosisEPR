@@ -1,0 +1,41 @@
+﻿@model AspergillosisEPR.Models.PatientViewModels.PatientDetailsViewModel
+
+@if (Model.PatientRadiologyFindings != null && Model.PatientRadiologyFindings.Any())
+{
+    <div class="col-sm-12">
+        <table class="table table-bordered table-striped">
+            <tbody>
+    @foreach (var radiology in Model.PatientRadiologyFindings.OrderByDescending(ig => ig.DateTaken))
+                {
+        <tr>
+            <td>@(radiology.RadiologyType.Name)</td>
+            <td>@(radiology.DateTaken.ToString("dd/MM/yyyy"))</td>
+            <td>@(radiology.FindingText)</td>
+        </tr>
+                    @if (!string.IsNullOrEmpty(radiology.Note))
+                    {
+                        <tr>
+                            <td></td>
+                            <td>Note:</td>
+                            <td>@(radiology.Note)</td>
+                        </tr>
+                    }
+    }
+            </tbody>
+        </table>
+
+
+    </div>
+
+}
+else
+{
+    <div class="col-sm-12">
+        <div class="alert alert-info alert-block">
+            <h4 class="alert-heading">Info!</h4>
+            <i class="fa fa-info-circle"></i>
+            This patient does not currently have any radiology scans in database
+        </div>
+    </div>
+
+}

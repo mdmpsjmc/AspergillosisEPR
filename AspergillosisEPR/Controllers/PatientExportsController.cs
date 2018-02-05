@@ -24,7 +24,7 @@ namespace AspergillosisEPR.Controllers
         {
             _hostingEnvironment = hostingEnvironment;
             _context = context;
-            _patientManager = new PatientManager(context);
+            _patientManager = new PatientManager(context, Request);
         }
 
         protected async Task<PatientDetailsViewModel> GetExportViewModel(int id)

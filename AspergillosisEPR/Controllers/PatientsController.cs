@@ -14,6 +14,7 @@ using Audit.Mvc;
 using AspergillosisEPR.Models.PatientViewModels;
 using System;
 using AspergillosisEPR.Lib;
+using Microsoft.AspNetCore.Http;
 
 namespace AspergillosisEPR.Controllers
 {
@@ -27,19 +28,18 @@ namespace AspergillosisEPR.Controllers
 
         public PatientsController(AspergillosisContext context)
         {
-            _patientManager = new PatientManager(context);
+            _patientManager = new PatientManager(context, Request);
             _context = context;
             _listResolver = new DropdownListsResolver(context, ViewBag);
         }
 
         [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
-        [Authorize(Roles =("Admin Role, Create Role"))]
+        [Authorize(Roles = ("Admin Role, Create Role"))]
         public IActionResult New()
         {
             _listResolver.PopulateDiagnosisCategoriesDropDownList();
             _listResolver.PopulateDiagnosisTypeDropDownList();
             _listResolver.PopulatePatientStatusesDropdownList();
-            _listResolver.PopulateRadiologyDropdownList("RadiologyType");
             return PartialView();
         }
 
@@ -52,7 +52,8 @@ namespace AspergillosisEPR.Controllers
 
         [Authorize(Roles = ("Admin Role, Create Role"))]
         [Audit(EventTypeName = "Patient::Create", IncludeHeaders = true, IncludeModel = true)]
-        public IActionResult Create([Bind("LastName,FirstName,DOB,Gender, RM2Number, PatientStatusId, DateOfDeath")] Patient patient,
+        public IActionResult Create([Bind("LastName,FirstName,DOB,Gender, RM2Number, PatientStatusId, DateOfDeath")]
+                                                 Patient patient,
                                                  PatientDiagnosis[] diagnoses,
                                                  PatientDrug[] drugs,
                                                  PatientSTGQuestionnaire[] sTGQuestionnaires,
@@ -60,12 +61,10 @@ namespace AspergillosisEPR.Controllers
                                                  PatientRadiologyFinding[] patientRadiologyFinding)
         {
             var existingPatient = _context.Patients.FirstOrDefault(x => x.RM2Number == patient.RM2Number);
-            if (existingPatient != null)
-            {
-                ModelState.AddModelError("RM2Number", "Patient with this RM2 Number already exists in database");
-            }
-            AddCollectionsFromFormToPatients(patient, ref diagnoses, ref drugs, 
-                                                      ref sTGQuestionnaires, patientImmunoglobulin, 
+            _patientManager.Request = Request;
+            CheckIsUnique(existingPatient);
+            _patientManager.AddCollectionsFromFormToPatients(patient, ref diagnoses, ref drugs,
+                                                      ref sTGQuestionnaires, patientImmunoglobulin,
                                                       ref patientRadiologyFinding);
             try
             {
@@ -151,8 +150,11 @@ namespace AspergillosisEPR.Controllers
         public async Task<IActionResult> EditPatient(int? id, [Bind("ID,DiagnosisCategoryId,DiagnosisTypeId,Description")] PatientDiagnosis[] diagnoses,
                                                               [Bind("ID,DrugId,StartDate,EndDate")] PatientDrug[] drugs,
                                                               [Bind("ID, ActivityScore, SymptomScore, ImpactScore, TotalScore")] PatientSTGQuestionnaire[] sTGQuestionnaires,
-                                                              [Bind("ID, DateTaken, Value, ImmunoglobulinTypeId")] PatientImmunoglobulin[] patientImmunoglobulines)
+                                                              [Bind("ID, DateTaken, Value, ImmunoglobulinTypeId")] PatientImmunoglobulin[] patientImmunoglobulines,
+                                                              PatientRadiologyFinding[] radiololgyFindings,
+                                                              IFormCollection formCollection)
         {
+            //var patientRadiologyFindings = GetRadiologyFindings(formCollection);
             if (id == null)
             {
                 return NotFound();
@@ -165,7 +167,8 @@ namespace AspergillosisEPR.Controllers
             _patientManager.UpdateDrugs(drugs, patientToUpdate, Request);
             _patientManager.UpdateSGRQ(sTGQuestionnaires, patientToUpdate);
             _patientManager.UpdateImmunoglobines(patientImmunoglobulines, patientToUpdate);
-            
+            _patientManager.UpdatePatientRadiology(radiololgyFindings, patientToUpdate);
+
             if (await TryUpdateModelAsync<Patient>(patientToUpdate,
                 "",
                 p => p.FirstName, p => p.LastName, p => p.DOB, p => p.RM2Number,
@@ -227,39 +230,12 @@ namespace AspergillosisEPR.Controllers
             return Json(new { ok = "ok" });
         }
 
-        private void AddSideEffectsToDrugs(PatientDrug[] drugs)
+        private void CheckIsUnique(Patient existingPatient)
         {
-            for (var cursor = 0; cursor < Request.Form["Drugs.index"].ToList().Count; cursor++)
+            if (existingPatient != null)
             {
-                string stringIndex = Request.Form["Drugs.index"][cursor];
-                string sideEffectsIds = Request.Form["Drugs[" + stringIndex + "].SideEffects"];
-                var sideEffects = _context.SideEffects.Where(se => sideEffectsIds.Contains(se.ID.ToString()));
-                foreach (var sideEffect in sideEffects)
-                {
-                    PatientDrugSideEffect drugSideEffect = new PatientDrugSideEffect();
-                    drugSideEffect.PatientDrug = drugs[cursor];
-                    drugSideEffect.SideEffect = sideEffect;
-                    drugs[cursor].SideEffects.Add(drugSideEffect);
-                }
+                ModelState.AddModelError("RM2Number", "Patient with this RM2 Number already exists in database");
             }
-        }
-
-        private void AddCollectionsFromFormToPatients(Patient patient, ref PatientDiagnosis[] diagnoses, 
-                                                                       ref PatientDrug[] drugs, ref PatientSTGQuestionnaire[] sTGQuestionnaires, 
-                                                                       PatientImmunoglobulin[] patientImmunoglobulin, 
-                                                                       ref PatientRadiologyFinding[] patientRadiologyFinding)
-        {
-            sTGQuestionnaires = sTGQuestionnaires.Where(q => q != null).ToArray();
-            diagnoses = diagnoses.Where(d => d != null).ToArray();
-            drugs = drugs.Where(dr => dr != null).ToArray();
-            patientRadiologyFinding = patientRadiologyFinding.Where(rf => rf != null).ToArray();
-
-            patient.PatientDiagnoses = diagnoses;
-            patient.PatientDrugs = drugs;
-            patient.STGQuestionnaires = sTGQuestionnaires;
-            patient.PatientImmunoglobulines = patientImmunoglobulin;
-            patient.PatientRadiologyFindings = patientRadiologyFinding;
-            AddSideEffectsToDrugs(drugs);
         }
     }
 }

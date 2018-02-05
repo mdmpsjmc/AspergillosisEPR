@@ -388,6 +388,9 @@
         $('input#DOB, input#DateOfDeath, input.datepicker').datetimepicker({
             format: 'YYYY-MM-DD'
         });
+        $('input.date-taken').datetimepicker({
+            format: 'DD/MM/YYYY'
+        });
         $("input#DOB, input.datepicker, input#DateOfDeath").on("click", function () {
             $(this).datetimepicker("show");
         });

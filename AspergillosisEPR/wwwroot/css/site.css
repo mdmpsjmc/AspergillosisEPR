@@ -178,7 +178,9 @@ div#details-tab-content {
     padding-left: 30px !important;
 }
 
-div#new-patient-modal .modal-dialog {
+div#new-patient-modal .modal-dialog,
+div#details-modal .modal-dialog,
+div#edit-modal .modal-dialog {
     min-width: 850px !important;
 }
 

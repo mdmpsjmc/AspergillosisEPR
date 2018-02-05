@@ -81,6 +81,14 @@ namespace AspergillosisEPR.Lib
             List<SelectList> drugs = new List<SelectList>();
             List<MultiSelectList> sideEffects = new List<MultiSelectList>();
             List<SelectList> patientImmunoglobines = new List<SelectList>();
+            List<SelectList> radiologyTypes = new List<SelectList>();
+            List<SelectList> findings = new List<SelectList>();
+            List<SelectList> chestDistributions = new List<SelectList>();
+            List<SelectList> chestLocations = new List<SelectList>();
+            List<SelectList> grades = new List<SelectList>();
+            List<SelectList> treatmentResponses = new List<SelectList>();
+
+
 
             for (int i = 0; i < patient.PatientDiagnoses.Count; i++)
             {
@@ -111,11 +119,28 @@ namespace AspergillosisEPR.Lib
                 var item = patient.PatientImmunoglobulines.ToList()[i];
                 patientImmunoglobines.Add(ImmunoglobinTypesDropdownList(item.ImmunoglobulinTypeId));
             }
+
+            for (int i = 0; i < patient.PatientRadiologyFindings.Count; i++)
+            {
+                var item = patient.PatientRadiologyFindings.ToList()[i];
+                radiologyTypes.Add(PopulateRadiologyDropdownList("RadiologyType", item.RadiologyTypeId));
+                findings.Add(PopulateRadiologyDropdownList("Finding", item.FindingId));
+                chestLocations.Add(PopulateRadiologyDropdownList("ChestLocation", item.ChestLocationId));
+                chestDistributions.Add(PopulateRadiologyDropdownList("ChestDistribution", item.ChestDistributionId));
+                grades.Add(PopulateRadiologyDropdownList("Grade", item.GradeId));
+                treatmentResponses.Add(PopulateRadiologyDropdownList("TreatmentResponse", item.TreatmentResponseId));
+            }
             _viewBag.DiagnosisTypes = diagnosesTypes;
             _viewBag.DiagnosisCategories = diagnosesCategories;
             _viewBag.Drugs = drugs;
             _viewBag.SideEffects = sideEffects;
             _viewBag.ImmunoglobulinTypeId = patientImmunoglobines;
+            _viewBag.RadiologyTypeId = radiologyTypes;
+            _viewBag.FindingId = findings;
+            _viewBag.ChestLocationId = chestLocations;
+            _viewBag.ChestDistributionId = chestDistributions;
+            _viewBag.GradeId = grades;
+            _viewBag.TreatmentResponseId = treatmentResponses;
             PopulatePatientStatusesDropdownList(patient.PatientStatusId);
         }
 

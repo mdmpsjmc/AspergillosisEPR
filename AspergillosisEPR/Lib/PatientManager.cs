@@ -12,8 +12,9 @@ namespace AspergillosisEPR.Lib
     public class PatientManager
     {
         private readonly AspergillosisContext _context;
+        public HttpRequest Request { get; set; }
         
-        public PatientManager(AspergillosisContext context)
+        public PatientManager(AspergillosisContext context, HttpRequest Request)
         {
             _context = context;
         }
@@ -33,6 +34,18 @@ namespace AspergillosisEPR.Lib
                                 .Include(p => p.STGQuestionnaires)
                                 .Include(p => p.PatientImmunoglobulines)
                                     .ThenInclude(pis => pis.ImmunoglobulinType)
+                                .Include( p => p.PatientRadiologyFindings)
+                                    .ThenInclude(prf => prf.RadiologyType)
+                                .Include(p => p.PatientRadiologyFindings)
+                                    .ThenInclude(prf => prf.Finding)
+                                .Include(p => p.PatientRadiologyFindings)
+                                    .ThenInclude(prf => prf.ChestLocation)
+                                .Include(p => p.PatientRadiologyFindings)
+                                    .ThenInclude(prf => prf.ChestDistribution)
+                                .Include(p => p.PatientRadiologyFindings)
+                                    .ThenInclude(prf => prf.Grade)
+                                 .Include(p => p.PatientRadiologyFindings)
+                                    .ThenInclude(prf => prf.TreatmentResponse)
                                 .AsNoTracking()
                                 .SingleOrDefaultAsync(m => m.ID == id);
         }
@@ -44,6 +57,7 @@ namespace AspergillosisEPR.Lib
                                 .Include(p => p.PatientDrugs)
                                 .Include(p => p.STGQuestionnaires)
                                 .Include(p => p.PatientImmunoglobulines)
+                                .Include(p => p.PatientRadiologyFindings)
                                 .AsNoTracking()
                                 .SingleOrDefaultAsync(m => m.ID == id);
         }
@@ -164,6 +178,66 @@ namespace AspergillosisEPR.Lib
                     drugToUpdate.EndDate = drug.EndDate;
                     drugToUpdate.DrugId = drug.DrugId;
                     _context.Update(drugToUpdate);
+                }
+            }
+        }
+
+        internal void UpdatePatientRadiology(PatientRadiologyFinding[] patientRadiologyFinding, Patient patientToUpdate)
+        {
+            foreach (var radiology in patientRadiologyFinding)
+            {
+                if (radiology.ID == 0)
+                {
+                    radiology.PatientId = patientToUpdate.ID;
+                    _context.Update(radiology);
+                }
+                else
+                {
+                    var radiologyToUpdate = patientToUpdate.PatientRadiologyFindings.SingleOrDefault(s => s.ID == radiology.ID);
+                    radiologyToUpdate.RadiologyTypeId = radiology.RadiologyTypeId;
+                    radiologyToUpdate.FindingId = radiology.RadiologyTypeId;
+                    radiologyToUpdate.GradeId = radiology.GradeId;
+                    radiologyToUpdate.ChestLocationId = radiology.ChestLocationId;
+                    radiologyToUpdate.ChestDistributionId = radiology.ChestDistributionId;
+                    radiologyToUpdate.DateTaken = radiology.DateTaken;
+                    radiologyToUpdate.Note = radiology.Note;
+                    radiologyToUpdate.TreatmentResponseId = radiology.TreatmentResponseId;
+                    _context.Update(radiologyToUpdate);
+                }
+            }
+        }
+
+        public void AddCollectionsFromFormToPatients(Patient patient, ref PatientDiagnosis[] diagnoses,
+                                                                       ref PatientDrug[] drugs, ref PatientSTGQuestionnaire[] sTGQuestionnaires,
+                                                                       PatientImmunoglobulin[] patientImmunoglobulin,
+                                                                       ref PatientRadiologyFinding[] patientRadiologyFinding)
+        {
+            sTGQuestionnaires = sTGQuestionnaires.Where(q => q != null).ToArray();
+            diagnoses = diagnoses.Where(d => d != null).ToArray();
+            drugs = drugs.Where(dr => dr != null).ToArray();
+            patientRadiologyFinding = patientRadiologyFinding.Where(rf => rf != null).ToArray();
+
+            patient.PatientDiagnoses = diagnoses;
+            patient.PatientDrugs = drugs;
+            patient.STGQuestionnaires = sTGQuestionnaires;
+            patient.PatientImmunoglobulines = patientImmunoglobulin;
+            patient.PatientRadiologyFindings = patientRadiologyFinding;
+            AddSideEffectsToDrugs(drugs);
+        }
+
+        private void AddSideEffectsToDrugs(PatientDrug[] drugs)
+        {
+            for (var cursor = 0; cursor < Request.Form["Drugs.index"].ToList().Count; cursor++)
+            {
+                string stringIndex = Request.Form["Drugs.index"][cursor];
+                string sideEffectsIds = Request.Form["Drugs[" + stringIndex + "].SideEffects"];
+                var sideEffects = _context.SideEffects.Where(se => sideEffectsIds.Contains(se.ID.ToString()));
+                foreach (var sideEffect in sideEffects)
+                {
+                    PatientDrugSideEffect drugSideEffect = new PatientDrugSideEffect();
+                    drugSideEffect.PatientDrug = drugs[cursor];
+                    drugSideEffect.SideEffect = sideEffect;
+                    drugs[cursor].SideEffects.Add(drugSideEffect);
                 }
             }
         }

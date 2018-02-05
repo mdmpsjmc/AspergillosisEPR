@@ -1,0 +1,81 @@
+﻿@model AspergillosisEPR.Models.PatientRadiologyFinding
+<div class="radiology-row">
+    <fieldset>
+        <div class="row">
+            <section class="col col-4">
+                <label class="select">
+                    <label asp-for="RadiologyTypeId" class="select">
+                        @Html.DropDownList("RadiololgyFindings[" + (string)ViewBag.Index + "].RadiologyTypeId", (SelectList)ViewBag.RadiologyTypeId, "Select Rad Type")
+                        <i></i>
+                        <span asp-validation-for="RadiologyTypeId" class="text-danger"></span>
+                    </label>
+                </label>
+            </section>
+            <section class="col col-4">
+                <label class="input" asp-for="DateTaken">
+                    <input asp-for="@(Model.DateTaken)" name="RadiololgyFindings[@((string)ViewBag.Index)].DateTaken" id="RadiololgyFindings_@((string)ViewBag.Index)__DateTaken" placeholder="Date Taken" class="datepicker" type="text" />
+                </label>
+            </section>
+            <section class="col col-4">
+                <label class="select">
+                    <label asp-for="FindingId" class="select">
+                        @Html.DropDownList("RadiololgyFindings[" + (string)ViewBag.Index + "].FindingId", (SelectList)ViewBag.FindingId, "Select Finding")
+                        <i></i>
+                        <span asp-validation-for="FindingId" class="text-danger"></span>
+                    </label>
+                </label>
+            </section>
+        </div>
+        <div class="row">
+            <section class="col col-4">
+                <label class="select">
+                    <label asp-for="ChestLocationId" class="select">
+                        @Html.DropDownList("RadiololgyFindings[" + (string)ViewBag.Index + "].ChestLocationId", (SelectList)ViewBag.ChestLocationId, "Select Location")
+                        <i></i>
+                        <span asp-validation-for="ChestLocationId" class="text-danger"></span>
+                    </label>
+                </label>
+            </section>
+            <section class="col col-4">
+                <label class="select">
+                    <label asp-for="ChestDistributionId" class="select">
+                        @Html.DropDownList("RadiololgyFindings[" + (string)ViewBag.Index + "].ChestDistributionId", (SelectList)ViewBag.ChestDistributionId, "Select Distribution")
+                        <i></i>
+                        <span asp-validation-for="ChestDistributionId" class="text-danger"></span>
+                    </label>
+                </label>
+            </section>
+            <section class="col col-4">
+                <label class="select">
+                    <label asp-for="GradeId" class="select">
+                        @Html.DropDownList("RadiololgyFindings[" + (string)ViewBag.Index + "].GradeId", (SelectList)ViewBag.GradeId, "Select Grade")
+                        <i></i>
+                        <span asp-validation-for="GradeId" class="text-danger"></span>
+                    </label>
+                </label>
+            </section>
+        </div>
+        <div class="row">
+            <section class="col col-4">
+                <label class="select">
+                    <label asp-for="TreatmentResponseId" class="select">
+                        @Html.DropDownList("RadiololgyFindings[" + (string)ViewBag.Index + "].TreatmentResponseId", (SelectList)ViewBag.TreatmentResponseId, "Select Response")
+                        <i></i>
+                        <span asp-validation-for="TreatmentResponseId" class="text-danger"></span>
+                    </label>
+                </label>
+            </section>
+            <section class="col col-8">
+                <label class="textarea">
+                    <i class="icon-append fa fa-comment"></i>
+                    @Html.TextArea("RadiololgyFindings[" + (string)ViewBag.Index + "].Note",  new { @class = "comment", @rows = 2, @placeholder = "Note" })
+                </label>
+            </section>
+        </div>
+        <div class="row">
+            <a href="javascript:void(0)" class="btn btn-danger remove-new-ig pull-right btn-lg" data-what="patients radiology entry" data-toggle="tooltip" data-title="Remove this item?" style="padding: 5px">
+                <i class="fa fa-trash"></i>
+            </a>
+        </div>
+    </fieldset>
+</div>

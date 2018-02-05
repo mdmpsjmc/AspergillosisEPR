@@ -30,6 +30,9 @@
                                 </span> Ig
                             </a>
                         </li>
+                        <li>
+                            <a href="#radiology" data-toggle="tab"><i class="fa fa-fw fa-lg fa-stethoscope"></i> Radiology</a>
+                        </li>
                     </ul>
 
                     <div id="details-tab-content" class="tab-content padding-10">
@@ -47,6 +50,9 @@
                         </div>
                         <div class="tab-pane fade ig" id="ig">
                             @Html.Partial("/Views/Patients/Details/Ig.cshtml")
+                        </div>
+                        <div class="tab-pane fade ig" id="radiology">
+                            @Html.Partial("/Views/Patients/Details/Radiology.cshtml")
                         </div>
                     </div>
 

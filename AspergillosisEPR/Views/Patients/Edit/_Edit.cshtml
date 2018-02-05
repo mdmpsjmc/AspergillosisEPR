@@ -31,6 +31,9 @@
                                 </span> Ig
                             </a>
                         </li>
+                        <li>
+                            <a href="#radiology" data-toggle="tab"><i class="fa fa-fw fa-lg fa-stethoscope"></i> Radiology</a>
+                        </li>
                     </ul>
                     <form asp-controller="Patients" asp-action="Edit" class="smart-form" data-ajax="true" data-ajax-method="POST" id="edit-patient-form">
                         <div id="new-patient-tab-content" class="tab-content padding-10">
@@ -48,6 +51,9 @@
                             </div>
                             <div class="tab-pane fade ig" id="ig">
                                 @{ await Html.RenderPartialAsync("/Views/Patients/Edit/_IgTab.cshtml"); }
+                            </div>
+                            <div class="tab-pane fade ig" id="radiology">
+                                @{ await Html.RenderPartialAsync("/Views/Patients/Edit/_RadiologyTab.cshtml"); }
                             </div>
                         </div>
                     </form>

@@ -1,0 +1,91 @@
+﻿@model AspergillosisEPR.Models.Patient
+<div class="col-12 row radiology-form" style="margin: 0px !important">
+    @for (int i = 0; i < Model.PatientRadiologyFindings.OrderByDescending(q => q.DateTaken).ToList().Count; i++)
+    {
+        PatientRadiologyFinding rad = Model.PatientRadiologyFindings.OrderByDescending(q => q.DateTaken).ToList()[i];
+        <div class="radiology-row">
+            <input type="hidden" value="@rad.ID" name="RadiololgyFindings[@(i.ToString())].ID" />
+            <fieldset>
+                <div class="row">
+                    <section class="col col-4">
+                        <label class="select">
+                            <label asp-for="@(rad.RadiologyTypeId)" class="select">
+                                @Html.DropDownList("RadiololgyFindings[" + i.ToString() + "].RadiologyTypeId", (SelectList)ViewBag.RadiologyTypeId[i], "Select Ig Type")
+                                <span asp-validation-for="@(rad.RadiologyTypeId)" class="text-danger"></span>
+                            </label>
+                        </label>
+                    </section>
+                    <section class="col col-4">
+                        <label class="input" asp-for="@rad.DateTaken">
+                            <input asp-for="@rad.DateTaken" name="RadiololgyFindings[@(i.ToString())].DateTaken" id="RadiololgyFindings_@(i.ToString())__DateTaken" placeholder="Date Taken" class="date-taken" type="text"/>
+                        </label>
+                    </section>
+                    <section class="col col-4">
+                        <label class="select">
+                            <label asp-for="@(rad.FindingId)" class="select">
+                                @Html.DropDownList("RadiololgyFindings[" + i.ToString() + "].FindingId", (SelectList)ViewBag.FindingId[i], "Select Finding")
+                                <span asp-validation-for="@(rad.FindingId)" class="text-danger"></span>
+                            </label>
+                        </label>
+                    </section>                   
+                </div>
+                <div class="row">
+                    <section class="col col-4">
+                        <label class="select">
+                            <label asp-for="@(rad.ChestLocationId)" class="select">
+                                @Html.DropDownList("RadiololgyFindings[" + i.ToString() + "].ChestLocationId", (SelectList)ViewBag.ChestLocationId[i], "Select Location")
+                                <span asp-validation-for="@(rad.ChestLocationId)" class="text-danger"></span>
+                            </label>
+                        </label>
+                    </section>  
+                    <section class="col col-4">
+                        <label class="select">
+                            <label asp-for="@(rad.ChestDistributionId)" class="select">
+                                @Html.DropDownList("RadiololgyFindings[" + i.ToString() + "].ChestDistributionId", (SelectList)ViewBag.ChestDistributionId[i], "Select Distribution")
+                                <span asp-validation-for="@(rad.ChestDistributionId)" class="text-danger"></span>
+                            </label>
+                        </label>
+                    </section>   
+                    <section class="col col-4">
+                        <label class="select">
+                            <label asp-for="@(rad.GradeId)" class="select">
+                                @Html.DropDownList("RadiololgyFindings[" + i.ToString() + "].GradeId", (SelectList)ViewBag.GradeId[i], "Select Grade")
+                                <span asp-validation-for="@(rad.GradeId)" class="text-danger"></span>
+                            </label>
+                        </label>
+                    </section>   
+                </div>
+                <div class="row">
+                    <section class="col col-4">
+                        <label class="select">
+                            <label asp-for="@(rad.TreatmentResponseId)" class="select">
+                                @Html.DropDownList("RadiololgyFindings[" + i.ToString() + "].TreatmentResponseId", (SelectList)ViewBag.TreatmentResponseId[i], "Select Response")
+                                <span asp-validation-for="@(rad.TreatmentResponseId)" class="text-danger"></span>
+                            </label>
+                        </label>
+                    </section>
+                    <section class="col col-8">
+                        <label class="textarea">
+                            <i class="icon-append fa fa-comment"></i>
+                            @Html.TextArea("RadiololgyFindings[" + i.ToString() +  "].Note", rad.Note,  new { @class = "comment", @rows = 2, @placeholder = "Note" })
+                        </label>
+                    </section>
+                </div>
+                <div class="row">
+                    <a href="@Url.Action("Delete", "PatientRadiololgy", new { id=rad.ID})" class="btn btn-danger remove-existing-item pull-right btn-lg" data-id="@(rad.ID)" data-what="Patients radiology entry" data-toggle="tooltip" data-title="Remove Patients Radiology Entry?" style="padding: 5px">
+                        <i class="fa fa-trash"></i>
+                    </a>
+                </div>
+            </fieldset>         
+        </div>
+    }
+</div>
+@if (User.IsInRole("Update Role") || User.IsInRole("Admin Role"))
+{
+    <a href="@Url.Action("EditRadiologyForm", "Partials")" class="btn btn-success edit-radiology edit-patient-partial" data-visible-row="div.radiology-row:visible" data-insert-into-class="div.radiology-form" style="padding: 5px">
+        <i class="fa fa-plus"></i>
+        <span>
+            <strong>Add Patients Radiology Entry</strong>
+        </span>
+    </a>
+}
