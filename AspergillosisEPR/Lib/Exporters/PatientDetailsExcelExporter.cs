@@ -205,6 +205,7 @@ namespace AspergillosisEPR.Lib.Exporters
             dictionary.Add("Drugs", _patientDetailsVM.PatientDrugs.ToList<object>());
             dictionary.Add("SGRQ", _patientDetailsVM.STGQuestionnaires.ToList<object>());
             dictionary.Add("Ig", _patientDetailsVM.PatientImmunoglobulines.ToList<object>());
+            dictionary.Add("Radiology", _patientDetailsVM.PatientRadiologyFindings.ToList<object>());
             return dictionary[tabName];
         }
 

@@ -1,4 +1,5 @@
 ﻿
+using AspergillosisEPR.Lib.Exporters;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System;
@@ -10,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace AspergillosisEPR.Models
 {
-    public class PatientRadiologyFinding
+    public class PatientRadiologyFinding : Exportable
     {
         public int ID { get; set; }
         public int PatientId { get; set; }
@@ -48,6 +49,18 @@ namespace AspergillosisEPR.Models
                     return text;
                 }         
             }
+        }
+
+        override public List<string> ExcludedProperties()
+        {
+            return new List<string>()
+            {
+                "PatientId", "Patient", "RadiologyType",
+                "RadiologyTypeId", "Finding", "FindingId",
+                "ChestLocation", "ChestLocationId", "ChestDistribution",
+                "ChestDistributionId", "Grade", "GradeId", 
+                "TreatmentResponse", "TreatmentResponseId"
+            };
         }
     }
 
