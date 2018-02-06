@@ -38,6 +38,7 @@
     }
 
     var igChartFromResponse = function (response) {
+        $("div.ig-chart-modal .modal-body").html("");
         Object.keys(response).forEach(function (key, index) {
             var chartData = {
                 labels: [],
