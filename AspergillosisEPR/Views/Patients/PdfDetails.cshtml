@@ -7,7 +7,7 @@
 
 <h2>Demographic info</h2>
 @Html.Partial("/Views/Patients/Details/Details.cshtml")
-@if(Model.ShowDiagnoses)
+@if (Model.ShowDiagnoses)
 {
     <h2>Diagnosis info</h2>
     @Html.Partial("/Views/Patients/Details/Diagnosis.cshtml")
@@ -25,7 +25,7 @@
              <img width="1000" height="600" src="/Files/Exported/PDF/@(Model.SgrqImageChartFile).png" />
         </div>
         @Html.Partial("/Views/Patients/Details/STGQuestionnaire.cshtml")
-        }
+}
         @if (Model.ShowIg)
         {
             <h2>Immunoglobuline Levels</h2>
@@ -41,3 +41,8 @@
                 });
             });
         </script>
+@if (Model.ShowRadiology)
+{
+    <h2>Radiology Appearances</h2>
+    @Html.Partial("/Views/Patients/Details/Radiology.cshtml")
+}
