@@ -32,12 +32,12 @@
                 sgrqChartFromResponse(response);
                 break;
             case "ig":
-                igChartFromResponse(response);
+                igChartsFromResponse(response);
                 break;
         }
     }
 
-    var igChartFromResponse = function (response) {
+    var igChartsFromResponse = function (response) {
         $("div.ig-chart-modal .modal-body").html("");
         Object.keys(response).forEach(function (key, index) {
             var chartData = {
@@ -60,8 +60,8 @@
                 }
 
                 var serie = $.extend({}, chartDataset, randomUIChartSettings());
-                chartData.datasets.push(serie);
                 var chartHtml = "<canvas id='ig-chart-content-popup-" + (index + 1) + "' style='width: 400px; height: 200px'></canvas>";
+                chartData.datasets.push(serie);
                 $("div.ig-chart-modal .modal-body").append(chartHtml);
                 var chartId = "canvas#ig-chart-content-popup-" + (index + 1);
                 //var context = document.getElementById("ig-chart-content");
@@ -76,10 +76,8 @@
                         },
                         onComplete: function (animation) {
 
-
                         }
                     },
-
                 };
 
                 window["chart" + index] = new Chart(uiContext, {
@@ -88,12 +86,9 @@
                     options: options
                 });
             }
-
-            
         });        
     }
-
-
+    //
     var chartUIOptions = function () {
         return [
             {
@@ -120,6 +115,12 @@
                 borderWidth: 1,
                 hoverBackgroundColor: "rgba(218,165,32, 0.4)",
                 hoverBorderColor: "rgb(139,69,19)"
+            }, {
+                backgroundColor: "rgba(229, 68, 36, 0.2)",
+                borderColor: "rgba(137, 36, 16, 1)",
+                borderWidth: 1,
+                hoverBackgroundColor: "rgba(239, 138, 118, 0.4)",
+                hoverBorderColor: "rgba(87, 23, 10, 1)"
             }
         ];
     }
