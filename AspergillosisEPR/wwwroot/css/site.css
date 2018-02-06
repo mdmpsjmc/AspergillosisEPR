@@ -108,6 +108,13 @@ div.tab-pane#ig{
     max-height: 400px
 }
 
+
+div.ig-chart-modal .modal-body {
+    overflow-y: auto;
+    min-height: 500px;
+    max-height: 500px
+}
+
 .profile-pic {
     margin-top: 22px;
     margin-left: 20px;

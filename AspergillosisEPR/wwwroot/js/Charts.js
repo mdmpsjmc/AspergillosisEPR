@@ -38,11 +38,12 @@
     }
 
     var igChartFromResponse = function (response) {
-        var chartData = {
-            labels: [],
-            datasets: []
-        };
         Object.keys(response).forEach(function (key, index) {
+            var chartData = {
+                labels: [],
+                datasets: []
+            };
+
             var chartEntries = response[key];    
             var seriesData = [];
             if (chartEntries.length > 0) {
@@ -51,39 +52,44 @@
                     chartData.labels.push(stringDate);
                     seriesData.push({ x: stringDate, y: entry.value });
                 });
+
                 var chartDataset = {
                     label: key,
                     data: seriesData
-                }                          
-               
+                }
+
                 var serie = $.extend({}, chartDataset, randomUIChartSettings());
                 chartData.datasets.push(serie);
-                console.log(serie);
+                var chartHtml = "<canvas id='ig-chart-content-popup-" + (index + 1) + "' style='width: 400px; height: 200px'></canvas>";
+                $("div.ig-chart-modal .modal-body").append(chartHtml);
+                var chartId = "canvas#ig-chart-content-popup-" + (index + 1);
+                //var context = document.getElementById("ig-chart-content");
+                var uiContext = $(chartId)[0];
+
+                var options = {
+                    animation: {
+                        duration: 2000,
+
+                        onProgress: function (animation) {
+
+                        },
+                        onComplete: function (animation) {
+
+
+                        }
+                    },
+
+                };
+
+                window["chart" + index] = new Chart(uiContext, {
+                    type: 'line',
+                    data: chartData,
+                    options: options
+                });
             }
-        });
-        //var context = document.getElementById("ig-chart-content");
-        var uiContext = document.getElementById("ig-chart-content-popup");
 
-        var options = {
-            animation: {
-                duration: 2000,
-
-                onProgress: function (animation) {
-
-                },
-                onComplete: function (animation) {
-                    
-                  
-                }
-            },
-
-        };       
-
-        var uiStackedLine = new Chart(uiContext, {
-            type: 'bar',
-            data: chartData,
-            options: options
-        });
+            
+        });        
     }
 
 
