@@ -102,6 +102,12 @@ div#diagnosis {
     overflow-y: scroll;
 }
 
+div.tab-pane#ig{
+    overflow-y: auto;
+    min-height: 400px;
+    max-height: 400px
+}
+
 .profile-pic {
     margin-top: 22px;
     margin-left: 20px;
