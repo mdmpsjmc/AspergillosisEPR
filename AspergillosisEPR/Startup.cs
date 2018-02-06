@@ -19,6 +19,7 @@ using DinkToPdf.Contracts;
 using System.Runtime.Loader;
 using System.Reflection;
 using static AspergillosisEPR.Services.ViewToString;
+using AspNetCore.RouteAnalyzer;
 
 namespace AspergillosisEPR
 {
@@ -50,11 +51,13 @@ namespace AspergillosisEPR
             {
                 options.MultipartBodyLengthLimit = 100000000;
             });
+
             // Add application services.
 
             services.AddTransient<IEmailSender, EmailSender>();
             services.AddTransient<PatientViewModel>();
             services.AddMvc();
+            services.AddRouteAnalyzer();
             services.AddMvc().AddJsonOptions(options =>
             {
                 options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
@@ -100,10 +103,12 @@ namespace AspergillosisEPR
 
             app.UseMvc(routes =>
             {
+                routes.MapRouteAnalyzer("/routes");
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
+
             await CreateRoles(app);
         }
 

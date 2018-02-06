@@ -72,7 +72,7 @@
                     </section>
                 </div>
                 <div class="row">
-                    <a href="@Url.Action("Delete", "PatientRadiololgy", new { id=rad.ID})" class="btn btn-danger remove-existing-item pull-right btn-lg" data-id="@(rad.ID)" data-what="Patients radiology entry" data-toggle="tooltip" data-title="Remove Patients Radiology Entry?" style="padding: 5px">
+                    <a href="/Deletions/Delete/@(rad.ID)" class="btn btn-danger remove-existing-item pull-right btn-lg" data-id="@(rad.ID)" data-what="Patients radiology entry" data-toggle="tooltip" data-title="Remove Patients Radiology Entry?" style="padding: 5px" data-url="@Url.Action("Delete", "PatientRadiololgyFindings", new { id=rad.ID})">
                         <i class="fa fa-trash"></i>
                     </a>
                 </div>

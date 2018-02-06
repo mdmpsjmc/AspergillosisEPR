@@ -297,6 +297,9 @@
             var button = $(this);
             var question = "Are you sure you want to remove this " + whatToRemove + "?";
             var requestUrl = $(this).attr("url");
+            if (requestUrl === undefined) {
+                requestUrl = $(this).attr("href");
+            }
             e.preventDefault();
             BootstrapDialog.confirm(question, function (result, dialog) {
                 if (result) {     

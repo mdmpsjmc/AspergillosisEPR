@@ -9,11 +9,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AspergillosisEPR.Controllers
 {
-    public class PatientRadiologyController : Controller
+    public class DeletionsController : Controller
     {
         private readonly AspergillosisContext _context;
 
-        public PatientRadiologyController(AspergillosisContext context)
+        public DeletionsController(AspergillosisContext context)
         {
             _context = context;
         }
@@ -21,7 +21,7 @@ namespace AspergillosisEPR.Controllers
         [HttpPost, ActionName("Delete")]
         [Authorize(Roles = "Delete Role, Admin Role")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> New(int id)
         {
             var radiology = await _context.PatientRadiologyFindings.SingleOrDefaultAsync(pd => pd.ID == id);
             _context.PatientRadiologyFindings.Remove(radiology);

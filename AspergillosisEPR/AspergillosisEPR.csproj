@@ -12,6 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="AspNetCore.RouteAnalyzer" Version="0.5.1" />
     <PackageReference Include="Audit.Mvc" Version="9.1.2" />
     <PackageReference Include="Audit.NET" Version="9.1.2" />
     <PackageReference Include="Audit.NET.SqlServer" Version="9.1.2" />
