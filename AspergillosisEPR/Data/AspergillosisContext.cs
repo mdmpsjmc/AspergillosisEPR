@@ -1,6 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using AspergillosisEPR.Models;
 using AspergillosisEPR.Extensions;
+using System.Linq;
+using System.ComponentModel.DataAnnotations;
 
 namespace AspergillosisEPR.Data
 {
@@ -9,6 +11,7 @@ namespace AspergillosisEPR.Data
         public AspergillosisContext(DbContextOptions<AspergillosisContext> options) : base(options)
         {
         }
+
 
         public DbSet<Patient> Patients { get; set; }
         public DbSet<DiagnosisType> DiagnosisTypes { get; set; }

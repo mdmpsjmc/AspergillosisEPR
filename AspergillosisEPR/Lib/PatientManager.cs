@@ -46,6 +46,7 @@ namespace AspergillosisEPR.Lib
                                     .ThenInclude(prf => prf.Grade)
                                  .Include(p => p.PatientRadiologyFindings)
                                     .ThenInclude(prf => prf.TreatmentResponse)
+                                .Include(p => p.PatientRadiologyFindings)
                                 .AsNoTracking()
                                 .SingleOrDefaultAsync(m => m.ID == id);
         }
@@ -55,6 +56,8 @@ namespace AspergillosisEPR.Lib
             return await _context.Patients
                                 .Include(p => p.PatientDiagnoses)
                                 .Include(p => p.PatientDrugs)
+                                .ThenInclude(d => d.SideEffects)
+                                    .ThenInclude(se => se.SideEffect)
                                 .Include(p => p.STGQuestionnaires)
                                 .Include(p => p.PatientImmunoglobulines)
                                 .Include(p => p.PatientRadiologyFindings)
@@ -195,7 +198,7 @@ namespace AspergillosisEPR.Lib
                 {
                     var radiologyToUpdate = patientToUpdate.PatientRadiologyFindings.SingleOrDefault(s => s.ID == radiology.ID);
                     radiologyToUpdate.RadiologyTypeId = radiology.RadiologyTypeId;
-                    radiologyToUpdate.FindingId = radiology.RadiologyTypeId;
+                    radiologyToUpdate.FindingId = radiology.FindingId;
                     radiologyToUpdate.GradeId = radiology.GradeId;
                     radiologyToUpdate.ChestLocationId = radiology.ChestLocationId;
                     radiologyToUpdate.ChestDistributionId = radiology.ChestDistributionId;

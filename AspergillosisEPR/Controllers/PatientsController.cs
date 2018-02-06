@@ -15,6 +15,7 @@ using AspergillosisEPR.Models.PatientViewModels;
 using System;
 using AspergillosisEPR.Lib;
 using Microsoft.AspNetCore.Http;
+using System.ComponentModel.DataAnnotations;
 
 namespace AspergillosisEPR.Controllers
 {
@@ -151,28 +152,31 @@ namespace AspergillosisEPR.Controllers
                                                               [Bind("ID,DrugId,StartDate,EndDate")] PatientDrug[] drugs,
                                                               [Bind("ID, ActivityScore, SymptomScore, ImpactScore, TotalScore")] PatientSTGQuestionnaire[] sTGQuestionnaires,
                                                               [Bind("ID, DateTaken, Value, ImmunoglobulinTypeId")] PatientImmunoglobulin[] patientImmunoglobulines,
-                                                              PatientRadiologyFinding[] radiololgyFindings,
-                                                              IFormCollection formCollection)
+                                                              [Bind("ID, DateTaken, FindingId, RadiologyTypeId, ChestLocationId, ChestDistributionId, GradeId, TreatmentResponseId, Note")] PatientRadiologyFinding[] radiololgyFindings)
         {
-            //var patientRadiologyFindings = GetRadiologyFindings(formCollection);
             if (id == null)
             {
                 return NotFound();
             }
             Patient patientToUpdate = await _patientManager.FindPatientWithFirstLevelRelationsByIdAsync(id);
 
-            _context.Entry(patientToUpdate).State = EntityState.Modified;
-
+            //patientToUpdate.PatientDiagnoses = diagnoses;
+            ///patientToUpdate.PatientDrugs = drugs;
+            //patientToUpdate.PatientImmunoglobulines = patientImmunoglobulines;
+            //patientToUpdate.STGQuestionnaires = sTGQuestionnaires;
+            //patientToUpdate.PatientRadiologyFindings = radiololgyFindings;
             _patientManager.UpdateDiagnoses(diagnoses, patientToUpdate);
             _patientManager.UpdateDrugs(drugs, patientToUpdate, Request);
             _patientManager.UpdateSGRQ(sTGQuestionnaires, patientToUpdate);
             _patientManager.UpdateImmunoglobines(patientImmunoglobulines, patientToUpdate);
             _patientManager.UpdatePatientRadiology(radiololgyFindings, patientToUpdate);
 
+            _context.Entry(patientToUpdate).State = EntityState.Modified;
+            //var results = !Validator.TryValidateObject(patientToUpdate, new ValidationContext(patientToUpdate), new List<ValidationResult>());
             if (await TryUpdateModelAsync<Patient>(patientToUpdate,
                 "",
                 p => p.FirstName, p => p.LastName, p => p.DOB, p => p.RM2Number,
-                p => p.Gender, p => p.PatientStatusId, p => p.DateOfDeath))
+                p => p.Gender, p => p.PatientStatusId, p => p.DateOfDeath, p=> p.PatientDiagnoses))
             {
                 try
                 {

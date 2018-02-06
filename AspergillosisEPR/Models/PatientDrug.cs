@@ -48,8 +48,8 @@ namespace AspergillosisEPR.Models
         {
             get
             {
-                if (SideEffects != null)
-                    return string.Join(", ", SideEffects.Select(x => x.SideEffect.Name).ToList());
+                if (SideEffects != null && SideEffects.Count > 0)
+                    return string.Join(", ", SideEffects.Select(x => x.SideEffect?.Name).ToList());
                 else
                 {
                     return "";

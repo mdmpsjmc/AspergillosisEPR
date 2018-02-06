@@ -10,7 +10,7 @@
                     <section class="col col-4">
                         <label class="select">
                             <label asp-for="@(rad.RadiologyTypeId)" class="select">
-                                @Html.DropDownList("RadiololgyFindings[" + i.ToString() + "].RadiologyTypeId", (SelectList)ViewBag.RadiologyTypeId[i], "Select Ig Type")
+                                @Html.DropDownList("RadiololgyFindings[" + i.ToString() + "].RadiologyTypeId", (SelectList)ViewBag.RadiologyTypeId[i], "Select Rad Type")
                                 <span asp-validation-for="@(rad.RadiologyTypeId)" class="text-danger"></span>
                             </label>
                         </label>
