@@ -1,5 +1,13 @@
 ﻿@model AspergillosisEPR.Models.PatientViewModels.PatientDetailsViewModel
+@if (Model.ShowButtons)
+{
+    <div class="col-sm-12" id="immunology-chart">
+        <a href="@Url.Action("Immunology", "PatientCharts", new { patientId= Model.Patient.ID})" data-id="@(Model.Patient.ID)" class="pdf-hide btn-hide btn-lg disable-default btn btn-primary show-immunology-chart" style="padding: 5px">
+            <i class="fa fa-line-chart"></i>&nbsp; Show Chart
+        </a>
+    </div>
 
+}
 @if (Model.PatientImmunoglobulines != null && Model.PatientImmunoglobulines.Any())
 {
     <div class="col-sm-12">

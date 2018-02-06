@@ -31,6 +31,22 @@ namespace AspergillosisEPR.Controllers
             var questionariesList = patient.STGQuestionnaires.OrderBy(q => q.DateTaken).ToList();
             var chartData = PatientSGRQViewModel.Build(patient, questionariesList);
             return Json(chartData);
+        }
+
+        public async Task<ActionResult> Immunology(int patientId)
+        {
+            var patient = await _context.Patients
+                                .Include(p => p.PatientImmunoglobulines)
+                                .ThenInclude(pi => pi.ImmunoglobulinType)
+                                .AsNoTracking()
+                                .SingleOrDefaultAsync(m => m.ID == patientId);
+
+            var immunoglobulines = patient.PatientImmunoglobulines.OrderBy(q => q.DateTaken).
+                                                                   GroupBy(ig => ig.ImmunoglobulinTypeId).
+                                                                   Select(ig => ig).
+                                                                   ToList();
+            Dictionary<string, List<PatientIgViewModel>> chartEntries = await PatientIgViewModel.BuildIgChartENtries(_context, immunoglobulines);
+            return Json(chartEntries);
         }        
     }
 }

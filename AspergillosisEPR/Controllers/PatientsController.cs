@@ -160,11 +160,6 @@ namespace AspergillosisEPR.Controllers
             }
             Patient patientToUpdate = await _patientManager.FindPatientWithFirstLevelRelationsByIdAsync(id);
 
-            //patientToUpdate.PatientDiagnoses = diagnoses;
-            ///patientToUpdate.PatientDrugs = drugs;
-            //patientToUpdate.PatientImmunoglobulines = patientImmunoglobulines;
-            //patientToUpdate.STGQuestionnaires = sTGQuestionnaires;
-            //patientToUpdate.PatientRadiologyFindings = radiololgyFindings;
             _patientManager.UpdateDiagnoses(diagnoses, patientToUpdate);
             _patientManager.UpdateDrugs(drugs, patientToUpdate, Request);
             _patientManager.UpdateSGRQ(sTGQuestionnaires, patientToUpdate);
@@ -172,11 +167,11 @@ namespace AspergillosisEPR.Controllers
             _patientManager.UpdatePatientRadiology(radiololgyFindings, patientToUpdate);
 
             _context.Entry(patientToUpdate).State = EntityState.Modified;
-            //var results = !Validator.TryValidateObject(patientToUpdate, new ValidationContext(patientToUpdate), new List<ValidationResult>());
+
             if (await TryUpdateModelAsync<Patient>(patientToUpdate,
                 "",
                 p => p.FirstName, p => p.LastName, p => p.DOB, p => p.RM2Number,
-                p => p.Gender, p => p.PatientStatusId, p => p.DateOfDeath, p=> p.PatientDiagnoses))
+                p => p.Gender, p => p.PatientStatusId, p => p.DateOfDeath))
             {
                 try
                 {

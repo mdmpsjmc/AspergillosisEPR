@@ -36,8 +36,16 @@
             $('.nav-tabs a[href="' + hash.replace(prefix, "") + '"]').tab('show');
         }
 
-        $('.nav-tabs a').on('shown.bs.tab', function (e) {
+        $('.nav-tabs a:not([data-parent-tab])').on('shown.bs.tab', function (e) {
             window.location.hash = e.target.hash.replace("#", "#" + prefix);
+            if (window.location.query !== undefined) {
+                $("a[data-parent-tab]#" + window.location.query).click();
+                window.location.query = undefined;
+            }
+        });
+
+        $('.nav-tabs a[data-parent-tab]').on('shown.bs.tab', function (e) {
+            window.location.query = $(this).attr("href").replace("#", "")
         });
     }
 
