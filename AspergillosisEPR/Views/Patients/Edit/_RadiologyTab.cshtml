@@ -11,6 +11,7 @@
                         <label class="select">
                             <label asp-for="@(rad.RadiologyTypeId)" class="select">
                                 @Html.DropDownList("RadiololgyFindings[" + i.ToString() + "].RadiologyTypeId", (SelectList)ViewBag.RadiologyTypeId[i], "Select Rad Type")
+                                <i></i>
                                 <span asp-validation-for="@(rad.RadiologyTypeId)" class="text-danger"></span>
                             </label>
                         </label>
@@ -24,6 +25,7 @@
                         <label class="select">
                             <label asp-for="@(rad.FindingId)" class="select">
                                 @Html.DropDownList("RadiololgyFindings[" + i.ToString() + "].FindingId", (SelectList)ViewBag.FindingId[i], "Select Finding")
+                                <i></i>
                                 <span asp-validation-for="@(rad.FindingId)" class="text-danger"></span>
                             </label>
                         </label>
@@ -34,6 +36,7 @@
                         <label class="select">
                             <label asp-for="@(rad.ChestLocationId)" class="select">
                                 @Html.DropDownList("RadiololgyFindings[" + i.ToString() + "].ChestLocationId", (SelectList)ViewBag.ChestLocationId[i], "Select Location")
+                                <i></i>
                                 <span asp-validation-for="@(rad.ChestLocationId)" class="text-danger"></span>
                             </label>
                         </label>
@@ -50,6 +53,7 @@
                         <label class="select">
                             <label asp-for="@(rad.GradeId)" class="select">
                                 @Html.DropDownList("RadiololgyFindings[" + i.ToString() + "].GradeId", (SelectList)ViewBag.GradeId[i], "Select Grade")
+                                <i></i>
                                 <span asp-validation-for="@(rad.GradeId)" class="text-danger"></span>
                             </label>
                         </label>
@@ -67,6 +71,7 @@
                     <section class="col col-8">
                         <label class="textarea">
                             <i class="icon-append fa fa-comment"></i>
+                            <i></i>
                             @Html.TextArea("RadiololgyFindings[" + i.ToString() +  "].Note", rad.Note,  new { @class = "comment", @rows = 2, @placeholder = "Note" })
                         </label>
                     </section>
