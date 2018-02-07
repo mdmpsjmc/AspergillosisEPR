@@ -183,7 +183,7 @@
     var bindPatientDetailsShow = function () {
         $(document).off("click.patient-details").on("click.patient-details", "a.patient-details", function (e) {
             LoadingIndicator.show();
-            e.preventDefault();
+            e.preventDefault();            
             var url = $(this).attr("href")
             $.get(url, function (responseHtml) {
                 LoadingIndicator.hide();
@@ -191,7 +191,11 @@
                 $("div#details-modal").modal("show");
                 var patientId = url.split("/")[3];
                 $.getJSON("/PatientCharts/SGRQ?patientId=" + patientId, function (response) {
-                    Charts.chartFromResponse(response);
+                    Charts.sgrqChartFromResponse(response);
+                });
+                $.getJSON("/PatientCharts/Immunology?patientId=" + patientId, function (response) {
+                    $("div#ig-charts").html(""); //clears hidden charts div. 
+                    Charts.igChartsFromResponse(response, true);
                 });
             });
         });
@@ -303,7 +307,6 @@
             e.preventDefault();
             BootstrapDialog.confirm(question, function (result, dialog) {
                 if (result) {     
-                    debugger;
                     $.ajax({
                         url: $(button).attr("href"),
                         type: "POST",
@@ -437,8 +440,13 @@
             e.preventDefault();
             var sgrqChartImage = encodeURIComponent($("img#sgrq-chart-image").attr("src"));
             var patientId = $(this).data("id");
-            var requestUrl = "/PatientPdfExports/Details/" + patientId;
-            var requestData = $("form#export-options-form").serialize()+"&sgrqChart=" + sgrqChartImage;
+            var requestUrl = "/PatientPdfExports/Details/" + patientId;            
+            var requestData = $("form#export-options-form").serialize() + "&sgrqChart=" + sgrqChartImage;
+            var igCharts = $("div#ig-charts img.ig-chart");
+            $.each(igCharts, function (index, chart) {
+                requestData = requestData + "&PatientCharts[" + index + "].Image=" + encodeURIComponent($(chart).attr("src"));
+            });
+            requestData = requestData + "&igChartsLength=" + igCharts.length;
             AjaxFileDownload.execute(requestUrl, requestData, "Patient_Details_" + patientId + ".pdf", "application/pdf");  
         });
     }

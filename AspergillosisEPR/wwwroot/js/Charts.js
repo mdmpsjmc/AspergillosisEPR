@@ -1,24 +1,24 @@
 ﻿var Charts = function () {
 
-    var initializeChart = function (binding, button, modalId, chartName) {
+    var initializeChart = function (binding, button, modalId, chartName, chartForPdf) {
         $(document).off(binding).on(binding, button, function () {
             var patientId = $(this).data("id");
             var requestUrl = $(this).attr("href");
             var chartModal = modalId + patientId;
-            requestAndDrawChart(patientId, requestUrl, chartModal, chartName);
+            requestAndDrawChart(patientId, requestUrl, chartModal, chartName, chartForPdf);
         });
         $('div.modal-backdrop.in').on("click", function () {
             $(this).remove();
         });
     }
 
-    var requestAndDrawChart = function (patientId, requestUrl, modalId, chartName) {
+    var requestAndDrawChart = function (patientId, requestUrl, modalId, chartName, chartForPdf) {
         $.getJSON(requestUrl, function (response) {
             $(modalId).modal("show");
             $(modalId).on('shown.bs.modal', function (e) {
                 $('.modal-dialog', this).addClass('focused');
                 $('body').addClass('modalprinter');
-                chartFromResponse(chartName, response);
+                chartFromResponse(chartName, response, chartForPdf);
             }).on('hidden.bs.modal', function () {
                 $('.modal-dialog', this).removeClass('focused');
                 $('body').removeClass('modalprinter');
@@ -26,19 +26,19 @@
         });   
     }
 
-    var chartFromResponse = function (chartName, response) {
+    var chartFromResponse = function (chartName, response, chartForPdf) {
         switch (chartName) {
             case "sgrq":
                 sgrqChartFromResponse(response);
                 break;
             case "ig":
-                igChartsFromResponse(response);
+                igChartsFromResponse(response, chartForPdf);
                 break;
         }
     }
 
-    var igChartsFromResponse = function (response) {
-        $("div.ig-chart-modal .modal-body").html("");
+    var igChartsFromResponse = function (response, chartForPdf) {
+        $("div.ig-chart-modal .modal-body").html("");        
         Object.keys(response).forEach(function (key, index) {
             var chartData = {
                 labels: [],
@@ -53,19 +53,19 @@
                     chartData.labels.push(stringDate);
                     seriesData.push({ x: stringDate, y: entry.value });
                 });
-
-                var chartDataset = {
-                    label: key,
-                    data: seriesData
-                }
-
+                var chartDataset = { label: key, data: seriesData }
                 var serie = $.extend({}, chartDataset, randomUIChartSettings());
                 var chartHtml = "<canvas id='ig-chart-content-popup-" + (index + 1) + "' style='width: 400px; height: 200px'></canvas>";
+                var chartPdfHtml =  "<canvas id='ig-chart-content-" + (index + 1) + "' style='width: 400px; height: 200px'></canvas>";
+
                 chartData.datasets.push(serie);
                 $("div.ig-chart-modal .modal-body").append(chartHtml);
+                $("div#ig-charts").append(chartPdfHtml);
+
                 var chartId = "canvas#ig-chart-content-popup-" + (index + 1);
-                //var context = document.getElementById("ig-chart-content");
+                var pdfChartId = "canvas#ig-chart-content-" + (index + 1);
                 var uiContext = $(chartId)[0];
+                var pdfContext = $(pdfChartId)[0];
 
                 var options = {
                     animation: {
@@ -75,18 +75,34 @@
 
                         },
                         onComplete: function (animation) {
-
+                            if (!img) {
+                                if (chartForPdf) {
+                                    pdfContext.setAttribute('href', window["pdfChart" + index].toBase64Image());
+                                    var img = new Image;
+                                    img.setAttribute("class", "ig-chart");
+                                    img.src = pdfContext.getAttribute('href');
+                                    pdfContext.insertAdjacentHTML("afterend", img.outerHTML);
+                                }
+                            }                            
                         }
                     },
                 };
 
                 window["chart" + index] = new Chart(uiContext, {
                     type: 'line',
+                    data: chartData
+                });
+
+                window["pdfChart" + index] = new Chart(pdfContext, {
+                    type: 'line',
                     data: chartData,
                     options: options
                 });
+
+
             }
         });        
+        $("div#ig-charts").addClass("hide");
     }
     //
     var chartUIOptions = function () {
@@ -216,12 +232,18 @@
     return {
         init: function () {
             initializeChart("click.show-sgrq", "a.show-sgrq-chart", "div#sgrq-chart-", "sgrq");
-            initializeChart("click.show-ig-chart", "a.show-immunology-chart", "div#ig-chart-", "ig");
-        }, 
+            initializeChart("click.show-ig-chart", "a.show-immunology-chart", "div#ig-chart-", "ig", false);
+        },
 
-        chartFromResponse: function (response) {
+        sgrqChartFromResponse: function (response) {
             return chartFromResponse("sgrq", response);
+        },
+
+        igChartsFromResponse: function (response, isFromPdf) {
+            return chartFromResponse("ig", response, isFromPdf);
         }
+
+
     }
 }();
 

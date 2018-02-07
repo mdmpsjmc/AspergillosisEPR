@@ -31,12 +31,22 @@ namespace AspergillosisEPR.Lib.Exporters
 
         public async Task<byte[]> GenerateDetailsPdf(int id, string sgrqChart, PatientDetailsViewModel patientDetailsViewModel)
         {
-            ProcessPdfChart(id, sgrqChart, patientDetailsViewModel);
+            ProcessSGRQChart(id, sgrqChart, patientDetailsViewModel);
+            ProcessIgCharts(patientDetailsViewModel);
             string htmlView = await _htmlRenderService.RenderToStringAsync("/Views/Patients/PdfDetails.cshtml", patientDetailsViewModel);
             return GeneratePdfFromHtml(htmlView);
         }
 
-        private void ProcessPdfChart(int id, string sgrqChart, PatientDetailsViewModel patientDetailsViewModel)
+
+        private void ProcessIgCharts(PatientDetailsViewModel patientDetailsViewModel)
+        {
+            foreach(var igChart in patientDetailsViewModel.IgCharts)
+            {                
+                SavePNGChart(igChart.PngImage, igChart.FileName);
+            }
+        }
+
+        private void ProcessSGRQChart(int id, string sgrqChart, PatientDetailsViewModel patientDetailsViewModel)
         {
             var sgrqChartFileName = "SGRQ_Chart_" + id.ToString() + "_";
             patientDetailsViewModel.ShowButtons = false;
