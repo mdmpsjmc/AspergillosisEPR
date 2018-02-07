@@ -13,6 +13,7 @@
                     <label class="select">
                         <label asp-for="@(diagnosis.DiagnosisCategoryId)" class="select">
                             @Html.DropDownList("Diagnoses[" + i.ToString() + "].DiagnosisCategoryId", (SelectList)ViewBag.DiagnosisCategories[i], "Select Diagnosis Category")
+                            <i></i>
                             <span asp-validation-for="@(diagnosis.DiagnosisCategoryId)" class="text-danger"></span>
                         </label>
 
@@ -22,6 +23,7 @@
                     <label class="select">
                         <label asp-for="@(diagnosis.DiagnosisTypeId)" class="select">
                             @Html.DropDownList("Diagnoses[" + i.ToString()+"].DiagnosisTypeId", (SelectList)ViewBag.DiagnosisTypes[i], "Select Diagnosis")
+                            <i></i>
                             <span asp-validation-for="@(diagnosis.DiagnosisTypeId)" class="text-danger"></span>
                         </label>
                     </label>

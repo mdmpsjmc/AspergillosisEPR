@@ -8,6 +8,7 @@
                 <label class="select">
                     <label asp-for="DiagnosisCategoryId" class="select">
                         @Html.DropDownListFor(m => m.DiagnosisCategoryId, (SelectList)ViewBag.DiagnosisCategoryId, "Select Diagnosis Category")
+                        <i></i>
                         <span asp-validation-for="DiagnosisCategoryId" class="text-danger"></span>
                     </label>
 
@@ -17,6 +18,7 @@
                 <label class="select">
                     <label asp-for="DiagnosisTypeId" class="select">
                         @Html.DropDownListFor(m => m.DiagnosisTypeId, (SelectList)ViewBag.DiagnosisTypeId, "Select Diagnosis")
+                        <i></i>
                         <span asp-validation-for="DiagnosisCategoryId" class="text-danger"></span>
                     </label>
                 </label>

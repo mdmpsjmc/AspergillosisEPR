@@ -55,51 +55,52 @@
                 });
                 var chartDataset = { label: key, data: seriesData }
                 var serie = $.extend({}, chartDataset, randomUIChartSettings());
-                var chartHtml = "<canvas id='ig-chart-content-popup-" + (index + 1) + "' style='width: 400px; height: 200px'></canvas>";
-                var chartPdfHtml =  "<canvas id='ig-chart-content-" + (index + 1) + "' style='width: 400px; height: 200px'></canvas>";
+                var chartHtml = "<canvas id='ig-chart-content-popup-" + (index + 1) + "' style='width: 400px; height: 200px'></canvas>";              
 
                 chartData.datasets.push(serie);
-                $("div.ig-chart-modal .modal-body").append(chartHtml);
-                $("div#ig-charts").append(chartPdfHtml);
+                $("div.ig-chart-modal .modal-body").append(chartHtml);              
 
                 var chartId = "canvas#ig-chart-content-popup-" + (index + 1);
-                var pdfChartId = "canvas#ig-chart-content-" + (index + 1);
-                var uiContext = $(chartId)[0];
-                var pdfContext = $(pdfChartId)[0];
-
-                var options = {
-                    animation: {
-                        duration: 2000,
-
-                        onProgress: function (animation) {
-
-                        },
-                        onComplete: function (animation) {
-                            if (!img) {
-                                if (chartForPdf) {
-                                    pdfContext.setAttribute('href', window["pdfChart" + index].toBase64Image());
-                                    var img = new Image;
-                                    img.setAttribute("class", "ig-chart");
-                                    img.src = pdfContext.getAttribute('href');
-                                    pdfContext.insertAdjacentHTML("afterend", img.outerHTML);
-                                }
-                            }                            
-                        }
-                    },
-                };
+                var uiContext = $(chartId)[0];                           
 
                 window["chart" + index] = new Chart(uiContext, {
                     type: 'line',
                     data: chartData
                 });
 
-                window["pdfChart" + index] = new Chart(pdfContext, {
-                    type: 'line',
-                    data: chartData,
-                    options: options
-                });
+                if (chartForPdf) {
+                    var chartPdfHtml = "<canvas id='ig-chart-content-" + (index + 1) + "' style='width: 400px; height: 200px'></canvas>";
+                    $("div#ig-charts").append(chartPdfHtml);
+                    var pdfChartId = "canvas#ig-chart-content-" + (index + 1);
+                    var pdfContext = $(pdfChartId)[0];
 
+                    var options = {
+                        animation: {
+                            duration: 2000,
 
+                            onProgress: function (animation) {
+
+                            },
+                            onComplete: function (animation) {
+                                if (!img) {
+                                    if (chartForPdf) {
+                                        pdfContext.setAttribute('href', window["pdfChart" + index].toBase64Image());
+                                        var img = new Image;
+                                        img.setAttribute("class", "ig-chart");
+                                        img.src = pdfContext.getAttribute('href');
+                                        pdfContext.insertAdjacentHTML("afterend", img.outerHTML);
+                                    }
+                                }
+                            }
+                        },
+                    };
+
+                    window["pdfChart" + index] = new Chart(pdfContext, {
+                        type: 'line',
+                        data: chartData,
+                        options: options
+                    });
+                }
             }
         });        
         $("div#ig-charts").addClass("hide");

@@ -6,6 +6,7 @@
                 <label class="select">
                     <label asp-for="ImmunoglobulinTypeId" class="select">
                         @Html.DropDownList("PatientImmunoglobulines[" + (string)ViewBag.Index + "].ImmunoglobulinTypeId", (SelectList)ViewBag.ImmunoglobulinTypeId, "Select Ig Type")
+                        <i></i>
                         <span asp-validation-for="ImmunoglobulinTypeId" class="text-danger"></span>
                     </label>
                 </label>

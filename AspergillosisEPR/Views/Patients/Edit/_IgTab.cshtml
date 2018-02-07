@@ -1,6 +1,6 @@
 ﻿@model AspergillosisEPR.Models.Patient
 <div class="col-12 row ig-form" style="margin: 0px !important">
-    @for (int i = 0; i < Model.PatientImmunoglobulines.Count; i++)
+    @for (int i = 0; i < Model.PatientImmunoglobulines.OrderByDescending(q => q.DateTaken).ToList().Count; i++)
     {
         PatientImmunoglobulin ig = Model.PatientImmunoglobulines.OrderByDescending(q => q.DateTaken).ToList()[i];
         <div class="ig-row">
@@ -11,12 +11,14 @@
                         <label class="select">
                             <label asp-for="@(ig.ImmunoglobulinTypeId)" class="select">
                                 @Html.DropDownList("PatientImmunoglobulines[" + i.ToString() + "].ImmunoglobulinTypeId", (SelectList)ViewBag.ImmunoglobulinTypeId[i], "Select Ig Type")
+                                <i></i>
                                 <span asp-validation-for="@(ig.ImmunoglobulinTypeId)" class="text-danger"></span>
                             </label>
                         </label>
                     </section>
                     <section class="col col-4">
                         <label class="input" asp-for="@ig.DateTaken">
+                            <i class="icon-append fa fa-calendar"></i>
                             <input asp-for="@ig.DateTaken" name="PatientImmunoglobulines[@(i.ToString())].DateTaken" id="PatientImmunoglobulines_@(i.ToString())__DateTaken" placeholder="Date Taken" class="datepicker" />
                         </label>
                     </section>

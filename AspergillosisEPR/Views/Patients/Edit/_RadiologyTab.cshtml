@@ -18,6 +18,7 @@
                     </section>
                     <section class="col col-4">
                         <label class="input" asp-for="@rad.DateTaken">
+                            <i class="icon-append fa fa-calendar"></i>
                             <input asp-for="@rad.DateTaken" name="RadiololgyFindings[@(i.ToString())].DateTaken" id="RadiololgyFindings_@(i.ToString())__DateTaken" placeholder="Date Taken" class="date-taken" type="text"/>
                         </label>
                     </section>
@@ -45,6 +46,7 @@
                         <label class="select">
                             <label asp-for="@(rad.ChestDistributionId)" class="select">
                                 @Html.DropDownList("RadiololgyFindings[" + i.ToString() + "].ChestDistributionId", (SelectList)ViewBag.ChestDistributionId[i], "Select Distribution")
+                                <i></i>
                                 <span asp-validation-for="@(rad.ChestDistributionId)" class="text-danger"></span>
                             </label>
                         </label>
@@ -64,6 +66,7 @@
                         <label class="select">
                             <label asp-for="@(rad.TreatmentResponseId)" class="select">
                                 @Html.DropDownList("RadiololgyFindings[" + i.ToString() + "].TreatmentResponseId", (SelectList)ViewBag.TreatmentResponseId[i], "Select Response")
+                                <i></i>
                                 <span asp-validation-for="@(rad.TreatmentResponseId)" class="text-danger"></span>
                             </label>
                         </label>
