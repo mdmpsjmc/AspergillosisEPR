@@ -34,7 +34,7 @@ namespace AspergillosisEPR.Models
         public Grade Grade { get; set; }
         public TreatmentResponse TreatmentResponse { get; set; }
 
-        public string FindingText
+        public string Appearance
         {
             get
             {

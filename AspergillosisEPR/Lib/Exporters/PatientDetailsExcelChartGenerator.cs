@@ -7,49 +7,82 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using AspergillosisEPR.Models.PatientViewModels;
 
 namespace AspergillosisEPR.Lib.Exporters
 {
     public class PatientDetailsExcelChartGenerator
     {
         private byte[] _spreadsheetToAppendChart;
-        private string _sheetChartName;
+        public string IgChartName { get; set; }
+        public string SGRQChartName { get; set; }
         private ExcelWorksheet _worksheet;
         private ExcelPackage _package;
-        private int _lastChartDataRowIndex;
+        private int _lastSGRQChartDataRowIndex;
+        private List<string> _chartNames;
+        private PatientDetailsViewModel _patientDetailsVM;
 
-        public PatientDetailsExcelChartGenerator(byte[] documentByteArray, string sheetChartName, int lastChartDataRowIndex)
+        public PatientDetailsExcelChartGenerator(byte[] documentByteArray, 
+                                                 List<string> chartNames, 
+                                                 PatientDetailsViewModel patientDetailsViewModel)
         {
             _spreadsheetToAppendChart = documentByteArray;
-            _sheetChartName = sheetChartName;
-            _lastChartDataRowIndex = lastChartDataRowIndex;
+            _chartNames = chartNames;
+            _patientDetailsVM = patientDetailsViewModel;
+            _lastSGRQChartDataRowIndex = patientDetailsViewModel.STGQuestionnaires.Count + 1;
+            SGRQChartName = chartNames.Where(n => n.Contains("SGRQ")).FirstOrDefault();
+            IgChartName = chartNames.Where(n => n.Contains("Ig")).FirstOrDefault();
         }
 
         public byte[] GenerateDocumentWithChart()
         {
             ByteArrayToExcelPackage();
-            CreatePatientDetailsChart();
+            CreatePatientsSGRQChart();
+            CreatePatientsIgCharts();
             return SerializeWorkbook();          
         }
 
-        private void CreatePatientDetailsChart()
+        private void CreatePatientsSGRQChart()
         {
-            _worksheet = _package.Workbook.Worksheets[_sheetChartName];
-            var chart = (ExcelLineChart)_worksheet.Drawings.AddChart(_sheetChartName + "_Chart", eChartType.Line3D);
+            if (SGRQChartName == null) return;
+            _worksheet = _package.Workbook.Worksheets[SGRQChartName];
+            var chart = (ExcelLineChart)_worksheet.Drawings.AddChart(SGRQChartName + "_Chart", eChartType.Line3D);
             chart.SetSize(800, 600);
             chart.SetPosition(10, 500);
-            chart.Title.Text = _sheetChartName;
-            AddPatientDetailsSeries(chart);
+            chart.Title.Text = SGRQChartName;
+            AddPatientDetailsSGRQSeries(chart);
         }
 
-        private void AddPatientDetailsSeries(ExcelLineChart chart)
+        public void CreatePatientsIgCharts()
         {
-            var seriesLabel = ExcelRange.GetAddress(2, 6, _lastChartDataRowIndex, 6);
+            if (IgChartName == null) return;
+            _worksheet = _package.Workbook.Worksheets[IgChartName];
+            var chart = (ExcelLineChart)_worksheet.Drawings.AddChart(IgChartName + "_Chart", eChartType.Line3D);
+            chart.SetSize(800, 600);
+            chart.SetPosition(10, 500);
+            chart.Title.Text = IgChartName;
+            AddPatientDetailsIgSeries(chart);
+        }
+
+        private void AddPatientDetailsIgSeries(ExcelLineChart chart)
+        {
+            var groupedIgSeries = _patientDetailsVM.PatientImmunoglobulines.
+                                                    GroupBy(pi => pi.ImmunoglobulinTypeId).
+                                                    ToList();            
+            var group = groupedIgSeries[0];
+            chart.Series.Add(ExcelRange.GetAddress(2, 4, group.Count() + 1, 4), 
+                                 ExcelRange.GetAddress(2, 3, group.Count() + 1, 3));
+            chart.Series[0].Header = "Test";            
+        }
+
+        private void AddPatientDetailsSGRQSeries(ExcelLineChart chart)
+        {
+            var seriesLabel = ExcelRange.GetAddress(2, 6, _lastSGRQChartDataRowIndex, 6);
             var addressesColumn = new string[]{ "B", "C", "D", "E" };
             for(var cursor = 0; cursor < 4; cursor++)
             {
                 var fromColumn = cursor + 2;
-                chart.Series.Add(ExcelRange.GetAddress(2, fromColumn, _lastChartDataRowIndex, fromColumn), seriesLabel);
+                chart.Series.Add(ExcelRange.GetAddress(2, fromColumn, _lastSGRQChartDataRowIndex, fromColumn), seriesLabel);
                 var addressLetter = addressesColumn[cursor];
                 chart.Series[cursor].Header = _worksheet.Cells[addressLetter + "1"].GetValue<string>();
             }            

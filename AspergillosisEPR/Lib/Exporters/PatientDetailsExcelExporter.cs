@@ -18,7 +18,8 @@ namespace AspergillosisEPR.Lib.Exporters
         private PatientDetailsViewModel _patientDetailsVM;
         private List<PropertyInfo> _controlDisplayProperties;
         private IFormCollection _form;
-        private bool isChartIncluded;
+        private bool isSGRQChartIncluded;
+        private bool isIgChartIncluded;
         private PatientDetailsExcelChartGenerator _chartGenerator;
         public static string EXPORTED_EXCEL_DIRECTORY = @"\wwwroot\Files\Exported\Excel\";
         public static string EXCEL_2007_CONTENT_TYPE = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
@@ -49,10 +50,19 @@ namespace AspergillosisEPR.Lib.Exporters
 
                 if (displayKeyValue == "on")
                 {
-                    if (propertyName == "SGRQ") isChartIncluded = true;
+                    if (propertyName == "SGRQ") isSGRQChartIncluded = true;
+                    if (propertyName == "Ig") isIgChartIncluded = true;
                     ISheet currentSheet = _outputWorkbook.CreateSheet(propertyName);
                     var items = GetCollectionFromTabName(propertyName);
-                    AddCollectionDataToCurrentSheet(items, currentSheet);
+                    if (CollectionToBeGroupped().Keys.Contains(propertyName))
+                    {
+                        var groupedItems = items.GroupBy(i => i.GetPropertyValue(CollectionToBeGroupped()[propertyName]));
+                        AddCollectionDataToCurrentSheet(groupedItems.SelectMany(gi => gi).ToList(), currentSheet);
+                    }
+                    else 
+                    {
+                        AddCollectionDataToCurrentSheet(items, currentSheet);
+                    }                   
                 }
             }
         }
@@ -67,7 +77,7 @@ namespace AspergillosisEPR.Lib.Exporters
                     currentSheet = CreateHeaders(items[cursor], currentSheet);
                 }
                 AddRowFrom(items[cursor], currentSheet, cursor);
-            }
+            }            
         }
 
         private ISheet CreateHeaders(object item, ISheet currentSheet)
@@ -204,9 +214,16 @@ namespace AspergillosisEPR.Lib.Exporters
             dictionary.Add("Diagnoses", allDx.ToList<object>());
             dictionary.Add("Drugs", _patientDetailsVM.PatientDrugs.ToList<object>());
             dictionary.Add("SGRQ", _patientDetailsVM.STGQuestionnaires.ToList<object>());
-            dictionary.Add("Ig", _patientDetailsVM.PatientImmunoglobulines.ToList<object>());
+            dictionary.Add("Ig", _patientDetailsVM.PatientImmunoglobulines.OrderBy(pi => pi.DateTaken).ToList<object>());
             dictionary.Add("Radiology", _patientDetailsVM.PatientRadiologyFindings.ToList<object>());
             return dictionary[tabName];
+        }
+
+        private Dictionary<string, string> CollectionToBeGroupped()
+        {
+            var collectionToBeGroupped = new Dictionary<string, string>();
+            collectionToBeGroupped.Add("Ig", "ImmunoglobulinTypeId");            
+            return collectionToBeGroupped;
         }
 
         private void SetNumericValueAndFormat(ICell cell, double value, short formatId)
@@ -229,14 +246,22 @@ namespace AspergillosisEPR.Lib.Exporters
                 tempStream.AllowClose = true;
                 var byteArray = tempStream.ToArray();
                 ms.Write(byteArray, 0, byteArray.Length);
-                if (isChartIncluded)
+                var chartNames = new List<string>();               
+                if (isSGRQChartIncluded)
                 {
-                    _chartGenerator = new PatientDetailsExcelChartGenerator(ms.ToArray(), "SGRQ", _patientDetailsVM.STGQuestionnaires.Count + 1);
-                    return _chartGenerator.GenerateDocumentWithChart();
+                    chartNames.Add("SGRQ");                    
                 }
-                else
+                if (isIgChartIncluded)
+                {
+                    chartNames.Add("Ig");                     
+                }
+                if (chartNames.Count == 0)
                 {
                     return ms.ToArray();
+                } else
+                {
+                    _chartGenerator = new PatientDetailsExcelChartGenerator(ms.ToArray(), chartNames, _patientDetailsVM);
+                    return _chartGenerator.GenerateDocumentWithChart();
                 }
             }
         }

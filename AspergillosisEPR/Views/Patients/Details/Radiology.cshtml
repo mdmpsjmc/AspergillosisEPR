@@ -10,7 +10,7 @@
         <tr>
             <td>@(radiology.RadiologyType.Name)</td>
             <td>@(radiology.DateTaken.ToString("dd/MM/yyyy"))</td>
-            <td>@(radiology.FindingText)</td>
+            <td>@(radiology.Appearance)</td>
         </tr>
                     @if (!string.IsNullOrEmpty(radiology.Note))
                     {

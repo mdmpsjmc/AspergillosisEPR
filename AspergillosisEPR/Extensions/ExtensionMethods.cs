@@ -53,5 +53,9 @@ namespace AspergillosisEPR.Extensions
             }
             return result == null ? string.Empty : result.ToString();
         }
+        public static object GetPropertyValue(this object obj, string propertyName)
+        {
+            return obj.GetType().GetProperty(propertyName).GetValue(obj, null);
+        }
     }
 }

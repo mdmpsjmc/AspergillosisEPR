@@ -113,16 +113,23 @@ namespace AspergillosisEPR.Lib
                 }
             }
 
-
-            for (int i = 0; i < patient.PatientImmunoglobulines.OrderByDescending(d => d.DateTaken).ToList().Count; i++)
+            var igListSortedChronologically = patient.PatientImmunoglobulines.
+                                                        OrderByDescending(d => d.DateTaken).
+                                                        ToList();
+            for (int i = 0; i < igListSortedChronologically.Count; i++)
             {
-                var item = patient.PatientImmunoglobulines.OrderByDescending(d => d.DateTaken).ToList().ToList()[i];
+                var item = igListSortedChronologically[i];
                 patientImmunoglobines.Add(ImmunoglobinTypesDropdownList(item.ImmunoglobulinTypeId));
             }
 
-            for (int i = 0; i < patient.PatientRadiologyFindings.OrderByDescending(d => d.DateTaken).ToList().Count; i++)
+            var radiologyListSortedChronologically = patient.PatientRadiologyFindings.
+                                                             OrderByDescending(d => d.DateTaken).
+                                                             ToList();
+
+            for (int i = 0; i < radiologyListSortedChronologically.Count; i++)
             {
-                var item = patient.PatientRadiologyFindings.OrderByDescending(d => d.DateTaken).ToList()[i];
+                var item = radiologyListSortedChronologically[i];
+
                 radiologyTypes.Add(PopulateRadiologyDropdownList("RadiologyType", item.RadiologyTypeId));
                 findings.Add(PopulateRadiologyDropdownList("Finding", item.FindingId));
                 chestLocations.Add(PopulateRadiologyDropdownList("ChestLocation", item.ChestLocationId));
