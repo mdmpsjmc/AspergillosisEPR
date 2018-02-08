@@ -68,11 +68,31 @@ namespace AspergillosisEPR.Lib.Exporters
         {
             var groupedIgSeries = _patientDetailsVM.PatientImmunoglobulines.
                                                     GroupBy(pi => pi.ImmunoglobulinTypeId).
-                                                    ToList();            
-            var group = groupedIgSeries[0];
-            chart.Series.Add(ExcelRange.GetAddress(2, 4, group.Count() + 1, 4), 
-                                 ExcelRange.GetAddress(2, 3, group.Count() + 1, 3));
-            chart.Series[0].Header = "Test";            
+                                                    ToList();
+            int startRowIndex = 0;
+            int endRowIndex = 0;
+            for(var cursor = 0; cursor < groupedIgSeries.Count; cursor++)
+            {
+               var groupNumber = cursor + 1;               
+               var listGroup = groupedIgSeries[cursor];
+               var listGroupCount = listGroup.Count();
+               
+               if (cursor == 0)
+                {
+                    startRowIndex = groupNumber + 1;
+                    endRowIndex = groupNumber + listGroupCount;
+                }
+                else
+                {
+                    startRowIndex = startRowIndex + groupedIgSeries[cursor - 1].Count();
+                    endRowIndex = endRowIndex + listGroupCount;
+                }
+                
+                chart.Series.Add(ExcelRange.GetAddress(startRowIndex, 4, endRowIndex, 4),
+                               ExcelRange.GetAddress(startRowIndex, 3, endRowIndex, 3));
+                chart.Series[cursor].Header = _worksheet.Cells["B" + startRowIndex.ToString()].
+                                                         GetValue<string>();
+            }                                  
         }
 
         private void AddPatientDetailsSGRQSeries(ExcelLineChart chart)
