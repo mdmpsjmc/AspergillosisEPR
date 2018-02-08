@@ -57,14 +57,10 @@ namespace AspergillosisEPR.Lib.Exporters
         {
             if (IgChartName == null) return;
             _worksheet = _package.Workbook.Worksheets[IgChartName];
-            var chart = (ExcelLineChart)_worksheet.Drawings.AddChart(IgChartName + "_Chart", eChartType.Line3D);
-            chart.SetSize(800, 600);
-            chart.SetPosition(10, 500);
-            chart.Title.Text = IgChartName;
-            AddPatientDetailsIgSeries(chart);
+            AddPatientDetailsIgSeries();
         }
 
-        private void AddPatientDetailsIgSeries(ExcelLineChart chart)
+        private void AddPatientDetailsIgSeries()
         {
             var groupedIgSeries = _patientDetailsVM.PatientImmunoglobulines.
                                                     GroupBy(pi => pi.ImmunoglobulinTypeId).
@@ -73,6 +69,10 @@ namespace AspergillosisEPR.Lib.Exporters
             int endRowIndex = 0;
             for(var cursor = 0; cursor < groupedIgSeries.Count; cursor++)
             {
+                var chart = (ExcelLineChart)_worksheet.Drawings.AddChart(IgChartName + cursor + "_Chart", eChartType.Line3D);
+                chart.SetSize(400, 300);
+                chart.SetPosition(10+(cursor*300), 500);
+               
                var groupNumber = cursor + 1;               
                var listGroup = groupedIgSeries[cursor];
                var listGroupCount = listGroup.Count();
@@ -90,8 +90,10 @@ namespace AspergillosisEPR.Lib.Exporters
                 
                 chart.Series.Add(ExcelRange.GetAddress(startRowIndex, 4, endRowIndex, 4),
                                ExcelRange.GetAddress(startRowIndex, 3, endRowIndex, 3));
-                chart.Series[cursor].Header = _worksheet.Cells["B" + startRowIndex.ToString()].
+                string title = _worksheet.Cells["B" + startRowIndex.ToString()].
                                                          GetValue<string>();
+                chart.Series[0].Header = title;
+                chart.Title.Text = title;
             }                                  
         }
 
