@@ -5,7 +5,7 @@
         <table class="table table-bordered table-striped">
             <thead>
                 <tr>
-                    <th>ID</th>
+                    <th>Select</th>
                     <th>Date Taken</th>
                     <th>Symptopms</th>
                     <th>Impact</th>
@@ -17,7 +17,12 @@
                 @foreach (var stg in Model.STGQuestionnaires.OrderByDescending(q => q.DateTaken))
                 {
                     <tr>
-                        <td>@(stg.ID)</td>
+                        <td>
+                            <label class="checkbox">
+                                <input type="checkbox" name="checkbox">
+                                <i></i>
+                            </label>
+                        </td>
                         <td>@(stg.DateTaken.ToString("dd-MMM-yyyy"))</td>
                         <td>@(stg.SymptomScore)</td>
                         <td>@(stg.ImpactScore)</td>

@@ -8,6 +8,12 @@
                 @foreach (var radiology in Model.PatientRadiologyFindings.OrderByDescending(ig => ig.DateTaken))
                 {
                     <tr>
+                        <td>
+                            <label class="checkbox">
+                                <input type="checkbox" name="checkbox">
+                                <i></i>
+                            </label>
+                        </td>
                         <td>@(radiology.RadiologyType.Name)</td>
                         <td>@(radiology.DateTaken.ToString("dd/MM/yyyy"))</td>
                         <td>@(radiology.Appearance)</td>

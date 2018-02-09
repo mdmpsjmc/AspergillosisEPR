@@ -3,10 +3,11 @@
 {
     @foreach (var igGroup in Model.PatientImmunoglobulines.OrderByDescending(ig => ig.DateTaken).GroupBy(ig => ig.ImmunoglobulinTypeId))
     {
-        <div class="col-sm-12" style="margin-top: 10px">
+        <div class="col-sm-12" style="margin-top: 15px">
             <table class="table table-bordered table-striped">
                 <thead>
                     <tr>
+                        <th>Select</th>
                         <th>Ig Type</th>
                         <th>Date</th>
                         <th>Value</th>
@@ -16,6 +17,12 @@
                     @foreach (var ig in igGroup)
                     {
                         <tr>
+                            <td>
+                                <label class="checkbox">
+                                    <input type="checkbox" name="checkbox">
+                                    <i></i>
+                                </label>
+                            </td>
                             <td>@(ig.ImmunoglobulinType.Name)</td>
                             <td>@(ig.DateTaken.ToString("dd/MM/yyyy"))</td>
                             <td>@(ig.Value.ToString())</td>
