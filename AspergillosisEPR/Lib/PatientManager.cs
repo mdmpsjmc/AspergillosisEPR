@@ -12,11 +12,18 @@ namespace AspergillosisEPR.Lib
     public class PatientManager
     {
         private readonly AspergillosisContext _context;
+        private AspergillosisContext context;
+
         public HttpRequest Request { get; set; }
         
         public PatientManager(AspergillosisContext context, HttpRequest Request)
         {
             _context = context;
+        }
+
+        public PatientManager(AspergillosisContext context)
+        {
+            this.context = context;
         }
 
         public async Task<Patient> FindPatientWithRelationsByIdAsync(int? id)

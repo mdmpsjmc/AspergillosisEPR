@@ -1,0 +1,18 @@
+﻿<section id="widget-grid" class="">
+    <div class="row">
+        <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <div class="jarviswidget" id="wid-id-0" data-widget-editbutton="false">
+                <header>
+                    <span class="widget-icon"> <i class="fa fa-hospital-o"></i> </span>
+                    <h2>Patient Visits</h2>
+                </header>
+                <div>
+                    <div class="widget-body">
+                        @Html.Partial("/Views/Home/_Spinner.cshtml")
+                        @Html.Partial("/Views/PatientVisits/_Index.cshtml")
+                    </div>
+                </div>
+            </div>
+        </article>
+    </div>
+</section>

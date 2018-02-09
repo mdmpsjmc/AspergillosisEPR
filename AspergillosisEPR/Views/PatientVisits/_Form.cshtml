@@ -1,0 +1,27 @@
+﻿@model AspergillosisEPR.Models.PatientViewModels.NewPatientVisitViewModel
+<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+<input type="hidden" value="@Html.AntiForgeryToken()" name="__RequestVerificationToken" />
+<fieldset>
+    <div class="row">
+        <section class="col col-12 col-xs-12 col-md-12">
+            <label asp-for="PatientId" class="select">
+                <select asp-for="PatientId" asp-items="new SelectList(new SelectListItem[0])" class="select2-patient-search" style="width: 100%">
+                    <option value="">Search Patient by RM2Number or Name</option>
+                </select>
+                <span asp-validation-for="PatientId" class="text-danger"></span>
+            </label>
+        </section>
+    </div>
+    <div class="row">
+        <section class="col col-12 col-xs-12 col-md-12">
+            <label asp-for="VisitDate" class="input">
+                <i class="icon-append fa fa-calendar"></i>
+                <input asp-for="VisitDate" placeholder="Date of Visit" class="visit-date">
+                <span asp-validation-for="VisitDate" class="text-danger"></span>
+            </label>
+        </section>
+    </div>
+    <div id="examinations-tabs">
+        @Html.Partial("/Views/PatientVisits/_ExaminationsTabs.cshtml")
+    </div>
+</fieldset>
