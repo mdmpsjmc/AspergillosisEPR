@@ -34,7 +34,13 @@ namespace AspergillosisEPR.Data
         public DbSet<TreatmentResponse> TreatmentResponses { get; set; }
         public DbSet<RadiologyType> RadiologyTypes { get; set; }
         public DbSet<PatientRadiologyFinding> PatientRadiologyFindings { get; set; }
-       
+        public DbSet<PatientExamination> PatientExaminations { get; set; }
+        public DbSet<SGRQExamination> SGRQExaminations { get; set; }
+        public DbSet<ImmunologyExamination> ImmunologyExaminations { get; set; }
+        public DbSet<RadiologyExamination> RadiologyExaminations { get; set; }
+        public DbSet<PatientVisit> PatientVisits { get; set; }
+
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Patient>().ToTable("Patients");

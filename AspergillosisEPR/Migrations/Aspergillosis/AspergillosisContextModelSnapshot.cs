@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.EntityFrameworkCore.Storage.Internal;
+using Microsoft.EntityFrameworkCore.ValueGeneration;
 using System;
 
 namespace AspergillosisEPR.Migrations.Aspergillosis
@@ -251,6 +252,23 @@ namespace AspergillosisEPR.Migrations.Aspergillosis
                     b.ToTable("PatientDrugSideEffects");
                 });
 
+            modelBuilder.Entity("AspergillosisEPR.Models.PatientExamination", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Discriminator")
+                        .IsRequired();
+
+                    b.Property<int>("PatientVisitId");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("PatientExaminations");
+
+                    b.HasDiscriminator<string>("Discriminator").HasValue("PatientExamination");
+                });
+
             modelBuilder.Entity("AspergillosisEPR.Models.PatientImmunoglobulin", b =>
                 {
                     b.Property<int>("ID")
@@ -299,6 +317,20 @@ namespace AspergillosisEPR.Migrations.Aspergillosis
 
                     b.HasKey("ID");
 
+                    b.HasIndex("ChestDistributionId");
+
+                    b.HasIndex("ChestLocationId");
+
+                    b.HasIndex("FindingId");
+
+                    b.HasIndex("GradeId");
+
+                    b.HasIndex("PatientId");
+
+                    b.HasIndex("RadiologyTypeId");
+
+                    b.HasIndex("TreatmentResponseId");
+
                     b.ToTable("PatientRadiologyFindings");
                 });
 
@@ -342,6 +374,20 @@ namespace AspergillosisEPR.Migrations.Aspergillosis
                     b.ToTable("PatientSTGQuestionnaires");
                 });
 
+            modelBuilder.Entity("AspergillosisEPR.Models.PatientVisit", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("PatientId");
+
+                    b.Property<DateTime>("VisitDate");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("PatientVisits");
+                });
+
             modelBuilder.Entity("AspergillosisEPR.Models.RadiologyType", b =>
                 {
                     b.Property<int>("ID")
@@ -377,6 +423,39 @@ namespace AspergillosisEPR.Migrations.Aspergillosis
                     b.HasKey("ID");
 
                     b.ToTable("TreatmentResponses");
+                });
+
+            modelBuilder.Entity("AspergillosisEPR.Models.ImmunologyExamination", b =>
+                {
+                    b.HasBaseType("AspergillosisEPR.Models.PatientExamination");
+
+                    b.Property<int>("PatientImmunoglobulinId");
+
+                    b.ToTable("ImmunologyExamination");
+
+                    b.HasDiscriminator().HasValue("ImmunologyExamination");
+                });
+
+            modelBuilder.Entity("AspergillosisEPR.Models.RadiologyExamination", b =>
+                {
+                    b.HasBaseType("AspergillosisEPR.Models.PatientExamination");
+
+                    b.Property<int>("PatientRadiologyFinidingId");
+
+                    b.ToTable("RadiologyExamination");
+
+                    b.HasDiscriminator().HasValue("RadiologyExamination");
+                });
+
+            modelBuilder.Entity("AspergillosisEPR.Models.SGRQExamination", b =>
+                {
+                    b.HasBaseType("AspergillosisEPR.Models.PatientExamination");
+
+                    b.Property<int>("PatientSTGQuestionnaireId");
+
+                    b.ToTable("SGRQExamination");
+
+                    b.HasDiscriminator().HasValue("SGRQExamination");
                 });
 
             modelBuilder.Entity("AspergillosisEPR.Models.Patient", b =>
@@ -440,6 +519,44 @@ namespace AspergillosisEPR.Migrations.Aspergillosis
                     b.HasOne("AspergillosisEPR.Models.Patient")
                         .WithMany("PatientImmunoglobulines")
                         .HasForeignKey("PatientId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("AspergillosisEPR.Models.PatientRadiologyFinding", b =>
+                {
+                    b.HasOne("AspergillosisEPR.Models.ChestDistribution", "ChestDistribution")
+                        .WithMany()
+                        .HasForeignKey("ChestDistributionId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("AspergillosisEPR.Models.ChestLocation", "ChestLocation")
+                        .WithMany()
+                        .HasForeignKey("ChestLocationId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("AspergillosisEPR.Models.Finding", "Finding")
+                        .WithMany()
+                        .HasForeignKey("FindingId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("AspergillosisEPR.Models.Grade", "Grade")
+                        .WithMany()
+                        .HasForeignKey("GradeId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("AspergillosisEPR.Models.Patient")
+                        .WithMany("PatientRadiologyFindings")
+                        .HasForeignKey("PatientId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("AspergillosisEPR.Models.RadiologyType", "RadiologyType")
+                        .WithMany()
+                        .HasForeignKey("RadiologyTypeId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("AspergillosisEPR.Models.TreatmentResponse", "TreatmentResponse")
+                        .WithMany()
+                        .HasForeignKey("TreatmentResponseId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

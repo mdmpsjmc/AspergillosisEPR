@@ -74,10 +74,10 @@ namespace AspergillosisEPR.Controllers.DataTables
                             _list = _list.Where(p => p.LastName.Contains(partialSearch)).ToList();
                             break;
                         case 4:
-                            _list = _list.Where(p => p.Gender == partialSearch).ToList();
+                            _list = _list.Where(p => p.Gender.ToString().ToLower() == partialSearch.ToLower()).ToList();
                             break;
                         case 5:
-                            _list = _list.Where(p => p.DOB.ToString().Contains(partialSearch)).ToList();
+                            _list = _list.Where(p => DateTimeOffset.FromUnixTimeSeconds(long.Parse(p.DOB.ToString())).UtcDateTime.ToString().Contains(partialSearch)).ToList();
                             break;
                     }
                 }
