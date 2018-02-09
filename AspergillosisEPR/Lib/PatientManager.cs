@@ -12,7 +12,6 @@ namespace AspergillosisEPR.Lib
     public class PatientManager
     {
         private readonly AspergillosisContext _context;
-        private AspergillosisContext context;
 
         public HttpRequest Request { get; set; }
         
@@ -23,7 +22,7 @@ namespace AspergillosisEPR.Lib
 
         public PatientManager(AspergillosisContext context)
         {
-            this.context = context;
+           _context = context;
         }
 
         public async Task<Patient> FindPatientWithRelationsByIdAsync(int? id)

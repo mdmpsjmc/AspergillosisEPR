@@ -1,6 +1,7 @@
 ﻿@model AspergillosisEPR.Models.PatientViewModels.NewPatientVisitViewModel
 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 <input type="hidden" value="@Html.AntiForgeryToken()" name="__RequestVerificationToken" />
+@Html.Partial("/Views/Home/_Spinner.cshtml")
 <fieldset>
     <div class="row">
         <section class="col col-12 col-xs-12 col-md-12">
@@ -20,6 +21,13 @@
                 <span asp-validation-for="VisitDate" class="text-danger"></span>
             </label>
         </section>
+    </div>
+    <div class="row">
+        <div class="alert alert-block alert-info col col-md-12 col-lg-12 col-sm-12" style="margin-left: 20px">
+            <i class="fa fa-2x fa-info-circle"></i>&nbsp;
+            <a class="close" href="#" onclick="$('.alert').hide();">×</a>
+            Select or Add database entries below to link it with this visit
+        </div>
     </div>
     <div id="examinations-tabs">
         @Html.Partial("/Views/PatientVisits/_ExaminationsTabs.cshtml")

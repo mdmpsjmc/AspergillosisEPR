@@ -11,10 +11,12 @@ namespace AspergillosisEPR.Controllers
     public class PatientVisitsController : Controller
     {
         private PatientManager _patientManager;
+        private AspergillosisContext _context;
 
         public PatientVisitsController(AspergillosisContext context)
         {
-            _patientManager = new PatientManager(context);
+            _context = context;
+            _patientManager = new PatientManager(_context);
         }
 
         public IActionResult Index()
@@ -27,8 +29,9 @@ namespace AspergillosisEPR.Controllers
             return PartialView();
         }
 
-        public async Task<IActionResult> ExaminationsTabsAsync(int patientId)
+        public async Task<IActionResult> ExaminationsTabs(int patientId)
         {
+            _patientManager = new PatientManager(_context);
             var patient = await _patientManager.FindPatientWithRelationsByIdAsync(patientId);
             if (patient == null)
             {
