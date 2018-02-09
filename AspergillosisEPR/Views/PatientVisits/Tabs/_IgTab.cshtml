@@ -3,7 +3,7 @@
 {
     @foreach (var igGroup in Model.PatientImmunoglobulines.OrderByDescending(ig => ig.DateTaken).GroupBy(ig => ig.ImmunoglobulinTypeId))
     {
-        <div class="col-sm-12">
+        <div class="col-sm-12" style="margin-top: 10px">
             <table class="table table-bordered table-striped">
                 <thead>
                     <tr>

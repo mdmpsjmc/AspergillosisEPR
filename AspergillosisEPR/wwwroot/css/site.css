@@ -382,3 +382,7 @@ select2-result-repository__meta {
 span.select2-container {
     z-index: 99999999;
 }
+div#examinations-tabs{
+    max-height: 300px;
+    overflow-y: auto;
+}
