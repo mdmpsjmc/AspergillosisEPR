@@ -1,0 +1,31 @@
+﻿@model AspergillosisEPR.Models.Patient
+@if (Model.STGQuestionnaires != null)
+{
+    <div class="col-sm-12">
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Date Taken</th>
+                    <th>Symptopms</th>
+                    <th>Impact</th>
+                    <th>Activity</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var stg in Model.STGQuestionnaires.OrderByDescending(q => q.DateTaken))
+                {
+                    <tr>
+                        <td>@(stg.ID)</td>
+                        <td>@(stg.DateTaken.ToString("dd-MMM-yyyy"))</td>
+                        <td>@(stg.SymptomScore)</td>
+                        <td>@(stg.ImpactScore)</td>
+                        <td>@(stg.ActivityScore)</td>
+                        <td>@(stg.TotalScore)</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}

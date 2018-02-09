@@ -1,0 +1,28 @@
+﻿@model AspergillosisEPR.Models.Patient
+@if (Model.PatientImmunoglobulines != null)
+{
+    @foreach (var igGroup in Model.PatientImmunoglobulines.OrderByDescending(ig => ig.DateTaken).GroupBy(ig => ig.ImmunoglobulinTypeId))
+    {
+        <div class="col-sm-12">
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>Ig Type</th>
+                        <th>Date</th>
+                        <th>Value</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var ig in igGroup)
+                    {
+                        <tr>
+                            <td>@(ig.ImmunoglobulinType.Name)</td>
+                            <td>@(ig.DateTaken.ToString("dd/MM/yyyy"))</td>
+                            <td>@(ig.Value.ToString())</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+}
