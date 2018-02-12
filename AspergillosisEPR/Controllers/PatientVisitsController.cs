@@ -39,9 +39,14 @@ namespace AspergillosisEPR.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(PatientVisit patientVisit)
         {
-            SaveCollectionFor("SGRQExamination", "PatientSTGQuestionnaireId", patientVisit);
-            SaveCollectionFor("ImmunologyExamination", "PatientImmunoglobulinId", patientVisit);
-            SaveCollectionFor("RadiologyExamination", "PatientRadiologyFinidingId", patientVisit);
+            var list1 = SaveExamination("SGRQExamination", "PatientSTGQuestionnaireId", patientVisit);
+            var list2 = SaveExamination("ImmunologyExamination", "PatientImmunoglobulinId", patientVisit);
+            var list3 = SaveExamination("RadiologyExamination", "PatientRadiologyFinidingId", patientVisit);
+            var concatenated = list1.Concat(list2).Concat(list3);
+            if (concatenated.Count() == 0)
+            {
+                ModelState.AddModelError("Base", "You need to select at least one item from the lists below");
+            }
             if (ModelState.IsValid)
             {
                 _context.Add(patientVisit);
@@ -68,47 +73,11 @@ namespace AspergillosisEPR.Controllers
             patientVM.PatientImmunoglobulines = patient.PatientImmunoglobulines;
             return PartialView(patientVM);
         }
-
-        private void SaveSGRQExaminationsFor(PatientVisit patientVisit)
-        {
-            var sgrqSelected = Request.Form.Keys.Where(k => k.Contains("SGRQ")).ToList();
-            var sgrqExaminations = new List<SGRQExamination>();
-            for (var sgCursor = 0; sgCursor < sgrqSelected.Count; sgCursor++)
-            {
-                var itemId = Request.Form["SGRQuestionnaire[" + sgCursor + "].ID"];
-                var isChecked = Request.Form["SGRQuestionnaire[" + sgCursor + "].Selected"];
-                if (isChecked == "on")
-                {
-                    var sgrqExamination = new SGRQExamination();
-                    sgrqExamination.PatientVisit = patientVisit;
-                    sgrqExamination.PatientSTGQuestionnaireId = Int32.Parse(itemId);
-                    sgrqExamination.PatientVisitId = patientVisit.ID;
-                    _context.SGRQExaminations.Add(sgrqExamination);
-                }
-            }
-        }
-
-        private void SaveImmunologyFor(PatientVisit patientVisit)
-        {
-            var igSelected = Request.Form.Keys.Where(k => k.Contains("Immunology")).ToList();
-            for (var igCursor = 0; igCursor < igSelected.Count; igCursor++)
-            {
-                var itemId = Request.Form["Immunology[" + igCursor + "].ID"];
-                var isChecked = Request.Form["Immunology[" + igCursor + "].Selected"];
-                if (isChecked == "on")
-                {
-                    var igExamination = new ImmunologyExamination();
-                    igExamination.PatientVisit = patientVisit;
-                    igExamination.PatientSTGQuestionnaireId = Int32.Parse(itemId);
-                    igExamination.PatientVisitId = patientVisit.ID;
-                    _context.ImmunologyExaminations.Add(igExamination);
-                }
-            }
-        }
-
-        private void SaveCollectionFor(string klass, string propertyName, PatientVisit patientVisit)
+   
+        private List<PatientExamination> SaveExamination(string klass, string propertyName, PatientVisit patientVisit)
         {
             var selected = Request.Form.Keys.Where(k => k.Contains(klass)).ToList();
+            var savedItems = new List<PatientExamination>();
             for (var cursor = 0; cursor < selected.Count; cursor++)
             {
                 var itemId = Request.Form[klass + "[" + cursor + "].ID"];
@@ -122,8 +91,10 @@ namespace AspergillosisEPR.Controllers
                     property.SetValue(examination, Int32.Parse(itemId));
                     examination.PatientVisitId = patientVisit.ID;
                     _context.PatientExaminations.Add(examination);
+                    savedItems.Add(examination);
                 }
             }
+            return savedItems;
         }
 
 

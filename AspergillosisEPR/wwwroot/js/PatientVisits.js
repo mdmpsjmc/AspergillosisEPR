@@ -153,7 +153,7 @@
                LoadingIndicator.hide();
                if (textStatus === "success") {
                    if (data.errors) {
-                       User.displayErrors(data.errors);
+                       Patients.displayErrors(data.errors);
                    } else {
                        $("form#new-patient-visit-form")[0].reset();
                        $("div#new-patient-visit-modal").modal("hide");
