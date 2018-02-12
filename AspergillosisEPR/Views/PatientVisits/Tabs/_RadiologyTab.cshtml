@@ -5,12 +5,14 @@
     <div class="col-sm-12">
         <table class="table table-bordered table-striped">
             <tbody>
-                @foreach (var radiology in Model.PatientRadiologyFindings.OrderByDescending(ig => ig.DateTaken))
+                @for(var cursor = 0; cursor < Model.PatientRadiologyFindings.OrderByDescending(q => q.DateTaken).Count(); cursor++)
                 {
+                    var radiology = Model.PatientRadiologyFindings.OrderByDescending(q => q.DateTaken).ToList()[cursor];
                     <tr class="row-with-date" data-unix-date="@(DateHelper.DateTimeToUnixTimestamp(radiology.DateTaken))">
                         <td>
                             <label class="checkbox">
-                                <input type="checkbox" name="checkbox">
+                                <input type="checkbox" name="RadiologyExamination[@cursor].Selected" />
+                                <input type="hidden" name="RadiologyExamination[@cursor].ID" value="@radiology.ID" />
                                 <i></i>
                             </label>
                         </td>

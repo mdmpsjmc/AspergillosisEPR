@@ -10,6 +10,7 @@ using AspergillosisEPR.Models;
 using AspergillosisEPR.Models.PatientViewModels;
 using AspergillosisEPR.Helpers;
 using System.Collections;
+using System.Reflection;
 
 namespace AspergillosisEPR.Controllers
 {
@@ -38,7 +39,9 @@ namespace AspergillosisEPR.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(PatientVisit patientVisit)
         {
-            SaveSGRQExaminationsFor(patientVisit);
+            SaveCollectionFor("SGRQExamination", "PatientSTGQuestionnaireId", patientVisit);
+            SaveCollectionFor("ImmunologyExamination", "PatientImmunoglobulinId", patientVisit);
+            SaveCollectionFor("RadiologyExamination", "PatientRadiologyFinidingId", patientVisit);
             if (ModelState.IsValid)
             {
                 _context.Add(patientVisit);
@@ -76,14 +79,53 @@ namespace AspergillosisEPR.Controllers
                 var isChecked = Request.Form["SGRQuestionnaire[" + sgCursor + "].Selected"];
                 if (isChecked == "on")
                 {
-                    var sgrqExamination = new SGRQExamination();   
+                    var sgrqExamination = new SGRQExamination();
                     sgrqExamination.PatientVisit = patientVisit;
                     sgrqExamination.PatientSTGQuestionnaireId = Int32.Parse(itemId);
                     sgrqExamination.PatientVisitId = patientVisit.ID;
-                    _context.SGRQExaminations.Add(sgrqExamination); 
+                    _context.SGRQExaminations.Add(sgrqExamination);
                 }
             }
         }
+
+        private void SaveImmunologyFor(PatientVisit patientVisit)
+        {
+            var igSelected = Request.Form.Keys.Where(k => k.Contains("Immunology")).ToList();
+            for (var igCursor = 0; igCursor < igSelected.Count; igCursor++)
+            {
+                var itemId = Request.Form["Immunology[" + igCursor + "].ID"];
+                var isChecked = Request.Form["Immunology[" + igCursor + "].Selected"];
+                if (isChecked == "on")
+                {
+                    var igExamination = new ImmunologyExamination();
+                    igExamination.PatientVisit = patientVisit;
+                    igExamination.PatientSTGQuestionnaireId = Int32.Parse(itemId);
+                    igExamination.PatientVisitId = patientVisit.ID;
+                    _context.ImmunologyExaminations.Add(igExamination);
+                }
+            }
+        }
+
+        private void SaveCollectionFor(string klass, string propertyName, PatientVisit patientVisit)
+        {
+            var selected = Request.Form.Keys.Where(k => k.Contains(klass)).ToList();
+            for (var cursor = 0; cursor < selected.Count; cursor++)
+            {
+                var itemId = Request.Form[klass + "[" + cursor + "].ID"];
+                var isChecked = Request.Form[klass + "[" + cursor + "].Selected"];
+                if (isChecked == "on")
+                {
+                    Type examinationType = Type.GetType("AspergillosisEPR.Models." + klass);
+                    var examination = (PatientExamination)Activator.CreateInstance(examinationType);
+                    examination.PatientVisit = patientVisit;
+                    PropertyInfo property = examination.GetType().GetProperty(propertyName);
+                    property.SetValue(examination, Int32.Parse(itemId));
+                    examination.PatientVisitId = patientVisit.ID;
+                    _context.PatientExaminations.Add(examination);
+                }
+            }
+        }
+
 
     }
 }
