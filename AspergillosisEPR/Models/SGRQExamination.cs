@@ -7,6 +7,5 @@ namespace AspergillosisEPR.Models
 {
     public class SGRQExamination : PatientExamination
     {
-        public int PatientSTGQuestionnaireId { get; set; }       
     }
 }

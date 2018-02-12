@@ -1,4 +1,4 @@
-﻿@model AspergillosisEPR.Models.Patient
+﻿@model AspergillosisEPR.Models.PatientViewModels.NewPatientVisitViewModel
 <div class="modal fade" role="dialog" id="new-patient-visit-modal">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -11,13 +11,13 @@
             <div class="modal-body">
                 <div class="widget-body">
                     <hr class="simple">                    
-                    <form asp-controller="PatientsVisits" asp-action="Create" class="smart-form" data-ajax="true" data-ajax-method="POST" id="new-patient-visit-form">
+                    <form asp-controller="PatientVisits" asp-action="Create" class="smart-form" data-ajax="true" data-ajax-method="POST" id="new-patient-visit-form">
                         @{await Html.RenderPartialAsync("~/Views/PatientVisits/_Form.cshtml");}
                     </form>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-success submit-new-patient">SAVE</button>
+                <button type="button" class="btn btn-success submit-new-patient-visit">SAVE</button>
             </div>
         </div>
     </div>

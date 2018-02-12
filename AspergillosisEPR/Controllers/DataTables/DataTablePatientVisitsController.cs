@@ -34,19 +34,28 @@ namespace AspergillosisEPR.Controllers
 
         public List<PatientVisitsDataTableViewModel> QueryVisitsData()
         {
-            return (from patientVisit in _aspergillosisContext.PatientVisits
-                    join patientExaminations in _aspergillosisContext.PatientExaminations on patientVisit.ID equals patientExaminations.PatientVisitId into examinations
-                    from patientExaminations in examinations.DefaultIfEmpty()
-                    join patients in _aspergillosisContext.Patients on patientVisit.PatientId equals patients.ID
-                    into patientsWithExaminations
-                    select new PatientVisitsDataTableViewModel()
-                    {
-                        ID = patientVisit.ID,
-                        Examinations = patientVisit.PatientExaminations.Select(pe => PatientVisitsDataTableViewModel.ExaminationNameFromClass("")).ToList(),
-                        PatientName = patientVisit.Patient.FullName,
-                        RM2Number = patientVisit.Patient.RM2Number,
-                        VisitDate = DateHelper.DateTimeToUnixTimestamp(patientVisit.VisitDate)
-                    }).ToList();            
+            var patientsWithVisits = (from patientVisit in _aspergillosisContext.PatientVisits
+                                      join patientExaminations in _aspergillosisContext.PatientExaminations on patientVisit.ID equals patientExaminations.PatientVisitId into examinations
+                                      select patientVisit
+                                      );
+
+            var visits = new List<PatientVisitsDataTableViewModel>();
+            foreach(var patientVisit in patientsWithVisits)
+            {
+                var patient = _aspergillosisContext.Patients.Where(p => p.ID == patientVisit.PatientId).SingleOrDefault();
+                patientVisit.Patient = patient;
+                var patientRow = new PatientVisitsDataTableViewModel()
+                {
+                    ID = patientVisit.ID,
+                    Examinations = _aspergillosisContext.PatientExaminations.Where(pe => pe.PatientVisitId == patientVisit.ID).Select(pe => PatientVisitsDataTableViewModel.ExaminationNameFromClass(pe.Discriminator)).ToList(),
+                    PatientName = patientVisit?.Patient.FullName,
+                    RM2Number = patientVisit?.Patient.RM2Number,
+                    VisitDate = DateHelper.DateTimeToUnixTimestamp(patientVisit.VisitDate)
+                };
+                visits.Add(patientRow);
+
+            }
+            return visits;
         }
             
 

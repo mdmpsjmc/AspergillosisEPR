@@ -8,6 +8,5 @@ namespace AspergillosisEPR.Models
 {
     public class RadiologyExamination : PatientExamination
     {
-        public int PatientRadiologyFinidingId { get; set; }
     }
 }

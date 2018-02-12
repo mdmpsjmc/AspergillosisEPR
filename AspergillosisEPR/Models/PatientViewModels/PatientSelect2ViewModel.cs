@@ -23,5 +23,6 @@ namespace AspergillosisEPR.Models.PatientViewModels
                 return "RM2 Number: " + Patient.RM2Number + ", Age: " + Patient.Age(); 
             }
         }
+
     }
 }

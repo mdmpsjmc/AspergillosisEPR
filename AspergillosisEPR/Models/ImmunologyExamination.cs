@@ -7,7 +7,6 @@ namespace AspergillosisEPR.Models
 {
     public class ImmunologyExamination : PatientExamination
     {
-        public int PatientImmunoglobulinId { get; set; }
 
     }
 }

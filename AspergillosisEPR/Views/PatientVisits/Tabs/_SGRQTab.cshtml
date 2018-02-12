@@ -1,5 +1,5 @@
 ﻿@using AspergillosisEPR.Helpers
-@model AspergillosisEPR.Models.Patient
+@model AspergillosisEPR.Models.PatientViewModels.NewPatientVisitViewModel
 @if (Model.STGQuestionnaires != null)
 {
     <div class="col-sm-12">
@@ -15,12 +15,16 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (var stg in Model.STGQuestionnaires.OrderByDescending(q => q.DateTaken))
+                @for(var cursor=0; cursor < Model.STGQuestionnaires.OrderByDescending(q => q.DateTaken).Count(); cursor++)
                 {
+                    var stg = Model.STGQuestionnaires.OrderByDescending(q => q.DateTaken).ToList()[cursor];
+
                     <tr class="row-with-date" data-unix-date="@(DateHelper.DateTimeToUnixTimestamp(stg.DateTaken))">
                         <td>
-                            <label class="checkbox">
-                                <input type="checkbox" name="checkbox">
+
+                            <label class="checkbox">   
+                                <input type="checkbox" name="SGRQuestionnaire[@cursor].Selected" />
+                                <input type="hidden" name="SGRQuestionnaire[@cursor].ID" value="@stg.ID" />
                                 <i></i>
                             </label>
                         </td>

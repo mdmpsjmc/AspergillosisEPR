@@ -20,10 +20,34 @@
             },
             "columns": [
                 { "data": "id", "name": "ID", "autoWidth": true },
-                { "data": "visitDate", "name": "VisitDate", "autoWidth": true },
+                {
+                    "data": "visitDate", "name": "VisitDate", "autoWidth": true,
+                    "render": function(data) {
+                        return moment.unix(data).format("MM/DD/YYYY");
+                    }            
+                },
                 { "data": "patientName", "name": "PatientName", "autoWidth": true },
-                { "data": "rm2Number", "name": "RM2Number", "autoWidth": true },
-                { "data": "examinations", "name": "Examinations", "autoWidth": true }
+                { "data": "rM2Number", "name": "RM2Number", "autoWidth": true },
+                {
+                    "data": "examinations", "name": "Examinations", "autoWidth": true,
+                    "render": function (data, type, items, meta) {
+                        var html = "";
+                        $.each(items.examinations, function (index, item) {
+                            html = html + "<label class='label-primary label'>" + item + "</label>&nbsp;";
+                        })
+                        return html;
+                    }, "sortable": false
+                },
+                {
+                    "render": function (data, type, visit, meta) {
+                        return '<a class="btn btn-info patient-details" style="display: none" data-role="Read Role" href="/Patients/Details/' + visit.id + '"><i class=\'fa fa-eye\'></i>&nbsp;Details</a>&nbsp;' +
+                            '<a class="btn btn-warning patient-edit" style="display: none" data-role="Update Role" href="/Patients/Edit/' + visit.id + '"><i class=\'fa fa-edit\' ></i>&nbsp;Edit</a>&nbsp;' +
+                            '<a class="btn btn-danger patient-delete" style="display: none" data-role="Delete Role" href="javascript:void(0)" data-id="' + visit.id + '"><i class=\'fa fa-trash\' ></i>&nbsp;Delete</a>&nbsp;';
+                    },
+                    "sortable": false,
+                    "width": 250,
+                    "autoWidth": false
+                }
             ]
         });
 
@@ -81,6 +105,7 @@
             var patientId = $(this).val();
             LoadingIndicator.show();
             requestPatientVisitsData(patientId);
+            submitNewPatientVisit();
         });;
     }
 
@@ -113,6 +138,38 @@
 
         return markup;
     }
+
+   var submitNewPatientVisit = function () {
+       $(document).off("click.save-patient-visit").on("click.save-patient-visit", "button.submit-new-patient-visit", function () {
+           LoadingIndicator.show();
+           $("label.text-danger").remove();
+           $.ajax({
+               url: $("form#new-patient-visit-form").attr("action"),
+               type: "POST",
+               data: $("form#new-patient-visit-form").serialize(),
+               contentType: "application/x-www-form-urlencoded",
+               dataType: 'json'
+           }).done(function (data, textStatus) {
+               LoadingIndicator.hide();
+               if (textStatus === "success") {
+                   if (data.errors) {
+                       User.displayErrors(data.errors);
+                   } else {
+                       $("form#new-patient-visit-form")[0].reset();
+                       $("div#new-patient-visit-modal").modal("hide");
+                       window.patientVisitsDT.ajax.reload(function () {
+                           Users.loadDataTableWithForCurrentUserRoles();
+                       });
+                   }
+               }
+           }).fail(function (data) {
+               LoadingIndicator.hide();
+               $("form#new-patient-visit-form")[0].reset();
+               $("div#new-patient-visit-modal").modal("hide");
+               alert("There was a problem saving this patient visit. Please contact administrator");
+           });
+       });
+   }
 
     return {
 
