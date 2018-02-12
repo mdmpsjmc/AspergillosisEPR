@@ -1,4 +1,5 @@
 ﻿@model AspergillosisEPR.Models.Patient
+@using AspergillosisEPR.Helpers
 @if (Model.PatientImmunoglobulines != null)
 {
     @foreach (var igGroup in Model.PatientImmunoglobulines.OrderByDescending(ig => ig.DateTaken).GroupBy(ig => ig.ImmunoglobulinTypeId))
@@ -16,7 +17,7 @@
                 <tbody>
                     @foreach (var ig in igGroup)
                     {
-                        <tr>
+                        <tr class="row-with-date" data-unix-date="@(DateHelper.DateTimeToUnixTimestamp(ig.DateTaken))">
                             <td>
                                 <label class="checkbox">
                                     <input type="checkbox" name="checkbox">

@@ -40,8 +40,14 @@
                 $("div#modal-container").html(responseHtml);
                 $("div#new-patient-visit-modal").modal("show");
                 $('input.visit-date').datetimepicker({
-                    format: 'DD/MM/YYYY'
-                });
+                    format: 'DD/MM/YYYY',                  
+                }).on("dp.change", function () {
+                        var currentDate = $("input.visit-date").val();
+                        var unixDate = moment(currentDate.split("/").reverse().join("-")).format("X");
+                        $("input.visit-date").attr("data-unix-date", unixDate);
+                        $("tr.row-with-date[data-unix-date='" + unixDate + "']").addClass("success");
+                        $("tr.row-with-date:not([data-unix-date='" + unixDate + "'])").removeClass("success");
+                    });
                 initalizeSelect2PatientSearch();
             });
         });

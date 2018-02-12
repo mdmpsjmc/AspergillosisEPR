@@ -1,5 +1,5 @@
 ﻿@model AspergillosisEPR.Models.Patient
-
+@using AspergillosisEPR.Helpers
 @if (Model.PatientRadiologyFindings != null)
 {
     <div class="col-sm-12">
@@ -7,7 +7,7 @@
             <tbody>
                 @foreach (var radiology in Model.PatientRadiologyFindings.OrderByDescending(ig => ig.DateTaken))
                 {
-                    <tr>
+                    <tr class="row-with-date" data-unix-date="@(DateHelper.DateTimeToUnixTimestamp(radiology.DateTaken))">
                         <td>
                             <label class="checkbox">
                                 <input type="checkbox" name="checkbox">
@@ -20,7 +20,8 @@
                     </tr>
                     @if (!string.IsNullOrEmpty(radiology.Note))
                     {
-                        <tr>
+                        <tr class="row-with-date" data-unix-date="@(DateHelper.DateTimeToUnixTimestamp(radiology.DateTaken))">
+                            <td></td>
                             <td></td>
                             <td>Note:</td>
                             <td>@(radiology.Note)</td>

@@ -1,4 +1,5 @@
-﻿@model AspergillosisEPR.Models.Patient
+﻿@using AspergillosisEPR.Helpers
+@model AspergillosisEPR.Models.Patient
 @if (Model.STGQuestionnaires != null)
 {
     <div class="col-sm-12">
@@ -16,7 +17,7 @@
             <tbody>
                 @foreach (var stg in Model.STGQuestionnaires.OrderByDescending(q => q.DateTaken))
                 {
-                    <tr>
+                    <tr class="row-with-date" data-unix-date="@(DateHelper.DateTimeToUnixTimestamp(stg.DateTaken))">
                         <td>
                             <label class="checkbox">
                                 <input type="checkbox" name="checkbox">
