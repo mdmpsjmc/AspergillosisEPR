@@ -1,7 +1,10 @@
 ﻿@model AspergillosisEPR.Models.PatientViewModels.NewPatientVisitViewModel
 <div class="examinations">
-<ul id="details-tab" class="nav nav-tabs bordered">
+<ul id="patient-vistis-tab" class="nav nav-tabs bordered">
     <li class="active">
+        <a href="#measurements" data-toggle="tab"><i class="fa fa-fw fa-lg fa-user-md"></i> Measurements</a>
+    </li>
+    <li>
         <a href="#stg" data-toggle="tab"><i class="fa fa-fw fa-lg fa-file-text"></i> SGRQ</a>
     </li>
     <li>
@@ -14,7 +17,13 @@
     </li>
     <li><a href="#radiology" data-toggle="tab"><i class="fa fa-fw fa-lg fa-stethoscope"></i> Radiology</a></li>
     <div id="visits-tab-content" class="tab-content padding-10">
-        <div class="tab-pane fade in active details" id="stg">
+        <div class="tab-pane fade in active details" id="measurements">
+            @if (Model != null)
+            {
+                @Html.Partial("/Views/PatientVisits/Tabs/_MeasurementsTab.cshtml")
+            }
+        </div>
+        <div class="tab-pane fade details" id="stg">
             @if (Model != null)
             {
                 @Html.Partial("/Views/PatientVisits/Tabs/_SGRQTab.cshtml")

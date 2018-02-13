@@ -69,6 +69,7 @@
                         var currentDate = $("input.visit-date").val();
                         var unixDate = moment(currentDate.split("/").reverse().join("-")).format("X");
                         $("input.visit-date").attr("data-unix-date", unixDate);
+                        $("input.visit-date").attr("data-iso-date", moment(currentDate.split("/").reverse().join("-")).toISOString());
                         $("tr.row-with-date[data-unix-date='" + unixDate + "']").addClass("success");
                         $("tr.row-with-date:not([data-unix-date='" + unixDate + "'])").removeClass("success");
                     });
@@ -76,6 +77,50 @@
             });
         });
         //$.fn.modal.Constructor.prototype.enforceFocus = function () { };
+    }
+
+    var newPatientsVisitsItemModalShow = function (binding, button, modalId) {
+        $(document).off(binding).on(binding, button, function () {
+            LoadingIndicator.show();
+            var requestUrl = $(this).attr("href");
+            $.get(requestUrl, function (responseHtml) {
+                LoadingIndicator.hide();
+                $("div#patient-visits-modal").html(responseHtml);
+                $(modalId).modal("show");
+                $(modalId).on("shown.bs.modal", function () {
+                    var currentDate = $("input#VisitDate.visit-date").attr("data-iso-date");
+                    $("input#DateTaken").val(currentDate);
+                    if (currentDate === "" || currentDate === undefined) {
+                        $(modalId).modal("hide");
+                        alert("Select visit date first!");
+                    }
+                });
+            });
+        });
+    }
+
+    var newPatientsVisitsItemSubmit = function (binding, button, form, appendTo) {
+        $(document).off(binding).on(binding, button, function () {
+            var patientId = $("select#PatientId").val();
+            var data = $(form).serialize()+"&patientId="+patientId;
+            var requestUrl = $(form).attr("action");
+            $.ajax({
+                url: requestUrl,
+                type: "POST",
+                data: data,
+                contentType: "application/x-www-form-urlencoded",
+                dataType: 'html',
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.log('error');
+                    console.log(jqXHR, textStatus, errorThrown);
+                }
+            }).done(function (htmlData, textStatus) {
+                $(appendTo).html(htmlData);
+                $(".modal:first").modal("hide");
+            }).fail(function () {
+                 alert("Sorry. Unable to save.");
+            }); 
+        });
     }
 
     var initalizeSelect2PatientSearch = function () {
@@ -169,13 +214,15 @@
                alert("There was a problem saving this patient visit. Please contact administrator");
            });
        });
-   }
+   }    
 
     return {
 
         init: function () {
             initializeDataTable();
             newPatientVisitsModalShow();
+            newPatientsVisitsItemModalShow("click.show-patient-visits-modal", "a.add-measurement", "#new-measurement-modal");
+            newPatientsVisitsItemSubmit("click.submit-patient-visits-item", "button.submit-patient-visit-item", "form#new-measurement-form", "div.measurement-form");
         }
     }
 }();

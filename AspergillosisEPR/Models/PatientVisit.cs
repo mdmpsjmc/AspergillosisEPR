@@ -17,5 +17,6 @@ namespace AspergillosisEPR.Models
         public ICollection<SGRQExamination> SGRQExaminations;
         public ICollection<RadiologyExamination> RadiologyExaminations;
         public ICollection<ImmunologyExamination> IgExaminations;
+        public ICollection<PatientMeasurement> PatientMeasurements;
     }
 }

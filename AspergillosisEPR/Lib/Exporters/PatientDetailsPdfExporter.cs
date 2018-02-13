@@ -40,6 +40,7 @@ namespace AspergillosisEPR.Lib.Exporters
 
         private void ProcessIgCharts(PatientDetailsViewModel patientDetailsViewModel)
         {
+            if (patientDetailsViewModel.IgCharts == null) return;
             foreach(var igChart in patientDetailsViewModel.IgCharts)
             {                
                 SavePNGChart(igChart.PngImage, igChart.FileName);
@@ -48,6 +49,7 @@ namespace AspergillosisEPR.Lib.Exporters
 
         private void ProcessSGRQChart(int id, string sgrqChart, PatientDetailsViewModel patientDetailsViewModel)
         {
+            if (sgrqChart == null) return;
             var sgrqChartFileName = "SGRQ_Chart_" + id.ToString() + "_";
             patientDetailsViewModel.ShowButtons = false;
             string base64String = sgrqChart.Replace("data:image/png;base64,", String.Empty);

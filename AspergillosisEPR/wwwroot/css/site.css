@@ -187,7 +187,7 @@ label.side-effects {
 div#details-tab-content {
     min-height: 320px !important;
 }
-.smart-form ul {
+.smart-form ul#details-tab {
     padding-left: 30px !important;
 }
 
@@ -385,4 +385,8 @@ span.select2-container {
 div#examinations-tabs{
     max-height: 300px;
     overflow-y: auto;
+}
+
+div#new-measurement-modal {
+    z-index: 1100 !important;
 }

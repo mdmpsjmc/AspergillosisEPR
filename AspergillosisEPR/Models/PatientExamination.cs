@@ -13,6 +13,8 @@ namespace AspergillosisEPR.Models
         public PatientVisit PatientVisit { get; set; }
         public int PatientSTGQuestionnaireId { get; set; }
         public int PatientRadiologyFinidingId { get; set; }
-        public int PatientImmunoglobulinId { get; set; }    
+        public int PatientImmunoglobulinId { get; set; }
+        public int PatientMeasurementId { get; set; }
+
     }
 }

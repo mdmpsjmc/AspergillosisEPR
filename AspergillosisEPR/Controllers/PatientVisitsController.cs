@@ -42,7 +42,9 @@ namespace AspergillosisEPR.Controllers
             var list1 = SaveExamination("SGRQExamination", "PatientSTGQuestionnaireId", patientVisit);
             var list2 = SaveExamination("ImmunologyExamination", "PatientImmunoglobulinId", patientVisit);
             var list3 = SaveExamination("RadiologyExamination", "PatientRadiologyFinidingId", patientVisit);
-            var concatenated = list1.Concat(list2).Concat(list3);
+            var list4 = SaveExamination("MeasurementExamination", "PatientMeasurementId", patientVisit);
+
+            var concatenated = list1.Concat(list2).Concat(list3).Concat(list4);
             if (concatenated.Count() == 0)
             {
                 ModelState.AddModelError("Base", "You need to select at least one item from the lists below");
