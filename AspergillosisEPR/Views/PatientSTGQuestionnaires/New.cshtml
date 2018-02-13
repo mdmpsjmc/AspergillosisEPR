@@ -1,0 +1,50 @@
+﻿@model AspergillosisEPR.Models.PatientSTGQuestionnaire
+<div class="modal fade new-stg-modal" tabindex="-1" role="dialog" id="new-stg-modal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">Add New Patients SGRQ</h4>
+            </div>
+            <div class="modal-body">
+                <div class="widget-body">
+                    <form asp-controller="PatientSTGQuestionnaires" asp-action="Create" class="smart-form patient-stg-visit-form" data-ajax="true" data-ajax-method="POST" id="new-stg-form">
+                        <div class="row">
+                            <fieldset>
+                                <div class="row">
+                                    <input type="hidden" asp-for="DateTaken" />
+                                    <section class="col col-3">
+                                        <label class="input" asp-for="SymptomScore">
+                                            <input asp-for="SymptomScore" placeholder="Symptoms">
+                                        </label>
+                                    </section>
+                                    <section class="col col-3">
+                                        <label class="input" asp-for="ImpactScore">
+                                            <input asp-for="ImpactScore" placeholder="Impact">
+                                        </label>
+                                    </section>
+                                    <section class="col col-3">
+                                        <label class="input" asp-for="ActivityScore">
+                                            <input asp-for="ActivityScore" placeholder="Activity" />
+                                        </label>
+                                    </section>
+                                    <section class="col col-3">
+                                        <label class="input" asp-for="TotalScore">
+                                            <input asp-for="TotalScore" placeholder="Total">
+                                        </label>
+                                    </section>
+                                    </div>
+                            </fieldset>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-success submit-patient-visit-stg" data-form="#new-stg-form" data-insert-into="div.stg-form">ADD</button>
+            </div>
+        </div>
+    </div>
+</div>

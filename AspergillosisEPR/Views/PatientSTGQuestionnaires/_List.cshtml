@@ -1,0 +1,39 @@
+﻿@model List<PatientSTGQuestionnaire>
+
+@using AspergillosisEPR.Helpers
+    <div class="col-sm-12">
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>Select</th>
+                    <th>Date Taken</th>
+                    <th>Symptopms</th>
+                    <th>Impact</th>
+                    <th>Activity</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (var cursor = 0; cursor < Model.Count(); cursor++)
+                {
+                    var stg = Model[cursor];
+
+                    <tr class="row-with-date" data-unix-date="@(DateHelper.DateTimeToUnixTimestamp(stg.DateTaken))">
+                        <td>
+
+                            <label class="checkbox">
+                                <input type="checkbox" name="SGRQExamination[@cursor].Selected" />
+                                <input type="hidden" name="SGRQExamination[@cursor].ID" value="@stg.ID" />
+                                <i></i>
+                            </label>
+                        </td>
+                        <td>@(stg.DateTaken.ToString("dd-MMM-yyyy"))</td>
+                        <td>@(stg.SymptomScore)</td>
+                        <td>@(stg.ImpactScore)</td>
+                        <td>@(stg.ActivityScore)</td>
+                        <td>@(stg.TotalScore)</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
