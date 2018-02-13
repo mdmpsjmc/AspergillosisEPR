@@ -308,11 +308,11 @@ namespace AspergillosisEPR.Migrations.Aspergillosis
 
                     b.Property<DateTime>("DateTaken");
 
-                    b.Property<decimal>("Height");
+                    b.Property<decimal?>("Height");
 
                     b.Property<int>("PatientId");
 
-                    b.Property<decimal>("Weight");
+                    b.Property<decimal?>("Weight");
 
                     b.HasKey("ID");
 
@@ -463,6 +463,16 @@ namespace AspergillosisEPR.Migrations.Aspergillosis
                     b.ToTable("ImmunologyExamination");
 
                     b.HasDiscriminator().HasValue("ImmunologyExamination");
+                });
+
+            modelBuilder.Entity("AspergillosisEPR.Models.MeasurementExamination", b =>
+                {
+                    b.HasBaseType("AspergillosisEPR.Models.PatientExamination");
+
+
+                    b.ToTable("MeasurementExamination");
+
+                    b.HasDiscriminator().HasValue("MeasurementExamination");
                 });
 
             modelBuilder.Entity("AspergillosisEPR.Models.RadiologyExamination", b =>

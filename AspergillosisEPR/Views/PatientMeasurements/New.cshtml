@@ -13,6 +13,7 @@
                     <form asp-controller="/PatientMeasurements" asp-action="Create" class="smart-form patient-measurements-visit-form" data-ajax="true" data-ajax-method="POST" id="new-measurement-form">
                         <div class="measurement-row">
                             <fieldset>
+                                <input type="hidden" name="Error" id="Error" />
                                 <div class="row">
                                     <section class="col col-4">
                                         <label class="input" asp-for="Weight">

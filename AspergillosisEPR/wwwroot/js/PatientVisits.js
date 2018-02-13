@@ -101,6 +101,7 @@
 
     var newPatientsVisitsItemSubmit = function (binding, button, form, appendTo) {
         $(document).off(binding).on(binding, button, function () {
+            $("label.text-danger").remove();
             var patientId = $("select#PatientId").val();
             var data = $(form).serialize()+"&patientId="+patientId;
             var requestUrl = $(form).attr("action");
@@ -112,7 +113,11 @@
                 dataType: 'html',
                 error: function (jqXHR, textStatus, errorThrown) {
                     console.log('error');
-                    console.log(jqXHR, textStatus, errorThrown);
+                    console.log(jqXHR.responseText);
+                    var jsonResponse = JSON.parse(jqXHR.responseText);
+                    if (jsonResponse.value) {
+                        Patients.displayErrors(jsonResponse.value.errors);
+                    }
                 }
             }).done(function (htmlData, textStatus) {
                 $(appendTo).html(htmlData);

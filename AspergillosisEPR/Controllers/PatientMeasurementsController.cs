@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Mvc;
 using AspergillosisEPR.Models;
 using AspergillosisEPR.Data;
 using Microsoft.AspNetCore.Authorization;
+using AspergillosisEPR.Helpers;
+using System.Collections;
 
 namespace AspergillosisEPR.Controllers
 {
@@ -35,18 +37,30 @@ namespace AspergillosisEPR.Controllers
             }
 
             measurementExamination.PatientId = patient.ID;
-        
+            CheckIfAtLeastHeightOrWeightArePresent(measurementExamination);
             if (ModelState.IsValid)
             {
                 _context.Add(measurementExamination);
                 _context.SaveChanges();
                 
+            } else
+            {
+                Hashtable errors = ModelStateHelper.Errors(ModelState);
+                return StatusCode(422, Json(new { success = false, errors }));
             }
             var patientMeasurments = _context.PatientMeasurements.
                                           Where(pm => pm.PatientId == patientId).
                                           OrderBy(pm => pm.DateTaken).
                                           ToList();
             return PartialView(patientMeasurments);
+        }
+
+        private void CheckIfAtLeastHeightOrWeightArePresent(PatientMeasurement measurementExamination)
+        {
+            if (measurementExamination.Weight == null && measurementExamination.Height == null)
+            {
+                ModelState.AddModelError("Error", "One of the fields - weight or height must be present");
+            }
         }
     }
 }

@@ -9,8 +9,8 @@ namespace AspergillosisEPR.Models
     {
         public int ID { get; set; }
         public int PatientId { get; set; }
-        public decimal Weight { get; set; } 
-        public decimal Height { get; set; }
+        public decimal? Weight { get; set; } 
+        public decimal? Height { get; set; }
         public DateTime DateTaken { get; set; }
     }
 }
