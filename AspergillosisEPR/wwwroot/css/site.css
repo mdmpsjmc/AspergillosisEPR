@@ -387,6 +387,7 @@ div#examinations-tabs{
     overflow-y: auto;
 }
 
-div#new-measurement-modal {
+div#new-measurement-modal,
+div#new-stg-modal {
     z-index: 1100 !important;
 }

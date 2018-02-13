@@ -50,7 +50,7 @@ namespace AspergillosisEPR.Controllers
             }
             var patientMeasurments = _context.PatientMeasurements.
                                           Where(pm => pm.PatientId == patientId).
-                                          OrderBy(pm => pm.DateTaken).
+                                          OrderByDescending(pm => pm.DateTaken).
                                           ToList();
             return PartialView(patientMeasurments);
         }

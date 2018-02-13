@@ -1,41 +1,15 @@
 ﻿@using AspergillosisEPR.Helpers
 @model AspergillosisEPR.Models.PatientViewModels.NewPatientVisitViewModel
-@if (Model.STGQuestionnaires != null)
+
+@if (User.IsInRole("Create Role") || User.IsInRole("Admin Role"))
 {
-    <div class="col-sm-12">
-        <table class="table table-bordered table-striped">
-            <thead>
-                <tr>
-                    <th>Select</th>
-                    <th>Date Taken</th>
-                    <th>Symptopms</th>
-                    <th>Impact</th>
-                    <th>Activity</th>
-                    <th>Total</th>
-                </tr>
-            </thead>
-            <tbody>
-                @for(var cursor=0; cursor < Model.STGQuestionnaires.OrderByDescending(q => q.DateTaken).Count(); cursor++)
-                {
-                    var stg = Model.STGQuestionnaires.OrderByDescending(q => q.DateTaken).ToList()[cursor];
-
-                    <tr class="row-with-date" data-unix-date="@(DateHelper.DateTimeToUnixTimestamp(stg.DateTaken))">
-                        <td>
-
-                            <label class="checkbox">   
-                                <input type="checkbox" name="SGRQExamination[@cursor].Selected" />
-                                <input type="hidden" name="SGRQExamination[@cursor].ID" value="@stg.ID" />
-                                <i></i>
-                            </label>
-                        </td>
-                        <td>@(stg.DateTaken.ToString("dd-MMM-yyyy"))</td>
-                        <td>@(stg.SymptomScore)</td>
-                        <td>@(stg.ImpactScore)</td>
-                        <td>@(stg.ActivityScore)</td>
-                        <td>@(stg.TotalScore)</td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-    </div>
+    <a href="@Url.Action("New", "PatientSTGQuestionnaires")" class="btn btn-success add-stg-questionnaire add-new-patient-partial disable-default" data-visible-row="div.sgrq-row:visible" data-insert-into-class="div.sgrq-form" style="padding: 5px;margin-top: 15px; margin-bottom: 10px">
+        <i class="fa fa-plus"></i>
+        <span>
+            <strong>Add entry</strong>
+        </span>
+    </a>
 }
+<div id="sgrq-data">
+    @Html.Partial("/Views/PatientSTGQuestionnaires/_List.cshtml", Model.STGQuestionnaires.OrderByDescending(q => q.DateTaken).ToList())
+</div>

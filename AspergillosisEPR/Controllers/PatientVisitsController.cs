@@ -69,10 +69,17 @@ namespace AspergillosisEPR.Controllers
             {
                 return NotFound();
             }
+            var patientMeasurements = _context.PatientMeasurements
+                                              .Where(pm => pm.PatientId == patient.ID);                                              
+
             var patientVM = new NewPatientVisitViewModel();
             patientVM.STGQuestionnaires = patient.STGQuestionnaires;
             patientVM.PatientRadiologyFindings = patient.PatientRadiologyFindings;
             patientVM.PatientImmunoglobulines = patient.PatientImmunoglobulines;
+            if (patientMeasurements != null)
+            {
+                patientVM.PatientMeasurements = patientMeasurements.ToList();
+            }
             return PartialView(patientVM);
         }
    
