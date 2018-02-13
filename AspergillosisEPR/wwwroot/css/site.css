@@ -389,6 +389,7 @@ div#examinations-tabs{
 
 div#new-measurement-modal,
 div#new-stg-modal,
-div#new-ig-modal {
+div#new-ig-modal,
+div#new-radiology-modal {
     z-index: 1100 !important;
 }

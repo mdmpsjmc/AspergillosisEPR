@@ -76,7 +76,6 @@
                 initalizeSelect2PatientSearch();
             });
         });
-        //$.fn.modal.Constructor.prototype.enforceFocus = function () { };
     }
 
     var newPatientsVisitsItemModalShow = function (binding, button, modalId) {
@@ -229,9 +228,11 @@
             newPatientsVisitsItemModalShow("click.show-patient-visits-modal", "a.add-measurement", "#new-measurement-modal");
             newPatientsVisitsItemModalShow("click.show-patient-visits-sgrq", "a.add-stg-questionnaire", "#new-stg-modal");
             newPatientsVisitsItemModalShow("click.show-patient-visits-ig", "a.add-ig", "#new-ig-modal");
+            newPatientsVisitsItemModalShow("click.show-patient-visits-radiology", "a.add-radiology", "#new-radiology-modal");
             newPatientsVisitsItemSubmit("click.submit-patient-visits-item", "button.submit-patient-visit-item", "form#new-measurement-form", "div.measurement-form");
             newPatientsVisitsItemSubmit("click.submit-patient-visits-sgrq", "button.submit-patient-visit-stg", "form#new-stg-form", "div#sgrq-data");
             newPatientsVisitsItemSubmit("click.submit-patient-visits-ig", "button.submit-patient-visit-ig", "form#new-ig-form", "div#ig-data");
+            newPatientsVisitsItemSubmit("click.submit-patient-visits-radiology", "button.submit-patient-visit-radiology", "form#new-radiology-form", "div#radiology-data");
         }
     }
 }();

@@ -1,0 +1,33 @@
+﻿@model List<PatientRadiologyFinding>;
+@using AspergillosisEPR.Helpers;
+    <div class="col-sm-12">
+        <table class="table table-bordered table-striped">
+            <tbody>
+                @for (var cursor = 0; cursor < Model.Count(); cursor++)
+                {
+                    var radiology = Model[cursor];
+                    <tr class="row-with-date" data-unix-date="@(DateHelper.DateTimeToUnixTimestamp(radiology.DateTaken))">
+                        <td>
+                            <label class="checkbox">
+                                <input type="checkbox" name="RadiologyExamination[@cursor].Selected" />
+                                <input type="hidden" name="RadiologyExamination[@cursor].ID" value="@radiology.ID" />
+                                <i></i>
+                            </label>
+                        </td>
+                        <td>@(radiology.RadiologyType.Name)</td>
+                        <td>@(radiology.DateTaken.ToString("dd/MM/yyyy"))</td>
+                        <td>@(radiology.Appearance)</td>
+                    </tr>
+                    @if (!string.IsNullOrEmpty(radiology.Note))
+                    {
+                        <tr class="row-with-date" data-unix-date="@(DateHelper.DateTimeToUnixTimestamp(radiology.DateTaken))">
+                            <td></td>
+                            <td></td>
+                            <td>Note:</td>
+                            <td>@(radiology.Note)</td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
