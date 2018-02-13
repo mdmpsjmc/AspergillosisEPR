@@ -3,53 +3,13 @@
 
 @if (User.IsInRole("Create Role") || User.IsInRole("Admin Role"))
 {
-    <a href="@Url.Action("New", "PatientImmunoglobulines")" class="btn btn-success add-ig add-new-patient-partial disable-default" data-visible-row="div.drug-row:visible" data-insert-into-class="div.measurement-form" style="padding: 5px;margin-top: 15px; margin-bottom: 10px">
+    <a href="@Url.Action("New", "PatientsImmunoglobulines")" class="btn btn-success add-ig add-new-patient-partial disable-default" data-visible-row="div.ig-row:visible" data-insert-into-class="div.ig-data" style="padding: 5px;margin-top: 15px; margin-bottom: 10px">
         <i class="fa fa-plus"></i>
         <span>
             <strong>Add entry</strong>
         </span>
     </a>
 }
-
-@if (Model.PatientImmunoglobulines != null)
-{
-
-        int cursor = 0;
-        @foreach (var igGroup in Model.PatientImmunoglobulines.OrderByDescending(ig => ig.DateTaken).GroupBy(ig => ig.ImmunoglobulinTypeId))
-        {
-            <div class="col-sm-12" style="margin-top: 15px">
-                <table class="table table-bordered table-striped">
-                    <thead>
-                        <tr>
-                            <th>Select</th>
-                            <th>Ig Type</th>
-                            <th>Date</th>
-                            <th>Value</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                            @foreach (var ig in igGroup)
-                            {
-                                <tr class="row-with-date" data-unix-date="@(DateHelper.DateTimeToUnixTimestamp(ig.DateTaken))">
-                                    <td>
-
-                                        <label class="checkbox">
-                                            <input type="checkbox" name="ImmunologyExamination[@cursor].Selected" />
-                                            <input type="hidden" name="ImmunologyExamination[@cursor].ID" value="@ig.ID" />
-                                            <i></i>
-                                        </label>
-                                    </td>
-                                    <td>@(ig.ImmunoglobulinType.Name)</td>
-                                    <td>@(ig.DateTaken.ToString("dd/MM/yyyy"))</td>
-                                    <td>@(ig.Value.ToString())</td>
-                                </tr>
-                                cursor++;
-                            }
-
-                    </tbody>
-                </table>
-            </div>
-
- }
-
-}
+<div id="ig-data">
+    @Html.Partial("/Views/PatientsImmunoglobulines/_List.cshtml", Model.PatientImmunoglobulines.OrderByDescending(q => q.DateTaken).ToList())
+</div>
