@@ -8,6 +8,7 @@
             "serverSide": true,
             "filter": true,
             "responsive": true,
+            "pageLength": 100,
             "orderMulti": false,
             "order": [[1, "asc"]],
             "initComplete": function (settings, json) {

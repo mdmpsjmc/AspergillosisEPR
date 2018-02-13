@@ -9,6 +9,7 @@
                 "processing": true,
                 "serverSide": true,
                 "filter": true,
+                "pageLength" : 100,
                 "orderMulti": false,
                 "initComplete": function (settings, json) {
                     newPatientsModalShow();
