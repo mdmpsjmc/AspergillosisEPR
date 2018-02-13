@@ -79,9 +79,9 @@
                 },
                 {
                     "render": function (data, type, visit, meta) {
-                        return '<a class="btn btn-info patient-details" style="display: none" data-role="Read Role" href="/Patients/Details/' + visit.id + '"><i class=\'fa fa-eye\'></i>&nbsp;Details</a>&nbsp;' +
-                            '<a class="btn btn-warning patient-edit" style="display: none" data-role="Update Role" href="/Patients/Edit/' + visit.id + '"><i class=\'fa fa-edit\' ></i>&nbsp;Edit</a>&nbsp;' +
-                            '<a class="btn btn-danger patient-delete" style="display: none" data-role="Delete Role" href="javascript:void(0)" data-id="' + visit.id + '"><i class=\'fa fa-trash\' ></i>&nbsp;Delete</a>&nbsp;';
+                        return '<a class="btn btn-info patient-details" style="display: none" data-role="Read Role" href="/PatientVisits/Details/' + visit.id + '"><i class=\'fa fa-eye\'></i>&nbsp;</a>&nbsp;' +
+                            '<a class="btn btn-warning patient-edit" style="display: none" data-role="Update Role" href="/PatientVisits/Edit/' + visit.id + '"><i class=\'fa fa-edit\' ></i>&nbsp;</a>&nbsp;' +
+                            '<a class="btn btn-danger patient-delete" style="display: none" data-role="Delete Role" href="javascript:void(0)" data-id="' + visit.id + '"><i class=\'fa fa-trash\' ></i>&nbsp;</a>&nbsp;';
                     },
                     "sortable": false,
                     "width": 250,

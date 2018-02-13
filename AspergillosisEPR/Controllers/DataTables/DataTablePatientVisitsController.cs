@@ -60,7 +60,7 @@ namespace AspergillosisEPR.Controllers
 
         private void ColumnSearch()
         {
-            for (int cursor = 0; cursor < 4; cursor++)
+            for (int cursor = 0; cursor < 5; cursor++)
             {
                 string partialSearch = Request.Form["columns[" + cursor.ToString() + "][search][value]"];
                 if (partialSearch != null && partialSearch != "")
