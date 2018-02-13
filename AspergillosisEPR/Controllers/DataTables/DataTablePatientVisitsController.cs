@@ -27,7 +27,7 @@ namespace AspergillosisEPR.Controllers
             {
                 _list = QueryVisitsData().ToList<dynamic>();
                 Sorting();
-                SingleSearch();
+                ColumnSearch();
             };
             return LoadData(queriesAction);
         }
@@ -57,7 +57,32 @@ namespace AspergillosisEPR.Controllers
             }
             return visits;
         }
-            
+
+        private void ColumnSearch()
+        {
+            for (int cursor = 0; cursor < 4; cursor++)
+            {
+                string partialSearch = Request.Form["columns[" + cursor.ToString() + "][search][value]"];
+                if (partialSearch != null && partialSearch != "")
+                {
+                    switch (cursor)
+                    {
+                        case 1:
+                            _list = _list.Where(p => DateTimeOffset.FromUnixTimeSeconds(long.Parse(p.VisitDate.ToString())).UtcDateTime.ToString().Contains(partialSearch)).ToList();
+                            break;
+                        case 2:
+                            _list = _list.Where(p => p.PatientName.Contains(partialSearch)).ToList();
+                            break;
+                        case 3:
+                            _list = _list.Where(p => p.RM2Number.Contains(partialSearch)).ToList();
+                            break;
+                        case 4:
+                            _list = _list.Where(p => p.Examinations.Contains(partialSearch)).ToList();
+                            break;                        
+                    }
+                }
+            }
+        }
 
         private void SingleSearch()
         {

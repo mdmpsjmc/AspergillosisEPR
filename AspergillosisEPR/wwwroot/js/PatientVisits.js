@@ -12,12 +12,51 @@
             "order": [[1, "asc"]],
             "initComplete": function (settings, json) {
                 Users.loadDataTableWithForCurrentUserRoles();
+                addButtonsToDataTable();
+                addFilteringColumns();
+                moveSearchFieldsFromFooterToHead();
             },
             "ajax": {
                 "url": "/DataTablePatientVisits/Load",
                 "type": "POST",
                 "datatype": "json"
             },
+            buttons: [
+                {
+                    'extend': 'excel',
+                    'className': 'btn btn-success btn-excel',
+                    'titleAttr': 'Export to Excel',
+                    'text': '<i class="fa fa-file-excel-o"></i>',
+                    'exportOptions': {
+                        columns: ':visible'
+                    }
+                },
+                {
+                    'extend': 'pdf',
+                    'className': 'btn btn-danger btn-pdf',
+                    'titleAttr': 'Export to PDF',
+                    'text': '<i class="fa fa-file-pdf-o"></i>',
+                    'exportOptions': {
+                        columns: ':visible'
+                    }
+                },
+                {
+                    'extend': 'print',
+                    'className': 'btn btn-warning btn-print',
+                    'titleAttr': 'Print',
+                    'text': '<i class="fa fa-print"></i>',
+                    'exportOptions': {
+                        columns: ':visible'
+                    }
+
+                },
+                {
+                    'extend': 'colvis',
+                    'className': 'btn btn-info btn-vis',
+                    'titleAttr': 'Column visibility',
+                    'text': '<i class="fa fa-eye"></i>',
+                }
+            ],
             "columns": [
                 { "data": "id", "name": "ID", "autoWidth": true },
                 {
@@ -54,6 +93,41 @@
         window.patientVisitsDT.on('draw.dt', function () {
             Users.loadDataTableWithForCurrentUserRoles();
         });
+    }
+
+    var addButtonsToDataTable = function () {
+        window.patientVisitsDT.buttons().container()
+            .appendTo($('.col-sm-6:eq(0)', window.patientsTable.table().container()));
+    }
+
+    var addFilteringColumns = function () {
+        $('#patient_visits_datatable tfoot th').each(function () {
+            var title = $(this).text();
+            $(this).html('<input type="text" class="form-control ' + title + '" placeholder="Search ' + title + '" />');
+        });
+
+        window.patientVisitsDT.columns().every(function () {
+            var that = this;
+
+            $('input', this.footer()).on('keyup change', function () {
+                if (that.search() !== this.value) {
+                    that
+                        .search(this.value)
+                        .draw();
+                }
+            });
+        });
+    }
+
+    var moveSearchFieldsFromFooterToHead = function () {
+        var r = $('#patient_visits_datatable tfoot tr');
+        r.find('th').each(function () {
+            $(this).css('padding', 8);
+        });
+        $('#patient_visits_datatable thead').append(r);
+        $('#search_0').css('text-align', 'center');
+        $("div#patient_visits_datatable_filter").hide();
+        $("input.Actions, input.form-control.ID").remove();
     }
 
     var newPatientVisitsModalShow = function () {
