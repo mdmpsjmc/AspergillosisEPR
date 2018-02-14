@@ -15,6 +15,6 @@ namespace AspergillosisEPR.Models
         public int PatientRadiologyFinidingId { get; set; }
         public int PatientImmunoglobulinId { get; set; }
         public int PatientMeasurementId { get; set; }
-
+        public PatientMeasurement PatientMeasurement { get; set; }
     }
 }

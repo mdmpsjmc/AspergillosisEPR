@@ -1,0 +1,64 @@
+﻿<div class="row">
+    <div class="col-sm-12">
+        <div class="row">
+            <div class="col-sm-2 profile-pic">
+                <img src="/img/avatars/@(Model.Patient.Gender).png" alt="patient">
+            </div>
+            <div class="col-sm-6">
+                <h1>
+                    @(Model.Patient.FirstName) <span class="semi-bold">@(Model.Patient.LastName)</span>
+                    <br>
+                    <small><strong> @(Model.Patient.RM2Number)</strong></small>
+                </h1>
+                <ul class="list-unstyled">
+                    <li>
+                        <p class="text-muted">
+                            <i class="fa fa-venus-mars"></i>&nbsp;&nbsp;<span class="txt-color-darken">@(Model.Patient.Gender.ToUpper())</span>
+                        </p>
+                    </li>
+                    <li>
+                        <p class="text-muted">
+                            <i class="fa fa-birthday-cake"></i>&nbsp;&nbsp;<span class="txt-color-darken">@(Model.Patient.DOB.ToString("dd/MMM/yyy")) (@(Model.Patient.Age()) years)</span>
+                        </p>
+                    </li>
+                    @if (Model.Patient.PatientStatus != null)
+                    {
+                        <li>
+                            <p class="text-muted">
+                                <i class="fa fa-info-circle"></i>&nbsp;&nbsp;<span class="txt-color-darken">Status:&nbsp;@(Model.Patient.PatientStatus.Name)</span>
+                            </p>
+                        </li>
+                    }
+                    @if (Model.Patient.IsDeceased())
+                    {
+                        <li>
+                            <p class="text-muted">
+                                <i class="fa fa-bolt"></i>&nbsp;&nbsp;<span class="txt-color-darken">Death:&nbsp;@(Model.Patient?.DateOfDeath.ToString("dd/MMM/yyy"))</span>
+                            </p>
+                        </li>
+
+                    }
+                    <li>
+                        <p class="text-muted">
+                            <i class="fa fa-calendar"></i>&nbsp;&nbsp;<span class="label label-success">Visit Date&nbsp;@(Model.VisitDate.ToString("dd/MMM/yyy"))</span>
+                        </p>
+                    </li>
+                </ul>
+                @foreach (var group in Model.PatientExaminations)
+                {
+                    @foreach (PatientExamination examination in group)
+                    {
+                        switch (examination.Discriminator)
+                        {
+                            case "MeasurementExamination":
+                                var measurement = (MeasurementExamination)examination;
+                                <h4>Weight/Height: <span class="label label-default">Some weight here</span></h4>
+                                break;
+                        }
+                    }
+                }
+                <br>
+            </div>
+        </div>
+    </div>
+</div>

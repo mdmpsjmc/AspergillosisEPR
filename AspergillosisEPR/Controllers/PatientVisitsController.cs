@@ -11,6 +11,7 @@ using AspergillosisEPR.Models.PatientViewModels;
 using AspergillosisEPR.Helpers;
 using System.Collections;
 using System.Reflection;
+using Microsoft.EntityFrameworkCore;
 
 namespace AspergillosisEPR.Controllers
 {
@@ -52,7 +53,7 @@ namespace AspergillosisEPR.Controllers
             if (ModelState.IsValid)
             {
                 _context.Add(patientVisit);
-               await _context.SaveChangesAsync();
+                await _context.SaveChangesAsync();
             } else
             {
                 Hashtable errors = ModelStateHelper.Errors(ModelState);
@@ -70,7 +71,7 @@ namespace AspergillosisEPR.Controllers
                 return NotFound();
             }
             var patientMeasurements = _context.PatientMeasurements
-                                              .Where(pm => pm.PatientId == patient.ID);                                              
+                                              .Where(pm => pm.PatientId == patient.ID);
 
             var patientVM = new NewPatientVisitViewModel();
             patientVM.STGQuestionnaires = patient.STGQuestionnaires;
@@ -82,7 +83,32 @@ namespace AspergillosisEPR.Controllers
             }
             return PartialView(patientVM);
         }
-   
+
+        public IActionResult Details(int id)
+        {
+            var patientDetailsVM = new PatientVisitDetailsViewModel();
+            var patientVisit = _context.PatientVisits
+                                       .Include(pv => pv.Patient)
+                                       .Where(pv => pv.ID == id)
+                                       .SingleOrDefault();                                       
+            
+            if (patientVisit == null)
+            {
+                return NotFound();
+            }
+
+            var patientExaminations = _context.PatientExaminations
+                                              .Where(pe => pe.PatientVisitId == id)
+                                              .GroupBy(pe => pe.Discriminator)
+                                              .ToList();
+
+            patientDetailsVM.Patient = patientVisit.Patient;
+            patientDetailsVM.VisitDate = patientVisit.VisitDate;
+            patientDetailsVM.PatientExaminations = patientExaminations.ToList<dynamic>();
+            //patientDetailsVM.PatientMeasurements = patientVisit.PatientMeasurements.ToList();
+            return PartialView(patientDetailsVM);
+        }
+        
         private List<PatientExamination> SaveExamination(string klass, string propertyName, PatientVisit patientVisit)
         {
             var selected = Request.Form.Keys.Where(k => k.Contains(klass)).ToList();

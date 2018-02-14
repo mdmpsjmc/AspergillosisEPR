@@ -83,17 +83,5 @@ namespace AspergillosisEPR.Controllers
                 }
             }
         }
-
-        private void SingleSearch()
-        {
-            if (!string.IsNullOrEmpty(_searchValue))
-            {
-                _list = _list
-                    .Where(u => u.Examinations.Contains(_searchValue) || u.PatientName.ToString().Contains(_searchValue)
-                                || u.RM2Number.ToString().Contains(_searchValue)
-                                || DateTimeOffset.FromUnixTimeSeconds(long.Parse(u.VisitDate)).UtcDate.ToString().Contains(_searchValue)).
-                                ToList();                
-            }
-        }
     }
 }

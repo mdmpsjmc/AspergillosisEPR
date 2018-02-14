@@ -13,10 +13,10 @@ namespace AspergillosisEPR.Models
 
         public Patient Patient { get; set; }
 
-        public ICollection<PatientExamination> PatientExaminations;
+        public ICollection<PatientMeasurement> PatientExaminations;
         public ICollection<SGRQExamination> SGRQExaminations;
         public ICollection<RadiologyExamination> RadiologyExaminations;
         public ICollection<ImmunologyExamination> IgExaminations;
-        public ICollection<PatientMeasurement> PatientMeasurements;
+        public ICollection<MeasurementExamination> MeasurementExaminations;
     }
 }

@@ -80,9 +80,9 @@
                 },
                 {
                     "render": function (data, type, visit, meta) {
-                        return '<a class="btn btn-info patient-details" style="display: none" data-role="Read Role" href="/PatientVisits/Details/' + visit.id + '"><i class=\'fa fa-eye\'></i>&nbsp;</a>&nbsp;' +
-                            '<a class="btn btn-warning patient-edit" style="display: none" data-role="Update Role" href="/PatientVisits/Edit/' + visit.id + '"><i class=\'fa fa-edit\' ></i>&nbsp;</a>&nbsp;' +
-                            '<a class="btn btn-danger patient-delete" style="display: none" data-role="Delete Role" href="javascript:void(0)" data-id="' + visit.id + '"><i class=\'fa fa-trash\' ></i>&nbsp;</a>&nbsp;';
+                        return '<a class="btn btn-info patient-visit-details" style="display: none" data-role="Read Role" href="/PatientVisits/Details/' + visit.id + '"><i class=\'fa fa-eye\'></i>&nbsp;</a>&nbsp;' +
+                            '<a class="btn btn-warning patient-visit-edit" style="display: none" data-role="Update Role" href="/PatientVisits/Edit/' + visit.id + '"><i class=\'fa fa-edit\' ></i>&nbsp;</a>&nbsp;' +
+                            '<a class="btn btn-danger patient-visit-delete" style="display: none" data-role="Delete Role" href="javascript:void(0)" data-id="' + visit.id + '"><i class=\'fa fa-trash\' ></i>&nbsp;</a>&nbsp;';
                     },
                     "sortable": false,
                     "width": 250,
@@ -104,7 +104,8 @@
     var addFilteringColumns = function () {
         $('#patient_visits_datatable tfoot th').each(function () {
             var title = $(this).text();
-            $(this).html('<input type="text" class="form-control ' + title + '" placeholder="Search ' + title + '" />');
+            var isDatepicker = title.match("Date") ? " table-datepicker " : "";
+            $(this).html('<input type="text" class="form-control ' + title + isDatepicker + '" placeholder="Search ' + title + '" />');
         });
 
         window.patientVisitsDT.columns().every(function () {
@@ -117,6 +118,10 @@
                         .draw();
                 }
             });
+        });
+
+        $("input.table-datepicker").datetimepicker({
+            format: "MM/DD/YYYY"
         });
     }
 
@@ -293,7 +298,19 @@
                alert("There was a problem saving this patient visit. Please contact administrator");
            });
        });
-   }    
+   }
+
+   var showPatientVisitDetails = function () {
+       $(document).off("click.show-pv-details").on("click.show-pv-details", "a.patient-visit-details", function (e) {
+           var currentId = $(this).data("id");
+           var requestUrl = $(this).attr("href");
+           e.preventDefault();
+           $.get(requestUrl, function (htmlResponse) {
+               $("div#modal-container").html(htmlResponse);
+               $("div#visit-details-modal").modal("show");
+           });
+       });
+   }
 
     return {
 
@@ -308,6 +325,7 @@
             newPatientsVisitsItemSubmit("click.submit-patient-visits-sgrq", "button.submit-patient-visit-stg", "form#new-stg-form", "div#sgrq-data");
             newPatientsVisitsItemSubmit("click.submit-patient-visits-ig", "button.submit-patient-visit-ig", "form#new-ig-form", "div#ig-data");
             newPatientsVisitsItemSubmit("click.submit-patient-visits-radiology", "button.submit-patient-visit-radiology", "form#new-radiology-form", "div#radiology-data");
+            showPatientVisitDetails();
         }
     }
 }();

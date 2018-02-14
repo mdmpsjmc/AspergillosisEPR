@@ -1,13 +1,13 @@
-﻿@model AspergillosisEPR.Models.PatientViewModels.PatientDetailsViewModel
+﻿@model AspergillosisEPR.Models.PatientViewModels.PatientVisitDetailsViewModel
 <div class="modal fade" tabindex="-1" role="dialog" id="visit-details-modal">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">Patient <strong>@(Model.Patient.FullName)</strong></h4>
+                <h4 class="modal-title">Patient <strong>@(Model.Patient.FullName)</strong> visit on: @(Model.VisitDate.ToString("dd-MM-yyyy"))</h4>
             </div>
             <div class="modal-body">
-                
+                @Html.Partial("/Views/PatientVisits/_Details.cshtml", Model)
             </div>
             <div class="modal-footer">                               
                 <a href="@Url.Action("Details", "PatientPdfExports", new { id = Model.Patient.ID })" disabled="disabled" class="btn btn-danger export-trigger-visits" data-file="pdf" data-id="@Model.Patient.ID">
