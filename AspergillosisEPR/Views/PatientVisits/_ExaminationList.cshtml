@@ -1,0 +1,67 @@
+﻿@using AspergillosisEPR.Models.PatientViewModels;
+
+<div class="col col-12 col-sm-12 col-md-12">
+    <div class="table-responsive">
+
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>Action</th>
+                    <th>Result</th>
+                    <th></th>
+                </tr>
+            </thead>            
+            @foreach (var group in Model)
+            {
+                <tbody>
+                    @foreach (PatientExamination examination in group)
+                    {
+                        switch (examination.Discriminator)
+                        {
+                            case "MeasurementExamination":
+                                var measurement = (MeasurementExamination)examination;
+                                <tr>
+                                    <td></td>
+                                    <td>@PatientVisitsDataTableViewModel.ExaminationNameFromClass(examination.Discriminator)</td>
+                                    <td>@measurement.AsDetailedString()</td>
+                                    <td></td>
+                                </tr>
+
+
+                                break;
+                            case "SGRQExamination":
+                                var sgrq = (SGRQExamination)examination;
+                                <tr>
+                                    <td></td>
+                                    <td>@PatientVisitsDataTableViewModel.ExaminationNameFromClass(examination.Discriminator)</td>
+                                    <td>@sgrq.AsDetailedString()</td>
+                                    <td></td>
+                                </tr>
+                                break;
+                            case "ImmunologyExamination":
+                                var ig = (ImmunologyExamination)examination;
+                                <tr>
+                                    <td></td>
+                                    <td>@PatientVisitsDataTableViewModel.ExaminationNameFromClass(examination.Discriminator)</td>
+                                    <td>@ig.AsDetailedString()</td>
+                                    <td></td>
+                                </tr>
+                                break;
+                            case "RadiologyExamination":
+                                var rad = (RadiologyExamination)examination;
+                                <tr>
+                                    <td></td>
+                                    <td>@PatientVisitsDataTableViewModel.ExaminationNameFromClass(examination.Discriminator)</td>
+                                    <td>@rad.AsDetailedString()</td>
+                                    <td></td>
+                                </tr>
+                                break;
+                        }
+                    }
+                </tbody>
+            }
+        </table>
+
+    </div>
+</div>

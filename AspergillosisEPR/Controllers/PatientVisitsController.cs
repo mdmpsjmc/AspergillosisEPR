@@ -103,11 +103,30 @@ namespace AspergillosisEPR.Controllers
                                               .GroupBy(pe => pe.Discriminator)
                                               .ToList();
             LoadRelatedData(patientExaminations);
+            var otherVisits = _context.PatientVisits.
+                                        Where(pv => pv.ID != patientVisit.ID && pv.PatientId == patientVisit.PatientId).
+                                        ToList();
+            LoadRelatedDataForEachVisit(otherVisits);
+
             patientDetailsVM.Patient = patientVisit.Patient;
             patientDetailsVM.VisitDate = patientVisit.VisitDate;
-            patientDetailsVM.PatientExaminations = patientExaminations.ToList<dynamic>();
-            //patientDetailsVM.PatientMeasurements = patientVisit.PatientMeasurements.ToList();
+            patientDetailsVM.PatientExaminations = patientExaminations;
+            patientDetailsVM.OtherVisits = otherVisits;
             return PartialView(patientDetailsVM);
+        }
+
+        private void LoadRelatedDataForEachVisit(List<PatientVisit> otherVisits)
+        {
+           foreach(var visit in otherVisits)
+            {
+                var examinations = _context.PatientExaminations
+                                              .Where(pe => pe.PatientVisitId == visit.ID)
+                                              .GroupBy(pe => pe.Discriminator)
+                                              .ToList();
+                
+                LoadRelatedData(examinations);
+                visit.GroupedExaminations = examinations;
+            }
         }
 
         private void LoadRelatedData(List<IGrouping<string, PatientExamination>> patientExaminations)

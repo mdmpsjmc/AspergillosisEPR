@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -18,5 +19,8 @@ namespace AspergillosisEPR.Models
         public ICollection<RadiologyExamination> RadiologyExaminations;
         public ICollection<ImmunologyExamination> IgExaminations;
         public ICollection<MeasurementExamination> MeasurementExaminations;
+        [NotMapped]
+        public List<IGrouping<string, PatientExamination>> GroupedExaminations { get; internal set; }
+
     }
 }

@@ -9,8 +9,9 @@ namespace AspergillosisEPR.Models.PatientViewModels
     {
         public Patient Patient { get; set; }
         public DateTime VisitDate { get; set; }
-        public List<dynamic> PatientExaminations { get; set; }
+        public List<IGrouping<string, PatientExamination>> PatientExaminations { get; set; }
         public bool ShowButtons { get; set; }
+        public List<PatientVisit> OtherVisits { get; set; }
 
         public PatientVisitDetailsViewModel() {
             ShowButtons = true;
