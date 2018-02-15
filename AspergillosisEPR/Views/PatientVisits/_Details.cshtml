@@ -52,7 +52,34 @@
                         {
                             case "MeasurementExamination":
                                 var measurement = (MeasurementExamination)examination;
-                                <h4>Weight/Height: <span class="label label-default">Some weight here</span></h4>
+                                
+                                    <div class="row" style="font-size: 16px">
+                                            <section class="col col-2" style="width: 100px; float: left"><span class="label label-primary">Weight/Height:</span> </section>
+                                            <section class="col col-9"><span class="label label-default">@measurement.AsDetailedString()</span></section>
+                                     </div>
+
+
+                                break;
+                            case "SGRQExamination":
+                                var sgrq = (SGRQExamination)examination;
+                                <div class="row" style="font-size: 16px">
+                                    <section class="col col-2" style="width: 100px; float: left"><span class="label label-primary">SGRQ:</span> </section>
+                                    <section class="col col-9" style="width: 300px; float: left"><span class="label label-default">@sgrq.AsDetailedString()</span></section>
+                                </div>
+                                break;
+                            case "ImmunologyExamination":
+                                var ig = (ImmunologyExamination)examination;
+                                <div class="row" style="font-size: 16px">
+                                    <section class="col col-2" style="width: 100px; float: left"><span class="label label-primary">Ig Levels:</span> </section>
+                                    <section class="col col-9" style="width: 300px; float: left"><span class="label label-default">@ig.AsDetailedString()</span></section>
+                                </div>
+                                break;
+                            case "RadiologyExamination":
+                                var rad = (RadiologyExamination)examination;
+                                <div class="row" style="font-size: 16px">
+                                    <section class="col col-2" style="width: 100px; float: left"><span class="label label-primary">Radiology:</span> </section>
+                                    <section class="col col-9" style="width: 300px; float: left"><span class="label label-default">@rad.AsDetailedString()</span></section>
+                                </div>
                                 break;
                         }
                     }

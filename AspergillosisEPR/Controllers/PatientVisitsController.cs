@@ -12,6 +12,7 @@ using AspergillosisEPR.Helpers;
 using System.Collections;
 using System.Reflection;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Dynamic.Core;
 
 namespace AspergillosisEPR.Controllers
 {
@@ -90,8 +91,8 @@ namespace AspergillosisEPR.Controllers
             var patientVisit = _context.PatientVisits
                                        .Include(pv => pv.Patient)
                                        .Where(pv => pv.ID == id)
-                                       .SingleOrDefault();                                       
-            
+                                       .SingleOrDefault();
+
             if (patientVisit == null)
             {
                 return NotFound();
@@ -101,14 +102,50 @@ namespace AspergillosisEPR.Controllers
                                               .Where(pe => pe.PatientVisitId == id)
                                               .GroupBy(pe => pe.Discriminator)
                                               .ToList();
-
+            LoadRelatedData(patientExaminations);
             patientDetailsVM.Patient = patientVisit.Patient;
             patientDetailsVM.VisitDate = patientVisit.VisitDate;
             patientDetailsVM.PatientExaminations = patientExaminations.ToList<dynamic>();
             //patientDetailsVM.PatientMeasurements = patientVisit.PatientMeasurements.ToList();
             return PartialView(patientDetailsVM);
         }
-        
+
+        private void LoadRelatedData(List<IGrouping<string, PatientExamination>> patientExaminations)
+        {
+            foreach (var group in patientExaminations)
+            {
+                foreach (PatientExamination examination in group)
+                {
+                    switch (examination.Discriminator)
+                    {
+                        case "MeasurementExamination":
+                            var measurement = (MeasurementExamination)examination;
+                            _context.Entry(measurement).Reference(m => m.PatientMeasurement).Load();
+                            break;
+                        case "SGRQExamination":
+                            var sgrq = (SGRQExamination)examination;
+                            _context.Entry(sgrq).Reference(m => m.PatientSTGQuestionnaire).Load();
+                            break;
+                        case "ImmunologyExamination":
+                            var ig = (ImmunologyExamination)examination;
+                            _context.Entry(ig).Reference(m => m.PatientImmunoglobulin).Load();
+                            _context.Entry(ig.PatientImmunoglobulin).Reference(m => m.ImmunoglobulinType).Load();
+                            break;
+                        case "RadiologyExamination":
+                            var rad = (RadiologyExamination)examination;
+                            _context.Entry(rad).Reference(m => m.PatientRadiologyFiniding).Load();
+                            _context.Entry(rad.PatientRadiologyFiniding).Reference(m => m.Grade).Load();
+                            _context.Entry(rad.PatientRadiologyFiniding).Reference(m => m.RadiologyType).Load();
+                            _context.Entry(rad.PatientRadiologyFiniding).Reference(m => m.TreatmentResponse).Load();
+                            _context.Entry(rad.PatientRadiologyFiniding).Reference(m => m.ChestDistribution).Load();
+                            _context.Entry(rad.PatientRadiologyFiniding).Reference(m => m.ChestLocation).Load();
+                            _context.Entry(rad.PatientRadiologyFiniding).Reference(m => m.Finding).Load();
+                            break;
+                    }
+                }
+            }
+        }
+
         private List<PatientExamination> SaveExamination(string klass, string propertyName, PatientVisit patientVisit)
         {
             var selected = Request.Form.Keys.Where(k => k.Contains(klass)).ToList();

@@ -393,3 +393,7 @@ div#new-ig-modal,
 div#new-radiology-modal {
     z-index: 1100 !important;
 }
+
+div#visit-details-modal .modal-dialog {
+    min-width: 850px !important;
+}

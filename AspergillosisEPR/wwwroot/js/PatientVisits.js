@@ -301,7 +301,7 @@
    }
 
    var showPatientVisitDetails = function () {
-       $(document).off("click.show-pv-details").on("click.show-pv-details", "a.patient-visit-details", function (e) {
+       $(document).off("click.show-pv-details").on("click.show-pv-details", "a.patient-visit-details:not(a.patient-details)", function (e) {
            var currentId = $(this).data("id");
            var requestUrl = $(this).attr("href");
            e.preventDefault();
