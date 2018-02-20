@@ -16,6 +16,7 @@
                 addButtonsToDataTable();
                 addFilteringColumns();
                 moveSearchFieldsFromFooterToHead();
+                onPatientVisitEditShow();
             },
             "ajax": {
                 "url": "/DataTablePatientVisits/Load",
@@ -81,7 +82,7 @@
                 {
                     "render": function (data, type, visit, meta) {
                         return '<a class="btn btn-info patient-visit-details" style="display: none" data-role="Read Role" href="/PatientVisits/Details/' + visit.id + '"><i class=\'fa fa-eye\'></i>&nbsp;</a>&nbsp;' +
-                            '<a class="btn btn-warning patient-visit-edit" style="display: none" data-role="Update Role" href="/PatientVisits/Edit/' + visit.id + '"><i class=\'fa fa-edit\' ></i>&nbsp;</a>&nbsp;' +
+                            '<a class="btn btn-warning patient-visit-edit disable-default" style="display: none" data-id="' + visit.id + '" data-role="Update Role" href="/PatientVisits/Edit/' + visit.id + '"><i class=\'fa fa-edit\' ></i>&nbsp;</a>&nbsp;' +
                             '<a class="btn btn-danger patient-visit-delete" style="display: none" data-role="Delete Role" href="javascript:void(0)" data-id="' + visit.id + '"><i class=\'fa fa-trash\' ></i>&nbsp;</a>&nbsp;';
                     },
                     "sortable": false,
@@ -146,16 +147,20 @@
                 $('input.visit-date').datetimepicker({
                     format: 'DD/MM/YYYY',                  
                 }).on("dp.change", function () {
-                        var currentDate = $("input.visit-date").val();
-                        var unixDate = moment(currentDate.split("/").reverse().join("-")).format("X");
-                        $("input.visit-date").attr("data-unix-date", unixDate);
-                        $("input.visit-date").attr("data-iso-date", moment(currentDate.split("/").reverse().join("-")).toISOString());
-                        $("tr.row-with-date[data-unix-date='" + unixDate + "']").addClass("success");
-                        $("tr.row-with-date:not([data-unix-date='" + unixDate + "'])").removeClass("success");
-                    });
+                    addDateAttributes();
+                });
                 initalizeSelect2PatientSearch();
             });
         });
+    }
+
+    var addDateAttributes = function () {
+        var currentDate = $("input.visit-date").val();
+        var unixDate = moment(currentDate.split("/").reverse().join("-")).format("X");
+        $("input.visit-date").attr("data-unix-date", unixDate);
+        $("input.visit-date").attr("data-iso-date", moment(currentDate.split("/").reverse().join("-")).toISOString());
+        $("tr.row-with-date[data-unix-date='" + unixDate + "']").addClass("success");
+        $("tr.row-with-date:not([data-unix-date='" + unixDate + "'])").removeClass("success");
     }
 
     var newPatientsVisitsItemModalShow = function (binding, button, modalId) {
@@ -166,7 +171,7 @@
                 LoadingIndicator.hide();
                 $("div#patient-visits-modal").html(responseHtml);
                 $(modalId).modal("show");
-                $(modalId).on("shown.bs.modal", function () {
+                $(modalId).off("shown.bs.modal").on("shown.bs.modal", function () {
                     var currentDate = $("input#VisitDate.visit-date").attr("data-iso-date");
                     $("input#DateTaken").val(currentDate);
                     if (currentDate === "" || currentDate === undefined) {
@@ -312,6 +317,35 @@
        });
    }
 
+   var onPatientVisitEditShow = function () {
+       $(document).off("click.show-pv-edit").on("click.show-pv-edit", "a.patient-visit-edit", function (e) {
+           var currentId = $(this).data("id");
+           var requestUrl = $(this).attr("href");
+           e.preventDefault();
+           $.ajax({
+               url: requestUrl,
+               type: "GET",
+           }).done(function (responseHtml, textStatus) {
+               LoadingIndicator.hide();
+               $("div#edit-patient-visit-modal-container").html(responseHtml);
+               $("div#edit-patient-visit-modal").modal("show");
+               $("select#PatientId").select2();
+               var visitDateUnix = $("input#VisitDate").val()
+               var formattedDate = moment.unix(visitDateUnix).format("MM/DD/YYYY");
+               $("input#VisitDate").val(formattedDate);
+               $("input.visit-date").datetimepicker({
+                   format: "MM/DD/YYYY"
+               }).on("dp.change", function () {
+                   addDateAttributes();
+              });
+           }).fail(function (data) {
+               LoadingIndicator.hide();
+               //$("form#edit-patient-visit-form")[0].reset();
+               alert("There was a problem requesting this patient visit. Please contact administrator");
+           });
+       });
+   }
+
     return {
 
         init: function () {
@@ -326,6 +360,7 @@
             newPatientsVisitsItemSubmit("click.submit-patient-visits-ig", "button.submit-patient-visit-ig", "form#new-ig-form", "div#ig-data");
             newPatientsVisitsItemSubmit("click.submit-patient-visits-radiology", "button.submit-patient-visit-radiology", "form#new-radiology-form", "div#radiology-data");
             showPatientVisitDetails();
+            onPatientVisitEditShow();
         }
     }
 }();

@@ -35,6 +35,8 @@ namespace AspergillosisEPR.Controllers
             return GetFileContentResult(pdfBytes.Result, ".pdf", "application/pdf");
         }
 
+
+
         private void AddIgChartsToPatientVM(PatientDetailsViewModel patientDetailsViewModel, int chartsCount)
         {
             var igCharts = new List<PatientIgChart>();

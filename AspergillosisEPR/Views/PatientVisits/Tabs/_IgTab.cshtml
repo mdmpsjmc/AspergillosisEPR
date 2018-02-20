@@ -10,6 +10,7 @@
         </span>
     </a>
 }
+
 <div id="ig-data">
     @Html.Partial("/Views/PatientsImmunoglobulines/_List.cshtml", Model.PatientImmunoglobulines.OrderByDescending(q => q.DateTaken).ToList())
 </div>

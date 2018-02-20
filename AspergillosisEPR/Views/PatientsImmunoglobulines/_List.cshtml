@@ -21,7 +21,19 @@
                             <td>
 
                                 <label class="checkbox">
-                                    <input type="checkbox" name="ImmunologyExamination[@cursor].Selected" />
+                                    @{
+                                        var igList = (List<int>)ViewBag.SelectedIg;
+                                        var isChecked = igList.Contains(ig.ID);
+                                        if (isChecked)
+                                        {
+
+                                            <input type="checkbox" name="ImmunologyExamination[@cursor].Selected" checked="checked" />
+                                        }
+                                        else
+                                        {
+                                            <input type="checkbox" name="ImmunologyExamination[@cursor].Selected" />
+                                        }
+                                    }
                                     <input type="hidden" name="ImmunologyExamination[@cursor].ID" value="@ig.ID" />
                                     <i></i>
                                 </label>

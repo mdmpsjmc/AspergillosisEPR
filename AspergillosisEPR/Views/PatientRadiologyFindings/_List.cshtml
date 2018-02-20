@@ -9,7 +9,19 @@
                     <tr class="row-with-date" data-unix-date="@(DateHelper.DateTimeToUnixTimestamp(radiology.DateTaken))">
                         <td>
                             <label class="checkbox">
-                                <input type="checkbox" name="RadiologyExamination[@cursor].Selected" />
+                                @{
+                                    var radList = (List<int>)ViewBag.SelectedRadiology;
+                                    var isChecked = radList.Contains(radiology.ID);
+                                    if (isChecked)
+                                    {
+
+                                        <input type="checkbox" name="RadiologyExamination[@cursor].Selected" checked="checked" />
+                                    }
+                                    else
+                                    {
+                                        <input type="checkbox" name="RadiologyExamination[@cursor].Selected" />
+                                    }
+                                }
                                 <input type="hidden" name="RadiologyExamination[@cursor].ID" value="@radiology.ID" />
                                 <i></i>
                             </label>

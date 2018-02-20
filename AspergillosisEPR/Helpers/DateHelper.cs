@@ -13,5 +13,12 @@ namespace AspergillosisEPR.Helpers
             return (TimeZoneInfo.ConvertTimeToUtc(dateTime) -
                      new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc)).TotalSeconds;
         }
+
+        public static DateTime UnixTimeStampToDateTime(double unixTimeStamp)
+        {
+            System.DateTime dtDateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+            dtDateTime = dtDateTime.AddSeconds(unixTimeStamp);
+            return dtDateTime;
+        }
     }
 }

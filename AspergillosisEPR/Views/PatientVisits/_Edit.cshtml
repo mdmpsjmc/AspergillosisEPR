@@ -1,0 +1,40 @@
+﻿@model AspergillosisEPR.Models.PatientViewModels.NewPatientVisitViewModel
+@using AspergillosisEPR.Helpers;
+<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+<input type="hidden" value="@Html.AntiForgeryToken()" name="__RequestVerificationToken" />
+@Html.Partial("/Views/Home/_Spinner.cshtml")
+<fieldset>
+    @Html.Hidden("PatientId", Model.PatientId)
+    <div class="row">
+        <section class="col col-12 col-xs-12 col-md-12">
+            <label asp-for="PatientId" class="select">
+                @{ var selectedItem = new SelectListItem() { Value = Model.PatientId.ToString(), Text = Model.Patient.FullName, Selected = true}; };
+                <select disabled="disabled" asp-for="PatientId" asp-items="new SelectListItem[1] { selectedItem }" class="select2-patient-search" style="width: 100%">
+                    <option value="">Search Patient by RM2Number or Name</option>
+                </select>
+                <span asp-validation-for="PatientId" class="text-danger"></span>
+            </label>
+        </section>
+    </div>
+    <div class="row">
+        <section class="col col-12 col-xs-12 col-md-12">
+            <label asp-for="VisitDate" class="input">
+                <i class="icon-append fa fa-calendar"></i>
+                <input asp-for="VisitDate" placeholder="Date of Visit" class="visit-date" data-iso-date="@DateHelper.UnixTimeStampToDateTime(double.Parse(Model.VisitDate)).ToString("o")">
+                <span asp-validation-for="VisitDate" class="text-danger"></span>
+            </label>
+        </section>
+    </div>
+    <div class="row">
+        <div class="alert alert-block alert-info col col-md-11 col-lg-11 col-sm-11" style="margin-left: 20px">
+            <i class="fa fa-2x fa-info-circle"></i>&nbsp;
+            <a class="close" href="#" onclick="$('.alert').hide();">×</a>
+            Select or Add database entries below to link it with this visit. If date is chosen, items from the same day will be highlighted with green.
+        </div>
+        <input type="hidden" name="Base" id="Base" />
+
+    </div>
+    <div id="examinations-tabs">
+        @Html.Partial("/Views/PatientVisits/_ExaminationsTabs.cshtml")
+    </div>
+</fieldset>

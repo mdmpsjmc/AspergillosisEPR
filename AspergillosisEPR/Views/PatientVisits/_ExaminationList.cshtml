@@ -2,7 +2,6 @@
 
 <div class="col col-12 col-sm-12 col-md-12">
     <div class="table-responsive">
-
         <table class="table table-hover">
             <thead>
                 <tr>
@@ -50,8 +49,13 @@
                                     <td>@PatientVisitsDataTableViewModel.ExaminationNameFromClass(examination.Discriminator)</td>
                                     <td>@ig.AsDetailedString()</td>
                                     <td>
-
+                                        <div class="col-sm-12" id="immunology-chart">
+                                            <a href="@Url.Action("Immunology", "PatientCharts", new { patientId= ig.PatientVisit.Patient.ID})" data-id="@(ig.PatientVisit.Patient.ID)" class="pdf-hide btn-hide btn-xs disable-default btn btn-primary show-immunology-chart" style="padding: 5px">
+                                                <i class="fa fa-line-chart"></i>
+                                            </a>
+                                        </div>
                                     </td>
+                                           
                                 </tr>
                                 break;
                             case "RadiologyExamination":
@@ -68,6 +72,5 @@
                 </tbody>
             }
         </table>
-
     </div>
 </div>

@@ -22,7 +22,19 @@
                         <td>
 
                             <label class="checkbox">
-                                <input type="checkbox" name="SGRQExamination[@cursor].Selected" />
+                                @{
+                                    var sgrqList = (List<int>)ViewBag.SelectedSGRQ;
+                                    var isChecked = sgrqList.Contains(stg.ID);
+                                    if (isChecked)
+                                    {
+
+                                        <input type="checkbox" name="SGRQExamination[@cursor].Selected" checked="checked" />
+                                    }
+                                    else
+                                    {
+                                        <input type="checkbox" name="SGRQExamination[@cursor].Selected" />
+                                    }
+                                }
                                 <input type="hidden" name="SGRQExamination[@cursor].ID" value="@stg.ID" />
                                 <i></i>
                             </label>

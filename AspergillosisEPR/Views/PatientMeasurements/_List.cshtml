@@ -18,7 +18,21 @@
                 <tr class="row-with-date" data-unix-date="@(DateHelper.DateTimeToUnixTimestamp(patientMeasurement.DateTaken))">
                     <td>
                         <label class="checkbox">
-                            <input type="checkbox" name="MeasurementExamination[@cursor].Selected" />
+                            @{
+                                var measurementList = (List<int>)ViewBag.SelectedMeasurements;
+                                var isChecked = measurementList.Contains(patientMeasurement.ID);
+                                if (isChecked)
+                                {
+
+                                    <input type="checkbox" name="MeasurementExamination[@cursor].Selected" checked="checked" />
+                                }
+                                else
+                                {
+                                    <input type="checkbox" name="MeasurementExamination[@cursor].Selected" />
+                                }
+                            }
+
+                           
                             <input type="hidden" name="MeasurementExamination[@cursor].ID" value="@patientMeasurement.ID" />
                             <i></i>
                         </label>
