@@ -112,6 +112,13 @@ namespace AspergillosisEPR.Lib
             }
         }
 
-    
+        public void DeleteExaminationsByIds(PatientVisit patientVisit, IEnumerable<int> toDeleteItems)
+        {
+            
+        }
+
+        public void InsertExaminationsByIds(PatientVisit patientVisit, IEnumerable<int> toInsertIds)
+        {
+        }
     }
 }

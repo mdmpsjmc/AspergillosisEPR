@@ -60,7 +60,8 @@ namespace AspergillosisEPR.Controllers
                 _context.Add(patientVisit);
                 _context.PatientExaminations.AddRange(concatenated);
                 await _context.SaveChangesAsync();
-            } else
+            }
+            else
             {
                 Hashtable errors = ModelStateHelper.Errors(ModelState);
                 return Json(new { success = false, errors });
@@ -79,7 +80,7 @@ namespace AspergillosisEPR.Controllers
             }
 
             var patientExaminations = _patientVisitManager.GetPatientExaminationsForVisitWithRelatedData(id);
-            var  otherVisits = _patientVisitManager.GetVisitsWithRelatedDataExcluding(patientVisit);
+            var otherVisits = _patientVisitManager.GetVisitsWithRelatedDataExcluding(patientVisit);
 
             patientDetailsVM.Patient = patientVisit.Patient;
             patientDetailsVM.VisitDate = patientVisit.VisitDate;
@@ -89,7 +90,7 @@ namespace AspergillosisEPR.Controllers
             return PartialView(patientDetailsVM);
         }
 
-        [Authorize(Roles = ("Admin Role, Edit Role"))]        
+        [Authorize(Roles = ("Admin Role, Edit Role"))]
         public IActionResult Edit(int? id)
         {
             var patientVisit = _patientVisitManager.GetPatientVisitById(id);
@@ -106,23 +107,30 @@ namespace AspergillosisEPR.Controllers
 
         [HttpPost]
         [ActionName("Edit")]
-        public IActionResult EditPatientVisit(int id)
+        public IActionResult EditPatientVisit(int id, SGRQExamination[] sGRQExamination)
         {
             var patientVisit = _patientVisitManager.GetPatientVisitById(id);
 
-            var sgrqList = SaveExamination("SGRQExamination", "PatientSTGQuestionnaireId", patientVisit).Select(i => i.ID).ToList();
-            var igList = SaveExamination("ImmunologyExamination", "PatientImmunoglobulinId", patientVisit).Select(i => i.ID).ToList();
-            var radiologyList = SaveExamination("RadiologyExamination", "PatientRadiologyFinidingId", patientVisit).Select(i => i.ID).ToList();
-            var measurementsList = SaveExamination("MeasurementExamination", "PatientMeasurementId", patientVisit).Select(i => i.ID).ToList();
+            var sgrqList = SelectedIds("SGRQExamination");
+            var igList = SelectedIds("ImmunologyExamination");
+            var radiologyList = SelectedIds("RadiologyExamination");
+            var measurementList = SelectedIds("MeasurementExamination");
 
-            NewPatientVisitViewModel patientVM;
-            List<IGrouping<string, PatientExamination>> patientExaminations;
-            GetPatientExaminationsWithVisitViewModel(id, patientVisit, out patientVM, out patientExaminations);
-            // string[] sideEffectsIDs = request.Form["Drugs[" + cursor + "].SideEffects"];
-            // var sideEffectsItems = _context.SideEffects.Where(se => sideEffectsIDs.Contains(se.ID.ToString()));
-            ///var uiSelectedIds = sideEffectsIDs.Select(int.Parse).ToList();
-            //var toDeleteEffectIds = drugToUpdate.SelectedEffectsIds.Except(uiSelectedIds);
-            //var toInsertEffectIds = uiSelectedIds.Except(drugToUpdate.SelectedEffectsIds);
+            var dbExmainationsIds = _context.PatientExaminations
+                                            .Where(pe => sgrqList.Contains(pe.PatientSTGQuestionnaireId) && pe.PatientVisitId == id)
+                                            .Select(pe => pe.PatientSTGQuestionnaireId)
+                                            .ToList();
+
+            var toDeleteItems = dbExmainationsIds.Except(sgrqList);
+            var toInsertIds = sgrqList.Except(dbExmainationsIds);
+            if (toDeleteItems.Count() > 0)
+            {
+                _patientVisitManager.DeleteExaminationsByIds(patientVisit, toDeleteItems);
+            }
+            if (toInsertIds.Count() < 0)
+            {
+                _patientVisitManager.InsertExaminationsByIds(patientVisit, toInsertIds);
+            }
             return Json("oK");
         }
 
@@ -137,7 +145,7 @@ namespace AspergillosisEPR.Controllers
         {
             patientVM = BuildPatientVisitVM(patientVisit.PatientId, patientVisit.VisitDate).Result;
             patientVM.Patient = _context.Patients.Where(p => p.ID == patientVisit.PatientId).SingleOrDefault();
-            patientExaminations = _patientVisitManager.GetPatientExaminationsForVisitWithRelatedData(id);            
+            patientExaminations = _patientVisitManager.GetPatientExaminationsForVisitWithRelatedData(id);
             SelectObjectsForVisit(patientVM, patientExaminations);
         }
 
@@ -205,7 +213,7 @@ namespace AspergillosisEPR.Controllers
                 patientVM.PatientMeasurements = patientMeasurements.ToList();
             }
             return patientVM;
-        }   
+        }
 
         private List<PatientExamination> SaveExamination(string klass, string propertyName, PatientVisit patientVisit)
         {
@@ -228,6 +236,22 @@ namespace AspergillosisEPR.Controllers
                 }
             }
             return savedItems;
+        }
+
+        private List<int> SelectedIds(string klass)
+        {
+            var selected = Request.Form.Keys.Where(k => k.Contains(klass)).ToList();
+            var selectedList = new List<int>();
+            for (var cursor = 0; cursor < selected.Count; cursor++)
+            {
+                var itemId = Request.Form[klass + "[" + cursor + "].ID"];
+                var isChecked = Request.Form[klass + "[" + cursor + "].Selected"];
+                if (isChecked == "on")
+                {
+                    selectedList.Add(int.Parse(itemId));
+                }
+            }
+            return selectedList;
         }
     }
 }
