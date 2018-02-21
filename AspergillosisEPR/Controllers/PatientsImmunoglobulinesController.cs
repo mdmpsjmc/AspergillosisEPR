@@ -59,6 +59,7 @@ namespace AspergillosisEPR.Controllers
                                           Where(pm => pm.PatientId == patientId).
                                           OrderByDescending(pm => pm.DateTaken).
                                           ToList();
+            ViewBag.SelectedIg = new List<int>();
             return PartialView(igs);
         }
 

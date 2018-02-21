@@ -53,6 +53,7 @@ namespace AspergillosisEPR.Controllers
                                           Where(pm => pm.PatientId == patientId).
                                           OrderByDescending(pm => pm.DateTaken).
                                           ToList();
+            ViewBag.SelectedSGRQ = new List<int>();
             return PartialView(questionnaires);
         }
 

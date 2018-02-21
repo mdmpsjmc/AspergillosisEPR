@@ -19,12 +19,14 @@ namespace AspergillosisEPR.Controllers
     public class PatientVisitsController : Controller
     {
         private PatientManager _patientManager;
+        private PatientVisitManager _patientVisitManager;
         private AspergillosisContext _context;
 
         public PatientVisitsController(AspergillosisContext context)
         {
             _context = context;
             _patientManager = new PatientManager(_context);
+            _patientVisitManager = new PatientVisitManager(_context, ViewBag);
         }
 
         public IActionResult Index()
@@ -56,6 +58,7 @@ namespace AspergillosisEPR.Controllers
             if (ModelState.IsValid)
             {
                 _context.Add(patientVisit);
+                _context.PatientExaminations.AddRange(concatenated);
                 await _context.SaveChangesAsync();
             } else
             {
@@ -68,59 +71,59 @@ namespace AspergillosisEPR.Controllers
         public IActionResult Details(int id)
         {
             var patientDetailsVM = new PatientVisitDetailsViewModel();
-            var patientVisit = _context.PatientVisits
-                                       .Include(pv => pv.Patient)
-                                       .Where(pv => pv.ID == id)
-                                       .SingleOrDefault();
+            var patientVisit = _patientVisitManager.GetPatientVisitById(id);
 
             if (patientVisit == null)
             {
                 return NotFound();
             }
 
-            var patientExaminations = _context.PatientExaminations
-                                              .Where(pe => pe.PatientVisitId == id)
-                                              .GroupBy(pe => pe.Discriminator)
-                                              .ToList();
-            LoadRelatedData(patientExaminations);
-            var otherVisits = _context.PatientVisits.
-                                        Where(pv => pv.ID != patientVisit.ID && pv.PatientId == patientVisit.PatientId).
-                                        ToList();
-            LoadRelatedDataForEachVisit(otherVisits);
+            var patientExaminations = _patientVisitManager.GetPatientExaminationsForVisitWithRelatedData(id);
+            var  otherVisits = _patientVisitManager.GetVisitsWithRelatedDataExcluding(patientVisit);
 
             patientDetailsVM.Patient = patientVisit.Patient;
             patientDetailsVM.VisitDate = patientVisit.VisitDate;
             patientDetailsVM.PatientExaminations = patientExaminations;
             patientDetailsVM.OtherVisits = otherVisits;
+
             return PartialView(patientDetailsVM);
         }
-
 
         [Authorize(Roles = ("Admin Role, Edit Role"))]        
         public IActionResult Edit(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var patientVisit = _context.PatientVisits
-                                       .Where(pv => pv.ID == id)
-                                       .SingleOrDefault();
+            var patientVisit = _patientVisitManager.GetPatientVisitById(id);
 
             if (patientVisit == null)
             {
                 return NotFound();
             }
-            var patientVM =  BuildPatientVisitVM(patientVisit.PatientId, patientVisit.VisitDate).Result;
-            patientVM.Patient = _context.Patients.Where(p => p.ID == patientVisit.PatientId).SingleOrDefault();
-            var patientExaminations = _context.PatientExaminations
-                                           .Where(pe => pe.PatientVisitId == id)
-                                           .GroupBy(pe => pe.Discriminator)
-                                           .ToList();
-            LoadRelatedData(patientExaminations);
-            SelectObjectForVisit(patientVM, patientExaminations);
+            NewPatientVisitViewModel patientVM;
+            List<IGrouping<string, PatientExamination>> patientExaminations;
+            GetPatientExaminationsWithVisitViewModel(id.Value, patientVisit, out patientVM, out patientExaminations);
             return PartialView(patientVM);
+        }
+
+        [HttpPost]
+        [ActionName("Edit")]
+        public IActionResult EditPatientVisit(int id)
+        {
+            var patientVisit = _patientVisitManager.GetPatientVisitById(id);
+
+            var sgrqList = SaveExamination("SGRQExamination", "PatientSTGQuestionnaireId", patientVisit).Select(i => i.ID).ToList();
+            var igList = SaveExamination("ImmunologyExamination", "PatientImmunoglobulinId", patientVisit).Select(i => i.ID).ToList();
+            var radiologyList = SaveExamination("RadiologyExamination", "PatientRadiologyFinidingId", patientVisit).Select(i => i.ID).ToList();
+            var measurementsList = SaveExamination("MeasurementExamination", "PatientMeasurementId", patientVisit).Select(i => i.ID).ToList();
+
+            NewPatientVisitViewModel patientVM;
+            List<IGrouping<string, PatientExamination>> patientExaminations;
+            GetPatientExaminationsWithVisitViewModel(id, patientVisit, out patientVM, out patientExaminations);
+            // string[] sideEffectsIDs = request.Form["Drugs[" + cursor + "].SideEffects"];
+            // var sideEffectsItems = _context.SideEffects.Where(se => sideEffectsIDs.Contains(se.ID.ToString()));
+            ///var uiSelectedIds = sideEffectsIDs.Select(int.Parse).ToList();
+            //var toDeleteEffectIds = drugToUpdate.SelectedEffectsIds.Except(uiSelectedIds);
+            //var toInsertEffectIds = uiSelectedIds.Except(drugToUpdate.SelectedEffectsIds);
+            return Json("oK");
         }
 
         public async Task<IActionResult> ExaminationsTabs(int patientId)
@@ -130,7 +133,15 @@ namespace AspergillosisEPR.Controllers
             return PartialView(patientVM);
         }
 
-        private void SelectObjectForVisit(NewPatientVisitViewModel patientVM, List<IGrouping<string, PatientExamination>> patientExaminations)
+        private void GetPatientExaminationsWithVisitViewModel(int id, PatientVisit patientVisit, out NewPatientVisitViewModel patientVM, out List<IGrouping<string, PatientExamination>> patientExaminations)
+        {
+            patientVM = BuildPatientVisitVM(patientVisit.PatientId, patientVisit.VisitDate).Result;
+            patientVM.Patient = _context.Patients.Where(p => p.ID == patientVisit.PatientId).SingleOrDefault();
+            patientExaminations = _patientVisitManager.GetPatientExaminationsForVisitWithRelatedData(id);            
+            SelectObjectsForVisit(patientVM, patientExaminations);
+        }
+
+        private void SelectObjectsForVisit(NewPatientVisitViewModel patientVM, List<IGrouping<string, PatientExamination>> patientExaminations)
         {
             InitViewBags();
             foreach (var group in patientExaminations)
@@ -194,62 +205,12 @@ namespace AspergillosisEPR.Controllers
                 patientVM.PatientMeasurements = patientMeasurements.ToList();
             }
             return patientVM;
-        }
-
-       
-        private void LoadRelatedDataForEachVisit(List<PatientVisit> otherVisits)
-        {
-           foreach(var visit in otherVisits)
-            {
-                var examinations = _context.PatientExaminations
-                                              .Where(pe => pe.PatientVisitId == visit.ID)
-                                              .GroupBy(pe => pe.Discriminator)
-                                              .ToList();
-                
-                LoadRelatedData(examinations);
-                visit.GroupedExaminations = examinations;
-            }
-        }
-
-        private void LoadRelatedData(List<IGrouping<string, PatientExamination>> patientExaminations)
-        {
-            foreach (var group in patientExaminations)
-            {
-                foreach (PatientExamination examination in group)
-                {
-                    switch (examination.Discriminator)
-                    {
-                        case "MeasurementExamination":
-                            var measurement = (MeasurementExamination)examination;
-                            _context.Entry(measurement).Reference(m => m.PatientMeasurement).Load();
-                            break;
-                        case "SGRQExamination":
-                            var sgrq = (SGRQExamination)examination;
-                            _context.Entry(sgrq).Reference(m => m.PatientSTGQuestionnaire).Load();
-                            break;
-                        case "ImmunologyExamination":
-                            var ig = (ImmunologyExamination)examination;
-                            _context.Entry(ig).Reference(m => m.PatientImmunoglobulin).Load();
-                            _context.Entry(ig.PatientImmunoglobulin).Reference(m => m.ImmunoglobulinType).Load();
-                            break;
-                        case "RadiologyExamination":
-                            var rad = (RadiologyExamination)examination;
-                            _context.Entry(rad).Reference(m => m.PatientRadiologyFiniding).Load();
-                            _context.Entry(rad.PatientRadiologyFiniding).Reference(m => m.Grade).Load();
-                            _context.Entry(rad.PatientRadiologyFiniding).Reference(m => m.RadiologyType).Load();
-                            _context.Entry(rad.PatientRadiologyFiniding).Reference(m => m.TreatmentResponse).Load();
-                            _context.Entry(rad.PatientRadiologyFiniding).Reference(m => m.ChestDistribution).Load();
-                            _context.Entry(rad.PatientRadiologyFiniding).Reference(m => m.ChestLocation).Load();
-                            _context.Entry(rad.PatientRadiologyFiniding).Reference(m => m.Finding).Load();
-                            break;
-                    }
-                }
-            }
-        }
+        }   
 
         private List<PatientExamination> SaveExamination(string klass, string propertyName, PatientVisit patientVisit)
         {
             var selected = Request.Form.Keys.Where(k => k.Contains(klass)).ToList();
+
             var savedItems = new List<PatientExamination>();
             for (var cursor = 0; cursor < selected.Count; cursor++)
             {
@@ -263,13 +224,10 @@ namespace AspergillosisEPR.Controllers
                     PropertyInfo property = examination.GetType().GetProperty(propertyName);
                     property.SetValue(examination, Int32.Parse(itemId));
                     examination.PatientVisitId = patientVisit.ID;
-                    _context.PatientExaminations.Add(examination);
                     savedItems.Add(examination);
                 }
             }
             return savedItems;
         }
-
-
     }
 }

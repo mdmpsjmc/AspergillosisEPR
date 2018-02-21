@@ -17,6 +17,7 @@
                 addFilteringColumns();
                 moveSearchFieldsFromFooterToHead();
                 onPatientVisitEditShow();
+                submitUpdatedPatientVisit();
             },
             "ajax": {
                 "url": "/DataTablePatientVisits/Load",
@@ -273,6 +274,12 @@
         return markup;
     }
 
+   var onEditModalShow = function () {
+       $("div#edit-patient-visit-modal").off("shown.bs.modal").on("shown.bs.modal", function () {
+           submitUpdatedPatientVisit();
+       })
+   }
+
    var submitNewPatientVisit = function () {
        $(document).off("click.save-patient-visit").on("click.save-patient-visit", "button.submit-new-patient-visit", function () {
            LoadingIndicator.show();
@@ -291,6 +298,38 @@
                    } else {
                        $("form#new-patient-visit-form")[0].reset();
                        $("div#new-patient-visit-modal").modal("hide");
+                       window.patientVisitsDT.ajax.reload(function () {
+                           Users.loadDataTableWithForCurrentUserRoles();
+                       });
+                   }
+               }
+           }).fail(function (data) {
+               LoadingIndicator.hide();
+               $("form#new-patient-visit-form")[0].reset();
+               $("div#new-patient-visit-modal").modal("hide");
+               alert("There was a problem saving this patient visit. Please contact administrator");
+           });
+       });
+   }
+
+   var submitUpdatedPatientVisit = function () {
+       $(document).off("click.save-pv-update").on("click.save-pv-udpate", "button.submit-edit-patient-visit", function () {
+           LoadingIndicator.show();
+           $("label.text-danger").remove();
+           $.ajax({
+               url: $("form#edit-patient-visit-form").attr("action"),
+               type: "POST",
+               data: $("form#edit-patient-visit-form").serialize(),
+               contentType: "application/x-www-form-urlencoded",
+               dataType: 'json'
+           }).done(function (data, textStatus) {
+               LoadingIndicator.hide();
+               if (textStatus === "success") {
+                   if (data.errors) {
+                       Patients.displayErrors(data.errors);
+                   } else {
+                       $("form#edit-patient-visit-form")[0].reset();
+                       $("div#edit-patient-visit-modal").modal("hide");
                        window.patientVisitsDT.ajax.reload(function () {
                            Users.loadDataTableWithForCurrentUserRoles();
                        });
@@ -337,7 +376,8 @@
                    format: "MM/DD/YYYY"
                }).on("dp.change", function () {
                    addDateAttributes();
-              });
+               });
+               onEditModalShow();
            }).fail(function (data) {
                LoadingIndicator.hide();
                //$("form#edit-patient-visit-form")[0].reset();
@@ -360,7 +400,6 @@
             newPatientsVisitsItemSubmit("click.submit-patient-visits-ig", "button.submit-patient-visit-ig", "form#new-ig-form", "div#ig-data");
             newPatientsVisitsItemSubmit("click.submit-patient-visits-radiology", "button.submit-patient-visit-radiology", "form#new-radiology-form", "div#radiology-data");
             showPatientVisitDetails();
-            onPatientVisitEditShow();
         }
     }
 }();
