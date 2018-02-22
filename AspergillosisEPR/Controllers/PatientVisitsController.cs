@@ -107,16 +107,18 @@ namespace AspergillosisEPR.Controllers
 
         [HttpPost]
         [ActionName("Edit")]
-        public IActionResult EditPatientVisit(int id, SGRQExamination[] sGRQExamination)
+        public IActionResult EditPatientVisit(int id)
         {
             var patientVisit = _patientVisitManager.GetPatientVisitById(id);
             NewPatientVisitViewModel patientVM;
             List<IGrouping<string, PatientExamination>> patientExaminations;
             GetPatientExaminationsWithVisitViewModel(id, patientVisit, out patientVM, out patientExaminations);
-            UpdateSelectedItemsForPatientVisit("SGRQExamination", patientVisit);
-            UpdateSelectedItemsForPatientVisit("ImmunologyExamination", patientVisit);
-            UpdateSelectedItemsForPatientVisit("MeasurementExamination", patientVisit);
-            UpdateSelectedItemsForPatientVisit("RadiologyExamination", patientVisit);
+
+            _patientVisitManager.UpdateSelectedItemsForPatientVisit(FormSelectedIds("SGRQExamination"), "SGRQExamination", patientVisit);
+            _patientVisitManager.UpdateSelectedItemsForPatientVisit(FormSelectedIds("ImmunologyExamination"), "ImmunologyExamination", patientVisit);
+            _patientVisitManager.UpdateSelectedItemsForPatientVisit(FormSelectedIds("MeasurementExamination"), "MeasurementExamination", patientVisit);
+            _patientVisitManager.UpdateSelectedItemsForPatientVisit(FormSelectedIds("RadiologyExamination"), "RadiologyExamination", patientVisit);
+
             if (TryValidateModel(patientVisit))
             {
                 _context.SaveChanges();
@@ -126,49 +128,7 @@ namespace AspergillosisEPR.Controllers
                 return Json("oK");
             }
             
-        }
-
-        private void UpdateSelectedItemsForPatientVisit(string klassName, PatientVisit patientVisit)
-        {
-            var toDeleteItems = new List<int>();
-            var toInsertIds = new List<int>();
-            switch (klassName)
-            {
-                case "SGRQExamination":
-                    var sgrqList = FormSelectedIds(klassName);
-                    var dbExmainationsIds = _patientVisitManager.SGRQPatientExaminationsIdList(patientVisit);
-                    toDeleteItems = dbExmainationsIds.Except(sgrqList).ToList();
-                    toInsertIds = sgrqList.Except(dbExmainationsIds).ToList();
-                    break;
-                case "ImmunologyExamination":
-                    var igList = FormSelectedIds(klassName);
-                    dbExmainationsIds = _patientVisitManager.IgPatientExaminationsIdList(patientVisit);
-                    toDeleteItems = dbExmainationsIds.Except(igList).ToList(); ;
-                    toInsertIds = igList.Except(dbExmainationsIds).ToList(); ;   
-                    break;
-                case "MeasurementExamination":
-                    var measurementExaminationList = FormSelectedIds(klassName);
-                    dbExmainationsIds = _patientVisitManager.MeasurementsPatientExaminationsIdList(patientVisit);
-                    toDeleteItems = dbExmainationsIds.Except(measurementExaminationList).ToList(); ;
-                    toInsertIds = measurementExaminationList.Except(dbExmainationsIds).ToList(); ;
-                    
-                    break;
-                case "RadiologyExamination":
-                    var radiologyExaminationList = FormSelectedIds(klassName);
-                    dbExmainationsIds = _patientVisitManager.RadiologyPatientExaminationsIdList(patientVisit);
-                    toDeleteItems = dbExmainationsIds.Except(radiologyExaminationList).ToList(); ;
-                    toInsertIds = radiologyExaminationList.Except(dbExmainationsIds).ToList(); ;
-                    break;
-            }
-            if (toDeleteItems.Count() > 0)
-            {
-                _patientVisitManager.DeleteExaminationsByIds(klassName, patientVisit, toDeleteItems);
-            }
-            if (toInsertIds.Count() > 0)
-            {
-                _patientVisitManager.InsertExaminationsByIds(klassName, patientVisit, toInsertIds);
-            }
-        }
+        }        
 
         public async Task<IActionResult> ExaminationsTabs(int patientId)
         {
