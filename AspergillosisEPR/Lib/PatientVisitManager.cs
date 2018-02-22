@@ -104,27 +104,14 @@ namespace AspergillosisEPR.Lib
         {
             foreach (string klassName in TABS_KLASSES_LIST.Keys)
             {
-                var items = new List<PatientExamination>();
-                switch (klassName)
+                var items = _context.PatientExaminations.AsEnumerable().Where(pe =>
                 {
-                    case "SGRQExamination":
-                        items = _context.PatientExaminations.Where(pe => pe.PatientVisitId == patientVisit.ID && toDeleteItems.Contains(pe.PatientSTGQuestionnaireId)).ToList();
-                        _context.RemoveRange(items);
-                        break;
-                    case "ImmunologyExamination":
-                        items = _context.PatientExaminations.Where(pe => pe.PatientVisitId == patientVisit.ID && toDeleteItems.Contains(pe.PatientImmunoglobulinId)).ToList();
-                        _context.RemoveRange(items);
-                        break;
-                    case "MeasurementExamination":
-                        items = _context.PatientExaminations.Where(pe => pe.PatientVisitId == patientVisit.ID && toDeleteItems.Contains(pe.PatientMeasurementId)).ToList();
-                        _context.RemoveRange(items);
-                        break;
-                    case "RadiologyExamination":
-                        items = _context.PatientExaminations.Where(pe => pe.PatientVisitId == patientVisit.ID && toDeleteItems.Contains(pe.PatientRadiologyFinidingId)).ToList();
-                        _context.RemoveRange(items);
-                        break;
-                }
-            }                        
+                    var propertyInfo = pe.GetType().GetProperty(TABS_KLASSES_LIST[klassName]);
+                    var propertyValueId = Convert.ToInt32(propertyInfo.GetValue(pe, null));
+                    return (pe.PatientVisitId == patientVisit.ID && toDeleteItems.Contains(propertyValueId));
+                });
+             _context.RemoveRange(items.ToList());                 
+            }
         }
 
         public void UpdateSelectedItemsForPatientVisit(PatientVisit patientVisit)
