@@ -98,8 +98,10 @@
     }
 
     var addButtonsToDataTable = function () {
-        window.patientVisitsDT.buttons().container()
-            .appendTo($('.col-sm-6:eq(0)', window.patientsTable.table().container()));
+        window.patientVisitsDT
+              .buttons()
+              .container()
+              .appendTo($('.col-sm-6:eq(0)', window.patientsTable.table().container()));
     }
 
     var addFilteringColumns = function () {
@@ -385,11 +387,17 @@
    var onPatientVisitDelete = function () {
        $(document).off("click.pv-delete").on("click.pv-delete", "a.patient-visit-delete", function (e) {
            LoadingIndicator.show();
-           var data = { "id" : $(this).data("id") };
-           $.post($(this).attr("href"), data, function (responseHtml) {
-               LoadingIndicator.hide();
-               window.location.reload(true);
-           });
+           var data = { "id": $(this).data("id") };
+           var question = "Delete this visit and related entries?";
+           var deleteUrl = $(this).attr("href");
+           BootstrapDialog.confirm(question, function (result, dialog) {
+               if (result) {
+                   $.post(deleteUrl, data, function (responseHtml) {
+                       LoadingIndicator.hide();
+                       window.location.reload(true);
+                   });
+               }
+           });         
        });
    }
 
