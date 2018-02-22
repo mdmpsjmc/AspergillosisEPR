@@ -14,6 +14,7 @@ using System.Reflection;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Dynamic.Core;
 using System.Globalization;
+using AspergillosisEPR.Extensions.Validations;
 
 namespace AspergillosisEPR.Controllers
 {
@@ -49,10 +50,8 @@ namespace AspergillosisEPR.Controllers
 
             var itemsToSave = _patientVisitManager.SavePatientExaminationsForVisit(patientVisit);
 
-            if (itemsToSave.Count() == 0)
-            {
-                ModelState.AddModelError("Base", "You need to select at least one item from the lists below");
-            }
+            this.CheckIfAtLeastOneIsSelected(itemsToSave.Count);
+
             if (ModelState.IsValid)
             {
                 _context.Add(patientVisit);
@@ -112,36 +111,41 @@ namespace AspergillosisEPR.Controllers
             _patientVisitManager = new PatientVisitManager(_context, ViewBag, Request.Form);
             var patientVisit = _patientVisitManager.GetPatientVisitById(id);
 
-            patientVisit.VisitDate = DateTime.ParseExact(Request.Form["VisitDate"], @"dd/MM/yyyy", CultureInfo.InvariantCulture);
+            this.CheckVisitDate(patientVisit);
 
             NewPatientVisitViewModel patientVM;
             List<IGrouping<string, PatientExamination>> patientExaminations;
             GetPatientExaminationsWithVisitViewModel(id, patientVisit, out patientVM, out patientExaminations);
 
-            _patientVisitManager.UpdateSelectedItemsForPatientVisit(patientVisit);                           
+            var selectedItems = _patientVisitManager.UpdateSelectedItemsForPatientVisit(patientVisit);
+            this.CheckIfAtLeastOneIsSelected(selectedItems.Count);
 
             if (TryValidateModel(patientVisit))
             {
                 _context.SaveChanges();
-                return Json("oK");
-            } else
+                return Json("ok");
+            }
+            else
             {
-                return Json("oK");
-            }            
-        }        
+                Hashtable errors = ModelStateHelper.Errors(ModelState);
+                return Json(new { success = false, errors });
+            }
+        }
 
         public async Task<IActionResult> ExaminationsTabs(int patientId)
         {
             _patientVisitManager = new PatientVisitManager(_context, ViewBag);
-            var patientVM = await BuildPatientVisitVM(patientId);
+            var patientVM = await NewPatientVisitViewModel.BuildPatientVisitVM(_context, patientId);
             InitViewBags();
             return PartialView(patientVM);
         }
 
-        private void GetPatientExaminationsWithVisitViewModel(int id, PatientVisit patientVisit,             
-            out NewPatientVisitViewModel patientVM, out List<IGrouping<string, PatientExamination>> patientExaminations)
+        private void GetPatientExaminationsWithVisitViewModel(int id, 
+                                                              PatientVisit patientVisit,             
+                                                              out NewPatientVisitViewModel patientVM, 
+                                                              out List<IGrouping<string, PatientExamination>> patientExaminations)
         {
-            patientVM = BuildPatientVisitVM(patientVisit.PatientId, patientVisit.VisitDate).Result;
+            patientVM = NewPatientVisitViewModel.BuildPatientVisitVM(_context, patientVisit.PatientId, patientVisit.VisitDate).Result;
             patientVM.Patient = _context.Patients.Where(p => p.ID == patientVisit.PatientId).SingleOrDefault();
             patientExaminations = _patientVisitManager.GetPatientExaminationsForVisitWithRelatedData(id);
             SelectObjectsForVisit(patientVM, patientExaminations);
@@ -184,34 +188,6 @@ namespace AspergillosisEPR.Controllers
             ViewBag.SelectedSGRQ = new List<int>();
             ViewBag.SelectedIg = new List<int>();
             ViewBag.SelectedRadiology = new List<int>();
-        }
-
-        private async Task<NewPatientVisitViewModel> BuildPatientVisitVM(int patientId, object visitDate = null)
-        {
-            _patientManager = new PatientManager(_context);
-            var patient = await _patientManager.FindPatientWithRelationsByIdAsync(patientId);
-            if (patient == null)
-            {
-                return null;
-            }
-            var patientMeasurements = _context.PatientMeasurements
-                                              .Where(pm => pm.PatientId == patient.ID);
-
-            var patientVM = new NewPatientVisitViewModel();
-            if (visitDate != null)
-            {
-                DateTime patientVisitDate = (DateTime)visitDate;
-                patientVM.VisitDate = DateHelper.DateTimeToUnixTimestamp(patientVisitDate).ToString();
-            }
-            patientVM.PatientId = patient.ID;
-            patientVM.STGQuestionnaires = patient.STGQuestionnaires;
-            patientVM.PatientRadiologyFindings = patient.PatientRadiologyFindings;
-            patientVM.PatientImmunoglobulines = patient.PatientImmunoglobulines;
-            if (patientMeasurements != null)
-            {
-                patientVM.PatientMeasurements = patientMeasurements.ToList();
-            }
-            return patientVM;
-        }        
+        }          
     }
 }

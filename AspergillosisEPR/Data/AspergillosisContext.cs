@@ -3,6 +3,7 @@ using AspergillosisEPR.Models;
 using AspergillosisEPR.Extensions;
 using System.Linq;
 using System.ComponentModel.DataAnnotations;
+using System;
 
 namespace AspergillosisEPR.Data
 {
@@ -73,6 +74,11 @@ namespace AspergillosisEPR.Data
             modelBuilder.Entity<PatientVisit>().ToTable("PatientVisits");
             modelBuilder.Entity<PatientMeasurement>().ToTable("PatientMeasurements");
 
+        }
+
+        internal void Set(Type currentType)
+        {
+            throw new NotImplementedException();
         }
     }
 

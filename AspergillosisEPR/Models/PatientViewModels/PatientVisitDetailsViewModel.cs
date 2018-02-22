@@ -16,6 +16,5 @@ namespace AspergillosisEPR.Models.PatientViewModels
         public PatientVisitDetailsViewModel() {
             ShowButtons = true;
         }
-
     }
 }
