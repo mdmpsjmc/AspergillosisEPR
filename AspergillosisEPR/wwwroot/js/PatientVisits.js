@@ -16,8 +16,7 @@
                 addButtonsToDataTable();
                 addFilteringColumns();
                 moveSearchFieldsFromFooterToHead();
-                onPatientVisitEditShow();
-                submitUpdatedPatientVisit();
+
             },
             "ajax": {
                 "url": "/DataTablePatientVisits/Load",
@@ -274,12 +273,6 @@
         return markup;
     }
 
-   var onEditModalShow = function () {
-       $("div#edit-patient-visit-modal").off("shown.bs.modal").on("shown.bs.modal", function () {
-           submitUpdatedPatientVisit();
-       })
-   }
-
    var submitNewPatientVisit = function () {
        $(document).off("click.save-patient-visit").on("click.save-patient-visit", "button.submit-new-patient-visit", function () {
            LoadingIndicator.show();
@@ -400,6 +393,8 @@
             newPatientsVisitsItemSubmit("click.submit-patient-visits-ig", "button.submit-patient-visit-ig", "form#new-ig-form", "div#ig-data");
             newPatientsVisitsItemSubmit("click.submit-patient-visits-radiology", "button.submit-patient-visit-radiology", "form#new-radiology-form", "div#radiology-data");
             showPatientVisitDetails();
+            onPatientVisitEditShow();
+            submitUpdatedPatientVisit();
         }
     }
 }();

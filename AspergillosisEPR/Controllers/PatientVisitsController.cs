@@ -110,28 +110,64 @@ namespace AspergillosisEPR.Controllers
         public IActionResult EditPatientVisit(int id, SGRQExamination[] sGRQExamination)
         {
             var patientVisit = _patientVisitManager.GetPatientVisitById(id);
+            NewPatientVisitViewModel patientVM;
+            List<IGrouping<string, PatientExamination>> patientExaminations;
+            GetPatientExaminationsWithVisitViewModel(id, patientVisit, out patientVM, out patientExaminations);
+            UpdateSelectedItemsForPatientVisit("SGRQExamination", patientVisit);
+            UpdateSelectedItemsForPatientVisit("ImmunologyExamination", patientVisit);
+            UpdateSelectedItemsForPatientVisit("MeasurementExamination", patientVisit);
+            UpdateSelectedItemsForPatientVisit("RadiologyExamination", patientVisit);
+            if (TryValidateModel(patientVisit))
+            {
+                _context.SaveChanges();
+                return Json("oK");
+            } else
+            {
+                return Json("oK");
+            }
+            
+        }
 
-            var sgrqList = SelectedIds("SGRQExamination");
-            var igList = SelectedIds("ImmunologyExamination");
-            var radiologyList = SelectedIds("RadiologyExamination");
-            var measurementList = SelectedIds("MeasurementExamination");
-
-            var dbExmainationsIds = _context.PatientExaminations
-                                            .Where(pe => sgrqList.Contains(pe.PatientSTGQuestionnaireId) && pe.PatientVisitId == id)
-                                            .Select(pe => pe.PatientSTGQuestionnaireId)
-                                            .ToList();
-
-            var toDeleteItems = dbExmainationsIds.Except(sgrqList);
-            var toInsertIds = sgrqList.Except(dbExmainationsIds);
+        private void UpdateSelectedItemsForPatientVisit(string klassName, PatientVisit patientVisit)
+        {
+            var toDeleteItems = new List<int>();
+            var toInsertIds = new List<int>();
+            switch (klassName)
+            {
+                case "SGRQExamination":
+                    var sgrqList = FormSelectedIds(klassName);
+                    var dbExmainationsIds = _patientVisitManager.SGRQPatientExaminationsIdList(patientVisit);
+                    toDeleteItems = dbExmainationsIds.Except(sgrqList).ToList();
+                    toInsertIds = sgrqList.Except(dbExmainationsIds).ToList();
+                    break;
+                case "ImmunologyExamination":
+                    var igList = FormSelectedIds(klassName);
+                    dbExmainationsIds = _patientVisitManager.IgPatientExaminationsIdList(patientVisit);
+                    toDeleteItems = dbExmainationsIds.Except(igList).ToList(); ;
+                    toInsertIds = igList.Except(dbExmainationsIds).ToList(); ;   
+                    break;
+                case "MeasurementExamination":
+                    var measurementExaminationList = FormSelectedIds(klassName);
+                    dbExmainationsIds = _patientVisitManager.MeasurementsPatientExaminationsIdList(patientVisit);
+                    toDeleteItems = dbExmainationsIds.Except(measurementExaminationList).ToList(); ;
+                    toInsertIds = measurementExaminationList.Except(dbExmainationsIds).ToList(); ;
+                    
+                    break;
+                case "RadiologyExamination":
+                    var radiologyExaminationList = FormSelectedIds(klassName);
+                    dbExmainationsIds = _patientVisitManager.RadiologyPatientExaminationsIdList(patientVisit);
+                    toDeleteItems = dbExmainationsIds.Except(radiologyExaminationList).ToList(); ;
+                    toInsertIds = radiologyExaminationList.Except(dbExmainationsIds).ToList(); ;
+                    break;
+            }
             if (toDeleteItems.Count() > 0)
             {
-                _patientVisitManager.DeleteExaminationsByIds(patientVisit, toDeleteItems);
+                _patientVisitManager.DeleteExaminationsByIds(klassName, patientVisit, toDeleteItems);
             }
-            if (toInsertIds.Count() < 0)
+            if (toInsertIds.Count() > 0)
             {
-                _patientVisitManager.InsertExaminationsByIds(patientVisit, toInsertIds);
+                _patientVisitManager.InsertExaminationsByIds(klassName, patientVisit, toInsertIds);
             }
-            return Json("oK");
         }
 
         public async Task<IActionResult> ExaminationsTabs(int patientId)
@@ -238,7 +274,7 @@ namespace AspergillosisEPR.Controllers
             return savedItems;
         }
 
-        private List<int> SelectedIds(string klass)
+        private List<int> FormSelectedIds(string klass)
         {
             var selected = Request.Form.Keys.Where(k => k.Contains(klass)).ToList();
             var selectedList = new List<int>();
