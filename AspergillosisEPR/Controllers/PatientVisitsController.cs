@@ -13,6 +13,7 @@ using System.Collections;
 using System.Reflection;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Dynamic.Core;
+using System.Globalization;
 
 namespace AspergillosisEPR.Controllers
 {
@@ -110,6 +111,8 @@ namespace AspergillosisEPR.Controllers
         {
             _patientVisitManager = new PatientVisitManager(_context, ViewBag, Request.Form);
             var patientVisit = _patientVisitManager.GetPatientVisitById(id);
+
+            patientVisit.VisitDate = DateTime.ParseExact(Request.Form["VisitDate"], @"dd/MM/yyyy", CultureInfo.InvariantCulture);
 
             NewPatientVisitViewModel patientVM;
             List<IGrouping<string, PatientExamination>> patientExaminations;

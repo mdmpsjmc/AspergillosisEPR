@@ -64,7 +64,7 @@
                 {
                     "data": "visitDate", "name": "VisitDate", "autoWidth": true,
                     "render": function(data) {
-                        return moment.unix(data).format("MM/DD/YYYY");
+                        return moment.unix(data).format("DD/MM/YYYY");
                     }            
                 },
                 { "data": "patientName", "name": "PatientName", "autoWidth": true },
@@ -122,7 +122,7 @@
         });
 
         $("input.table-datepicker").datetimepicker({
-            format: "MM/DD/YYYY"
+            format: "DD/MM/YYYY"
         });
     }
 
@@ -146,19 +146,19 @@
                 $("div#new-patient-visit-modal").modal("show");
                 $('input.visit-date').datetimepicker({
                     format: 'DD/MM/YYYY',                  
-                }).on("dp.change", function () {
-                    addDateAttributes();
-                });
+                }).on("dp.change", function(e) {                        
+                        addDateAttributes(e.target);
+                }).trigger("chage");
                 initalizeSelect2PatientSearch();
             });
         });
     }
 
-    var addDateAttributes = function () {
-        var currentDate = $("input.visit-date").val();
-        var unixDate = moment(currentDate.split("/").reverse().join("-")).format("X");
-        $("input.visit-date").attr("data-unix-date", unixDate);
-        $("input.visit-date").attr("data-iso-date", moment(currentDate.split("/").reverse().join("-")).toISOString());
+    var addDateAttributes = function (target) {
+        var currentDate = $(target).val();
+        var unixDate = moment(currentDate, "DD/MM/YYYY").format("X");
+        $(target).attr("data-unix-date", unixDate);
+        $(target).attr("data-iso-date", moment(currentDate, "DD/MM/YYYY").toISOString());
         $("tr.row-with-date[data-unix-date='" + unixDate + "']").addClass("success");
         $("tr.row-with-date:not([data-unix-date='" + unixDate + "'])").removeClass("success");
     }
@@ -363,14 +363,16 @@
                $("div#edit-patient-visit-modal").modal("show");
                $("select#PatientId").select2();
                var visitDateUnix = $("input#VisitDate").val()
-               var formattedDate = moment.unix(visitDateUnix).format("MM/DD/YYYY");
-               $("input#VisitDate").val(formattedDate);
+               var formattedDate = moment.unix(visitDateUnix).format("DD/MM/YYYY");
+               $("input#VisitDate").attr("value", formattedDate);
+               $("input#VisitDate").attr("data-iso-date", moment.unix(visitDateUnix).toISOString());
                $("input.visit-date").datetimepicker({
-                   format: "MM/DD/YYYY"
-               }).on("dp.change", function () {
-                   addDateAttributes();
-               });
-               onEditModalShow();
+                   format: "DD/MM/YYYY"
+               }).on("dp.change", function (e) {
+                   
+                   addDateAttributes(e.target);
+                   $(e.target).attr("value", $(e.target).val());
+               }).trigger("change");
            }).fail(function (data) {
                LoadingIndicator.hide();
                //$("form#edit-patient-visit-form")[0].reset();
