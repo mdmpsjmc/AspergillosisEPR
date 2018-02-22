@@ -83,7 +83,7 @@
                     "render": function (data, type, visit, meta) {
                         return '<a class="btn btn-info patient-visit-details" style="display: none" data-role="Read Role" href="/PatientVisits/Details/' + visit.id + '"><i class=\'fa fa-eye\'></i>&nbsp;</a>&nbsp;' +
                             '<a class="btn btn-warning patient-visit-edit disable-default" style="display: none" data-id="' + visit.id + '" data-role="Update Role" href="/PatientVisits/Edit/' + visit.id + '"><i class=\'fa fa-edit\' ></i>&nbsp;</a>&nbsp;' +
-                            '<a class="btn btn-danger patient-visit-delete" style="display: none" data-role="Delete Role" href="javascript:void(0)" data-id="' + visit.id + '"><i class=\'fa fa-trash\' ></i>&nbsp;</a>&nbsp;';
+                            '<a class="btn btn-danger patient-visit-delete disable-default" style="display: none" data-role="Delete Role" href="PatientVisits/Delete/' + visit.id + '" data-id="' + visit.id + '"><i class=\'fa fa-trash\' ></i>&nbsp;</a>&nbsp;';
                     },
                     "sortable": false,
                     "width": 250,
@@ -337,6 +337,8 @@
        });
    }
 
+    
+
    var showPatientVisitDetails = function () {
        $(document).off("click.show-pv-details").on("click.show-pv-details", "a.patient-visit-details:not(a.patient-details)", function (e) {
            var currentId = $(this).data("id");
@@ -368,8 +370,7 @@
                $("input#VisitDate").attr("data-iso-date", moment.unix(visitDateUnix).toISOString());
                $("input.visit-date").datetimepicker({
                    format: "DD/MM/YYYY"
-               }).on("dp.change", function (e) {
-                   
+               }).on("dp.change", function (e) {                   
                    addDateAttributes(e.target);
                    $(e.target).attr("value", $(e.target).val());
                }).trigger("change");
@@ -377,6 +378,17 @@
                LoadingIndicator.hide();
                //$("form#edit-patient-visit-form")[0].reset();
                alert("There was a problem requesting this patient visit. Please contact administrator");
+           });
+       });
+   }
+
+   var onPatientVisitDelete = function () {
+       $(document).off("click.pv-delete").on("click.pv-delete", "a.patient-visit-delete", function (e) {
+           LoadingIndicator.show();
+           var data = { "id" : $(this).data("id") };
+           $.post($(this).attr("href"), data, function (responseHtml) {
+               LoadingIndicator.hide();
+               window.location.reload(true);
            });
        });
    }
@@ -397,6 +409,7 @@
             showPatientVisitDetails();
             onPatientVisitEditShow();
             submitUpdatedPatientVisit();
+            onPatientVisitDelete();
         }
     }
 }();

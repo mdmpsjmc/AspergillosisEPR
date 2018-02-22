@@ -130,6 +130,18 @@ namespace AspergillosisEPR.Controllers
                 Hashtable errors = ModelStateHelper.Errors(ModelState);
                 return Json(new { success = false, errors });
             }
+
+        }
+
+        [HttpPost]
+        [ActionName("Delete")]
+        [Authorize(Roles = "Delete Role, Admin Role")]
+        public async Task<IActionResult> DeleteConfirmedAsync(int id)
+        {
+            var patientVisit = await _context.PatientVisits.SingleOrDefaultAsync(pv => pv.ID == id);
+            _context.PatientVisits.Remove(patientVisit);
+            await _context.SaveChangesAsync();
+            return Json(new { ok = "ok" });
         }
 
         public async Task<IActionResult> ExaminationsTabs(int patientId)
