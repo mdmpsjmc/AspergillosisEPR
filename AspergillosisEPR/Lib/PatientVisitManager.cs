@@ -60,10 +60,7 @@ namespace AspergillosisEPR.Lib
 
         public List<IGrouping<string, PatientExamination>> GetPatientExaminationsForVisitWithRelatedData(int patientVisitId)
         {
-            var patientExaminations = _context.PatientExaminations
-                                         .Where(pe => pe.PatientVisitId == patientVisitId)
-                                         .GroupBy(pe => pe.Discriminator)
-                                         .ToList();
+            var patientExaminations = GetPatientExaminationsForVisit(patientVisitId); 
             LoadRelatedData(patientExaminations);
             return patientExaminations;
         }
@@ -73,9 +70,9 @@ namespace AspergillosisEPR.Lib
             foreach (var visit in visits)
             {
                 var examinations = _context.PatientExaminations
-                                              .Where(pe => pe.PatientVisitId == visit.ID)
-                                              .GroupBy(pe => pe.Discriminator)
-                                              .ToList();
+                                           .Where(pe => pe.PatientVisitId == visit.ID)
+                                           .GroupBy(pe => pe.Discriminator)
+                                           .ToList();
 
                 LoadRelatedData(examinations);
                 visit.GroupedExaminations = examinations;
@@ -100,18 +97,15 @@ namespace AspergillosisEPR.Lib
             return allExaminations;
         }
 
-        private void DeleteExaminationsByIds(PatientVisit patientVisit, IEnumerable<int> toDeleteItems)
-        {
-            foreach (string klassName in TABS_KLASSES_LIST.Keys)
+        private void DeleteExaminationsByIds(String klassName, PatientVisit patientVisit, IEnumerable<int> toDeleteItems)
+        {    
+            var items = _context.PatientExaminations.AsEnumerable().Where(pe =>
             {
-                var items = _context.PatientExaminations.AsEnumerable().Where(pe =>
-                {
-                    var propertyInfo = pe.GetType().GetProperty(TABS_KLASSES_LIST[klassName]);
-                    var propertyValueId = Convert.ToInt32(propertyInfo.GetValue(pe, null));
-                    return (pe.PatientVisitId == patientVisit.ID && toDeleteItems.Contains(propertyValueId));
-                });
-             _context.RemoveRange(items.ToList());                 
-            }
+                var propertyInfo = pe.GetType().GetProperty(TABS_KLASSES_LIST[klassName]);
+                var propertyValueId = Convert.ToInt32(propertyInfo.GetValue(pe, null));
+                return (pe.PatientVisitId == patientVisit.ID && toDeleteItems.Contains(propertyValueId));
+            });
+            _context.RemoveRange(items.ToList());                 
         }
 
         public void UpdateSelectedItemsForPatientVisit(PatientVisit patientVisit)
@@ -123,10 +117,8 @@ namespace AspergillosisEPR.Lib
             }                       
         }
 
-        private void InsertExaminationsByIds(PatientVisit patientVisit, IEnumerable<int> toInsertIds)
+        private void InsertExaminationsByIds(string klassName, PatientVisit patientVisit, IEnumerable<int> toInsertIds)
         {
-            foreach (var klassName in TABS_KLASSES_LIST.Keys)
-            {
                 switch (klassName)
                 {
                     case "SGRQExamination":
@@ -169,55 +161,29 @@ namespace AspergillosisEPR.Lib
                             _context.Add(examination);
                         }
                         break;
-
-                }
             }
         }
 
         private void UpdateSelectedItemsForPatientVisit(List<int> selectedIds, string klassName, PatientVisit patientVisit)
         {
-            var toDeleteItems = new List<int>();
-            var toInsertIds = new List<int>();
-            switch (klassName)
-            {
-                case "SGRQExamination":
-                    var dbExmainationsIds = SGRQPatientExaminationsIdList(patientVisit);
-                    toDeleteItems = dbExmainationsIds.Except(selectedIds).ToList();
-                    toInsertIds = selectedIds.Except(dbExmainationsIds).ToList();
-                    break;
-                case "ImmunologyExamination":
-                    dbExmainationsIds = IgPatientExaminationsIdList(patientVisit);
-                    toDeleteItems = dbExmainationsIds.Except(selectedIds).ToList(); ;
-                    toInsertIds = selectedIds.Except(dbExmainationsIds).ToList(); ;
-                    break;
-                case "MeasurementExamination":
-                    dbExmainationsIds = MeasurementsPatientExaminationsIdList(patientVisit);
-                    toDeleteItems = dbExmainationsIds.Except(selectedIds).ToList(); ;
-                    toInsertIds = selectedIds.Except(dbExmainationsIds).ToList(); ;
-
-                    break;
-                case "RadiologyExamination":
-                    dbExmainationsIds = RadiologyPatientExaminationsIdList(patientVisit);
-                    toDeleteItems = dbExmainationsIds.Except(selectedIds).ToList(); ;
-                    toInsertIds = selectedIds.Except(dbExmainationsIds).ToList(); ;
-                    break;
-            }
+            var dbExmainationsIds = ExaminationsIdsListFromDatabase(klassName, patientVisit);
+            var toDeleteItems = dbExmainationsIds.Except(selectedIds).ToList();
+            var toInsertIds = selectedIds.Except(dbExmainationsIds).ToList();            
             if (toDeleteItems.Count() > 0)
             {
-                DeleteExaminationsByIds(patientVisit, toDeleteItems);
+                DeleteExaminationsByIds(klassName, patientVisit, toDeleteItems);
             }
             if (toInsertIds.Count() > 0)
             {
-                InsertExaminationsByIds(patientVisit, toInsertIds);
+                InsertExaminationsByIds(klassName, patientVisit, toInsertIds);
             }
         }
-
 
         private List<PatientVisit> GetVisitsExcluding(PatientVisit patientVisit)
         {
             return _context.PatientVisits.
-                                        Where(pv => pv.ID != patientVisit.ID && pv.PatientId == patientVisit.PatientId).
-                                        ToList();
+                            Where(pv => pv.ID != patientVisit.ID && pv.PatientId == patientVisit.PatientId).
+                            ToList();
         }
 
         private void LoadRelatedData(List<IGrouping<string, PatientExamination>> patientExaminations)
@@ -256,36 +222,20 @@ namespace AspergillosisEPR.Lib
             }
         }
 
-        private List<int> SGRQPatientExaminationsIdList(PatientVisit patientVisit)
+        private List<int> ExaminationsIdsListFromDatabase(string klassName, PatientVisit patientVisit)
         {
-            var sgrqIds = _context.PatientExaminations.Where(pe => pe.PatientSTGQuestionnaireId > 0 && pe.PatientVisitId == patientVisit.ID)
-                                               .Select(pe => pe.PatientSTGQuestionnaireId)
-                                               .ToList();
-            return sgrqIds;
-        }
-
-        private List<int> IgPatientExaminationsIdList(PatientVisit patientVisit)
-        {
-            var igIds = _context.PatientExaminations.Where(pe => pe.PatientImmunoglobulinId > 0 && pe.PatientVisitId == patientVisit.ID)
-                                               .Select(pe => pe.PatientImmunoglobulinId)
-                                               .ToList();
-            return igIds;
-        }
-
-        private List<int> MeasurementsPatientExaminationsIdList(PatientVisit patientVisit)
-        {
-            var measurementIds = _context.PatientExaminations.Where(pe => pe.PatientMeasurementId > 0 && pe.PatientVisitId == patientVisit.ID)
-                                               .Select(pe => pe.PatientMeasurementId)
-                                               .ToList();
-            return measurementIds;
-        }
-
-        private List<int> RadiologyPatientExaminationsIdList(PatientVisit patientVisit)
-        {
-            var radiologyIds = _context.PatientExaminations.Where(pe => pe.PatientRadiologyFinidingId > 0 && pe.PatientVisitId == patientVisit.ID)
-                                               .Select(pe => pe.PatientRadiologyFinidingId)
-                                               .ToList();
-            return radiologyIds;
+            var items = _context.PatientExaminations.AsEnumerable().Where(pe =>
+            {
+                var propertyInfo = pe.GetType().GetProperty(TABS_KLASSES_LIST[klassName]);
+                var propertyInfoId = Convert.ToInt32(propertyInfo.GetValue(pe, null));
+                return (propertyInfoId > 0 && pe.PatientVisitId == patientVisit.ID);
+            }).Select(i =>
+            {
+                var propertyInfo = i.GetType().GetProperty(TABS_KLASSES_LIST[klassName]);
+                var propertyInfoId = Convert.ToInt32(propertyInfo.GetValue(i, null));
+                return propertyInfoId;
+            }).ToList(); ;
+            return items;
         }
 
         private List<int> FormSelectedIds(string klass)

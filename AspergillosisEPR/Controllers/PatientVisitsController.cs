@@ -135,7 +135,8 @@ namespace AspergillosisEPR.Controllers
             return PartialView(patientVM);
         }
 
-        private void GetPatientExaminationsWithVisitViewModel(int id, PatientVisit patientVisit, out NewPatientVisitViewModel patientVM, out List<IGrouping<string, PatientExamination>> patientExaminations)
+        private void GetPatientExaminationsWithVisitViewModel(int id, PatientVisit patientVisit,             
+            out NewPatientVisitViewModel patientVM, out List<IGrouping<string, PatientExamination>> patientExaminations)
         {
             patientVM = BuildPatientVisitVM(patientVisit.PatientId, patientVisit.VisitDate).Result;
             patientVM.Patient = _context.Patients.Where(p => p.ID == patientVisit.PatientId).SingleOrDefault();
@@ -143,7 +144,8 @@ namespace AspergillosisEPR.Controllers
             SelectObjectsForVisit(patientVM, patientExaminations);
         }
 
-        private void SelectObjectsForVisit(NewPatientVisitViewModel patientVM, List<IGrouping<string, PatientExamination>> patientExaminations)
+        private void SelectObjectsForVisit(NewPatientVisitViewModel patientVM, 
+                List<IGrouping<string, PatientExamination>> patientExaminations)
         {
             InitViewBags();
             foreach (var group in patientExaminations)
