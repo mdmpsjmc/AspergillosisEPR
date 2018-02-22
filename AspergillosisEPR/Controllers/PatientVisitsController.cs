@@ -26,7 +26,6 @@ namespace AspergillosisEPR.Controllers
         {
             _context = context;
             _patientManager = new PatientManager(_context);
-            _patientVisitManager = new PatientVisitManager(_context, ViewBag);
         }
 
         public IActionResult Index()
@@ -43,22 +42,20 @@ namespace AspergillosisEPR.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(PatientVisit patientVisit)
         {
+            _patientVisitManager = new PatientVisitManager(_context, ViewBag, Request.Form);
+
             InitViewBags();
 
-            var list1 = SaveExamination("SGRQExamination", "PatientSTGQuestionnaireId", patientVisit);
-            var list2 = SaveExamination("ImmunologyExamination", "PatientImmunoglobulinId", patientVisit);
-            var list3 = SaveExamination("RadiologyExamination", "PatientRadiologyFinidingId", patientVisit);
-            var list4 = SaveExamination("MeasurementExamination", "PatientMeasurementId", patientVisit);
+            var itemsToSave = _patientVisitManager.SavePatientExaminationsForVisit(patientVisit);
 
-            var concatenated = list1.Concat(list2).Concat(list3).Concat(list4);
-            if (concatenated.Count() == 0)
+            if (itemsToSave.Count() == 0)
             {
                 ModelState.AddModelError("Base", "You need to select at least one item from the lists below");
             }
             if (ModelState.IsValid)
             {
                 _context.Add(patientVisit);
-                _context.PatientExaminations.AddRange(concatenated);
+                _context.PatientExaminations.AddRange(itemsToSave);
                 await _context.SaveChangesAsync();
             }
             else
@@ -71,6 +68,7 @@ namespace AspergillosisEPR.Controllers
 
         public IActionResult Details(int id)
         {
+            _patientVisitManager = new PatientVisitManager(_context, ViewBag);
             var patientDetailsVM = new PatientVisitDetailsViewModel();
             var patientVisit = _patientVisitManager.GetPatientVisitById(id);
 
@@ -93,6 +91,7 @@ namespace AspergillosisEPR.Controllers
         [Authorize(Roles = ("Admin Role, Edit Role"))]
         public IActionResult Edit(int? id)
         {
+            _patientVisitManager = new PatientVisitManager(_context, ViewBag);
             var patientVisit = _patientVisitManager.GetPatientVisitById(id);
 
             if (patientVisit == null)
@@ -109,15 +108,14 @@ namespace AspergillosisEPR.Controllers
         [ActionName("Edit")]
         public IActionResult EditPatientVisit(int id)
         {
+            _patientVisitManager = new PatientVisitManager(_context, ViewBag, Request.Form);
             var patientVisit = _patientVisitManager.GetPatientVisitById(id);
+
             NewPatientVisitViewModel patientVM;
             List<IGrouping<string, PatientExamination>> patientExaminations;
             GetPatientExaminationsWithVisitViewModel(id, patientVisit, out patientVM, out patientExaminations);
 
-            _patientVisitManager.UpdateSelectedItemsForPatientVisit(FormSelectedIds("SGRQExamination"), "SGRQExamination", patientVisit);
-            _patientVisitManager.UpdateSelectedItemsForPatientVisit(FormSelectedIds("ImmunologyExamination"), "ImmunologyExamination", patientVisit);
-            _patientVisitManager.UpdateSelectedItemsForPatientVisit(FormSelectedIds("MeasurementExamination"), "MeasurementExamination", patientVisit);
-            _patientVisitManager.UpdateSelectedItemsForPatientVisit(FormSelectedIds("RadiologyExamination"), "RadiologyExamination", patientVisit);
+            _patientVisitManager.UpdateSelectedItemsForPatientVisit(patientVisit);                           
 
             if (TryValidateModel(patientVisit))
             {
@@ -126,12 +124,12 @@ namespace AspergillosisEPR.Controllers
             } else
             {
                 return Json("oK");
-            }
-            
+            }            
         }        
 
         public async Task<IActionResult> ExaminationsTabs(int patientId)
         {
+            _patientVisitManager = new PatientVisitManager(_context, ViewBag);
             var patientVM = await BuildPatientVisitVM(patientId);
             InitViewBags();
             return PartialView(patientVM);
@@ -209,45 +207,6 @@ namespace AspergillosisEPR.Controllers
                 patientVM.PatientMeasurements = patientMeasurements.ToList();
             }
             return patientVM;
-        }
-
-        private List<PatientExamination> SaveExamination(string klass, string propertyName, PatientVisit patientVisit)
-        {
-            var selected = Request.Form.Keys.Where(k => k.Contains(klass)).ToList();
-
-            var savedItems = new List<PatientExamination>();
-            for (var cursor = 0; cursor < selected.Count; cursor++)
-            {
-                var itemId = Request.Form[klass + "[" + cursor + "].ID"];
-                var isChecked = Request.Form[klass + "[" + cursor + "].Selected"];
-                if (isChecked == "on")
-                {
-                    Type examinationType = Type.GetType("AspergillosisEPR.Models." + klass);
-                    var examination = (PatientExamination)Activator.CreateInstance(examinationType);
-                    examination.PatientVisit = patientVisit;
-                    PropertyInfo property = examination.GetType().GetProperty(propertyName);
-                    property.SetValue(examination, Int32.Parse(itemId));
-                    examination.PatientVisitId = patientVisit.ID;
-                    savedItems.Add(examination);
-                }
-            }
-            return savedItems;
-        }
-
-        private List<int> FormSelectedIds(string klass)
-        {
-            var selected = Request.Form.Keys.Where(k => k.Contains(klass)).ToList();
-            var selectedList = new List<int>();
-            for (var cursor = 0; cursor < selected.Count; cursor++)
-            {
-                var itemId = Request.Form[klass + "[" + cursor + "].ID"];
-                var isChecked = Request.Form[klass + "[" + cursor + "].Selected"];
-                if (isChecked == "on")
-                {
-                    selectedList.Add(int.Parse(itemId));
-                }
-            }
-            return selectedList;
-        }
+        }        
     }
 }
