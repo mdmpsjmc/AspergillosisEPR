@@ -408,12 +408,12 @@
            var exportType = $(this).data("file");
            var visitId = $(this).data("visit-id");
            var requestData = {
-               id: visitId,
-               otherVisits: $("input#IncludeOtherVisits").prop("checked")
+               id: visitId
            }
            $("div#patient-visit-export-modal").modal("show");
            $(document).off("click.export-visit").on("click.export-visit", "button#export-patient-visit", function () {
-               AjaxFileDownload.execute(exportUrl, requestData, "Patient_Visits_Details_" + visitId + ".pdf", "application/pdf");
+               var exportUrlWithOptions = exportUrl + "?otherVisits=" + $("input#IncludeOtherVisits").prop("checked");
+               AjaxFileDownload.execute(exportUrlWithOptions, requestData, "Patient_Visits_Details_" + visitId + ".pdf", "application/pdf");
            });    
        });
    }
