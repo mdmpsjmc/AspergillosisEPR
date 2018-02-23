@@ -401,6 +401,12 @@
        });
    }
 
+   var onExportOptionsClick = function () {
+       $(document).off("click.export-pv").on("click.export-pv", "a.patient-visit-export", function (e) {
+           $("div#patient-visit-export-modal").modal("show");
+       });
+   }
+
     return {
 
         init: function () {
@@ -418,6 +424,7 @@
             onPatientVisitEditShow();
             submitUpdatedPatientVisit();
             onPatientVisitDelete();
+            onExportOptionsClick();
         }
     }
 }();

@@ -26,8 +26,6 @@
                                     <td>@measurement.AsDetailedString()</td>
                                     <td></td>
                                 </tr>
-
-
                                 break;
                             case "SGRQExamination":
                                 var sgrq = (SGRQExamination)examination;
@@ -36,9 +34,11 @@
                                     <td>@PatientVisitsDataTableViewModel.ExaminationNameFromClass(examination.Discriminator)</td>
                                     <td>@sgrq.AsDetailedString()</td>
                                     <td>
-
-
-
+                                        <div class="col-sm-12" id="sgrq-chart">
+                                            <a href="@Url.Action("SGRQ", "PatientCharts", new { patientId= sgrq.PatientVisit.Patient.ID})" data-id="@(sgrq.PatientVisit.Patient.ID)" class="pdf-hide btn-hide btn-xs disable-default btn btn-primary show-sgrq-chart" style="padding: 5px">
+                                                <i class="fa fa-line-chart"></i>
+                                            </a>
+                                        </div>
                                     </td>
                                 </tr>
                                 break;

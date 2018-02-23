@@ -37,6 +37,7 @@ namespace AspergillosisEPR.Controllers
 
 
 
+
         private void AddIgChartsToPatientVM(PatientDetailsViewModel patientDetailsViewModel, int chartsCount)
         {
             var igCharts = new List<PatientIgChart>();

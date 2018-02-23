@@ -404,8 +404,10 @@
     }
 
     var addButtonsToDataTable = function () {
-        window.patientsTable.buttons().container()
-            .appendTo($('.col-sm-6:eq(0)', window.patientsTable.table().container()));
+        window.patientsTable
+              .buttons()
+              .container()
+              .appendTo($('.col-sm-6:eq(0)', window.patientsTable.table().container()));
     }
 
     var onExportOptionsShow = function () {
