@@ -403,7 +403,18 @@
 
    var onExportOptionsClick = function () {
        $(document).off("click.export-pv").on("click.export-pv", "a.patient-visit-export", function (e) {
+           e.preventDefault();
+           var exportUrl = $(this).attr("href");
+           var exportType = $(this).data("file");
+           var visitId = $(this).data("visit-id");
+           var requestData = {
+               id: visitId,
+               otherVisits: $("input#IncludeOtherVisits").prop("checked")
+           }
            $("div#patient-visit-export-modal").modal("show");
+           $(document).off("click.export-visit").on("click.export-visit", "button#export-patient-visit", function () {
+               AjaxFileDownload.execute(exportUrl, requestData, "Patient_Visits_Details_" + visitId + ".pdf", "application/pdf");
+           });    
        });
    }
 

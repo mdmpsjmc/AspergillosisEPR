@@ -67,9 +67,9 @@ namespace AspergillosisEPR.Controllers
         }
 
         public IActionResult Details(int id)
-        {
+        {           
             _patientVisitManager = new PatientVisitManager(_context, ViewBag);
-            var patientDetailsVM = new PatientVisitDetailsViewModel();
+
             var patientVisit = _patientVisitManager.GetPatientVisitById(id);
 
             if (patientVisit == null)
@@ -77,14 +77,9 @@ namespace AspergillosisEPR.Controllers
                 return NotFound();
             }
 
-            var patientExaminations = _patientVisitManager.GetPatientExaminationsForVisitWithRelatedData(id);
-            var otherVisits = _patientVisitManager.GetVisitsWithRelatedDataExcluding(patientVisit);
-
-            patientDetailsVM.Patient = patientVisit.Patient;
-            patientDetailsVM.VisitDate = patientVisit.VisitDate;
-            patientDetailsVM.PatientExaminations = patientExaminations;
-            patientDetailsVM.OtherVisits = otherVisits;
-
+            var patientDetailsVM = PatientVisitDetailsViewModel.
+                                        BuildPatientVisitDetailsVM(_patientVisitManager, patientVisit);
+            ViewBag.ShowButtons = true;
             return PartialView(patientDetailsVM);
         }
 
@@ -130,7 +125,6 @@ namespace AspergillosisEPR.Controllers
                 Hashtable errors = ModelStateHelper.Errors(ModelState);
                 return Json(new { success = false, errors });
             }
-
         }
 
         [HttpPost]
@@ -159,7 +153,7 @@ namespace AspergillosisEPR.Controllers
         {
             patientVM = NewPatientVisitViewModel.BuildPatientVisitVM(_context, patientVisit.PatientId, patientVisit.VisitDate).Result;
             patientVM.Patient = _context.Patients.Where(p => p.ID == patientVisit.PatientId).SingleOrDefault();
-            patientExaminations = _patientVisitManager.GetPatientExaminationsForVisitWithRelatedData(id);
+            patientExaminations = _patientVisitManager.GetPatientExaminationsForVisitWithRelatedData(patientVisit.ID);
             SelectObjectsForVisit(patientVM, patientExaminations);
         }
 

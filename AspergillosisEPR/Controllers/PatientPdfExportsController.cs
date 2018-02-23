@@ -35,8 +35,17 @@ namespace AspergillosisEPR.Controllers
             return GetFileContentResult(pdfBytes.Result, ".pdf", "application/pdf");
         }
 
-
-
+        [HttpPost]
+        public IActionResult VisitDetails(int id, bool exportCharts, bool otherVisits)
+        {
+            var patientVisitManager = new PatientVisitManager(_context, ViewBag);
+            var patientVisit = patientVisitManager.GetPatientVisitById(id);
+            var patientDetailsVM = PatientVisitDetailsViewModel.BuildPatientVisitDetailsVM(patientVisitManager, patientVisit);
+            ViewBag.ShowButtons = false;
+            patientDetailsVM.ShowOtherVisits = otherVisits;
+            var pdfBytes = _pdfConverter.GenerateVisitDetailsPdf(patientDetailsVM);
+            return GetFileContentResult(pdfBytes.Result, ".pdf", "application/pdf");
+        }
 
         private void AddIgChartsToPatientVM(PatientDetailsViewModel patientDetailsViewModel, int chartsCount)
         {

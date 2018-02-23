@@ -38,11 +38,11 @@ namespace AspergillosisEPR.Services
             {
                 var httpContext = new DefaultHttpContext { RequestServices = _serviceProvider };
                 var actionContext = new ActionContext(httpContext, new RouteData(), new ActionDescriptor());
-
+                
                 using (var sw = new StringWriter())
                 {
                     var viewResult = _razorViewEngine.GetView(null, viewName, true);
-
+                        
                     if (viewResult.View == null)
                     {
                         throw new ArgumentNullException($"{viewName} does not match any available view");
@@ -52,7 +52,7 @@ namespace AspergillosisEPR.Services
                     {
                         Model = model
                     };
-
+                    
                     var viewContext = new ViewContext(
                         actionContext,
                         viewResult.View,
@@ -61,7 +61,7 @@ namespace AspergillosisEPR.Services
                         sw,
                         new HtmlHelperOptions()
                     );
-
+                    viewContext.ViewBag.ShowButtons = false;
                     await viewResult.View.RenderAsync(viewContext);
                     return sw.ToString();
                 }

@@ -27,10 +27,10 @@
                 </div>
             </div>
                 <div class="modal-footer">
-                    <a href="@Url.Action("VisitDetails", "PatientPdfExports", new { id = Model.Patient.ID })"class="btn btn-danger patient-visit-export disable-default" data-file="pdf" data-id="@Model.Patient.ID">
+                    <a href="@Url.Action("VisitDetails", "PatientPdfExports", new { id = Model.VisitId })"class="btn btn-danger patient-visit-export disable-default" data-file="pdf" data-id="@Model.Patient.ID" data-visit-id="@Model.VisitId">
                         <i class="fa fa-file-pdf-o"></i>&nbsp; PDF
                     </a>
-                    <a href="@Url.Action("VisitDetails", "PatientExcelExports", new { id = Model.Patient.ID })"data-file="excel" class="btn btn-success patient-visit-export disable-default" data-id="@Model.Patient.ID">
+                    <a href="@Url.Action("VisitDetails", "PatientExcelExports", new { id = Model.VisitId })"data-file="excel" class="btn btn-success patient-visit-export disable-default" data-id="@Model.Patient.ID" data-visit-id="@Model.VisitId">
                         <i class="fa fa-file-excel-o"></i>&nbsp; Excel
                     </a>
                     <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="$('div.modal-backdrop.in').remove()">Close Window</button>

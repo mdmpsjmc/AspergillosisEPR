@@ -37,6 +37,11 @@ namespace AspergillosisEPR.Lib.Exporters
             return GeneratePdfFromHtml(htmlView);
         }
 
+        public async Task<byte[]> GenerateVisitDetailsPdf(PatientVisitDetailsViewModel patientVisitDetailsViewModel)
+        {
+            string htmlView = await _htmlRenderService.RenderToStringAsync("/Views/PatientVisits/PdfVisitDetails.cshtml", patientVisitDetailsViewModel);
+            return GeneratePdfFromHtml(htmlView);
+        }
 
         private void ProcessIgCharts(PatientDetailsViewModel patientDetailsViewModel)
         {
@@ -57,6 +62,7 @@ namespace AspergillosisEPR.Lib.Exporters
             patientDetailsViewModel.SgrqImageChartFile = sgrqChartFileName;
         }
 
+       
         private bool SavePNGChart(string ImgStr, string ImgName)
         {
             if (!Directory.Exists(_fileStoragePath))
