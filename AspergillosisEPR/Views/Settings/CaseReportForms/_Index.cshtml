@@ -1,0 +1,50 @@
+﻿<div class="jarviswidget" id="wid-id-7">
+
+    <header role="heading">
+
+        <ul class="nav nav-tabs pull-left in">
+            <li class="active">
+                <a data-toggle="tab" href="#hr1" aria-expanded="false">
+                    <i class="fa fa-lg fa-arrow-circle-o-down"></i>
+                    <span class="hidden-mobile hidden-tablet"> Case Report Forms Options </span>
+                </a>
+            </li>
+        </ul>
+    </header>
+    <div>
+
+        <div class="widget-body">
+            <div class="tab-content">
+                <ul class="nav nav-tabs">
+                    <li class="active">
+                        <a href="#pre-defined-forms" data-toggle="tab" data-parent-tab="case-report-forms">Pre Defined Forms</a>
+                    </li>
+                    <li class="">
+                        <a href="#field-types" data-toggle="tab" data-parent-tab="case-report-forms">Field Types</a>
+                    </li>
+                    <li class="">
+                        <a href="#form-sections" data-toggle="tab" data-parent-tab="case-report-forms">Form Sections</a>
+                    </li>
+                    <li class="">
+                        <a href="#option-groups" data-toggle="tab" data-parent-tab="case-report-forms">Option Groups</a>
+                    </li>
+                </ul>
+                <div class="tab-content padding-10">
+                    <div class="tab-pane active in" id="pre-defined-forms">
+                        @Html.Partial("/Views/Settings/CaseReportForms/_Forms.cshtml")
+                    </div>
+                    <div class="tab-pane fade" id="field-types">
+                        @Html.Partial("/Views/Settings/CaseReportForms/_FieldTypes.cshtml")
+                    </div>
+                    <div class="tab-pane fade" id="form-sections">
+                        @Html.Partial("/Views/Settings/CaseReportForms/_FormSections.cshtml")
+                    </div>
+                    <div class="tab-pane fade" id="option-groups">
+                        @Html.Partial("/Views/Settings/CaseReportForms/_OptionGroups.cshtml")
+                    </div>           
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
