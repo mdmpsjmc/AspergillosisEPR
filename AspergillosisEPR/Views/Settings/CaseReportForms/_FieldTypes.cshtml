@@ -1,4 +1,21 @@
-﻿
-@*
-    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model AspergillosisEPR.Models.SettingsViewModels.SettingsViewModel
+<div class="table-responsive">
+    @if (User.IsInRole("Create Role") || User.IsInRole("Admin Role"))
+    {
+        <div class="button">
+            <a href="@Url.Action("New", "CaseReportForms" )" class="btn btn-success add-radiology-type add-settings-item disable-default" data-klass="CaseReportFormFieldType" data-tab="case-report-forms-field-types">
+                <i class="fa fa-plus"></i> Add New Field Type
+            </a>
+        </div>
+    }
+    <table class="table table-bordered table-hover" id="case_report_forms_field_types_datatable" data-url="/DataTableCaseReportForms/Load?collection=CaseReportFormFieldType" style="width: 100%">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+</div>

@@ -18,6 +18,7 @@
 <script src="~/lib/chart.js/dist/Chart.min.js"></script>
 <script src="~/js/LoadingIndicator.js"></script>
 <script src="~/js/App.js"></script>
+<script src="~/js/SimpleDataTable.js"></script>
 <script src="~/js/Patients.js"></script>
 <script src="~/js/Settings.js"></script>
 <script src="~/js/Users.js"></script>
@@ -30,22 +31,13 @@
 <script src="~/js/download.js"></script>
 <script src="~/js/AjaxFileDownload.js"></script>
 <script src="~/js/PatientVisits.js"></script>
+<script src="~/js/CaseReportForms.js"></script>
 
 @Html.Partial("/Views/Shared/_ValidationScriptsPartial.cshtml");
 <script>
     $(document).ready(function () {
         pageSetUp();
         drawBreadCrumb();
-        App.init();
-        Patients.init();
-        Settings.init();
-        Users.init();
-        Imports.init();
-        DiagnosisTypes.init();
-        SideEffects.init();
-        Charts.init();
-        Search.init();
-        Radiology.init();
-        PatientVisits.init();
+        App.init();      
     });
 </script>
