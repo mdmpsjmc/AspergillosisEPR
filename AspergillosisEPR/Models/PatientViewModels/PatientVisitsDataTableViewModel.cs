@@ -12,6 +12,7 @@ namespace AspergillosisEPR.Models.PatientViewModels
         public string RM2Number { get; set; }
         public double VisitDate { get; set; }
         public List<string> Examinations { get; set; }
+        public int PatientId { get; set; }
 
         public static string ExaminationNameFromClass(string discriminator)
         {

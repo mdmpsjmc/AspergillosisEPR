@@ -205,12 +205,9 @@
         var options = {
             animation: {
                 duration: 2000,
-
-                onProgress: function (animation) {
-
-                },
                 onComplete: function (animation) {
-                    var imageUrl = stackedLine.toBase64Image();
+                    var imageUrl = stackedLine.toBase64Image(); 
+                    console.log(imageUrl);
                     $("img#sgrq-chart-image").attr("src", imageUrl);
                     $("a.export-trigger").removeAttr("disabled");
                 }
@@ -226,7 +223,6 @@
         var uiStackedLine = new Chart(uiContext, {
             type: 'line',
             data: chartData,
-            options: options
         });
     }
 

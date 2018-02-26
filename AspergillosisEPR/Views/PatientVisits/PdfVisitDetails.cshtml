@@ -1,7 +1,7 @@
 ﻿@model AspergillosisEPR.Models.PatientViewModels.PatientVisitDetailsViewModel
 @{
     Layout = "~/Views/Shared/_PdfLayout.cshtml";
-    ViewData["Title"] = Model.Patient.FullName + "Visits Details";
+    ViewData["Title"] = Model.Patient.FullName + " Visits Details";
 }
 
 <div class="row">
@@ -61,6 +61,3 @@
 {
     @Html.Partial("/Views/PatientVisits/_PdfOtherVisits.cshtml");
 }
-<img src="" class="chart-image hide" id="sgrq-chart-image" />
-<canvas id="sgrq-chart-content" width="800" height="400" class="hide"></canvas>
-<div id="ig-charts"></div>

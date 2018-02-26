@@ -1,0 +1,21 @@
+﻿@model AspergillosisEPR.Models.PatientViewModels.PatientVisitDetailsViewModel
+<div class="panel-group smart-accordion-default" id="accordion-2">
+    @foreach (var visit in Model.OtherVisits.OrderByDescending(q => q.VisitDate))
+    {
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a data-toggle="collapse" data-parent="#accordion-2" href="#@(visit.ID)" aria-expanded="false" class="collapsed">
+                        <i class="fa fa-lg fa-angle-down pull-right"></i> <i class="fa fa-lg fa-angle-up pull-right"></i>
+                        @visit.VisitDate.ToString("dd-MM-yyyy")
+                    </a>
+                </h4>
+            </div>
+            <div id="@(visit.ID)" style="height: 0px;">
+                <div class="panel-body">
+                    @Html.Partial("/Views/PatientVisits/_ExaminationList.cshtml", visit.GroupedExaminations);
+                </div>
+            </div>
+        </div>
+    }
+</div>

@@ -36,7 +36,8 @@ namespace AspergillosisEPR.Controllers
         }
 
         [HttpPost]
-        public IActionResult VisitDetails(int id, bool exportCharts, bool otherVisits)
+        public IActionResult VisitDetails(int id, bool exportCharts, 
+                                          bool otherVisits, string sgrqChart)
         {
             var patientVisitManager = new PatientVisitManager(_context, ViewBag);
             var patientVisit = patientVisitManager.GetPatientVisitById(id);

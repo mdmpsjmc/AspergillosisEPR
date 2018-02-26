@@ -50,7 +50,8 @@ namespace AspergillosisEPR.Controllers
                     Examinations = _aspergillosisContext.PatientExaminations.Where(pe => pe.PatientVisitId == patientVisit.ID).Select(pe => PatientVisitsDataTableViewModel.ExaminationNameFromClass(pe.Discriminator)).ToList(),
                     PatientName = patientVisit?.Patient.FullName,
                     RM2Number = patientVisit?.Patient.RM2Number,
-                    VisitDate = DateHelper.DateTimeToUnixTimestamp(patientVisit.VisitDate)
+                    VisitDate = DateHelper.DateTimeToUnixTimestamp(patientVisit.VisitDate),
+                    PatientId = patientVisit.PatientId
                 };
                 visits.Add(patientRow);
 

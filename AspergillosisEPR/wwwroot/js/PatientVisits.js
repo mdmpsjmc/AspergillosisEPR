@@ -81,7 +81,7 @@
                 },
                 {
                     "render": function (data, type, visit, meta) {
-                        return '<a class="btn btn-info patient-visit-details" style="display: none" data-role="Read Role" href="/PatientVisits/Details/' + visit.id + '"><i class=\'fa fa-eye\'></i>&nbsp;</a>&nbsp;' +
+                        return '<a class="btn btn-info patient-visit-details" style="display: none" data-patient-id="' + visit.patientId + '" data-role="Read Role" href="/PatientVisits/Details/' + visit.id + '"><i class=\'fa fa-eye\'></i>&nbsp;</a>&nbsp;' +
                             '<a class="btn btn-warning patient-visit-edit disable-default" style="display: none" data-id="' + visit.id + '" data-role="Update Role" href="/PatientVisits/Edit/' + visit.id + '"><i class=\'fa fa-edit\' ></i>&nbsp;</a>&nbsp;' +
                             '<a class="btn btn-danger patient-visit-delete disable-default" style="display: none" data-role="Delete Role" href="PatientVisits/Delete/' + visit.id + '" data-id="' + visit.id + '"><i class=\'fa fa-trash\' ></i>&nbsp;</a>&nbsp;';
                     },
@@ -345,10 +345,15 @@
        $(document).off("click.show-pv-details").on("click.show-pv-details", "a.patient-visit-details:not(a.patient-details)", function (e) {
            var currentId = $(this).data("id");
            var requestUrl = $(this).attr("href");
+           var patientId = $(this).data("patient-id");
            e.preventDefault();
            $.get(requestUrl, function (htmlResponse) {
                $("div#modal-container").html(htmlResponse);
                $("div#visit-details-modal").modal("show");
+               
+               $.getJSON("/PatientCharts/SGRQ?patientId=" + patientId, function (response) {
+                   Charts.sgrqChartFromResponse(response);
+               });
            });
        });
    }
@@ -407,13 +412,11 @@
            var exportUrl = $(this).attr("href");
            var exportType = $(this).data("file");
            var visitId = $(this).data("visit-id");
-           var requestData = {
-               id: visitId
-           }
+           var sgrqChartImage = "sgrqChart="+ encodeURIComponent($("img#sgrq-chart-image").attr("src"));
            $("div#patient-visit-export-modal").modal("show");
            $(document).off("click.export-visit").on("click.export-visit", "button#export-patient-visit", function () {
                var exportUrlWithOptions = exportUrl + "?otherVisits=" + $("input#IncludeOtherVisits").prop("checked");
-               AjaxFileDownload.execute(exportUrlWithOptions, requestData, "Patient_Visits_Details_" + visitId + ".pdf", "application/pdf");
+               AjaxFileDownload.execute(exportUrlWithOptions, sgrqChartImage, "Patient_Visits_Details_" + visitId + ".pdf", "application/pdf");
            });    
        });
    }
