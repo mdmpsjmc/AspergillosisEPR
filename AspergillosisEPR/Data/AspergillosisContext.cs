@@ -4,6 +4,7 @@ using AspergillosisEPR.Extensions;
 using System.Linq;
 using System.ComponentModel.DataAnnotations;
 using System;
+using AspergillosisEPR.Models.CaseReportForms;
 
 namespace AspergillosisEPR.Data
 {
@@ -43,6 +44,13 @@ namespace AspergillosisEPR.Data
         public DbSet<PatientMeasurement> PatientMeasurements { get; set; }
         public DbSet<MeasurementExamination> MeasurementExaminations { get; set; }
 
+        public DbSet<CaseReportFormResult> CaseReportFormResults { get; set; }
+        public DbSet<CaseReportFormField> CaseReportFormFields { get; set; }
+        public DbSet<CaseReportFormFieldType> CaseReportFormFieldTypes { get; set; }
+        public DbSet<CaseReportFormOptionChoice> CaseReportFormOptionChoices { get; set; }
+        public DbSet<CaseReportFormOptionGroup> CaseReportFormOptionGroups { get; set; }
+        public DbSet<CaseReportFormSection> CaseReportFormSections { get; set; }
+        public DbSet<CaseReportFormCategory> CaseReportFormCategories { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -74,6 +82,13 @@ namespace AspergillosisEPR.Data
             modelBuilder.Entity<PatientVisit>().ToTable("PatientVisits");
             modelBuilder.Entity<PatientMeasurement>().ToTable("PatientMeasurements");
 
+            modelBuilder.Entity<CaseReportFormField>().ToTable("CaseReportFormFields");
+            modelBuilder.Entity<CaseReportFormFieldType>().ToTable("CaseReportFormFieldTypes");
+            modelBuilder.Entity<CaseReportFormOptionChoice>().ToTable("CaseReportFormOptionChoices");
+            modelBuilder.Entity<CaseReportFormOptionGroup>().ToTable("CaseReportFormOptionGroups");
+            modelBuilder.Entity<CaseReportFormSection>().ToTable("CaseReportFormSections");
+            modelBuilder.Entity<CaseReportFormCategory>().ToTable("CaseReportFormCategories");
+            modelBuilder.Entity<CaseReportFormResult>().ToTable("CaseReportFormResults");
         }
 
         internal void Set(Type currentType)
