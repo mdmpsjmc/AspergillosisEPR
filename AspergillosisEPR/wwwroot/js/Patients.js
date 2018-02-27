@@ -161,7 +161,7 @@
     }
 
     var bindNewPartialOnPatientFormClick = function () {
-        $(document).off("click.new-pat-partial").on("click.new-pat-partial", "a.add-new-patient-partial, a.edit-patient-partial", function (e) {
+        $(document).off("click.new-pat-partial").on("click.new-pat-partial", "a.add-new-patient-partial, a.edit-patient-partial, a.add-form-field", function (e) {
             LoadingIndicator.show();
             e.preventDefault();
             var visibleRow = $(this).data("visible-row");

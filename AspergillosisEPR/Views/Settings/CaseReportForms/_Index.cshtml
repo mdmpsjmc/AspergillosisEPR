@@ -28,6 +28,9 @@
                     <li class="">
                         <a href="#option-groups" data-toggle="tab" data-parent-tab="case-report-forms">Option Groups</a>
                     </li>
+                    <li class="">
+                        <a href="#categories" data-toggle="tab" data-parent-tab="case-report-forms">Form Categories</a>
+                    </li>
                 </ul>
                 <div class="tab-content padding-10">
                     <div class="tab-pane active in" id="pre-defined-forms">
@@ -41,7 +44,10 @@
                     </div>
                     <div class="tab-pane fade" id="option-groups">
                         @Html.Partial("/Views/Settings/CaseReportForms/_OptionGroups.cshtml")
-                    </div>           
+                    </div>  
+                    <div class="tab-pane fade" id="categories">
+                        @Html.Partial("/Views/Settings/CaseReportForms/_Categories.cshtml")
+                    </div>        
                 </div>
             </div>
 

@@ -9,5 +9,7 @@ namespace AspergillosisEPR.Models.CaseReportForms
     {
         public int ID { get; set; }
         public string Name { get; set; }
+
+        public IEnumerable<CaseReportFormOptionChoice> Choices { get; set; }
     }
 }

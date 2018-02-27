@@ -40,6 +40,34 @@
             window[referenceName].on('draw.dt', function () {
                 Users.loadDataTableWithForCurrentUserRoles();
             });
+        },
+
+        initializeWithColumns: function (referenceName, dataTableId, collection, columns) {
+            window[referenceName] = $(dataTableId).DataTable({
+                dom: "<'row'<'col-sm-3'l><'col-sm-3'f><'col-sm-6'p>>" +
+                "<'row'<'col-sm-12'tr>>" +
+                "<'row'<'col-sm-5'i><'col-sm-7'p>>",
+                "processing": true,
+                "serverSide": true,
+                "filter": true,
+                "responsive": true,
+                "orderMulti": false,
+                "pageLength": 50,
+                "order": [[1, "asc"]],
+                "initComplete": function (settings, json) {
+                    Users.loadDataTableWithForCurrentUserRoles();
+                },
+                "ajax": {
+                    "url": $(dataTableId).data("url"),
+                    "type": "POST",
+                    "datatype": "json"
+                },
+                "columns": columns
+            });
+
+            window[referenceName].on('draw.dt', function () {
+                Users.loadDataTableWithForCurrentUserRoles();
+            });
         }
     }
 

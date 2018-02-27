@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -12,6 +13,7 @@ namespace AspergillosisEPR.Models.CaseReportForms
         public string Label { get; set; }
 
         public CaseReportFormFieldType CaseReportFormFieldType { get; set; }
-
+        [NotMapped]
+        public List<int> SelectedOptionsIds { get; set; }
     }
 }

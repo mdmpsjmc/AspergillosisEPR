@@ -10,6 +10,8 @@ using Microsoft.EntityFrameworkCore;
 using AspergillosisEPR.Models;
 using System.Collections;
 using System.Linq.Dynamic;
+using AspergillosisEPR.Lib.CaseReportForms;
+
 namespace AspergillosisEPR.Controllers.DataTables
 {
     public class DataTableCaseReportFormsController : DataTablesController
