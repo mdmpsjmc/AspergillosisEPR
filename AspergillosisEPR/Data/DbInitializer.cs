@@ -111,7 +111,7 @@ namespace AspergillosisEPR.Data
             context.SaveChanges();
         }
 
-        public static async void CreateDbImportTypes(AspergillosisContext context)
+        public static void CreateDbImportTypes(AspergillosisContext context)
         {
             if (context.DBImportTypes.Any())
             {
@@ -129,10 +129,10 @@ namespace AspergillosisEPR.Data
             {
                 context.Add(dbImportType);
             }
-            await context.SaveChangesAsync();
+             context.SaveChanges();
         }
 
-        public static async void AddIgTypes(AspergillosisContext context)
+        public static void AddIgTypes(AspergillosisContext context)
         {
             if (context.ImmunoglobulinTypes.Any())
             {
@@ -152,7 +152,7 @@ namespace AspergillosisEPR.Data
             {
                 context.Add(ig);
             }
-            await context.SaveChangesAsync();
+             context.SaveChanges();
         }
 
         

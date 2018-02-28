@@ -8,7 +8,7 @@ namespace AspergillosisEPR.Data
 {
     public class RadiologyDataInitializer
     {
-        public static async void AddRadiologyModels(AspergillosisContext context)
+        public static  void AddRadiologyModels(AspergillosisContext context)
         {
             if (context.Findings.Any())
             {
@@ -107,7 +107,7 @@ namespace AspergillosisEPR.Data
                 context.Add(rt);
             }
 
-            await context.SaveChangesAsync();
+             context.SaveChanges();
         }
     }
 }
