@@ -21,6 +21,7 @@ namespace AspergillosisEPR.Controllers
             _context = context;
         }
 
+        [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
         public async Task<ActionResult> Sgrq(int patientId)
         {          
             var patient = await _context.Patients                                
@@ -33,6 +34,7 @@ namespace AspergillosisEPR.Controllers
             return Json(chartData);
         }
 
+        [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
         public async Task<ActionResult> Immunology(int patientId)
         {
             var patient = await _context.Patients

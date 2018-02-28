@@ -1,1 +1,2 @@
-﻿@Html.DropDownList("CaseReportFormField[" + (string)ViewBag.Index + "].SectionOptions", (SelectList)ViewBag.SectionOptions, new { @multiple = "multiple" })
+﻿<label>Select available dropdown options</label>
+@Html.DropDownList("CaseReportFormField[" + (string)ViewBag.Index + "].SectionOptions", (SelectList)ViewBag.SectionOptions, new { @multiple = "multiple" })

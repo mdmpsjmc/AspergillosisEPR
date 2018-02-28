@@ -18,6 +18,7 @@ namespace AspergillosisEPR.Lib.Importers.Implementations
                                 string fileExtension, AspergillosisContext context) : base(stream, file, fileExtension, context)
 
         {
+           
         }
 
         public static Hashtable HeadersDictionary()

@@ -101,7 +101,7 @@ namespace AspergillosisEPR.Lib.Importers
                         var identifierValue = row.Cells[identifierIndex].ToString().Trim();
                         if (!string.IsNullOrEmpty(identifierValue))
                         {
-                            var dbPatient = FindDbPatientByRM2Number(identifierValue);
+                            var dbPatient = FindDbPatientByRM2Number(identifierValue.Replace("RM2",String.Empty));
                             if (dbPatient != null)
                             {
                                 patient = dbPatient;

@@ -8,7 +8,7 @@ namespace AspergillosisEPR.Data
 {
     public class CaseReportFormsDataInitializer
     {
-        public static async void AddCaseReportFormsModels(AspergillosisContext context)
+        public static  void AddCaseReportFormsModels(AspergillosisContext context)
         {
             if (context.CaseReportFormFieldTypes.Any())
             {
@@ -20,7 +20,7 @@ namespace AspergillosisEPR.Data
             AddCaseResultFormDefaultSections(context);
             AddCaseResultFormDefaultCategories(context);
 
-            await context.SaveChangesAsync();
+             context.SaveChanges();
         }
 
         private static void AddCaseResultFormDefaultCategories(AspergillosisContext context)
