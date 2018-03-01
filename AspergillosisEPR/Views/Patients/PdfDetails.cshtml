@@ -26,7 +26,7 @@
         </div>
         @Html.Partial("/Views/Patients/Details/STGQuestionnaire.cshtml")
 }
-@if (Model.ShowIg)
+@if (Model.ShowIg && Model.IgCharts != null)
 {       
      <h2>Immunoglobuline Levels</h2>
      <div id="ig-charts" style="width: 1000px; height: @(300*Model.IgCharts.Count)px; margin-bottom: 20px">

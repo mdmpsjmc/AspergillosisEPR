@@ -81,33 +81,33 @@ namespace AspergillosisEPR.Lib.Importers.Implementations
 
         private PatientSTGQuestionnaire BuildPatientSTGQuestionnaire(Patient patient, IDictionary record)
         {
-            var stgQuestionnaire = new PatientSTGQuestionnaire();
-            stgQuestionnaire.PatientId = patient.ID;
-            stgQuestionnaire.SymptomScore = decimal.Parse((string) record[SYMPTOM_SCORE]);
-            stgQuestionnaire.ImpactScore = decimal.Parse((string) record[IMPACT_SCORE]);
-            stgQuestionnaire.ActivityScore = decimal.Parse((string) record[ACTIVITY_SCORE]);
-            stgQuestionnaire.TotalScore = decimal.Parse((string) record[TOTAL_SCORE]);
+            var sgrquestionare = new PatientSTGQuestionnaire();
+            sgrquestionare.PatientId = patient.ID;
+            sgrquestionare.SymptomScore = decimal.Parse((string) record[SYMPTOM_SCORE]);
+            sgrquestionare.ImpactScore = decimal.Parse((string) record[IMPACT_SCORE]);
+            sgrquestionare.ActivityScore = decimal.Parse((string) record[ACTIVITY_SCORE]);
+            sgrquestionare.TotalScore = decimal.Parse((string) record[TOTAL_SCORE]);
             string dateTaken = (string)record[DATE_TAKEN];
-            if (patient.RM2Number.Equals("4331330"))
-            {
-                Console.WriteLine(dateTaken);
-            }
             try
             {
-                stgQuestionnaire.DateTaken = DateTime.ParseExact(dateTaken, "yyyy-MM-dd", CultureInfo.InvariantCulture);
+                sgrquestionare.DateTaken = DateTime.ParseExact(dateTaken, "yyyy-MM-dd", CultureInfo.InvariantCulture);
             } catch (FormatException)
             {
                 try
                 {
-                    stgQuestionnaire.DateTaken = Convert.ToDateTime(dateTaken);
+                    sgrquestionare.DateTaken = Convert.ToDateTime(dateTaken);
                 } catch (FormatException)
                 {
                     Console.WriteLine(dateTaken);
                 }
                 
-            }           
-            if (stgQuestionnaire.IsValid()) Imported.Add(stgQuestionnaire);
-            return stgQuestionnaire;
+            }
+            _context.Entry(patient).Collection(p => p.STGQuestionnaires).Load();
+            var dates = patient.STGQuestionnaires.Select(sgrq => sgrq.DateTaken.Date).ToList();
+            var existingDbDates = dates.FindAll(d => d.Date == sgrquestionare.DateTaken.Date);
+            if (existingDbDates.Count > 0) return sgrquestionare;
+            if (sgrquestionare.IsValid()) Imported.Add(sgrquestionare);
+            return sgrquestionare;
         }
 
         private Patient GetPatientByRM2Number(string rm2Nmber)

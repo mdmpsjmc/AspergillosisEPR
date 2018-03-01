@@ -18,7 +18,7 @@ namespace AspergillosisEPR.Data
             {
             new Patient{FirstName="Carson",LastName="Alexander",DOB=DateTime.Parse("2005-09-01"),Gender="male", RM2Number="1234576RD"},
             new Patient{FirstName="Meredith",LastName="Alonso",DOB=DateTime.Parse("2002-09-01"), Gender="male", RM2Number="3454576RD"},
-            new Patient { FirstName = "Arturo", LastName = "Anand", DOB = DateTime.Parse("2003-09-01"), Gender = "male" , RM2Number = "AD23445"},
+            new Patient{FirstName = "Arturo", LastName = "Anand", DOB = DateTime.Parse("2003-09-01"), Gender = "male" , RM2Number = "AD23445"},
             new Patient{FirstName="Gytis",LastName="Barzdukas",DOB=DateTime.Parse("2002-09-01"), Gender="female",RM2Number="AD5467676"},
             new Patient{FirstName="Yan",LastName="Li",DOB=DateTime.Parse("2002-09-01"), Gender="male",RM2Number="VVV333355"},
             new Patient{FirstName="Peggy",LastName="Justice",DOB=DateTime.Parse("2001-09-01"), Gender="female",RM2Number="ASH34578" },
