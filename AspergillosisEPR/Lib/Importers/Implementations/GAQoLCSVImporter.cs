@@ -17,6 +17,8 @@ namespace AspergillosisEPR.Lib.Importers.Implementations
     {
         private static string RM2NUMBER = "Field4";
         private static string DATE_TAKEN = "Field6";
+        private static string WEIGHT = "Field8";
+        private static string HEIGHT = "Field10";
         private static string SYMPTOM_SCORE = "Field119";
         private static string IMPACT_SCORE = "Field120";
         private static string ACTIVITY_SCORE = "Field121";
@@ -54,7 +56,8 @@ namespace AspergillosisEPR.Lib.Importers.Implementations
                     var rm2Number = GetRM2Number(record);
                     var patient = GetPatientByRM2Number(rm2Number);
                     if (patient == null) continue;
-                    BuildPatientSTGQuestionnaire(patient, record);
+                    var sgrquestionnaire = BuildPatientSTGQuestionnaire(patient, record);
+                    BuildPatientMeasurement(patient, sgrquestionnaire.DateTaken, record);
                 }
             }
             catch (Exception ex)
@@ -106,8 +109,33 @@ namespace AspergillosisEPR.Lib.Importers.Implementations
             var dates = patient.STGQuestionnaires.Select(sgrq => sgrq.DateTaken.Date).ToList();
             var existingDbDates = dates.FindAll(d => d.Date == sgrquestionare.DateTaken.Date);
             if (existingDbDates.Count > 0) return sgrquestionare;
-            if (sgrquestionare.IsValid()) Imported.Add(sgrquestionare);
+            if (sgrquestionare.IsValid())
+            {
+                Imported.Add(sgrquestionare);
+            }
             return sgrquestionare;
+        }
+
+        private void BuildPatientMeasurement(Patient patient, DateTime dateTaken, IDictionary record)
+        {
+            string csvHeight = (string)record[HEIGHT];
+            string csvWeight = (string)record[WEIGHT];
+            if (!string.IsNullOrEmpty(csvHeight) || !string.IsNullOrEmpty(csvHeight))
+            {
+                decimal height, weight;
+                decimal.TryParse(csvHeight, out height);
+                decimal.TryParse(csvWeight, out weight);
+                if (height != 0 || weight != 0)
+                {
+                    var measurement = new PatientMeasurement();
+                    measurement.Weight = weight;
+                    measurement.Height = height;
+                    measurement.PatientId = patient.ID;
+                    measurement.DateTaken = dateTaken;
+                    _context.PatientMeasurements.Add(measurement);
+                }               
+            }
+          
         }
 
         private Patient GetPatientByRM2Number(string rm2Nmber)
