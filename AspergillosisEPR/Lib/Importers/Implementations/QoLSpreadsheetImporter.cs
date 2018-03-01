@@ -52,7 +52,7 @@ namespace AspergillosisEPR.Lib.Importers.Implementations
             {
                 _patientAliveStatus = _context.PatientStatuses.Where(s => s.Name == "Active").FirstOrDefault().ID;
                 _patientDeceasedStatus = _context.PatientStatuses.Where(s => s.Name == "Deceased").FirstOrDefault().ID;
-                _cpaDiagnosis = _context.DiagnosisTypes.Where(dt => dt.Name == "Chronic pulmonary aspergillosis").SingleOrDefault();
+                _cpaDiagnosis = _context.DiagnosisTypes.Where(dt => dt.Name.Contains("Chronic pulmonary aspergillosis")).SingleOrDefault();
                 _primaryDiagnosisCat = _context.DiagnosisCategories.Where(dc => dc.CategoryName == "Primary").SingleOrDefault();
 
                 var importedPatient = ReadCellsToPatient(patient, row, cellCount);
@@ -66,10 +66,11 @@ namespace AspergillosisEPR.Lib.Importers.Implementations
         private void AddPatientDiagnosis(Patient patient)
         {
             var patientDiagnosis = new PatientDiagnosis();
+            patient.PatientDiagnoses = new List<PatientDiagnosis>();
             patientDiagnosis.DiagnosisCategoryId = _primaryDiagnosisCat.ID;
             patientDiagnosis.DiagnosisTypeId = _cpaDiagnosis.ID;
             patientDiagnosis.PatientId = patient.ID;
-            _context.PatientDiagnoses.Add(patientDiagnosis);
+            patient.PatientDiagnoses.Add(patientDiagnosis);            
         }
 
         private Patient ReadCellsToPatient(Patient patient, IRow row, int cellCount)

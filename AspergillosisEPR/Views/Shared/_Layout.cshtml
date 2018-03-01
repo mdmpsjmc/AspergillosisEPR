@@ -43,5 +43,11 @@
     @{ await Html.RenderPartialAsync("_Scripts"); }
 
     @{ RenderSection("scripts", false); }
+    <script>
+        jQuery(function () {
+            Search.init();
+
+        })
+    </script>
 </body>
 </html>

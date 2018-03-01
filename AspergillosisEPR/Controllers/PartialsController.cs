@@ -115,7 +115,6 @@ namespace AspergillosisEPR.Controllers
             return PartialView();
         }
 
-        [Authorize(Roles = "Read Role")]
         public IActionResult SearchPartial()
         {
             ViewBag.Index = (string)Request.Query["index"];
@@ -127,7 +126,6 @@ namespace AspergillosisEPR.Controllers
             return PartialView(searchVm);
         }
 
-        [Authorize(Roles = "Read Role")]
         public IActionResult CriteriaPartial()
         {
             string klassName = Request.Query["searchClass"];
@@ -140,7 +138,6 @@ namespace AspergillosisEPR.Controllers
             return PartialView(searchVm);
         }
 
-        [Authorize(Roles = "Read Role")]
         public IActionResult SearchCriteria()
         {
             var searchVm = new PatientSearchViewModel();
@@ -149,7 +146,6 @@ namespace AspergillosisEPR.Controllers
             return PartialView(searchVm);
         }
 
-        [Authorize(Roles ="Read Role")]
         public IActionResult SearchSelectPartial()
         {
             string klass = Request.Query["klass"];

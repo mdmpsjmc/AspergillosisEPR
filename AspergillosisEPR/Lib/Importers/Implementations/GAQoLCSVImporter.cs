@@ -59,6 +59,7 @@ namespace AspergillosisEPR.Lib.Importers.Implementations
                     var sgrquestionnaire = BuildPatientSTGQuestionnaire(patient, record);
                     BuildPatientMeasurement(patient, sgrquestionnaire.DateTaken, record);
                 }
+                _context.SaveChanges();
             }
             catch (Exception ex)
             {

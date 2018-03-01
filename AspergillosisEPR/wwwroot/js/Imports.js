@@ -4,10 +4,10 @@
         $('#btn-import-data').on('click', function (e) {
             e.preventDefault();
             $('#upload-response').html("");
-            var fileExtension = ['xls', 'xlsx', 'csv'];
+            var fileExtension = ['xls', 'xlsx', 'csv', 'pdf'];
             var filename = $('#fileToImport').val();
             if (filename.length === 0) {
-                alert("Please select a file.");
+                alert("Please select a valid file.");
                 return false;
             }
             else {

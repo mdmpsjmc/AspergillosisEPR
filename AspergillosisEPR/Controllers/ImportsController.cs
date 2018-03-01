@@ -69,20 +69,28 @@ namespace AspergillosisEPR.Controllers
                 PatientsCount = _importer.Imported.Count()
             };
             _context.Add(dbImport);
-            SavePatientsInDatabase();
+            SaveItemsInDatabase();
             await _context.SaveChangesAsync();
             return Json(new { result = _importer.Imported.Count() });
         }
 
-        private void SavePatientsInDatabase()
+        private void SaveItemsInDatabase()
         {
             foreach (var record in _importer.Imported)
             {
-                if (record.ID != 0)
+                if ((record.ID != 0) && (record.ID > 0))
                 {
-                    _context.Patients.Attach(record);
-                    _context.Entry(record).State = EntityState.Modified;
-                } else
+                    _context.Attach(record);
+                    if (record.GetType() != typeof(PatientImmunoglobulin))
+                    {
+                       _context.Entry(record).State = EntityState.Modified;
+                    }
+                }
+                else if (record.ID < 0)
+                {
+                    _context.Add(record);
+                }
+                else
                 {
                     _context.Add(record);
                 }                
