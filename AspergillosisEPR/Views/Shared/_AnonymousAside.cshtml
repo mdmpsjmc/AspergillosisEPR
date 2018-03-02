@@ -1,0 +1,25 @@
+﻿<aside id="left-panel">
+    @addTagHelper *, AspergillosisEPR
+    @{ await Html.RenderPartialAsync("_CurrentUser"); }
+    <nav>
+        <ul>
+            <li is-active-route asp-controller="AnonymousPatients" asp-action="Index">
+                <a href="@Url.Action("index", "AnonymousPatients")" title="Patients">
+
+                    <i class="fa fa-lg fa-fw fa-home"></i>
+                    <span class="menu-item-parent">Patients</span>
+                </a>
+            </li>
+            <li is-active-route asp-controller="AnonymousUsers" asp-action="Change">
+                <a href="@Url.Action("index", "AnonymousUsers")" title="Change Password">
+
+                    <i class="fa fa-lg fa-fw fa-lock"></i>
+                    <span class="menu-item-parent">Change Password</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <span class="minifyme" data-action="minifyMenu">
+        <i class="fa fa-arrow-circle-left hit"></i>
+    </span>
+</aside>

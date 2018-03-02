@@ -14,6 +14,8 @@ namespace AspergillosisEPR.Controllers
     {
         public ActionResult Index()
         {
+            var isAnon = User.IsInRole("Anonymous Role") && !User.IsInRole("Read Role");
+            if (isAnon) return RedirectToAction("Index", "Patients", new { Area = "Anonymous" });
             return View();
         }
     }

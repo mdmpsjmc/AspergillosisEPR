@@ -15,7 +15,14 @@
     </header>
 @if (User.Identity.IsAuthenticated)
 {
-    await Html.RenderPartialAsync("_Aside"); 
+    if (User.IsInRole("Anonymous Role") && !User.IsInRole("Read Role"))
+    {
+        await Html.RenderPartialAsync("_AnonymousAside");
+    }
+    else
+    {
+        await Html.RenderPartialAsync("_Aside");
+    }
 }
 <div id="main" role="main">      
 @if (User.Identity.IsAuthenticated)

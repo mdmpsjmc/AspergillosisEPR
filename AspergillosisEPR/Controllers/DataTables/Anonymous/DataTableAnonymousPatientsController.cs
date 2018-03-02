@@ -1,30 +1,25 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using AspergillosisEPR.Data;
-using System.Linq.Dynamic.Core;
-using AspergillosisEPR.Models;
-using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
-using AspergillosisEPR.Models.PatientViewModels;
+using AspergillosisEPR.Models.PatientViewModels.Anonymous;
 using Microsoft.AspNetCore.Authorization;
-using AspergillosisEPR.Helpers;
 
-namespace AspergillosisEPR.Controllers.DataTables
+namespace AspergillosisEPR.Controllers.DataTables.Anonymous
 {
-    [Authorize]
-    public class DataTablePatientsController : DataTablesController
+    public class DataTableAnonymousPatientsController : DataTablePatientsController
     {
-        protected new AspergillosisContext _aspergillosisContext;
-
-        public DataTablePatientsController(AspergillosisContext context)
+        public DataTableAnonymousPatientsController(AspergillosisContext context) : base(context)
         {
             _aspergillosisContext = context;
             _list = new List<dynamic>();
         }
 
-        [Authorize(Roles = "Read Role, Admin Role")]
-        virtual public IActionResult Load()
+        [Authorize(Roles ="Anonymous Role")]
+        override public IActionResult Load()
         {
             Action queriesAction = () =>
             {
@@ -54,7 +49,7 @@ namespace AspergillosisEPR.Controllers.DataTables
 
         private void ColumnSearch()
         {
-            for (int cursor = 0; cursor < 6; cursor++)
+            for (int cursor = 0; cursor < 2; cursor++)
             {
                 string partialSearch = Request.Form["columns[" + cursor.ToString() + "][search][value]"];
                 if (partialSearch != null && partialSearch != "")
@@ -62,55 +57,27 @@ namespace AspergillosisEPR.Controllers.DataTables
                     switch (cursor)
                     {
                         case 0:
-                            _list = _list.Where(p => p.RM2Number.Contains(partialSearch)).ToList();
+                            _list = _list.Where(p => p.ID.ToString().Contains(partialSearch)).ToList();
                             break;
                         case 1:
                             _list = _list.Where(p => p.PrimaryDiagnosis.Contains(partialSearch)).ToList();
-                            break;
-                        case 2:
-                            _list = _list.Where(p => p.FirstName.Contains(partialSearch)).ToList();
-                            break;
-                        case 3:
-                            _list = _list.Where(p => p.LastName.Contains(partialSearch)).ToList();
-                            break;
-                        case 4:
-                            _list = _list.Where(p => p.Gender.ToString().ToLower() == partialSearch.ToLower()).ToList();
-                            break;
-                        case 5:
-                            _list = _list.Where(p => DateTimeOffset.FromUnixTimeSeconds(long.Parse(p.DOB.ToString())).UtcDateTime.ToString().Contains(partialSearch)).ToList();
-                            break;
+                            break;                       
                     }
                 }
             }
         }
 
-        protected void AppendDiagnosesToPatients(List<PatientDiagnosis> patientDiagnoses)
-        {
-            foreach (var patient in _list)
-            {
-                var diagnosis = patientDiagnoses.Where(pd => pd.PatientId == patient.ID).
-                                FirstOrDefault();
-
-                patient.PrimaryDiagnosis = diagnosis == null ? "" : diagnosis.DiagnosisType.Name;
-            }
-        }
-
-        private IQueryable<PatientDataTableViewModel> QueryPatientData()
+        private IQueryable<AnonymousPatientDataTableViewModel> QueryPatientData()
         {
             return (from patient in _aspergillosisContext.Patients
                     join patientDiagnosis in _aspergillosisContext.PatientDiagnoses on patient.ID equals patientDiagnosis.PatientId into diagnoses
                     from patientDiagnosis in diagnoses.DefaultIfEmpty()
                     join diagnosesTypes in _aspergillosisContext.DiagnosisTypes on patientDiagnosis.DiagnosisTypeId equals diagnosesTypes.ID
                     into patientsWithDiagnoses
-                    select new PatientDataTableViewModel()
+                    select new AnonymousPatientDataTableViewModel()
                     {
-                        ID = patient.ID,
-                        RM2Number = patient.RM2Number,
-                        PrimaryDiagnosis = "",
-                        LastName = patient.LastName,
-                        FirstName = patient.FirstName,
-                        Gender = patient.Gender,
-                        DOB = DateHelper.DateTimeToUnixTimestamp(patient.DOB)
+                        ID = patient.ID,                        
+                        PrimaryDiagnosis = ""
                     });
         }
     }
