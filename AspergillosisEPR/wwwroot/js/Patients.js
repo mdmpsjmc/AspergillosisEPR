@@ -191,10 +191,10 @@
                 $("div#modal-container").html(responseHtml);
                 $("div#details-modal").modal("show");
                 var patientId = url.split("/")[3];
-                $.getJSON("/PatientCharts/SGRQ?patientId=" + patientId, function (response) {
+                $.getJSON("/Patients/" + patientId + "/Charts/SGRQ", function (response) {
                     Charts.sgrqChartFromResponse(response);
                 });
-                $.getJSON("/PatientCharts/Immunology?patientId=" + patientId, function (response) {
+                $.getJSON("/Patients/" + patientId + "/Charts/Immunology", function (response) {
                     $("div#ig-charts").html(""); //clears hidden charts div. 
                     Charts.igChartsFromResponse(response, true);
                 });

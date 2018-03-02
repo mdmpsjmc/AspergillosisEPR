@@ -33,26 +33,35 @@
                         <li>
                             <a href="#radiology" data-toggle="tab"><i class="fa fa-fw fa-lg fa-stethoscope"></i> Radiology</a>
                         </li>
+                        <li>
+                            <a href="#measurements" data-toggle="tab"><i class="fa fa-fw fa-lg fa-dashboard"></i> Weight</a>
+                        </li>
                     </ul>
 
                     <div id="details-tab-content" class="tab-content padding-10">
+                        <div class="tab-pane fade ig" id="measurements">
+                            @Html.Partial("/Views/Patients/Details/Measurements.cshtml")
+                        </div>
                         <div class="tab-pane fade in active details" id="details">
                            @Html.Partial("/Views/Patients/Details/Details.cshtml")
                         </div>
-                        <div class="tab-pane fade details" id="diagnosis">
+                        <div class="tab-pane fade diagnosis" id="diagnosis">
                            @Html.Partial("/Views/Patients/Details/Diagnosis.cshtml")
                         </div>
-                        <div class="tab-pane fade details" id="drugs">
+                        <div class="tab-pane fade drugs" id="drugs">
                            @Html.Partial("/Views/Patients/Details/Drugs.cshtml")
                         </div>
-                        <div class="tab-pane fade details" id="stg">     
+                        <div class="tab-pane fade stg" id="stg">     
                            @Html.Partial("/Views/Patients/Details/STGQuestionnaire.cshtml")
                         </div>
                         <div class="tab-pane fade ig" id="ig">
                             @Html.Partial("/Views/Patients/Details/Ig.cshtml")
                         </div>
-                        <div class="tab-pane fade ig" id="radiology">
+                        <div class="tab-pane fade radiology" id="radiology">
                             @Html.Partial("/Views/Patients/Details/Radiology.cshtml")
+                        </div>
+                        <div class="tab-pane fade radiology" id="measurements">
+                            @Html.Partial("/Views/Patients/Details/Measurements.cshtml")
                         </div>
                     </div>
 
@@ -76,6 +85,8 @@
 <img src="" class="chart-image hide" id="sgrq-chart-image" />
 <canvas id="sgrq-chart-content" width="800" height="400" class="hide"></canvas>
 <div id="ig-charts"></div>
-@Html.Partial("/Views/PatientCharts/_SGRQ.cshtml")
-@Html.Partial("/Views/PatientCharts/_Ig.cshtml")
+<div id="measurement-content-popup"></div>
+@Html.Partial("/Views/Patients/Charts/_SGRQ.cshtml")
+@Html.Partial("/Views/Patients/Charts/_Ig.cshtml")
+@Html.Partial("/Views/Patients/Charts/_Measurements.cshtml")
 @Html.Partial("/Views/Patients/Details/Export/_Options.cshtml")

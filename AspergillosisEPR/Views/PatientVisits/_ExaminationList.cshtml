@@ -24,7 +24,14 @@
                                     <td></td>
                                     <td>@PatientVisitsDataTableViewModel.ExaminationNameFromClass(examination.Discriminator)</td>
                                     <td>@measurement.AsDetailedString()</td>
-                                    <td></td>
+                                    <td>@if ((bool)ViewBag.ShowButtons)
+                                    {
+                                        <div class="col-sm-12" id="immunology-chart">
+                                            <a href="@Url.Action("Measurements", "Charts", new { patientId= measurement.PatientVisit.Patient.ID})" data-id="@(measurement.PatientVisit.Patient.ID)" class="pdf-hide btn-hide btn-xs disable-default btn btn-primary show-measurement-chart" style="padding: 5px">
+                                                <i class="fa fa-line-chart"></i>
+                                            </a>
+                                        </div>
+                                    }      </td>
                                 </tr>
                                 break;
                             case "SGRQExamination":
@@ -37,7 +44,7 @@
                                         @if ((bool) ViewBag.ShowButtons)
                                         {
                                         <div class="col-sm-12" id="sgrq-chart">
-                                            <a href="@Url.Action("SGRQ", "PatientCharts", new { patientId = sgrq.PatientVisit.Patient.ID })" data-id="@(sgrq.PatientVisit.Patient.ID)" class="pdf-hide btn-hide btn-xs disable-default btn btn-primary show-sgrq-chart" style="padding: 5px">
+                                            <a href="@Url.Action("SGRQ", "Charts", new { patientId = sgrq.PatientVisit.Patient.ID })" data-id="@(sgrq.PatientVisit.Patient.ID)" class="pdf-hide btn-hide btn-xs disable-default btn btn-primary show-sgrq-chart" style="padding: 5px">
                                                 <i class="fa fa-line-chart"></i>
                                             </a>
                                         </div>
@@ -55,7 +62,7 @@
                                         @if ((bool)ViewBag.ShowButtons)
                                         {
                                             <div class="col-sm-12" id="immunology-chart">
-                                                <a href="@Url.Action("Immunology", "PatientCharts", new { patientId= ig.PatientVisit.Patient.ID})" data-id="@(ig.PatientVisit.Patient.ID)" class="pdf-hide btn-hide btn-xs disable-default btn btn-primary show-immunology-chart" style="padding: 5px">
+                                                <a href="@Url.Action("Immunology", "Charts", new { patientId= ig.PatientVisit.Patient.ID})" data-id="@(ig.PatientVisit.Patient.ID)" class="pdf-hide btn-hide btn-xs disable-default btn btn-primary show-immunology-chart" style="padding: 5px">
                                                     <i class="fa fa-line-chart"></i>
                                                 </a>
                                             </div>

@@ -231,7 +231,7 @@
                     };
                 }
             },
-            placeholder: 'Search for a patient by RM2Number or Name',
+            placeholder: 'Search for a patient by identifier or Name',
             escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
             minimumInputLength: 2,
             dropdownParent: $("div#new-patient-visit-modal"),
@@ -351,7 +351,7 @@
                $("div#modal-container").html(htmlResponse);
                $("div#visit-details-modal").modal("show");
                
-               $.getJSON("/PatientCharts/SGRQ?patientId=" + patientId, function (response) {
+               $.getJSON("/Patients/Charts/" + patientId + "/SGRQ", function (response) {
                    Charts.sgrqChartFromResponse(response);
                });
            });

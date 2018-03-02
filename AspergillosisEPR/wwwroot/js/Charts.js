@@ -34,7 +34,50 @@
             case "ig":
                 igChartsFromResponse(response, chartForPdf);
                 break;
+            case "measurement":
+                measurementChartFromResponse(response);
+                break;
         }
+    }
+
+    var measurementChartFromResponse = function (response) {
+        var weight = [], height = [];
+        var labels = [];
+
+        $.each(response, function (index, chartItem) {
+            var stringDate = moment.unix(chartItem.dateTaken).format("ll");
+            weight.push({ x: stringDate, y: chartItem.weight });
+            labels.push(stringDate);
+        });
+        var chartData = {
+            labels: labels,
+            datasets: [
+                {
+                    label: "Weight",
+                    backgroundColor: "rgba(255,99,132,0.2)",
+                    borderColor: "rgba(255,99,132,1)",
+                    borderWidth: 1,
+                    hoverBackgroundColor: "rgba(255,99,132,0.4)",
+                    hoverBorderColor: "rgba(255,99,132,1)",
+                    data: weight
+                }
+            ]
+        };
+
+        var options = {
+            animation: {
+                duration: 2000,
+                onComplete: function (animation) {
+                   
+                }
+            },
+
+        };
+        var stackedLine = new Chart(document.getElementById("measurement-chart-canvas"), {
+            type: 'line',
+            data: chartData,
+            options: options
+        });
     }
 
     var igChartsFromResponse = function (response, chartForPdf) {
@@ -230,6 +273,7 @@
         init: function () {
             initializeChart("click.show-sgrq", "a.show-sgrq-chart", "div#sgrq-chart-", "sgrq");
             initializeChart("click.show-ig-chart", "a.show-immunology-chart", "div#ig-chart-", "ig", false);
+            initializeChart("click.show-measurement-chart", "a.show-measurement-chart", "div#measurement-chart-", "measurement", false);
         },
 
         sgrqChartFromResponse: function (response) {
@@ -238,9 +282,11 @@
 
         igChartsFromResponse: function (response, isFromPdf) {
             return chartFromResponse("ig", response, isFromPdf);
+        },
+
+        measurementChartFromResponse: function (response) {
+            return chartFromResponse("measurement", response, false);
         }
-
-
     }
 }();
 

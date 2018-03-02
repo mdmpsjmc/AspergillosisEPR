@@ -14,7 +14,7 @@ namespace AspergillosisEPR.Models.PatientViewModels
       public double DateTaken { get; set; }
       public string Value { get; set; }
 
-        public static async Task<Dictionary<string, List<PatientIgViewModel>>> BuildIgChartENtries(
+        public static async Task<Dictionary<string, List<PatientIgViewModel>>> BuildIgChartEntries(
             AspergillosisContext context,     
             List<IGrouping<int, PatientImmunoglobulin>> immunoglobulines)
         {

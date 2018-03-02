@@ -1,0 +1,43 @@
+﻿@model AspergillosisEPR.Models.PatientViewModels.PatientDetailsViewModel
+@if (Model.ShowButtons)
+{
+    <div class="col-sm-12" id="measurements-chart">
+        <a href="@Url.Action("Measurements", "Charts", new { patientId= Model.Patient.ID})" data-id="@(Model.Patient.ID)" class="pdf-hide btn-hide btn-lg disable-default btn btn-primary show-measurement-chart" style="padding: 5px; margin-bottom: 5px">
+            <i class="fa fa-line-chart"></i>&nbsp; Show Chart
+        </a>
+    </div>
+}
+@if (Model.PatientMeasurements != null && Model.PatientMeasurements.Any())
+{
+    <div class="col-sm-12">
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Date Taken</th>
+                    <th>Weight</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var measurement in Model.PatientMeasurements)
+                {
+                    <tr>
+                        <td>@(measurement.ID)</td>
+                        <td>@(measurement.DateTaken.ToString("dd/MM/yyyy"))</td>
+                        <td>@(measurement.Weight != 0 ? measurement.Weight.ToString() : "not measured")</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+else
+{
+    <div class="col-sm-12">
+        <div class="alert alert-info alert-block">
+            <h4 class="alert-heading">Info!</h4>
+            <i class="fa fa-info-circle"></i>
+            This patient does not currently have any database entries for weight
+        </div>
+    </div>
+}

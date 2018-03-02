@@ -11,16 +11,17 @@ using AspergillosisEPR.Helpers;
 using System.IO;
 using Microsoft.AspNetCore.NodeServices;
 
-namespace AspergillosisEPR.Controllers
+namespace AspergillosisEPR.Controllers.Patients
 {
-    public class PatientChartsController : Controller
+    [Route("patients/{patientId:int}/charts")]
+    public class ChartsController : PatientBaseController
     {
-        private readonly AspergillosisContext _context;    
-        public PatientChartsController(AspergillosisContext context)
+        public ChartsController(AspergillosisContext context) : base(context)
         {
             _context = context;
         }
 
+        [Route("SGRQ")]
         [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
         public async Task<ActionResult> Sgrq(int patientId)
         {          
@@ -33,7 +34,7 @@ namespace AspergillosisEPR.Controllers
             var chartData = PatientSGRQViewModel.Build(patient, questionariesList);
             return Json(chartData);
         }
-
+        [Route("Immunology")]
         [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
         public async Task<ActionResult> Immunology(int patientId)
         {
@@ -47,8 +48,27 @@ namespace AspergillosisEPR.Controllers
                                                                    GroupBy(ig => ig.ImmunoglobulinTypeId).
                                                                    Select(ig => ig).
                                                                    ToList();
-            Dictionary<string, List<PatientIgViewModel>> chartEntries = await PatientIgViewModel.BuildIgChartENtries(_context, immunoglobulines);
+            Dictionary<string, List<PatientIgViewModel>> chartEntries = await PatientIgViewModel
+                                                                                    .BuildIgChartEntries(_context, immunoglobulines);
             return Json(chartEntries);
-        }        
+        }
+
+        [Route("Measurements")]
+        [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
+        public async Task<ActionResult> Measurements(int patientId)
+        {
+            var patient = await _context.Patients
+                                .Include(p => p.PatientMeasurements)                                
+                                .AsNoTracking()
+                                .SingleOrDefaultAsync(m => m.ID == patientId);
+
+            var measurements = patient.PatientMeasurements.OrderByDescending(q => q.DateTaken)
+                                                          .ToList();
+
+            var viewModelChartData = PatientMeasurementsChartViewModel
+                                                    .Build(measurements, patient);
+
+            return Json(viewModelChartData);
+        }
     }
 }

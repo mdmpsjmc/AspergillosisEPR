@@ -45,8 +45,10 @@ namespace AspergillosisEPR.Models
         public ICollection<PatientSTGQuestionnaire> STGQuestionnaires { get; set; }
         public ICollection<PatientImmunoglobulin> PatientImmunoglobulines { get; set; }
         public ICollection<PatientRadiologyFinding> PatientRadiologyFindings { get; set; }
+        public ICollection<PatientMeasurement> PatientMeasurements { get; set; }
 
         public PatientStatus PatientStatus { get; set; }
+       
 
         [Display(Name = "Full Name")]
         public string FullName

@@ -97,7 +97,9 @@ body.smart-style-6 #logo-group > span#logo:before {
     margin: 0px !important;
 }
 
-div#diagnosis {
+div#diagnosis,
+div#stg,
+div#measurements {
     max-height: 600px;
     overflow-y: scroll;
 }
@@ -243,7 +245,8 @@ div#immunology-chart {
 }
 
 div.sgrq-modal .modal-dialog,
-div.ig-chart-modal .modal-dialog{
+div.ig-chart-modal .modal-dialog,
+div.measurement-chart-modal .modal-dialog {
     width: 900px;
     height: 600px;
     padding: 0;
