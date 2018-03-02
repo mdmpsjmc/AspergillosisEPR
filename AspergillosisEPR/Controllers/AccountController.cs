@@ -131,10 +131,10 @@ namespace AspergillosisEPR.Controllers
                     if (result.Succeeded)
                     {
                         var selectedRoles = Request.Form["Roles"].AsEnumerable();
-                        string readAccessRole = "Read Role";
-                        if (!selectedRoles.Contains(readAccessRole))
+                        string anonRole = "Anonymous Role";
+                        if (!selectedRoles.Contains(anonRole))
                         {
-                            selectedRoles = selectedRoles.Append(readAccessRole);
+                            selectedRoles = selectedRoles.Append(anonRole);
                         }
                         await _userManager.AddToRolesAsync(user, selectedRoles);     
                         audit.Comment("Created user " + user.UserName);

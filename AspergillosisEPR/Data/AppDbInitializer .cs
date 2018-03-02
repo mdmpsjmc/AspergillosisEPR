@@ -11,10 +11,9 @@ namespace AspergillosisEPR.Data
     public static class AppDbInitializer
     {
 
-        public static void Iniitalize(ApplicationDbContext context)
+        public static void Initialize(ApplicationDbContext context)
         {
             context.Database.EnsureCreated();
-
 
         }
 

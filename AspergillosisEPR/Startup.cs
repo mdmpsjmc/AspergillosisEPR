@@ -110,6 +110,7 @@ namespace AspergillosisEPR
             });
 
             await CreateRoles(app);
+            await CreateAnonymousRole(app);
         }
 
         private async Task CreateRoles(IApplicationBuilder app)
@@ -159,6 +160,27 @@ namespace AspergillosisEPR
                 }
             }
         }
+
+        private async Task CreateAnonymousRole(IApplicationBuilder app)
+        {
+            using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
+            {
+                var RoleManager = serviceScope.ServiceProvider.GetService<RoleManager<ApplicationRole>>();
+                var role = new ApplicationRole
+                {
+                    Name = "Anonymous Role",
+                    NormalizedName = "Anonymous Role".ToUpper(),
+                    CreatedAt = DateTime.Now,
+                    Description = "User with this role can read information in database in an anonymised way where no personal information is revealed."
+                };
+                var roleExist = await RoleManager.RoleExistsAsync(role.Name);
+                if (!roleExist)
+                {
+                   IdentityResult roleResult = await RoleManager.CreateAsync(role);
+                }                
+            }
+        }
+
 
         internal class CustomAssemblyLoadContext : AssemblyLoadContext
         {

@@ -28,7 +28,7 @@ namespace AspergillosisEPR
                     QoLExcelImportType.Seed(context);
                     IGgEPRImportTypeSeed.Seed(context);
                     var context2 = services.GetRequiredService<ApplicationDbContext>();
-                    AppDbInitializer.Iniitalize(context2);
+                    AppDbInitializer.Initialize(context2);
                 }
                 catch (Exception ex)
                 {

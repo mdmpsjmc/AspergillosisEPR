@@ -75,9 +75,9 @@ namespace AspergillosisEPR.Controllers
                 {
                     await _userManager.UpdateAsync(userToUpdate);
                     var uiSelectedRoles = roles;
-                    if (uiSelectedRoles.Count() == 0 || !uiSelectedRoles.Contains("Read Role"))
+                    if (uiSelectedRoles.Count() == 0 || !uiSelectedRoles.Contains("Anonymous Role"))
                     {
-                        uiSelectedRoles.Add("Read Role");
+                        uiSelectedRoles.Add("Anonymous Role");
                     }
                     var currentRoles = _userManager.GetRolesAsync(userToUpdate).Result;
                     var toDeleteRoles = currentRoles.Except(uiSelectedRoles);
