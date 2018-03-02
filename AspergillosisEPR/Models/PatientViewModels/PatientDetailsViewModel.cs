@@ -28,6 +28,7 @@ namespace AspergillosisEPR.Models.PatientViewModels
         public bool ShowIg { get; set; }
         public bool ShowButtons { get; set; }
         public bool ShowRadiology { get; set; }
+        public bool ShowWeight { get; set; }
 
         public string SgrqImageChartFile { get; set; }
 
@@ -39,6 +40,7 @@ namespace AspergillosisEPR.Models.PatientViewModels
             ShowIg = true;
             ShowRadiology = true;
             ShowButtons = true;
+            ShowWeight = true;
         }
 
         public static PatientDetailsViewModel BuildPatientViewModel(AspergillosisContext context, Patient patient)

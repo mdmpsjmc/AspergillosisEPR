@@ -142,7 +142,7 @@ namespace AspergillosisEPR.Lib.Exporters
                         valueCell.SetCellValue(integerPropertyValue);
                         valueCell.SetCellType(CellType.Numeric);
                         break;
-                    case TypeCode.String:
+                    case TypeCode.String: 
                         var stringPropertyValue = property.GetValue(item)?.ToString();
                         valueCell.SetCellType(CellType.String);
                         valueCell.SetCellValue(stringPropertyValue);
@@ -150,6 +150,11 @@ namespace AspergillosisEPR.Lib.Exporters
                     case TypeCode.DateTime:
                         var datePropertyValue = Convert.ToDateTime(property.GetValue(item));
                         valueCell.SetCellValue(datePropertyValue.ToString("dd/MM/yyyy"));
+                        break;
+                    default:
+                        var propVal = property.GetValue(item)?.ToString();
+                        valueCell.SetCellType(CellType.String);
+                        valueCell.SetCellValue(propVal);
                         break;
                 }
             }           
@@ -216,6 +221,7 @@ namespace AspergillosisEPR.Lib.Exporters
             dictionary.Add("SGRQ", _patientDetailsVM.STGQuestionnaires.ToList<object>());
             dictionary.Add("Ig", _patientDetailsVM.PatientImmunoglobulines.OrderBy(pi => pi.DateTaken).ToList<object>());
             dictionary.Add("Radiology", _patientDetailsVM.PatientRadiologyFindings.ToList<object>());
+            dictionary.Add("Weight", _patientDetailsVM.PatientMeasurements.OrderByDescending(pi => pi.DateTaken).ToList<object>());
             return dictionary[tabName];
         }
 

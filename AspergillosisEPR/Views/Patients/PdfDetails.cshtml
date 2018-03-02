@@ -42,3 +42,9 @@
    <h2>Radiology Appearances</h2>
    @Html.Partial("/Views/Patients/Details/Radiology.cshtml")
 }
+
+@if (Model.ShowWeight)
+{
+    <h2>Patients Weight</h2>
+    @Html.Partial("/Views/Patients/Details/Measurements.cshtml")
+}
