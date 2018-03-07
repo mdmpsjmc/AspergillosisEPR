@@ -50,9 +50,9 @@
                 "processing": true,
                 "serverSide": true,
                 "filter": true,
-                "responsive": true,
+                "responsive": false,
                 "orderMulti": false,
-                "pageLength": 50,
+                "pageLength": 100,
                 "order": [[1, "asc"]],
                 "initComplete": function (settings, json) {
                     Users.loadDataTableWithForCurrentUserRoles();

@@ -18,7 +18,7 @@ namespace AspergillosisEPR.Controllers.DataTables.Anonymous
             _list = new List<dynamic>();
         }
 
-        new public IActionResult LoadPatients()
+        public IActionResult LoadPatients()
         {
             Action queriesAction = () =>
             {
@@ -40,29 +40,19 @@ namespace AspergillosisEPR.Controllers.DataTables.Anonymous
                                    .Select(a => a.FirstOrDefault())
                                    .ToList<dynamic>();
                 AppendDiagnosesToPatients(patientDiagnoses);
-                ColumnSearch();
+                Search();
                 Sorting();
             };
             return LoadData(queriesAction);
         }
 
-        private void ColumnSearch()
+        private void Search()
         {
-            for (int cursor = 0; cursor < 2; cursor++)
+            if (!string.IsNullOrEmpty(_searchValue))
             {
-                string partialSearch = Request.Form["columns[" + cursor.ToString() + "][search][value]"];
-                if (partialSearch != null && partialSearch != "")
-                {
-                    switch (cursor)
-                    {
-                        case 0:
-                            _list = _list.Where(p => p.ID.ToString().Contains(partialSearch)).ToList();
-                            break;
-                        case 1:
-                            _list = _list.Where(p => p.Initials().Contains(partialSearch)).ToList();
-                            break;                       
-                    }
-                }
+                _list = _list
+                        .Where(u => u.ID.ToString().Contains(_searchValue) 
+                                || u.Initials.Contains(_searchValue)).ToList();
             }
         }
 
