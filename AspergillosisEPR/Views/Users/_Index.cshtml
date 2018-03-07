@@ -1,0 +1,20 @@
+﻿<p>Manage users and roles</p>
+<hr class="simple">
+@Html.Partial("~/Views/Home/_Spinner.cshtml")
+<ul id="users-and-roles" class="nav nav-tabs bordered">
+    <li class="active">
+        <a href="#users" data-toggle="tab" aria-expanded="true"><i class="fa fa-lg fa-users"></i>&nbsp; Users</a>
+    </li>
+    <li>
+        <a href="ApplicationRoles/Index"  data-toggle="tabajax" data-target="#roles"><i class="fa fa-lg fa-briefcase"></i>&nbsp; Roles</a>
+    </li>   
+</ul>
+
+<div id="settings-content" class="tab-content padding-10">
+    <div class="tab-pane fade in active" id="users">
+        @Html.Partial("/Views/Users/_Users.cshtml")
+    </div>
+    <div class="tab-pane fade" id="roles" >
+       
+    </div>  
+</div>

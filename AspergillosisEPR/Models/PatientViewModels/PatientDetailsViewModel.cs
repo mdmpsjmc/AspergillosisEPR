@@ -29,11 +29,14 @@ namespace AspergillosisEPR.Models.PatientViewModels
         public bool ShowButtons { get; set; }
         public bool ShowRadiology { get; set; }
         public bool ShowWeight { get; set; }
+        public bool ShowDetails { get; set; }
+
 
         public string SgrqImageChartFile { get; set; }
 
         public PatientDetailsViewModel()
         {
+            ShowDetails = true;
             ShowDiagnoses = true;
             ShowDrugs = true;
             ShowSGRQ = true;

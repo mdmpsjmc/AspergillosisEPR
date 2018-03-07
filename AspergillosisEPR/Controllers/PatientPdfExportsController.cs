@@ -1,10 +1,12 @@
 ﻿using AspergillosisEPR.Data;
 using AspergillosisEPR.Lib;
 using AspergillosisEPR.Lib.Exporters;
+using AspergillosisEPR.Models;
 using AspergillosisEPR.Models.PatientViewModels;
 using DinkToPdf;
 using DinkToPdf.Contracts;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -17,19 +19,27 @@ namespace AspergillosisEPR.Controllers
     public class PatientPdfExportsController : PatientExportsController
     {
         private PatientDetailsPdfExporter _pdfConverter;
+        private ApplicationDbContext _appContext;
+        private UserManager<ApplicationUser> _userManager;
 
         public PatientPdfExportsController(IConverter dinkToPdfConverter, 
                                            IViewRenderService htmlRenderService, 
                                            IHostingEnvironment hostingEnvironment, 
+                                           ApplicationDbContext _appContext, 
+                                           UserManager<ApplicationUser> userManager,
                                            AspergillosisContext context) : base(context, hostingEnvironment)
         {
             _pdfConverter = new PatientDetailsPdfExporter(dinkToPdfConverter, htmlRenderService, hostingEnvironment);
             _fileStoragePath = _hostingEnvironment.ContentRootPath + PatientDetailsPdfExporter.EXPORTED_PDFS_DIRECTORY;
+            _userManager = userManager;
         }
         [HttpPost]
         public async Task<IActionResult> Details(int id, string sgrqChart, int igChartsLength)
         {
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            var rolesCount = _userManager.GetRolesAsync(user).Result.Count;
             PatientDetailsViewModel patientDetailsViewModel = await GetExportViewModel(id);
+            patientDetailsViewModel.ShowDetails = rolesCount > 1;
             if (igChartsLength > 0) AddIgChartsToPatientVM(patientDetailsViewModel, igChartsLength);
             var pdfBytes = _pdfConverter.GenerateDetailsPdf(id, sgrqChart, patientDetailsViewModel);
             return GetFileContentResult(pdfBytes.Result, ".pdf", "application/pdf");
