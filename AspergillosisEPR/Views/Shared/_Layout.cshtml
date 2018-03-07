@@ -3,6 +3,7 @@
 <html class="smart-style-6">
 @Html.Partial("/Views/Shared/_Head.cshtml")
 <body class="pace-done smart-style-6 hidden-menu" data-action="toggleMenu">
+    @Html.Partial("/Views/_ViewImports.cshtml")
     <header id="header">
         <span class="AntiForge"> @Html.AntiForgeryToken() </span>
         @if (User.Identity.IsAuthenticated)
@@ -53,7 +54,6 @@
     <script>
         jQuery(function () {
             Search.init();
-
         })
     </script>
 </body>

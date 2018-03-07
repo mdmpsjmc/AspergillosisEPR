@@ -1,0 +1,86 @@
+﻿@model AspergillosisEPR.Models.PatientViewModels.Anonymous.AnonPatientDetailsViewModel;
+<div class="modal fade" tabindex="-1" role="dialog" id="anon-details-modal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Patient <strong>@(Model.Identifier)</strong></h4>
+            </div>
+            <div class="modal-body">
+                <div class="widget-body">
+                    <hr class="simple">
+                    <ul id="details-tab" class="nav nav-tabs bordered">
+                       
+                        <li>
+                            <a href="#diagnosis" data-toggle="tab"><i class="fa fa-fw fa-lg fa-heartbeat"></i> Diagnoses</a>
+                        </li>
+                        <li>
+                            <a href="#drugs" data-toggle="tab"><i class="fa fa-fw fa-lg fa-medkit"></i> Drugs</a>
+                        </li>
+                        <li>
+                            <a href="#stg" data-toggle="tab"><i class="fa fa-fw fa-lg fa-file-text"></i> SGRQ</a>
+                        </li>
+                        <li>
+                            <a href="#ig" data-toggle="tab">
+                                <span class="mi-blood-transfusion-3870 tab-styled-custom">
+                                    <span class="path2"></span>
+                                    <span class="fa-fw fa-lg path3"></span>
+                                </span> Ig
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#radiology" data-toggle="tab"><i class="fa fa-fw fa-lg fa-stethoscope"></i> Radiology</a>
+                        </li>
+                        <li>
+                            <a href="#measure" data-toggle="tab"><i class="fa fa-fw fa-lg fa-dashboard"></i> Weight</a>
+                        </li>
+                    </ul>
+
+                    <div id="details-tab-content" class="tab-content padding-10">
+                        <div class="tab-pane fade ig" id="measurements">
+                        </div>                       
+                        <div class="tab-pane fade diagnosis" id="diagnosis">
+                            @Html.Partial("/Views/Patients/Details/Diagnosis.cshtml")
+                        </div>
+                        <div class="tab-pane fade drugs" id="drugs">
+                            @Html.Partial("/Views/Patients/Details/Drugs.cshtml")
+                        </div>
+                        <div class="tab-pane fade stg" id="stg">
+                            @Html.Partial("/Views/Patients/Details/STGQuestionnaire.cshtml")
+                        </div>
+                        <div class="tab-pane fade ig" id="ig">
+                            @Html.Partial("/Views/Patients/Details/Ig.cshtml")
+                        </div>
+                        <div class="tab-pane fade radiology" id="radiology">
+                            @Html.Partial("/Views/Patients/Details/Radiology.cshtml")
+                        </div>
+                        <div class="tab-pane fade measure" id="measure">
+                            @Html.Partial("/Views/Patients/Details/Measurements.cshtml")
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                @if (Model.ShowButtons)
+                {
+                    <a href="@Url.Action("Details", "PatientPdfExports", new { id = Model.Patient.ID })" disabled="disabled" class="btn btn-danger export-trigger" data-file="pdf" data-id="@Model.Patient.ID">
+                        <i class="fa fa-file-pdf-o"></i>&nbsp; PDF
+                    </a>
+                    <a href="@Url.Action("Details", "PatientExcelExports", new { id = Model.Patient.ID })" disabled="disabled" data-file="excel" class="btn btn-success export-trigger" data-id="@Model.Patient.ID">
+                        <i class="fa fa-file-excel-o"></i>&nbsp; Excel
+                    </a>
+                }
+                <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="$('div.modal-backdrop.in').remove()">Close Window</button>
+            </div>
+        </div>
+    </div>
+</div>
+<img src="" class="chart-image hide" id="sgrq-chart-image" />
+<canvas id="sgrq-chart-content" width="800" height="400" class="hide"></canvas>
+<div id="ig-charts"></div>
+<div id="measurement-content-popup"></div>
+@Html.Partial("/Views/Patients/Charts/_SGRQ.cshtml")
+@Html.Partial("/Views/Patients/Charts/_Ig.cshtml")
+@Html.Partial("/Views/Patients/Charts/_Measurements.cshtml")
+@Html.Partial("/Views/Patients/Details/Export/_Options.cshtml")
