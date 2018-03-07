@@ -13,7 +13,6 @@ using System.Collections.ObjectModel;
 
 namespace AspergillosisEPR.Controllers.DataTables
 {
-    [Authorize]
     public class DataTablesController : Controller
     {
         protected List<dynamic> _list;

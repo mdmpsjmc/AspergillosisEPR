@@ -108,5 +108,10 @@ namespace AspergillosisEPR.Models
                 { "Status", "PatientStatus.PatientStatusId.Select" }
             }; 
         }
+
+        public string Initials()
+        {
+            return FirstName.Substring(0, 1) + LastName.Substring(0, 1);
+        }
     }
 }

@@ -9,5 +9,6 @@ namespace AspergillosisEPR.Models.PatientViewModels.Anonymous
     {
         public int ID { get; set; }
         public string PrimaryDiagnosis { get; set; }
+        public string Initials { get; set; }       
     }
 }

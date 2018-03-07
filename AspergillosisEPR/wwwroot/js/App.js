@@ -27,6 +27,7 @@
             Radiology.init();
             PatientVisits.init();
             CaseReportForms.init();
+            AnonPatients.init();
         }
     }
 

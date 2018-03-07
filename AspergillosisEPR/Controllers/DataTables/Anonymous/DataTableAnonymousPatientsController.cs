@@ -18,8 +18,7 @@ namespace AspergillosisEPR.Controllers.DataTables.Anonymous
             _list = new List<dynamic>();
         }
 
-        [Authorize(Roles ="Anonymous Role")]
-        override public IActionResult Load()
+        new public IActionResult LoadPatients()
         {
             Action queriesAction = () =>
             {
@@ -37,9 +36,9 @@ namespace AspergillosisEPR.Controllers.DataTables.Anonymous
                                         Where(pd => patientIds.Contains(pd.PatientId) && pd.DiagnosisCategoryId == primaryDiagnosis.ID).
                                         ToList();
 
-                _list = patientData.GroupBy(p => p.ID).
-                                  Select(a => a.FirstOrDefault()).
-                                  ToList<dynamic>();
+                _list = patientData.GroupBy(p => p.ID)
+                                   .Select(a => a.FirstOrDefault())
+                                   .ToList<dynamic>();
                 AppendDiagnosesToPatients(patientDiagnoses);
                 ColumnSearch();
                 Sorting();
@@ -60,7 +59,7 @@ namespace AspergillosisEPR.Controllers.DataTables.Anonymous
                             _list = _list.Where(p => p.ID.ToString().Contains(partialSearch)).ToList();
                             break;
                         case 1:
-                            _list = _list.Where(p => p.PrimaryDiagnosis.Contains(partialSearch)).ToList();
+                            _list = _list.Where(p => p.Initials().Contains(partialSearch)).ToList();
                             break;                       
                     }
                 }
@@ -76,7 +75,8 @@ namespace AspergillosisEPR.Controllers.DataTables.Anonymous
                     into patientsWithDiagnoses
                     select new AnonymousPatientDataTableViewModel()
                     {
-                        ID = patient.ID,                        
+                        ID = patient.ID,
+                        Initials = patient.Initials(),
                         PrimaryDiagnosis = ""
                     });
         }
