@@ -10,13 +10,6 @@ namespace AspergillosisEPR.AspergillosisEPR.Tests.Controllers
 {
     public class HomeControllerTests
     {
-       [Fact]
-       public void IndexAction_WhenUnauthorized_RedirectsToLoginPage()
-        {
-            var controller = new HomeController();
-            var actionResult = controller.Index() as ViewResult;
-
-            Assert.IsType<ViewResult>(actionResult);
-        }
+       
     }
 }
