@@ -511,6 +511,10 @@
             displayErrors(errors);
         },
 
+        onExportOptionsShow: function () {
+            onExportOptionsShow();
+        },
+
         init: function() {
             initPatientsDataTable();
             submitNewPatient();

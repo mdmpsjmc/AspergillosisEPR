@@ -5,8 +5,17 @@
     ViewData["Title"] = Model.Patient.FullName + " Details";
 }
 
-<h2>Demographic info</h2>
-@Html.Partial("/Views/Patients/Details/Details.cshtml")
+
+@if (User.IsInRole("Read Role"))
+{
+    <h2>Demographic info</h2>
+    @Html.Partial("/Views/Patients/Details/Details.cshtml")
+}
+else
+{
+    <h2><strong>Patient Id: @(Model.Patient.ID)</strong></h2>
+}
+
 @if (Model.ShowDiagnoses)
 {
     <h2>Diagnosis</h2>

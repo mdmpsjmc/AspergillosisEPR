@@ -31,7 +31,8 @@ namespace AspergillosisEPR.Controllers
         {
             PatientDetailsViewModel patientDetailsVM = await GetExportViewModel(id);
             patientDetailsVM.STGQuestionnaires = patientDetailsVM.STGQuestionnaires.OrderBy((q => q.DateTaken)).ToList();
-            var exporter = new PatientDetailsExcelExporter(patientDetailsVM, DetailsDisplayControlProperties(), Request.Form);
+            bool isAnonymous = User.IsInRole("Anonymous Role") && !User.IsInRole("Read Role");
+            var exporter = new PatientDetailsExcelExporter(patientDetailsVM, DetailsDisplayControlProperties(), Request.Form, isAnonymous);
             return GetFileContentResult(exporter.ToOutputBytes(), ".xlsx", EXCEL_2007_CONTENT_TYPE);
         }       
     }

@@ -14,7 +14,7 @@
                     Charts.sgrqChartFromResponse(response);
                 });
                 $.getJSON("/Patients/" + patientId + "/Charts/Immunology", function (response) {
-                    $("div#ig-charts").html(""); //clears hidden charts div. 
+                    $("div#ig-charts").html(""); 
                     Charts.igChartsFromResponse(response, true);
                 });
             });
@@ -24,6 +24,7 @@
     return {
         init: function () {
             initializeDetailsModal();
+            Patients.onExportOptionsShow();
             SimpleDataTable.initializeWithColumns("anonPatientsDT", "table#anonymous_patients_datatable", "Patient", [
                 { "data": "id", "name": "ID", "autoWidth": true, sortable: true },
                 { "data": "initials", "name": "Initials", "autoWidth": true, "sortable": true},

@@ -20,23 +20,29 @@ namespace AspergillosisEPR.Lib.Exporters
         private IFormCollection _form;
         private bool isSGRQChartIncluded;
         private bool isIgChartIncluded;
+        public bool IsAnonymous; 
         private PatientDetailsExcelChartGenerator _chartGenerator;
         public static string EXPORTED_EXCEL_DIRECTORY = @"\wwwroot\Files\Exported\Excel\";
         public static string EXCEL_2007_CONTENT_TYPE = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
 
         public PatientDetailsExcelExporter(PatientDetailsViewModel patientDetailsViewModel, 
-                                      List<PropertyInfo> controlDisplayProperties, IFormCollection form)
+                                           List<PropertyInfo> controlDisplayProperties, IFormCollection form, 
+                                           bool isAnonymous = false)
         {
             _outputWorkbook = new XSSFWorkbook();
             _patientDetailsVM = patientDetailsViewModel;
             _controlDisplayProperties = controlDisplayProperties;
             _form = form;
+            IsAnonymous = isAnonymous;
         }
 
         public byte[] ToOutputBytes()
         {
-            ISheet currentSheet = _outputWorkbook.CreateSheet("Details");
-            SetHorizontalCellValuesFromProperties(_patientDetailsVM.Patient, currentSheet);
+            if (!IsAnonymous)
+            {
+                ISheet currentSheet = _outputWorkbook.CreateSheet("Details");
+                SetHorizontalCellValuesFromProperties(_patientDetailsVM.Patient, currentSheet);
+            }            
             CreateSheetNamesFromSelectedTabs();
             return SerializeWorkbook();
         }
