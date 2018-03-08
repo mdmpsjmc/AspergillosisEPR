@@ -3,8 +3,9 @@
     @if (User.IsInRole("Create Role") || User.IsInRole("Admin Role"))
     {
         <div class="button">
-            <a href="@Url.Action("New", "CaseReportFormSections" )" class="btn btn-success add-settings-item disable-default" data-klass="CaseReportFormSection" data-tab="case-report-forms-section">
-                <i class="fa fa-plus"></i> Add New Form Section
+            <a href="@Url.Action("New", "CaseReportFormSections" )" class="btn btn-success add-crf-item disable-default" data-klass="CaseReportFormSection" data-tab="case-report-forms-section">
+                <i class="fa fa-plus"></i> 
+                Add New Form Section
             </a>
         </div>
     }

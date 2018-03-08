@@ -4,13 +4,13 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace AspergillosisEPR.Models.CaseReportForms
+namespace AspergillosisEPR.Models.CaseReportForms.ViewModels
 {
-    public class CaseReportFormCategory
+    public class CaseReportFormCategoryViewModel
     {
-        public int ID { get; set; }
         [Required]
         [Display(Name = "Category Name")]
         public string Name { get; set; }
+        public string FormAction { get; set; }
     }
 }

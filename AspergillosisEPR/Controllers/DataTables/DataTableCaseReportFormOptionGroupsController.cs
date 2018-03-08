@@ -43,7 +43,7 @@ namespace AspergillosisEPR.Controllers.DataTables
                 var viewModel  = new CaseReportFormOptionGroupViewModel();
                 viewModel.ID = result.ID;
                 viewModel.Name = result.Name;
-                viewModel.Options = string.Join(", ", result.Choices.Select(c => c.Name).ToList());
+                viewModel.Options = result.Choices.Select(c => c.Name).ToArray();
                 _list.Add(viewModel);
             }            
         }

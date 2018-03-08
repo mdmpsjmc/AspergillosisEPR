@@ -3,8 +3,9 @@
     @if (User.IsInRole("Create Role") || User.IsInRole("Admin Role"))
     {
         <div class="button">
-            <a href="@Url.Action("New", "CaseReportFormsOptionGroups" )" class="btn btn-success disable-default" data-klass="CaseReportFormOptionGroup" data-tab="case-report-form-option-group">
-                <i class="fa fa-plus"></i> Add New Option Group
+            <a href="@Url.Action("New", "CaseReportFormOptionGroups" )" class="btn btn-success add-crf-item disable-default" data-klass="CaseReportFormOptionGroup" data-tab="crfs">
+                <i class="fa fa-plus"></i>
+                Add New Option Group
             </a>
         </div>
     }

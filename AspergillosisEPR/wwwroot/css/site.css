@@ -401,3 +401,7 @@ div#new-radiology-modal {
 div#visit-details-modal .modal-dialog {
     min-width: 850px !important;
 }
+
+form#new-case-report-form-option-group span.select2-container.select2-container--default {
+    width: 100%;
+}
