@@ -351,7 +351,7 @@
                $("div#modal-container").html(htmlResponse);
                $("div#visit-details-modal").modal("show");
                
-               $.getJSON("/Patients/Charts/" + patientId + "/SGRQ", function (response) {
+               $.getJSON("/Patients/" + patientId + "/Charts/SGRQ", function (response) {
                    Charts.sgrqChartFromResponse(response);
                });
            });

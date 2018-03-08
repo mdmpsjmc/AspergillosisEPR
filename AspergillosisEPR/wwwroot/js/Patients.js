@@ -443,7 +443,7 @@
             e.preventDefault();
             var sgrqChartImage = encodeURIComponent($("img#sgrq-chart-image").attr("src"));
             var patientId = $(this).data("id");
-            var requestUrl = "/PatientPdfExports/Details/" + patientId;            
+            var requestUrl = "patients/" + patientId + "/exports/pdf";            
             var requestData = $("form#export-options-form").serialize() + "&sgrqChart=" + sgrqChartImage;
             var igCharts = $("div#ig-charts img.ig-chart");
             $.each(igCharts, function (index, chart) {
@@ -459,7 +459,7 @@
             e.preventDefault();
             var sgrqChartImage = encodeURIComponent($("img#sgrq-chart-image").attr("src"));
             var patientId = $(this).data("id");
-            var requestUrl = "/PatientExcelExports/Details/" + patientId;
+            var requestUrl = "patients/" + patientId + "/exports/excel";     
             var requestData = $("form#export-options-form").serialize();
             AjaxFileDownload.execute(requestUrl, requestData, "Patient_Details_" + patientId + ".xlsx", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
         });

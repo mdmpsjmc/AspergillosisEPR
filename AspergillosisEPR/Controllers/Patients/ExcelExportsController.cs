@@ -13,15 +13,16 @@ using AspergillosisEPR.Extensions;
 using System;
 using System.Linq;
 using AspergillosisEPR.Lib.Exporters;
+using AspergillosisEPR.Controllers.Patients;
 
-namespace AspergillosisEPR.Controllers
+namespace AspergillosisEPR.Controllers.Patients
 {
-    public class PatientExcelExportsController : PatientExportsController
+    public class ExcelExportsController : ExportsController
     {
         private static string EXPORTED_EXCEL_DIRECTORY = @"\wwwroot\Files\Exported\Excel\";
         private static string EXCEL_2007_CONTENT_TYPE = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
         
-        public PatientExcelExportsController(AspergillosisContext context,
+        public ExcelExportsController(AspergillosisContext context,
                                              IHostingEnvironment hostingEnvironment) : base(context, hostingEnvironment)
         {
             _fileStoragePath = _hostingEnvironment.ContentRootPath + EXPORTED_EXCEL_DIRECTORY;

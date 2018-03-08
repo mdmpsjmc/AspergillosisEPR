@@ -1,4 +1,5 @@
-﻿using AspergillosisEPR.Data;
+﻿using AspergillosisEPR.Controllers.Patients;
+using AspergillosisEPR.Data;
 using AspergillosisEPR.Lib;
 using AspergillosisEPR.Lib.Exporters;
 using AspergillosisEPR.Models;
@@ -14,20 +15,20 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using static AspergillosisEPR.Services.ViewToString;
-namespace AspergillosisEPR.Controllers
+namespace AspergillosisEPR.Controllers.Patients
 {
-    public class PatientPdfExportsController : PatientExportsController
+    [Route("patients/{id:int}/exports/pdf")]
+    public class PdfExportsController : ExportsController
     {
         private PatientDetailsPdfExporter _pdfConverter;
-        private ApplicationDbContext _appContext;
         private UserManager<ApplicationUser> _userManager;
 
-        public PatientPdfExportsController(IConverter dinkToPdfConverter, 
-                                           IViewRenderService htmlRenderService, 
-                                           IHostingEnvironment hostingEnvironment, 
-                                           ApplicationDbContext _appContext, 
-                                           UserManager<ApplicationUser> userManager,
-                                           AspergillosisContext context) : base(context, hostingEnvironment)
+        public PdfExportsController(IConverter dinkToPdfConverter, 
+                                    IViewRenderService htmlRenderService, 
+                                    IHostingEnvironment hostingEnvironment, 
+                                    ApplicationDbContext _appContext, 
+                                    UserManager<ApplicationUser> userManager,
+                                    AspergillosisContext context) : base(context, hostingEnvironment)
         {
             _pdfConverter = new PatientDetailsPdfExporter(dinkToPdfConverter, htmlRenderService, hostingEnvironment);
             _fileStoragePath = _hostingEnvironment.ContentRootPath + PatientDetailsPdfExporter.EXPORTED_PDFS_DIRECTORY;
@@ -46,6 +47,7 @@ namespace AspergillosisEPR.Controllers
         }
 
         [HttpPost]
+        [Route("visit")]
         public IActionResult VisitDetails(int id, bool exportCharts, 
                                           bool otherVisits, string sgrqChart)
         {

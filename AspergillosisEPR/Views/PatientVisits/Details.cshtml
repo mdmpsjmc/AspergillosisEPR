@@ -27,7 +27,7 @@
                 </div>
             </div>
                 <div class="modal-footer">
-                    <a href="@Url.Action("VisitDetails", "PatientPdfExports", new { id = Model.VisitId })"class="export-trigger btn btn-danger patient-visit-export disable-default" disabled="disabled" data-file="pdf" data-id="@Model.Patient.ID" data-visit-id="@Model.VisitId">
+                    <a href="@Url.Action("VisitDetails", "PdfExports", new { id = Model.VisitId })"class="export-trigger btn btn-danger patient-visit-export disable-default" disabled="disabled" data-file="pdf" data-id="@Model.Patient.ID" data-visit-id="@Model.VisitId">
                         <i class="fa fa-file-pdf-o"></i>&nbsp; PDF
                     </a>                 
                     <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="$('div.modal-backdrop.in').remove()">Close Window</button>

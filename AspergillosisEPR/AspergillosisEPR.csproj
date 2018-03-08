@@ -45,6 +45,7 @@
 
   <ItemGroup>
     <Folder Include="Properties\PublishProfiles\" />
+    <Folder Include="Views\Anonymous\Patients\Details\" />
     <Folder Include="wwwroot\Upload\" />
   </ItemGroup>
 

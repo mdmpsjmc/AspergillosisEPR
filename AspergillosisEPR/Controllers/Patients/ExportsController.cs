@@ -11,16 +11,17 @@ using System.Reflection;
 using Microsoft.AspNetCore.Hosting;
 using System.IO;
 
-namespace AspergillosisEPR.Controllers
+namespace AspergillosisEPR.Controllers.Patients
 {
-    public class PatientExportsController : Controller
+    [Route("patients/{id:int}/exports/excel")]
+    public class ExportsController : Controller
     {
         protected PatientManager _patientManager;
         protected AspergillosisContext _context;
         protected string _fileStoragePath;
         protected IHostingEnvironment _hostingEnvironment;
 
-        public PatientExportsController(AspergillosisContext context, IHostingEnvironment hostingEnvironment) 
+        public ExportsController(AspergillosisContext context, IHostingEnvironment hostingEnvironment) 
         {
             _hostingEnvironment = hostingEnvironment;
             _context = context;
