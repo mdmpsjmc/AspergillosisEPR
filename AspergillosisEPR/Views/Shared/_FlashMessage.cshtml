@@ -1,0 +1,19 @@
+﻿@using AspergillosisEPR.Lib.Flash;
+@{
+    string text = (string)TempData["FlashMessage.Text"];
+    string cssClass = null;
+    if (!string.IsNullOrWhiteSpace(text))
+    {
+        FlashMessageType type = (FlashMessageType)TempData["FlashMessage.Type"];
+        cssClass = type.ToString().ToLower();
+    }
+}
+@if (!string.IsNullOrWhiteSpace(text))
+{
+    <div class="alert alert-dismissable alert-@cssClass">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        <p>
+            @text
+        </p>
+    </div>
+}

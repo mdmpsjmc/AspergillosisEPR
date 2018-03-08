@@ -1,0 +1,47 @@
+﻿@model AspergillosisEPR.Models.AccountViewModels.ResetPasswordViewModel;
+<form action="@Url.Action("Edit", "AnonymousUsers")" method="post" id="smart-form-register" class="smart-form client-form">
+    <header>
+        <i class="fa fa-lock fa-2x"></i>&nbsp;Change Password
+    </header>
+    <fieldset>
+        @if (Model?.Errors.Count > 0)
+        {
+                <div class="row">
+                    <div class="alert alert-block alert-danger col col-md-4 col-lg-4 col-sm-4" style="margin-left: 20px">
+                        <i class="fa fa-2x fa-info-circle"></i>&nbsp;
+                        <a class="close" href="#" onclick="$('.alert').hide();">×</a>
+                        <ul>
+                            @for(int cursor=0; cursor < Model.Errors.Count; cursor++)
+                            {
+                                var errorItem = Model.Errors[cursor];
+                                <li>@errorItem</li>
+                             }
+                        </ul>
+                    </div>
+                </div>
+         }
+                <section>
+                    <label asp-for="Password" class="input">
+                        <i class="icon-append fa fa-lock"></i>
+                        <input asp-for="Password" placeholder="Password" class="form-control">
+                        <span asp-validation-for="Password" class="text-danger"></span>
+                        <b class="tooltip tooltip-bottom-right">Don't forget your password</b>
+                    </label>
+                </section>
+
+                <section>
+                    <label asp-for="ConfirmPassword" class="input">
+                        <i class="icon-append fa fa-lock"></i>
+                        <input asp-for="ConfirmPassword" placeholder="Confirm password" class="form-control">
+                        <b class="tooltip tooltip-bottom-right">Don't forget your password</b>
+                        <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                    </label>
+                </section>
+</fieldset>    
+    <footer>
+        <button type="submit" class="btn btn-primary pull-left">
+            Change my password
+        </button>
+        <a href="@Url.Action("Index", "AnonymousPatients")" class="btn btn-success pull-left">Go back to patients list</a>
+    </footer>
+</form>
