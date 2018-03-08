@@ -101,6 +101,66 @@ namespace AspergillosisEPR.Controllers.CaseReportForms
             return PartialView(@"~/Views/CaseReportForms/CaseReportFormOptionGroups/New.cshtml", viewModel);
         }
 
+        [HttpPost, ActionName("Edit")]
+        [Authorize(Roles = "Admin Role, Update Role")]
+        [ValidateAntiForgeryToken]
+        public IActionResult EditOptionGroupItem(int? id, CaseReportFormOptionGroupViewModel optionGroup)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            var foundItem = _context.CaseReportFormOptionGroups
+                                    .Include(crfog => crfog.Choices)    
+                                    .Where(crfc => crfc.ID == id)
+                                    .FirstOrDefault();
+
+            if (foundItem == null)
+            {
+                return NotFound();
+            }
+            var optionsNames = optionGroup.Options;
+            var dbOptionsChoices = new List<string>();
+            var dbOptionsItems = new List<CaseReportFormOptionChoice>();
+            foreach(string optionName in optionsNames)
+            {
+                var optionChoice = _context.CaseReportFormOptionChoices
+                                           .Where(crfoc => crfoc.Name.Contains(optionName))
+                                           .FirstOrDefault();
+                if (optionChoice != null)
+                {
+                    dbOptionsChoices.Add(optionChoice.Name);
+                    dbOptionsItems.Add(optionChoice);
+                }
+            }
+            var toDeleteOptions = dbOptionsChoices.Except(optionsNames);
+            var toInsertOptions = optionsNames.Except(dbOptionsChoices);
+            
+            optionGroup.ID = foundItem.ID;
+
+            if (TryValidateModel(foundItem))
+            {
+                try
+                {
+                    _context.Update(foundItem);
+                    _context.SaveChanges();
+                }
+                catch (DbUpdateException /* ex */)
+                {
+                    ModelState.AddModelError("", "Unable to save changes. " +
+                        "Try again, and if the problem persists, " +
+                        "see your system administrator.");
+                }
+            }
+            else
+            {
+                Hashtable errors = ModelStateHelper.Errors(ModelState);
+                return Json(new { success = false, errors });
+            }
+
+            return Json(new { result = "ok" });
+        }
+
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin Role, Delete Role")]
