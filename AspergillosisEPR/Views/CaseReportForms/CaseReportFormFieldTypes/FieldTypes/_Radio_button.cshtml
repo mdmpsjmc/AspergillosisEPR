@@ -8,7 +8,7 @@
 
                         @foreach (var option in @Model.Options)
                         {
-                            <label class="radio radio-inline">
+                            <label class="radio">
                                 <input type="radio" class="radiobox" name="Fields[@Model.ID].@Model.FieldName()">
                                 <span>@option.Option.Name</span>
                             </label>
