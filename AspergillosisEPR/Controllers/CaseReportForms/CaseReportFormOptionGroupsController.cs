@@ -120,24 +120,29 @@ namespace AspergillosisEPR.Controllers.CaseReportForms
                 return NotFound();
             }
             var optionsNames = optionGroup.Options;
-            var dbOptionsChoices = new List<string>();
-            var dbOptionsItems = new List<CaseReportFormOptionChoice>();
-            foreach(string optionName in optionsNames)
-            {
-                var optionChoice = _context.CaseReportFormOptionChoices
-                                           .Where(crfoc => crfoc.Name.Contains(optionName))
-                                           .FirstOrDefault();
-                if (optionChoice != null)
-                {
-                    dbOptionsChoices.Add(optionChoice.Name);
-                    dbOptionsItems.Add(optionChoice);
-                }
-            }
+            var dbOptionsChoices = foundItem.Choices.Select(c => c.Name).ToList() ;
+            var dbOptionsItems = foundItem.Choices.ToList();
             var toDeleteOptions = dbOptionsChoices.Except(optionsNames);
             var toInsertOptions = optionsNames.Except(dbOptionsChoices);
-            
-            optionGroup.ID = foundItem.ID;
-
+            if (toDeleteOptions.Count() > 0)
+            {
+                var dbDeleteList = _context.CaseReportFormOptionChoices
+                                           .Where(crfoc => toDeleteOptions.Contains(crfoc.Name) && crfoc.CaseReportFormOptionGroupId == id);
+                _context.CaseReportFormOptionChoices.RemoveRange(dbDeleteList);
+            }
+            if (toInsertOptions.Count() > 0)
+            {
+                foreach(var optionName in toInsertOptions)
+                {
+                    var option = new CaseReportFormOptionChoice()
+                    {
+                        CaseReportFormOptionGroupId = id.Value,
+                        Name = optionName
+                    };
+                    _context.CaseReportFormOptionChoices.Add(option);
+                }
+            }
+            foundItem.Name = optionGroup.Name;
             if (TryValidateModel(foundItem))
             {
                 try
