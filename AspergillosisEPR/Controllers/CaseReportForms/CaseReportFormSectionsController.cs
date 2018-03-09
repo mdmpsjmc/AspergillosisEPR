@@ -27,7 +27,7 @@ namespace AspergillosisEPR.Controllers.CaseReportForms
         public IActionResult New()
         {
             ViewBag.FieldTypes = _resolver.PopulateCRFFieldTypesDropdownList();
-            return View(@"~/Views/CaseReportForms/CaseReportFormSections/New.cshtml");
+            return PartialView(@"~/Views/CaseReportForms/CaseReportFormSections/New.cshtml");
         }
 
         [HttpPost]
@@ -46,6 +46,29 @@ namespace AspergillosisEPR.Controllers.CaseReportForms
                 Hashtable errors = ModelStateHelper.Errors(ModelState);
                 return Json(new { success = false, errors });
             }
+        }
+
+        public IActionResult Show(int? id)
+        {
+            ViewBag.FieldTypes = _resolver.PopulateCRFFieldTypesDropdownList();
+            if (id == null)
+            {
+                return NotFound();
+            }
+            var section = _context.CaseReportFormSections
+                                  .Where(crfs => crfs.ID == id)
+                                  .Include(crfs => crfs.CaseReportFormResultFields)
+                                     .ThenInclude(f => f.CaseReportFormFieldType)
+                                  .Include(crfs => crfs.CaseReportFormResultFields)
+                                     .ThenInclude(f => f.Options)
+                                        .ThenInclude(o => o.Option)
+                                  .FirstOrDefault();
+
+            if (section == null)
+            {
+                return NotFound();
+            }
+            return PartialView(@"~/Views/CaseReportForms/CaseReportFormSections/Show.cshtml", section);
         }
     }
 }

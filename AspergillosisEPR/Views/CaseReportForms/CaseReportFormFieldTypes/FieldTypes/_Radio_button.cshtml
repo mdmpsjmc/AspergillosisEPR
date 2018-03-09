@@ -1,0 +1,21 @@
+﻿@model AspergillosisEPR.Models.CaseReportForms.CaseReportFormField;
+<form class="smart-form">
+    <fieldset>
+        <div class="form">
+            <div class="form-group">
+                <label class="col-md-2 control-label">@Model.Label</label>
+                <div class="col-md-12">                   
+
+                        @foreach (var option in @Model.Options)
+                        {
+                            <label class="radio radio-inline">
+                                <input type="radio" class="radiobox" name="Fields[@Model.ID].@Model.FieldName()">
+                                <span>@option.Option.Name</span>
+                            </label>
+                        }
+                            
+                </div>
+            </div>
+        </div>
+    </fieldset>    
+</form>

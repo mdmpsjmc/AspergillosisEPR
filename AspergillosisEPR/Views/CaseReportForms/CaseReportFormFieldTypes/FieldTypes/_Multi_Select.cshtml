@@ -1,0 +1,15 @@
+﻿@model AspergillosisEPR.Models.CaseReportForms.CaseReportFormField;
+<form class="smart-form">
+    <div class="row">
+        <section class="col col-4 label-render">
+            <label>@Model.Label</label>
+        </section>
+        <section class="col col-12">
+            <label class="select">
+                <label class="select">
+                    @Html.DropDownList("Fields["+ Model.ID + "]." + @Model.FieldName(), Model.Options.Select(o => o.DropdownItem()).ToList(), new { @multiple = "multiple"})
+                </label>
+            </label>
+        </section>
+    </div>
+</form>

@@ -1,4 +1,5 @@
-﻿using AspergillosisEPR.Models.CaseReportForms.ViewModels;
+﻿using AspergillosisEPR.Extensions;
+using AspergillosisEPR.Models.CaseReportForms.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -22,5 +23,10 @@ namespace AspergillosisEPR.Models.CaseReportForms
         public ICollection<CaseReportFormFieldOption> Options { get; set; } 
         [NotMapped]
         public int[] SelectedOptionsIds { get; set; }
+
+        public string FieldName()
+        {
+            return Label.ToUnderscore();
+        }
     }
 }

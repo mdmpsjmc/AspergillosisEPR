@@ -405,3 +405,8 @@ div#visit-details-modal .modal-dialog {
 form#new-case-report-form-option-group span.select2-container.select2-container--default {
     width: 100%;
 }
+
+.label-render {
+    margin-top: 9px;
+    font-weight: bold;
+}

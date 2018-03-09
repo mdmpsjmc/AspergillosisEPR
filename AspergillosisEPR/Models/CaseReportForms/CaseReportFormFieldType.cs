@@ -12,5 +12,12 @@ namespace AspergillosisEPR.Models.CaseReportForms
         [Required]
         [Display(Name = "Field Type Name")]
         public string Name { get; set; }
+
+        public string FieldPartial()
+        {
+            return this.Name.Replace(" ", "_").Replace("-", "_");
+        }
     }
+
+   
 }

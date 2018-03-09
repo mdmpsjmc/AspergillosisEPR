@@ -16,7 +16,7 @@
         $(document).off("click.asm").on("click.asm", "a.add-crf-item, a.edit-crf-link", function (e) {
             LoadingIndicator.show();
             e.preventDefault();
-            $.get((this).href + "?klass=" + $(this).data("klass"), function (html) {                
+            $.get((this).href + "?klass=" + $(this).data("klass"), function (html) {
                 LoadingIndicator.hide();
                 $("div#modal-container").html(html);
                 $("div.new-settings-modal").modal("show");
@@ -26,6 +26,22 @@
                     placeholder: "Type option"
                 });
                 $("form#new-case-report-form-option-group span.select2-container.select2-container--default").css("width", "100%");
+            });
+        });
+    }
+
+    var showRenderedSection = function () {
+        $(document).off("click.asm").on("click.srs", "a.show-crf-section", function (e) {
+            LoadingIndicator.show();
+            e.preventDefault();
+            $.get((this).href + "?klass=" + $(this).data("klass"), function (html) {
+                LoadingIndicator.hide();
+                $("div#modal-container").html(html);
+                $("div#render-section-modal").modal("show");
+                $('input.datepicker').datetimepicker({
+                    format: 'DD/MM/YYYY'
+                });
+                $("select[multiple='multiple']").multiSelect();
             });
         });
     }
@@ -45,17 +61,22 @@
     }
 
     return {
+        showCRFModal: function () {
+            showCRFModal();
+        },
+
         init: function () {
             addNewPartial();
             onOptionGroupSelectChange();
             showCRFModal();
             Patients.deletePartialFromPopup();
+            showRenderedSection();
             SimpleDataTable.initializeWithColumns("crf_sectionsDT", "table#case_report_forms_sections_datatable", "CaseReportFormSection", [
                 { "data": "name", "name": "Name", "autoWidth": true, "sortable": false},               
                 { "data": "fieldNames", "name": "FieldNames", "autoWidth": true, "sortable": false }, 
                 {
                     "render": function (data, type, object, meta) {
-                        return '<a class="btn btn-info details-link disable-default" data-what="item" data-klass="CaseReportFormSection" data-tab="crfs" data-child-tab="CaseReportFormSection" data-warning="All patient information related to this items will be  irreversibly lost from database if you remove it" style="display: none" data-role="Delete Role" href="/CaseReportFormSections/Details/' + object.id + '" data-id="' + object.id + '"><i class=\'fa fa-eye\' ></i>&nbsp;Show</a>&nbsp;' +
+                        return '<a class="btn btn-info details-link disable-default show-crf-section" data-what="item" data-klass="CaseReportFormSection" data-tab="crfs" data-child-tab="CaseReportFormSection" data-warning="All patient information related to this items will be  irreversibly lost from database if you remove it" style="display: none" data-role="Delete Role" href="/CaseReportFormSections/Show/' + object.id + '" data-id="' + object.id + '"><i class=\'fa fa-eye\' ></i>&nbsp;Show</a>&nbsp;' +
                                '<a class="btn btn-primary edit-crf-link disable-default" data-klass="CaseReportFormSection" style="display: none" data-role="Update Role" href="/CaseReportFormSections/Edit/' + object.id + '" data-id="' + object.id + '"><i class=\'fa fa-edit\' ></i>&nbsp;Edit</a>&nbsp;' +
                                '<a class="btn btn-danger delete-link disable-default" data-what="item" data-klass="CaseReportFormSection" data-tab="crfs" data-child-tab="CaseReportFormSection" data-warning="All patient information related to this items will be  irreversibly lost from database if you remove it" style="display: none" data-role="Delete Role" href="/CaseReportFormSections/Delete/' + object.id + '" data-id="' + object.id + '"><i class=\'fa fa-trash\' ></i>&nbsp;Delete</a>&nbsp;';                        
                     },
