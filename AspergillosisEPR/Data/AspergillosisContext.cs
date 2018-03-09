@@ -5,6 +5,7 @@ using System.Linq;
 using System.ComponentModel.DataAnnotations;
 using System;
 using AspergillosisEPR.Models.CaseReportForms;
+using AspergillosisEPR.Models.CaseReportForms.ViewModels;
 
 namespace AspergillosisEPR.Data
 {
@@ -51,6 +52,8 @@ namespace AspergillosisEPR.Data
         public DbSet<CaseReportFormOptionGroup> CaseReportFormOptionGroups { get; set; }
         public DbSet<CaseReportFormSection> CaseReportFormSections { get; set; }
         public DbSet<CaseReportFormCategory> CaseReportFormCategories { get; set; }
+        public DbSet<CaseReportFormFieldOption> CaseReportFormFieldOptions { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -89,6 +92,8 @@ namespace AspergillosisEPR.Data
             modelBuilder.Entity<CaseReportFormSection>().ToTable("CaseReportFormSections");
             modelBuilder.Entity<CaseReportFormCategory>().ToTable("CaseReportFormCategories");
             modelBuilder.Entity<CaseReportFormResult>().ToTable("CaseReportFormResults");
+            modelBuilder.Entity<CaseReportFormFieldOption>().ToTable("CaseReportFormFieldOptions");
+
         }
 
         internal void Set(Type currentType)

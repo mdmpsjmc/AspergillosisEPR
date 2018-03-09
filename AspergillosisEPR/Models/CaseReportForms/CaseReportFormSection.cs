@@ -9,7 +9,7 @@ namespace AspergillosisEPR.Models.CaseReportForms
     {
         public int ID { get; set; }
         public string Name { get; set; }
-        public IEnumerable<CaseReportFormField> CaseReportFormResultFields { get; set; }
+        public ICollection<CaseReportFormField> CaseReportFormResultFields { get; set; }
 
     }
 }

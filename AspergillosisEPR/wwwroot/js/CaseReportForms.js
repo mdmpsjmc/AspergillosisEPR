@@ -13,9 +13,10 @@
     }
 
     var showCRFModal = function () {
-        $(document).off("click.asm").on("click.asm", "a.add-crf-item, a.edit-crf-link", function () {
+        $(document).off("click.asm").on("click.asm", "a.add-crf-item, a.edit-crf-link", function (e) {
             LoadingIndicator.show();
-            $.get((this).href + "?klass=" + $(this).data("klass"), function (html) {
+            e.preventDefault();
+            $.get((this).href + "?klass=" + $(this).data("klass"), function (html) {                
                 LoadingIndicator.hide();
                 $("div#modal-container").html(html);
                 $("div.new-settings-modal").modal("show");
@@ -32,7 +33,8 @@
     var onOptionGroupSelectChange = function () {
         $(document).off("change").on("change", "select.option-group", function () {
             var optionGroupId = $(this).val();
-            var requestUrl = "/CaseReportFormOptionGroups/Show/" + optionGroupId;
+            var currentIndex = $(this).data("index");
+            var requestUrl = "/CaseReportFormOptionGroups/Show/" + optionGroupId + "?index=" + currentIndex;
             $.get(requestUrl, function (responseHtml) {
                 $("section.options").html(responseHtml);
                 $("section.options").removeClass("hide");
@@ -47,8 +49,21 @@
             addNewPartial();
             onOptionGroupSelectChange();
             showCRFModal();
-   
-            SimpleDataTable.initialize("crf_sectionsDT", "table#case_report_forms_sections_datatable", "CaseReportFormSection");
+            Patients.deletePartialFromPopup();
+            SimpleDataTable.initializeWithColumns("crf_sectionsDT", "table#case_report_forms_sections_datatable", "CaseReportFormSection", [
+                { "data": "name", "name": "Name", "autoWidth": true, "sortable": false},               
+                { "data": "fieldNames", "name": "FieldNames", "autoWidth": true, "sortable": false }, 
+                {
+                    "render": function (data, type, object, meta) {
+                        return '<a class="btn btn-info details-link disable-default" data-what="item" data-klass="CaseReportFormSection" data-tab="crfs" data-child-tab="CaseReportFormSection" data-warning="All patient information related to this items will be  irreversibly lost from database if you remove it" style="display: none" data-role="Delete Role" href="/CaseReportFormSections/Details/' + object.id + '" data-id="' + object.id + '"><i class=\'fa fa-eye\' ></i>&nbsp;Show</a>&nbsp;' +
+                               '<a class="btn btn-primary edit-crf-link disable-default" data-klass="CaseReportFormSection" style="display: none" data-role="Update Role" href="/CaseReportFormSections/Edit/' + object.id + '" data-id="' + object.id + '"><i class=\'fa fa-edit\' ></i>&nbsp;Edit</a>&nbsp;' +
+                               '<a class="btn btn-danger delete-link disable-default" data-what="item" data-klass="CaseReportFormSection" data-tab="crfs" data-child-tab="CaseReportFormSection" data-warning="All patient information related to this items will be  irreversibly lost from database if you remove it" style="display: none" data-role="Delete Role" href="/CaseReportFormSections/Delete/' + object.id + '" data-id="' + object.id + '"><i class=\'fa fa-trash\' ></i>&nbsp;Delete</a>&nbsp;';                        
+                    },
+                    "sortable": false,
+                    "width": 250,
+                    "autoWidth": false
+                }
+            ]);
             SimpleDataTable.initializeWithColumns("crf_option_groupsDT", "table#case_report_forms_option_groups_datatable", "CaseReportFormOptionGroup", [
                 { "data": "id", "name": "ID", "autoWidth": true },
                 { "data": "name", "name": "Name", "autoWidth": true },

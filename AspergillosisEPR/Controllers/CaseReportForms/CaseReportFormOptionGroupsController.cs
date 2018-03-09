@@ -35,6 +35,7 @@ namespace AspergillosisEPR.Controllers.CaseReportForms
         public IActionResult Show(int id)
         {
             ViewBag.SectionOptions = _resolver.PopulateCRFOptionGroupChoicesDropdownList(id);
+            ViewBag.Index = Request.Query["index"];
             return PartialView(@"~/Views/CaseReportForms/CaseReportFormOptionGroups/Show.cshtml");
         }
 

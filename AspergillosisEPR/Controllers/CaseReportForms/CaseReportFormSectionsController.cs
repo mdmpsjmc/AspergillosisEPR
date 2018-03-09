@@ -5,6 +5,11 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using AspergillosisEPR.Data;
 using AspergillosisEPR.Lib.CaseReportForms;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.EntityFrameworkCore;
+using AspergillosisEPR.Helpers;
+using System.Collections;
+using AspergillosisEPR.Models.CaseReportForms.ViewModels;
 
 namespace AspergillosisEPR.Controllers.CaseReportForms
 {
@@ -23,6 +28,24 @@ namespace AspergillosisEPR.Controllers.CaseReportForms
         {
             ViewBag.FieldTypes = _resolver.PopulateCRFFieldTypesDropdownList();
             return View(@"~/Views/CaseReportForms/CaseReportFormSections/New.cshtml");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin Role, Create Role")]
+        public async Task<IActionResult> Create(CaseReportFormSectionViewModel formSectionVM)
+        {
+            if (ModelState.IsValid)
+            {
+                CaseReportFormSectionViewModel.BuildSection(_context, formSectionVM);
+                await _context.SaveChangesAsync();
+                return Json(new { result = "ok" });
+            }
+            else
+            {
+                Hashtable errors = ModelStateHelper.Errors(ModelState);
+                return Json(new { success = false, errors });
+            }
         }
     }
 }

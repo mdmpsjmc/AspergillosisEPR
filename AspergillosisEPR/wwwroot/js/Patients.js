@@ -282,8 +282,8 @@
         });
     }
 
-    var deletePatientPartialFromPopup = function () {
-        $(document).off("click.delete-partial").on("click.delete-partial", "a.remove-new-diagnosis, a.remove-new-drug, a.remove-new-stg, a.remove-new-ig", function () {
+    var deletePartialFromPopup = function () {
+        $(document).off("click.delete-partial").on("click.delete-partial", "a.remove-new-diagnosis, a.remove-new-drug, a.remove-new-stg, a.remove-new-ig, a.remove-partial", function () {
             var whatToRemove = $(this).data("what");
             var button = $(this);
             var question = "Are you sure you want to remove this " + whatToRemove + "?";
@@ -480,7 +480,7 @@
             bindPatientDetailsShow();
             bindPatientEdit();
             bindOnDeletePatientClick();
-            deletePatientPartialFromPopup();
+            deletePartialFromPopup();
             deletePatientDbPartialFromPopup();
             onPatientStatusChange();
             onModalClose();
@@ -493,7 +493,7 @@
             bindPatientDetailsShow();
             bindPatientEdit();
             bindOnDeletePatientClick();
-            deletePatientPartialFromPopup();
+            deletePartialFromPopup();
             deletePatientDbPartialFromPopup();
             onPatientStatusChange();
             onModalClose();
@@ -513,6 +513,10 @@
 
         onExportOptionsShow: function () {
             onExportOptionsShow();
+        },
+
+        deletePartialFromPopup: function () {
+            deletePartialFromPopup();
         },
 
         init: function() {
