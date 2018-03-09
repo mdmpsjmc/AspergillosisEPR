@@ -29,6 +29,7 @@ namespace AspergillosisEPR
                     IGgEPRImportTypeSeed.Seed(context);
                     var context2 = services.GetRequiredService<ApplicationDbContext>();
                     AppDbInitializer.Initialize(context2);
+                    CaseReportFormsDataInitializer.AddSelectFieldTypes(context);
                 }
                 catch (Exception ex)
                 {

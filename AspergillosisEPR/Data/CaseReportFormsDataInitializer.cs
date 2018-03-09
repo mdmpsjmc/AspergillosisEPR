@@ -8,7 +8,7 @@ namespace AspergillosisEPR.Data
 {
     public class CaseReportFormsDataInitializer
     {
-        public static  void AddCaseReportFormsModels(AspergillosisContext context)
+        public static void AddCaseReportFormsModels(AspergillosisContext context)
         {
             if (context.CaseReportFormFieldTypes.Any())
             {
@@ -20,7 +20,33 @@ namespace AspergillosisEPR.Data
             AddCaseResultFormDefaultSections(context);
             AddCaseResultFormDefaultCategories(context);
 
-             context.SaveChanges();
+            context.SaveChanges();
+        }
+
+        public static void AddSelectFieldTypes(AspergillosisContext context)
+        {
+            var multiSelect = context.CaseReportFormFieldTypes
+                                     .Where(ft => ft.Name.Contains("Select"));
+
+            if (multiSelect.Any())
+            {
+                return;
+            }
+
+            var caseReportFormFieldTypes = new CaseReportFormFieldType[]
+            {
+               new CaseReportFormFieldType { Name = "Single Select"},
+               new CaseReportFormFieldType { Name = "Multi Select"},
+               new CaseReportFormFieldType { Name = "Check-box" },
+               new CaseReportFormFieldType { Name = "Radio-button" },
+               new CaseReportFormFieldType { Name = "Time-select" }
+            };
+
+            foreach (var item in caseReportFormFieldTypes)
+            {
+                context.Add(item);
+            }
+            context.SaveChanges();
         }
 
         private static void AddCaseResultFormDefaultCategories(AspergillosisContext context)
