@@ -16,7 +16,7 @@
         $(document).off("click.asm").on("click.asm", "a.add-crf-item, a.edit-crf-link", function (e) {
             LoadingIndicator.show();
             e.preventDefault();
-            $.get((this).href + "?klass=" + $(this).data("klass"), function (html) {
+            $.get((this).href + "?klass=" + $(this).data("klass"), function(html) {
                 LoadingIndicator.hide();
                 $("div#modal-container").html(html);
                 $("div.new-settings-modal").modal("show");
