@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using AspergillosisEPR.Helpers;
 using System.Collections;
 using AspergillosisEPR.Models.CaseReportForms.ViewModels;
+using AspergillosisEPR.Models.CaseReportForms;
 
 namespace AspergillosisEPR.Controllers.CaseReportForms
 {
@@ -55,7 +56,36 @@ namespace AspergillosisEPR.Controllers.CaseReportForms
             {
                 return NotFound();
             }
-            var section = _context.CaseReportFormSections
+            var section = ObtainFormSection(id);
+
+            if (section == null)
+            {
+                return NotFound();
+            }
+            return PartialView(@"~/Views/CaseReportForms/CaseReportFormSections/Show.cshtml", section);
+        }
+
+        public IActionResult Edit(int? id)
+        {
+            ViewBag.FieldTypes = _resolver.PopulateCRFFieldTypesDropdownList();
+            if (id == null)
+            {
+                return NotFound();
+            }
+            var section = ObtainFormSection(id);
+
+            if (section == null)
+            {
+                return NotFound();
+            }
+            ViewBag.FieldTypes = _resolver.PopulateCRFFieldTypesDropdownList();
+            ViewBag.OptionGroups = _resolver.PopulateCRFOptionGroupsDropdownList();
+            return PartialView(@"~/Views/CaseReportForms/CaseReportFormSections/Edit.cshtml", section);
+        }
+
+        private CaseReportFormSection ObtainFormSection(int? id)
+        {
+            return _context.CaseReportFormSections
                                   .Where(crfs => crfs.ID == id)
                                   .Include(crfs => crfs.CaseReportFormResultFields)
                                      .ThenInclude(f => f.CaseReportFormFieldType)
@@ -63,12 +93,6 @@ namespace AspergillosisEPR.Controllers.CaseReportForms
                                      .ThenInclude(f => f.Options)
                                         .ThenInclude(o => o.Option)
                                   .FirstOrDefault();
-
-            if (section == null)
-            {
-                return NotFound();
-            }
-            return PartialView(@"~/Views/CaseReportForms/CaseReportFormSections/Show.cshtml", section);
         }
     }
 }
