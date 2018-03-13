@@ -152,6 +152,19 @@ namespace AspergillosisEPR.Controllers.CaseReportForms
             }
         }
 
+        [HttpPost, ActionName("Delete")]
+        [Authorize(Roles = "Admin Role, Delete Role")]
+        [ValidateAntiForgeryToken]
+        public IActionResult ConfirmDelete(int id)
+        {
+            var item = _context.CaseReportFormSections.SingleOrDefault(fs => fs.ID == id);           
+            var sectionFields = _context.CaseReportFormFields.Where(f => f.CaseReportFormSectionId == id);
+            _context.RemoveRange(sectionFields);
+            _context.CaseReportFormSections.Remove(item);
+            _context.SaveChanges();
+            return Json(new { ok = "ok" });
+        }
+
         private CaseReportFormSection ObtainFormSection(int? id)
         {
             return _context.CaseReportFormSections

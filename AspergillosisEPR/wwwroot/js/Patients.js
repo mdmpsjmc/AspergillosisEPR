@@ -295,7 +295,7 @@
         });
     }
 
-    var deletePatientDbPartialFromPopup = function () {
+    var deleteDbPartialFromPopup = function () {
         $(document).off("click.delete-db-partial").on("click.delete-db-partial", "a.remove-existing-diagnosis, a.remove-existing-drug, a.remove-existing-stg, a.remove-existing-item", function (e) {
             var itemId = $(this).data("id");
             var whatToRemove = $(this).data("what");
@@ -481,7 +481,7 @@
             bindPatientEdit();
             bindOnDeletePatientClick();
             deletePartialFromPopup();
-            deletePatientDbPartialFromPopup();
+            deleteDbPartialFromPopup();
             onPatientStatusChange();
             onModalClose();
             initPatientsDateTimePickers();
@@ -494,7 +494,7 @@
             bindPatientEdit();
             bindOnDeletePatientClick();
             deletePartialFromPopup();
-            deletePatientDbPartialFromPopup();
+            deleteDbPartialFromPopup();
             onPatientStatusChange();
             onModalClose();
             initPatientsDateTimePickers();
@@ -517,6 +517,10 @@
 
         deletePartialFromPopup: function () {
             deletePartialFromPopup();
+        },
+
+        deleteDbPartialFromPopup: function () {
+            deleteDbPartialFromPopup();
         },
 
         init: function() {

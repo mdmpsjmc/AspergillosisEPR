@@ -71,6 +71,7 @@
             onOptionGroupSelectChange();
             showCRFModal();
             Patients.deletePartialFromPopup();
+            Patients.deleteDbPartialFromPopup();
             showRenderedSection();
             SimpleDataTable.initializeWithColumns("crf_sectionsDT", "table#case_report_forms_sections_datatable", "CaseReportFormSection", [
                 { "data": "name", "name": "Name", "autoWidth": true, "sortable": false},               
