@@ -45,7 +45,7 @@ namespace AspergillosisEPR.Data
         public DbSet<PatientMeasurement> PatientMeasurements { get; set; }
         public DbSet<MeasurementExamination> MeasurementExaminations { get; set; }
 
-        public DbSet<CaseReportFormResult> CaseReportFormResults { get; set; }
+        public DbSet<CaseReportForm> CaseReportForms { get; set; }
         public DbSet<CaseReportFormField> CaseReportFormFields { get; set; }
         public DbSet<CaseReportFormFieldType> CaseReportFormFieldTypes { get; set; }
         public DbSet<CaseReportFormOptionChoice> CaseReportFormOptionChoices { get; set; }
@@ -53,6 +53,7 @@ namespace AspergillosisEPR.Data
         public DbSet<CaseReportFormSection> CaseReportFormSections { get; set; }
         public DbSet<CaseReportFormCategory> CaseReportFormCategories { get; set; }
         public DbSet<CaseReportFormFieldOption> CaseReportFormFieldOptions { get; set; }
+        public DbSet<CaseReportFormFormSection> CaseReportFormFormSections { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -91,8 +92,9 @@ namespace AspergillosisEPR.Data
             modelBuilder.Entity<CaseReportFormOptionGroup>().ToTable("CaseReportFormOptionGroups");
             modelBuilder.Entity<CaseReportFormSection>().ToTable("CaseReportFormSections");
             modelBuilder.Entity<CaseReportFormCategory>().ToTable("CaseReportFormCategories");
-            modelBuilder.Entity<CaseReportFormResult>().ToTable("CaseReportFormResults");
+            modelBuilder.Entity<CaseReportForm>().ToTable("CaseReportForms");
             modelBuilder.Entity<CaseReportFormFieldOption>().ToTable("CaseReportFormFieldOptions");
+            modelBuilder.Entity<CaseReportFormFormSection>().ToTable("CaseReportFormFormSections");
 
         }
 

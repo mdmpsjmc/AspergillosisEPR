@@ -27,8 +27,8 @@ namespace AspergillosisEPR.Lib.CaseReportForms
                     return _context.Query(typeof(CaseReportFormSection));
                 case "CaseReportFormFieldType":
                     return _context.Query(typeof(CaseReportFormFieldType));
-                case "CaseReportFormResult":
-                    return _context.Query(typeof(CaseReportFormResult));
+                case "CaseReportForm":
+                    return _context.Query(typeof(CaseReportForm));
                 case "CaseReportFormCategory":
                     return _context.Query(typeof(CaseReportFormCategory));
 

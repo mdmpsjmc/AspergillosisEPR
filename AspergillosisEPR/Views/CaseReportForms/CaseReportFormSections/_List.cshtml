@@ -1,0 +1,4 @@
+﻿@model AspergillosisEPR.Models.CaseReportForms.ViewModels.CaseReportFormViewModel
+<label><strong>Select from existing sections</strong></label>
+<br />
+@Html.DropDownListFor(m => m.SectionsIds, (MultiSelectList) ViewBag.SectionIds, new {@multiple = "multiple" });

@@ -13,7 +13,8 @@ namespace AspergillosisEPR.Models.CaseReportForms
     {
         public int ID { get; set; }
         public int CaseReportFormFieldTypeId { get; set; }
-        public int CaseReportFormSectionId { get; set; }
+        public int? CaseReportFormSectionId { get; set; }
+        public int? CaseReportFormId { get; set; }
         [Required]
         [Display(Name = "Field label")]
         public string Label { get; set; }

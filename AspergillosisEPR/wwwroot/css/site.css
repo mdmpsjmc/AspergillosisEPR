@@ -412,3 +412,7 @@ form#new-case-report-form-option-group span.select2-container.select2-container-
     margin-top: 9px;
     font-weight: bold;
 }
+
+div#form-sections {
+    padding-left: 80px;
+}

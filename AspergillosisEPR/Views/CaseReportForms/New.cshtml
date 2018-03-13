@@ -1,0 +1,49 @@
+﻿@model AspergillosisEPR.Models.CaseReportForms.ViewModels.CaseReportFormViewModel
+<div class="modal fade new-settings-modal" tabindex="-1" role="dialog" id="new-case-report-form-modal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">Add New Case Report Form</h4>
+            </div>
+            <div class="modal-body">
+                <div class="widget-body">
+                    <form asp-controller="CaseReportForms" asp-action="Create" class="smart-form settings-form" data-ajax="true" data-ajax-method="POST" id="new-case-report-form-section-form">
+                        <fieldset>
+                            <div class="row">
+                                <label class="input" asp-for="Name">
+                                    <i class="icon-append fa fa-info-circle"></i>
+                                    <input placeholder="Enter Case Report Form Name" asp-for="Name">
+                                    <span class="text-danger"></span>
+                                </label>
+                            </div>
+                            <div class="row">
+                                <label class="select" asp-for="CaseReportFormCategoryId">
+                                    @Html.DropDownListFor(m => m.CaseReportFormCategoryId,(SelectList) ViewBag.CategoriesIds, "Select Form Category Type")
+                                    <i></i>
+                                </label>
+                            </div>
+                        </fieldset>                        
+                        <div id="form-sections">
+                            @Html.Partial("/Views/CaseReportForms/CaseReportFormSections/_List.cshtml", Model)
+                        </div>
+                        <a href="@Url.Action("New", "CaseReportFormFields")" class="btn btn-success add-form-field disable-default" style="padding: 5px" data-visible-row="div.field-row:visible" data-insert-into-class="div#form-fields">
+                            <i class="fa fa-plus"></i>
+                            <span>
+                                <strong>Add field</strong>
+                            </span>
+                        </a>
+                        <div id="form-fields">
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-success submit-settings-item" data-tab="case-report-form-section">SAVE</button>
+            </div>
+        </div>
+    </div>
+</div>
