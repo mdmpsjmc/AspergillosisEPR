@@ -12,6 +12,7 @@
             <div class="modal-body">
                 <div class="widget-body">
                     <form asp-controller="CaseReportFormSections" asp-action="Edit" class="smart-form settings-form" data-ajax="true" data-ajax-method="POST" id="new-case-report-form-section-form">
+                        @Html.Hidden("ID", Model.ID)
                         <fieldset>
                             <div class="row">
                                 <label class="input" asp-for="Name">

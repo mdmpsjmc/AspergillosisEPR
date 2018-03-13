@@ -11,8 +11,11 @@
             </section>
             <section class="col col-6">
                 <label class="select">
+                     @Html.Hidden("Fields[" + Model.Index + "].ID", Model.Field.ID)
+                     @Html.Hidden("Fields[" + Model.Index + "].CaseReportFormSectionId", Model.Field.CaseReportFormSectionId)
                      @Html.DropDownList("Fields[" + Model.Index + "].CaseReportFormFieldTypeId", 
-                                        (SelectList)ViewBag.FieldTypeIds[Int32.Parse(Model.Index)], "Select Field Type")
+                                       (SelectList)ViewBag.FieldTypeIds[Int32.Parse(Model.Index)], 
+                                       "Select Field Type")
                      <i></i>
                      <span asp-validation-for="Field.CaseReportFormFieldTypeId" class="text-danger"></span>
                 </label>
@@ -35,8 +38,9 @@
                 @if (Model.Field.Options.Any())
                 {
                     <label>Select available dropdown options</label>
-                    @Html.DropDownList("Fields[" + Model.Index + "].SelectedOptionsIds", (MultiSelectList)ViewBag.FieldOptions[Int32.Parse(Model.Index)],
-                                                                                     new { @multiple = "multiple", @data_index = Model.Index })
+                    @Html.DropDownList("Fields[" + Model.Index + "].SelectedOptionsIds", 
+                                       (MultiSelectList)ViewBag.FieldOptions[Int32.Parse(Model.Index)],
+                                       new { @multiple = "multiple", @data_index = Model.Index })
 
                 }
             </section>

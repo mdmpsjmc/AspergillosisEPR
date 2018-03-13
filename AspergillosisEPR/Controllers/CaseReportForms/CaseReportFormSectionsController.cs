@@ -104,6 +104,54 @@ namespace AspergillosisEPR.Controllers.CaseReportForms
             return PartialView(@"~/Views/CaseReportForms/CaseReportFormSections/Edit.cshtml", section);
         }
 
+        [HttpPost, ActionName("Edit")]
+        [Authorize(Roles = "Admin Role, Update Role")]
+        [ValidateAntiForgeryToken]
+        public IActionResult EditFormSection(int? id,
+                                             CaseReportFormSection section,
+                                             CaseReportFormField[] fields)
+        {
+            section.CaseReportFormResultFields = fields;
+            foreach(var field in section.CaseReportFormResultFields.OrderBy(f => f.ID))
+            {
+
+                var dbOptionsIds = _context.CaseReportFormFieldOptions.Where(fo => fo.CaseReportFormFieldId == field.ID).Select(fo => fo.CaseReportFormOptionChoiceId).ToList();
+                var formIds = new List<int>();
+                if (field.SelectedOptionsIds != null)
+                {
+                    formIds = field.SelectedOptionsIds.ToList();
+                }
+                var toDeleteOptions = dbOptionsIds.Except(formIds);
+                var toInsertOptions = formIds.Except(dbOptionsIds);
+                if (toDeleteOptions.Count() > 0)
+                {
+                    var fieldOptions = _context.CaseReportFormFieldOptions.Where(fo => fo.CaseReportFormFieldId == field.ID
+                                                                                 && toDeleteOptions.Contains(fo.CaseReportFormOptionChoiceId));
+                    _context.RemoveRange(fieldOptions);
+                }
+                if (toInsertOptions.Count() > 0)
+                {
+                    foreach(var optionId in toInsertOptions)
+                    {
+                        var fieldOption = new CaseReportFormFieldOption();
+                        fieldOption.CaseReportFormFieldId = field.ID;
+                        fieldOption.CaseReportFormOptionChoiceId = optionId;
+                        _context.Add(fieldOption);
+                    }
+                }
+            }
+            if (ModelState.IsValid)
+            {
+                _context.Update(section);
+                _context.SaveChanges();
+                return Json(new { valid = true });
+            } else
+            {
+                var errors = ModelStateHelper.Errors(ModelState);
+                return Json(new {errors = errors, valid = false });
+            }
+        }
+
         private CaseReportFormSection ObtainFormSection(int? id)
         {
             return _context.CaseReportFormSections
