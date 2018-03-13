@@ -10,5 +10,7 @@ namespace AspergillosisEPR.Models.CaseReportForms
         public int ID { get; set; }
         public int CaseReportFormId { get; set; }
         public int CaseReportFormSectionId { get; set; }
+
+        public CaseReportFormSection Section { get; set; }
     }
 }

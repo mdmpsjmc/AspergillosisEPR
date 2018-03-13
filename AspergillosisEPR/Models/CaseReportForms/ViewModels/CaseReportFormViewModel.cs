@@ -19,5 +19,10 @@ namespace AspergillosisEPR.Models.CaseReportForms.ViewModels
         public List<CaseReportFormField> Fields { get; set; }
 
         public List<int> SectionsIds { get; set; }
+
+        public string CategoryName { get; set; }
+        public List<string> SectionsNames { get; set; }
+        public List<string> FieldsNames { get; set; }
+        public string ItemId { get; set; }
     }
 }

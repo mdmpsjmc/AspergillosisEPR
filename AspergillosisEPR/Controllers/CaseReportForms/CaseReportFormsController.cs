@@ -40,7 +40,7 @@ namespace AspergillosisEPR.Controllers.CaseReportForms
             try
             {
                 var caseReportForm = new CaseReportForm();
-                var sections = new List<CaseReportFormSection>();
+                var sections = new List<CaseReportFormFormSection>();
                 caseReportForm.Fields = new List<CaseReportFormField>();
                 if (caseReportFormViewModel.SectionsIds != null)
                 {
@@ -49,16 +49,25 @@ namespace AspergillosisEPR.Controllers.CaseReportForms
                         var section = _context.CaseReportFormSections
                                               .Where(s => s.ID == sectionId)
                                               .SingleOrDefault();
-                        sections.Add(section);
+                        var formSection = new CaseReportFormFormSection();
+                        formSection.CaseReportFormSectionId = sectionId;
+                        sections.Add(formSection);
                     }
                 }
                 caseReportForm.Name = caseReportFormViewModel.Name;
                 caseReportForm.CaseReportFormCategoryId = caseReportFormViewModel.CaseReportFormCategoryId;
                 caseReportForm.Fields = caseReportFormViewModel.Fields;
+                caseReportForm.Sections = sections;
+
+                if (caseReportFormViewModel.SectionsIds == null && caseReportFormViewModel.Fields == null)
+                {
+                    ModelState.AddModelError("Base",
+                                             "Add least one section or field needs to be present on any form");
+                }
+
                 if (ModelState.IsValid)
                 {
-                    _context.CaseReportFormFields.AddRange(caseReportFormViewModel.Fields);
-                    _context.CaseReportFormSections.AddRange(sections);
+                    _context.CaseReportFormFormSections.AddRange(sections);
                     _context.CaseReportForms.Add(caseReportForm);
                     await _context.SaveChangesAsync();
                     return Json(new { result = "ok" });
