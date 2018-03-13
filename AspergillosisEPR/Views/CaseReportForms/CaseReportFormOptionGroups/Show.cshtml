@@ -1,2 +1,2 @@
 ﻿<label>Select available dropdown options</label>
-@Html.DropDownList("Fields[" + (string)ViewBag.Index + "].SelectedOptionsIds", (SelectList)ViewBag.SectionOptions, new { @multiple = "multiple", @data_index=(string) ViewBag.Index })
+@Html.DropDownList("Fields[" + (string)ViewBag.Index + "].SelectedOptionsIds", (MultiSelectList)ViewBag.SectionOptions, new { @multiple = "multiple", @data_index=(string) ViewBag.Index })

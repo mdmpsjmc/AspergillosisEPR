@@ -25,6 +25,7 @@
                     tokenSeparators: [',', ' '],
                     placeholder: "Type option"
                 });
+                $("select[multiple='multiple']").multiSelect();
                 $("form#new-case-report-form-option-group span.select2-container.select2-container--default").css("width", "100%");
             });
         });
@@ -52,10 +53,10 @@
             var currentIndex = $(this).data("index");
             var requestUrl = "/CaseReportFormOptionGroups/Show/" + optionGroupId + "?index=" + currentIndex;
             $.get(requestUrl, function (responseHtml) {
-                $("section.options").html(responseHtml);
-                $("section.options").removeClass("hide");
+                $("section.options[data-index='" + currentIndex + "']").html(responseHtml);
+                $("section.options[data-index='" + currentIndex + "']").removeClass("hide");
                 $("select[multiple='multiple']").multiSelect();
-                if (optionGroupId === "") $("section.options").addClass("hide");
+                if (optionGroupId === "") $("section.options[data-index='" + currentIndex + "']").addClass("hide");
             });
         });
     }

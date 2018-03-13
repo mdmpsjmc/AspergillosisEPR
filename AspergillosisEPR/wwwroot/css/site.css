@@ -100,7 +100,7 @@ body.smart-style-6 #logo-group > span#logo:before {
 div#diagnosis,
 div#stg,
 div#radiology,
-div#measurements {
+div#measurements{
     max-height: 600px;
     overflow-y: scroll;
 }
@@ -205,13 +205,15 @@ div#details-tab-content div#stg {
     max-height: 450px;
 }
 
-div#new-patient-tab-content div#stg {
+div#new-patient-tab-content div#stg{
     overflow-y: auto;
     max-height: 450px;
 }
-
+div#edit-case-report-form-section-modal .modal-body {
+    overflow-y: scroll;
+    max-height: 600px;
+}
 /* hide native chrome datepicker */
-
 input::-webkit-calendar-picker-indicator {
     display: none;
 }

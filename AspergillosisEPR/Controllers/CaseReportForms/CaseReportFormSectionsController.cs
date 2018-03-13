@@ -11,6 +11,7 @@ using AspergillosisEPR.Helpers;
 using System.Collections;
 using AspergillosisEPR.Models.CaseReportForms.ViewModels;
 using AspergillosisEPR.Models.CaseReportForms;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace AspergillosisEPR.Controllers.CaseReportForms
 {
@@ -78,8 +79,28 @@ namespace AspergillosisEPR.Controllers.CaseReportForms
             {
                 return NotFound();
             }
-            ViewBag.FieldTypes = _resolver.PopulateCRFFieldTypesDropdownList();
-            ViewBag.OptionGroups = _resolver.PopulateCRFOptionGroupsDropdownList();
+            var fields = section.CaseReportFormResultFields.OrderBy(f => f.ID).ToList();
+            ViewBag.OptionGroupsIds = new List<SelectList>();
+            ViewBag.FieldTypeIds = new List<SelectList>();
+            ViewBag.FieldOptions = new List<MultiSelectList>();
+
+            for (int cursor = 0; cursor < fields.Count(); cursor++)
+            {
+                var field = fields[cursor];
+                var optionGroupId = field.Options.FirstOrDefault()?.Option?.CaseReportFormOptionGroupId;
+                ViewBag.OptionGroupsIds.Add(_resolver.PopulateCRFOptionGroupsDropdownList(optionGroupId));
+                ViewBag.FieldTypeIds.Add(_resolver.PopulateCRFFieldTypesDropdownList(field.CaseReportFormFieldTypeId));
+                _context.Entry(field).Collection(m => m.Options).Load();
+                if (optionGroupId != null)
+                {
+                    var selectedIds = field.Options.Select(o => o.CaseReportFormOptionChoiceId).ToList();
+                    ViewBag.FieldOptions.Add(_resolver.PopulateCRFOptionGroupChoicesDropdownList(optionGroupId.Value, selectedIds));
+                } else
+                {
+                    ViewBag.FieldOptions.Add(new SelectList(new List<int>()));
+                }
+            }
+
             return PartialView(@"~/Views/CaseReportForms/CaseReportFormSections/Edit.cshtml", section);
         }
 

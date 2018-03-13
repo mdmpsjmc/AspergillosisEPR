@@ -1,6 +1,7 @@
 ﻿using AspergillosisEPR.Data;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -19,17 +20,18 @@ namespace AspergillosisEPR.Lib.CaseReportForms
         public SelectList PopulateCRFFieldTypesDropdownList(object selectedItem = null)
         {
             var statuses = from se in _context.CaseReportFormFieldTypes
-                           orderby se.Name
+                           orderby se.ID
                            select se;
             return new SelectList(statuses, "ID", "Name", selectedItem);
         }
 
-        public SelectList PopulateCRFOptionGroupChoicesDropdownList(int id, object selectedItem = null)
+        public MultiSelectList PopulateCRFOptionGroupChoicesDropdownList(int id, 
+                                                                    IList selectedItems = null)
         {
             var options = _context.CaseReportFormOptionChoices
                                   .Where(crfoc => crfoc.CaseReportFormOptionGroupId == id)
                                   .ToList();
-            return new SelectList(options, "ID", "Name", selectedItem);
+            return new MultiSelectList(options, "ID", "Name", selectedItems);
         }
 
         public SelectList PopulateCRFOptionGroupsDropdownList(object selectedItem = null)

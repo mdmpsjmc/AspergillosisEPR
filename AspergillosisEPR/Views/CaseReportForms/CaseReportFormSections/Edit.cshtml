@@ -1,4 +1,5 @@
 ﻿@model AspergillosisEPR.Models.CaseReportForms.CaseReportFormSection
+@using AspergillosisEPR.Models.CaseReportForms.ViewModels;
 <div class="modal fade new-settings-modal" tabindex="-1" role="dialog" id="edit-case-report-form-section-modal">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -27,9 +28,13 @@
                                 <strong>Add field</strong>
                             </span>
                         </a>
-                        @foreach(var field in Model.CaseReportFormResultFields)
+                        @for(int cursor = 0; cursor < Model.CaseReportFormResultFields.OrderBy(f => f.ID).Count(); cursor++)
                         {
-                            @Html.Partial("/Views/CaseReportForms/CaseReportFormFields/_Edit.cshtml", field)
+                            var formField = Model.CaseReportFormResultFields.OrderBy(f => f.ID).ToList()[cursor];
+                            var viewModel = new CaseReportFormFieldViewModel();
+                            viewModel.Field = formField;
+                            viewModel.Index = cursor.ToString();
+                            @Html.Partial("/Views/CaseReportForms/CaseReportFormFields/_Edit.cshtml", viewModel)
                         }
                     </form>
                 </div>
