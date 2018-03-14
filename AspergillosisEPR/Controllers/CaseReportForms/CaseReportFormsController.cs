@@ -17,18 +17,20 @@ namespace AspergillosisEPR.Controllers.CaseReportForms
     public class CaseReportFormsController : Controller
     {
         private AspergillosisContext _context;
-        private CaseReportFormsDropdownResolver _resolver;
+        private CaseReportFormsDropdownResolver _dropdownResolver;
+        private CaseReportFormManager _caseReportFormResolver;
 
         public CaseReportFormsController(AspergillosisContext context)
         {
             _context = context;
-            _resolver = new CaseReportFormsDropdownResolver(context);
+            _dropdownResolver = new CaseReportFormsDropdownResolver(context);
+            _caseReportFormResolver = new CaseReportFormManager(context);
         }
 
         public IActionResult New()
         {
-            ViewBag.CategoriesIds = _resolver.PopuplateCRFCategoriesDropdownList();
-            ViewBag.SectionIds = _resolver.PopulateCRFSectionsDropdownList();
+            ViewBag.CategoriesIds = _dropdownResolver.PopuplateCRFCategoriesDropdownList();
+            ViewBag.SectionIds = _dropdownResolver.PopulateCRFSectionsDropdownList();
             return PartialView();
         }
 
@@ -101,24 +103,7 @@ namespace AspergillosisEPR.Controllers.CaseReportForms
 
         public IActionResult Show(int? id)
         {
-            var caseReportForm = _context.CaseReportForms
-                                         .Where(f => f.ID == id)
-                                         .Include(f => f.CaseReportFormCategory)
-                                         .Include(f => f.Fields)
-                                            .ThenInclude(f => f.CaseReportFormFieldType)   
-                                         .Include(f => f.Fields) 
-                                            .ThenInclude(f => f.Options)
-                                                .ThenInclude(o => o.Option)
-                                         .Include(f => f.Sections)
-                                            .ThenInclude(s => s.Section)                
-                                                .ThenInclude(s => s.CaseReportFormResultFields)
-                                                        .ThenInclude(f => f.Options)
-                                                            .ThenInclude(o => o.Option)
-                                         .Include(f => f.Sections)
-                                            .ThenInclude(s => s.Section)
-                                                .ThenInclude(s => s.CaseReportFormResultFields)
-                                                    .ThenInclude(f => f.CaseReportFormFieldType)
-                                         .FirstOrDefault();
+            var caseReportForm = _caseReportFormResolver.FindByIdWithAllRelations(id.Value);
 
             if (caseReportForm == null)
             {
@@ -128,6 +113,23 @@ namespace AspergillosisEPR.Controllers.CaseReportForms
             return PartialView(@"/Views/CaseReportForms/_Show.cshtml", viewModel);
         }
 
-        
+        public IActionResult Edit(int? id)
+        {
+            var caseReportForm = _caseReportFormResolver.FindByIdWithAllRelations(id.Value);
+
+            if (caseReportForm == null)
+            {
+                return NotFound();
+            }
+            var viewModel = CaseReportFormViewModel.BuildViewModel(caseReportForm);
+            ViewBag.CategoriesIds = _dropdownResolver.PopuplateCRFCategoriesDropdownList(caseReportForm.CaseReportFormCategoryId);
+            var sectionIds = caseReportForm.Sections.Select(s => s.CaseReportFormSectionId).ToList();
+            ViewBag.SectionIds = _dropdownResolver.PopulateCRFSectionsDropdownList(sectionIds);
+            _caseReportFormResolver.BuildFormFor(ViewBag, caseReportForm.Fields.ToList(), _dropdownResolver);
+            return PartialView(@"/Views/CaseReportForms/_Edit.cshtml", viewModel);
+        }
+
+
+
     }
 }
