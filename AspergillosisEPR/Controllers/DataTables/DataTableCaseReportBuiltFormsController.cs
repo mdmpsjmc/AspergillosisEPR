@@ -46,7 +46,8 @@ namespace AspergillosisEPR.Controllers.DataTables
                 var viewModel = new CaseReportFormViewModel()
                 {
                     ItemId = result.ID.ToString(),
-                    CategoryName = result.Name,
+                    Name = result.Name, 
+                    CategoryName = result.CaseReportFormCategory.Name,
                     SectionsNames = result.Sections.Select(s => s.Section.Name).ToList(),
                     FieldsNames = result.Fields.Select(f => f.Label).ToList()
                 };
