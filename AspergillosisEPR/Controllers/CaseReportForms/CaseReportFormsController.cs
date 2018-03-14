@@ -41,40 +41,9 @@ namespace AspergillosisEPR.Controllers.CaseReportForms
         {
             try
             {
-                var caseReportForm = new CaseReportForm();
-                var sections = new List<CaseReportFormFormSection>();
-                caseReportForm.Fields = new List<CaseReportFormField>();
-                if (caseReportFormViewModel.SectionsIds != null)
-                {
-                    foreach (var sectionId in caseReportFormViewModel.SectionsIds)
-                    {
-                        var section = _context.CaseReportFormSections
-                                              .Where(s => s.ID == sectionId)
-                                              .SingleOrDefault();
-                        var formSection = new CaseReportFormFormSection();
-                        formSection.CaseReportFormSectionId = sectionId;
-                        sections.Add(formSection);
-
-                    }
-                }
-                if (caseReportFormViewModel.Fields != null)
-                {
-                    foreach(var field in caseReportFormViewModel.Fields)
-                    {
-                        if (field.SelectedOptionsIds == null) continue;
-                        foreach (var fieldOptionId in field.SelectedOptionsIds)
-                        {
-                            var sectionOption = new CaseReportFormFieldOption();
-                            sectionOption.CaseReportFormOptionChoiceId = fieldOptionId;
-                            sectionOption.Field = field;
-                            _context.CaseReportFormFieldOptions.Add(sectionOption);
-                        }
-                    }
-                }
-                caseReportForm.Name = caseReportFormViewModel.Name;
-                caseReportForm.CaseReportFormCategoryId = caseReportFormViewModel.CaseReportFormCategoryId;
-                caseReportForm.Fields = caseReportFormViewModel.Fields;
-                caseReportForm.Sections = sections;
+                CaseReportForm caseReportForm;
+                List<CaseReportFormFormSection> sections;
+                BuildFormWithSections(caseReportFormViewModel, out caseReportForm, out sections);
 
                 if (caseReportFormViewModel.SectionsIds == null && caseReportFormViewModel.Fields == null)
                 {
@@ -99,7 +68,7 @@ namespace AspergillosisEPR.Controllers.CaseReportForms
             {
                 return null;
             }
-        }
+        }        
 
         public IActionResult Show(int? id)
         {
@@ -122,11 +91,99 @@ namespace AspergillosisEPR.Controllers.CaseReportForms
                 return NotFound();
             }
             var viewModel = CaseReportFormViewModel.BuildViewModel(caseReportForm);
-            ViewBag.CategoriesIds = _dropdownResolver.PopuplateCRFCategoriesDropdownList(caseReportForm.CaseReportFormCategoryId);
             var sectionIds = caseReportForm.Sections.Select(s => s.CaseReportFormSectionId).ToList();
+
+            ViewBag.CategoriesIds = _dropdownResolver.PopuplateCRFCategoriesDropdownList(caseReportForm.CaseReportFormCategoryId);
             ViewBag.SectionIds = _dropdownResolver.PopulateCRFSectionsDropdownList(sectionIds);
             _caseReportFormResolver.BuildFormFor(ViewBag, caseReportForm.Fields.ToList(), _dropdownResolver);
+
             return PartialView(@"/Views/CaseReportForms/_Edit.cshtml", viewModel);
+        }
+
+
+        [HttpPost, ActionName("Edit")]
+        [Authorize(Roles = "Admin Role, Update Role")]
+        [ValidateAntiForgeryToken]
+        public IActionResult EditForm(int? id, CaseReportForm caseReportForm,
+                                               CaseReportFormField[] fields)
+        {
+            caseReportForm.Fields = fields;
+            foreach(var field in caseReportForm.Fields.OrderBy(f => f.ID))
+            {
+
+                var dbOptionsIds = _context.CaseReportFormFieldOptions.Where(fo => fo.CaseReportFormFieldId == field.ID).Select(fo => fo.CaseReportFormOptionChoiceId).ToList();
+                var formIds = new List<int>();
+                if (field.SelectedOptionsIds != null)
+                {
+                    formIds = field.SelectedOptionsIds.ToList();
+                }
+                var toDeleteOptions = dbOptionsIds.Except(formIds);
+                var toInsertOptions = formIds.Except(dbOptionsIds);
+                if (toDeleteOptions.Count() > 0)
+                {
+                    var fieldOptions = _context.CaseReportFormFieldOptions.Where(fo => fo.CaseReportFormFieldId == field.ID
+                                                                                 && toDeleteOptions.Contains(fo.CaseReportFormOptionChoiceId));
+                    _context.RemoveRange(fieldOptions);
+                }
+                if (toInsertOptions.Count() > 0)
+                {
+                    foreach(var optionId in toInsertOptions)
+                    {
+                        var fieldOption = new CaseReportFormFieldOption();
+                        fieldOption.CaseReportFormFieldId = field.ID;
+                        fieldOption.CaseReportFormOptionChoiceId = optionId;
+                        _context.Add(fieldOption);
+                    }
+                }
+            }
+            if (ModelState.IsValid)
+            {
+                _context.Update(caseReportForm);
+                _context.SaveChanges();
+                return Json(new { valid = true });
+            } else
+            {
+                var errors = ModelStateHelper.Errors(ModelState);
+                return Json(new {errors = errors, valid = false });
+            }
+        }
+
+        private void BuildFormWithSections(CaseReportFormViewModel caseReportFormViewModel, out CaseReportForm caseReportForm, out List<CaseReportFormFormSection> sections)
+        {
+            caseReportForm = new CaseReportForm();
+            sections = new List<CaseReportFormFormSection>();
+            caseReportForm.Fields = new List<CaseReportFormField>();
+            if (caseReportFormViewModel.SectionsIds != null)
+            {
+                foreach (var sectionId in caseReportFormViewModel.SectionsIds)
+                {
+                    var section = _context.CaseReportFormSections
+                                          .Where(s => s.ID == sectionId)
+                                          .SingleOrDefault();
+                    var formSection = new CaseReportFormFormSection();
+                    formSection.CaseReportFormSectionId = sectionId;
+                    sections.Add(formSection);
+
+                }
+            }
+            if (caseReportFormViewModel.Fields != null)
+            {
+                foreach (var field in caseReportFormViewModel.Fields)
+                {
+                    if (field.SelectedOptionsIds == null) continue;
+                    foreach (var fieldOptionId in field.SelectedOptionsIds)
+                    {
+                        var sectionOption = new CaseReportFormFieldOption();
+                        sectionOption.CaseReportFormOptionChoiceId = fieldOptionId;
+                        sectionOption.Field = field;
+                        _context.CaseReportFormFieldOptions.Add(sectionOption);
+                    }
+                }
+            }
+            caseReportForm.Name = caseReportFormViewModel.Name;
+            caseReportForm.CaseReportFormCategoryId = caseReportFormViewModel.CaseReportFormCategoryId;
+            caseReportForm.Fields = caseReportFormViewModel.Fields;
+            caseReportForm.Sections = sections;
         }
 
 
