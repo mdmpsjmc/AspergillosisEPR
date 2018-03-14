@@ -198,5 +198,17 @@ namespace AspergillosisEPR.Controllers.CaseReportForms
             _context.SaveChanges();
             return Json(new { ok = "ok" });
         }
+
+        public IActionResult Patient(int? id)
+        {
+            var caseReportForm = _caseReportFormResolver.FindByIdWithAllRelations(id.Value);
+
+            if (caseReportForm == null)
+            {
+                return NotFound();
+            }
+            var viewModel = CaseReportFormViewModel.BuildViewModel(caseReportForm);
+            return PartialView(@"/Views/CaseReportForms/_Show.cshtml", viewModel);
+        }
     }
 }

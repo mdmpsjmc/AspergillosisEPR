@@ -61,6 +61,19 @@
         });
     }
 
+    var onPatientCaseReportFormSelectChange = function () {
+        $(document).off("change").on("change", "select#patient-case-report-form", function () {
+            var caseReportFormId = $(this).val();
+            var requestUrl = "/CaseReportForms/Patient/" + caseReportFormId;
+            $.get(requestUrl, function (responseHtml) {
+                $("div.case-report-form").html(responseHtml);
+                $("div.case-report-form").removeClass("hide");
+                $("select[multiple='multiple']").multiSelect();
+                if (caseReportFormId === "") $("div.case-report-form").addClass("hide");
+            });
+        });
+    }
+
     return {
         showCRFModal: function () {
             showCRFModal();
@@ -73,6 +86,7 @@
             Patients.deletePartialFromPopup();
             Patients.deleteDbPartialFromPopup();
             showRenderedSection();
+            onPatientCaseReportFormSelectChange();
             SimpleDataTable.initializeWithColumns("crf_sectionsDT", "table#case_report_forms_sections_datatable", "CaseReportFormSection", [
                 { "data": "name", "name": "Name", "autoWidth": true, "sortable": false},               
                 { "data": "fieldNames", "name": "FieldNames", "autoWidth": true, "sortable": false }, 

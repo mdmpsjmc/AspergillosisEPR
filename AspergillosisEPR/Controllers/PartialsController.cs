@@ -13,6 +13,7 @@ using System;
 using AspergillosisEPR.Models.PatientViewModels;
 using AspergillosisEPR.Lib.Search;
 using AspergillosisEPR.Lib;
+using AspergillosisEPR.Lib.CaseReportForms;
 
 namespace AspergillosisEPR.Controllers
 {
@@ -21,10 +22,12 @@ namespace AspergillosisEPR.Controllers
     {
         private readonly AspergillosisContext _context;
         private readonly DropdownListsResolver _listResolver;
+        private readonly CaseReportFormsDropdownResolver _caseReportFormListResolver;
 
         public PartialsController(AspergillosisContext context)
         {
             _listResolver = new DropdownListsResolver(context, ViewBag);
+            _caseReportFormListResolver = new CaseReportFormsDropdownResolver(context);
             _context = context;
         }
         [Authorize(Roles ="Create Role, Admin Role")]
@@ -166,6 +169,13 @@ namespace AspergillosisEPR.Controllers
                     break;
             }
             return PartialView();
+        }
+
+        public IActionResult CaseReportFormModal()
+        {
+            var gropupedCategoriesList = _caseReportFormListResolver
+                                            .PopulateCRFGroupedCategoriesDropdownList();
+            return PartialView(gropupedCategoriesList);
         }
         private SelectList CriteriaClassesDropdownList()
         {

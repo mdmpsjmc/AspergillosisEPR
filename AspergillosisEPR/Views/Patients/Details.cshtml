@@ -36,6 +36,9 @@
                         <li>
                             <a href="#measurements" data-toggle="tab"><i class="fa fa-fw fa-lg fa-dashboard"></i> Weight</a>
                         </li>
+                        <li>
+                            <a href="#case-report-forms" data-toggle="tab"><i class="fa fa-fw fa-lg fa-th-list"></i> Case Report Forms</a>
+                        </li>
                     </ul>
 
                     <div id="details-tab-content" class="tab-content padding-10">
@@ -60,8 +63,11 @@
                         <div class="tab-pane fade radiology" id="radiology">
                             @Html.Partial("/Views/Patients/Details/Radiology.cshtml")
                         </div>
-                        <div class="tab-pane fade radiology" id="measurements">
+                        <div class="tab-pane fade measurements" id="measurements">
                             @Html.Partial("/Views/Patients/Details/Measurements.cshtml")
+                        </div>
+                        <div class="tab-pane fade case-report-forms" id="case-report-forms">
+                            @Html.Partial("/Views/Patients/CaseReportForms/Forms.cshtml")
                         </div>
                     </div>
 
