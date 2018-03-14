@@ -1,12 +1,12 @@
-﻿<form class="smart-form">
-    <div class="row">
-        <section class="col col-4 label-render">
-            <label>@Model.Label</label>
-        </section>
-        <section class="col col-5">
-            <label class="input">
-                <input name="Fields[@Model.ID].@Model.FieldName()" placeholder="@Model.Label" class="form-control">                 
-            </label>
-        </section>
-    </div>
-</form>
+﻿@model AspergillosisEPR.Models.CaseReportForms.CaseReportFormField;
+<div class="row">
+    <section class="col col-4 label-render">
+        <label>@Model.Label</label>
+    </section>
+    <section class="col col-5">
+        <label class="input">
+            <input name="CaseReportFormPatientResult.TextAnswer" placeholder="@Model.Label" class="form-control">
+            @Html.Hidden("CaseReportFormPatientResult.CaseReportFormFieldId", Model.ID)
+        </label>
+    </section>
+</div>

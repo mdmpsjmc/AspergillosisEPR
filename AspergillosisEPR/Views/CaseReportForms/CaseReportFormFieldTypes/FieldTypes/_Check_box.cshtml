@@ -1,17 +1,17 @@
 ﻿@model AspergillosisEPR.Models.CaseReportForms.CaseReportFormField;
-<form class="smart-form">
-    <div class="row">
-        <div class="inline-group labels">
-            @foreach (var option in @Model.Options)
+<div class="row">
+    <div class="inline-group labels">
+        @foreach (var option in @Model.Options)
             {
-                <label class="checkbox">
-                   <input type="checkbox" name= "Fields[@Model.ID].@Model.FieldName()" value="@option.CaseReportFormOptionChoiceId">
-                   <i></i> 
-                   <span class="checkbox-label">
-                      @option.Option.Name
-                   </span>
-                </label>
-            }
-        </div>
+            <label class="checkbox">
+                <input type="checkbox" name="CaseReportFormPatientResult.CaseReportFormOptionChoiceId" value="@option.CaseReportFormOptionChoiceId">
+                @Html.Hidden("CaseReportFormPatientResult.CaseReportFormFieldId", Model.ID)
+                <i></i>
+                <span class="checkbox-label">
+                    @option.Option.Name
+                </span>
+            </label>
+        }
     </div>
-</form>
+</div>
+

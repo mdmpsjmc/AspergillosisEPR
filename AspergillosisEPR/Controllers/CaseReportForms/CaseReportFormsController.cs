@@ -201,6 +201,11 @@ namespace AspergillosisEPR.Controllers.CaseReportForms
 
         public IActionResult Patient(int? id)
         {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
             var caseReportForm = _caseReportFormResolver.FindByIdWithAllRelations(id.Value);
 
             if (caseReportForm == null)
@@ -208,7 +213,7 @@ namespace AspergillosisEPR.Controllers.CaseReportForms
                 return NotFound();
             }
             var viewModel = CaseReportFormViewModel.BuildViewModel(caseReportForm);
-            return PartialView(@"/Views/CaseReportForms/_Show.cshtml", viewModel);
+            return PartialView(@"/Views/Patients/CaseReportForms/_Show.cshtml", viewModel);
         }
     }
 }

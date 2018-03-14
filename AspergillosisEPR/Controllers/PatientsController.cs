@@ -59,14 +59,18 @@ namespace AspergillosisEPR.Controllers
                                                  PatientDrug[] drugs,
                                                  PatientSTGQuestionnaire[] sTGQuestionnaires,
                                                  PatientImmunoglobulin[] patientImmunoglobulin,
-                                                 PatientRadiologyFinding[] patientRadiologyFinding)
+                                                 PatientRadiologyFinding[] patientRadiologyFinding,
+                                                 string[] fields)
         {
             var existingPatient = _context.Patients.FirstOrDefault(x => x.RM2Number == patient.RM2Number);
             _patientManager.Request = Request;
             CheckIsUnique(existingPatient);
-            _patientManager.AddCollectionsFromFormToPatients(patient, ref diagnoses, ref drugs,
-                                                      ref sTGQuestionnaires, patientImmunoglobulin,
-                                                      ref patientRadiologyFinding);
+            _patientManager.AddCollectionsFromFormToPatients(patient, 
+                                                             ref diagnoses, 
+                                                             ref drugs,
+                                                             ref sTGQuestionnaires, 
+                                                             patientImmunoglobulin,
+                                                             ref patientRadiologyFinding);
             try
             {
                 if (ModelState.IsValid)

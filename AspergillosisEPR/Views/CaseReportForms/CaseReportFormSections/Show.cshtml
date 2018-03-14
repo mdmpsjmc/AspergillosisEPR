@@ -16,12 +16,14 @@
                                 <strong>
                                     @Model.Name
                                 </strong>
-                            </header>                            
-                           @foreach(var field in @Model.CaseReportFormResultFields)
-                           {
-                               @Html.Partial("/Views/CaseReportForms/CaseReportFormFieldTypes/FieldTypes/_" 
+                            </header>           
+                            <form class="smart-form">
+                                @foreach (var field in @Model.CaseReportFormResultFields)
+                                {
+                                    @Html.Partial("/Views/CaseReportForms/CaseReportFormFieldTypes/FieldTypes/_"
                                                 + @field.CaseReportFormFieldType.FieldPartial() + ".cshtml", field)
-                           }
+                                }
+                            </form>
                         </fieldset>
 
                 </div>

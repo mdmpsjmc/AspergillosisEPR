@@ -211,7 +211,8 @@ div#new-patient-tab-content div#stg{
 }
 div#edit-case-report-form-section-modal .modal-body,
 div#edit-case-report-form-modal .modal-body,
-div#render-crf-modal  .modal-body{
+div#render-crf-modal  .modal-body,
+div#case-report-form {
     overflow-y: scroll;
     max-height: 600px;
 }

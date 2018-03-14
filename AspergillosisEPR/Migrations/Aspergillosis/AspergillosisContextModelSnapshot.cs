@@ -119,6 +119,8 @@ namespace AspergillosisEPR.Migrations.Aspergillosis
 
                     b.HasIndex("CaseReportFormId");
 
+                    b.HasIndex("CaseReportFormSectionId");
+
                     b.ToTable("CaseReportFormFormSections");
                 });
 
@@ -148,6 +150,50 @@ namespace AspergillosisEPR.Migrations.Aspergillosis
                     b.HasKey("ID");
 
                     b.ToTable("CaseReportFormOptionGroups");
+                });
+
+            modelBuilder.Entity("AspergillosisEPR.Models.CaseReportForms.CaseReportFormPatientResult", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("CaseReportFormFieldId");
+
+                    b.Property<int>("CaseReportFormId");
+
+                    b.Property<DateTime?>("DateAnswer");
+
+                    b.Property<decimal?>("NumericAnswer");
+
+                    b.Property<int>("PatientId");
+
+                    b.Property<string>("TextAnswer");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("CaseReportFormFieldId");
+
+                    b.HasIndex("CaseReportFormId");
+
+                    b.HasIndex("PatientId");
+
+                    b.ToTable("CaseReportFormPatientResults");
+                });
+
+            modelBuilder.Entity("AspergillosisEPR.Models.CaseReportForms.CaseReportFormPatientResultOptionChoice", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("CaseReportFormOptionChoiceId");
+
+                    b.Property<int>("CaseReportFormPatientResultId");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("CaseReportFormPatientResultId");
+
+                    b.ToTable("CaseReportFormPatientResultOptionChoices");
                 });
 
             modelBuilder.Entity("AspergillosisEPR.Models.CaseReportForms.CaseReportFormSection", b =>
@@ -690,6 +736,11 @@ namespace AspergillosisEPR.Migrations.Aspergillosis
                         .WithMany("Sections")
                         .HasForeignKey("CaseReportFormId")
                         .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("AspergillosisEPR.Models.CaseReportForms.CaseReportFormSection", "Section")
+                        .WithMany()
+                        .HasForeignKey("CaseReportFormSectionId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("AspergillosisEPR.Models.CaseReportForms.CaseReportFormOptionChoice", b =>
@@ -697,6 +748,32 @@ namespace AspergillosisEPR.Migrations.Aspergillosis
                     b.HasOne("AspergillosisEPR.Models.CaseReportForms.CaseReportFormOptionGroup", "CaseReportFormOptionGroup")
                         .WithMany("Choices")
                         .HasForeignKey("CaseReportFormOptionGroupId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("AspergillosisEPR.Models.CaseReportForms.CaseReportFormPatientResult", b =>
+                {
+                    b.HasOne("AspergillosisEPR.Models.CaseReportForms.CaseReportFormField", "Field")
+                        .WithMany()
+                        .HasForeignKey("CaseReportFormFieldId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("AspergillosisEPR.Models.CaseReportForms.CaseReportForm", "Form")
+                        .WithMany()
+                        .HasForeignKey("CaseReportFormId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("AspergillosisEPR.Models.Patient", "Patient")
+                        .WithMany()
+                        .HasForeignKey("PatientId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("AspergillosisEPR.Models.CaseReportForms.CaseReportFormPatientResultOptionChoice", b =>
+                {
+                    b.HasOne("AspergillosisEPR.Models.CaseReportForms.CaseReportFormPatientResult")
+                        .WithMany("Options")
+                        .HasForeignKey("CaseReportFormPatientResultId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

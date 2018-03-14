@@ -17,22 +17,24 @@
                                 @Model.Name
                             </strong>
                         </header>
-                        @foreach (var fsection in Model.Sections)
-                        {
-                            <fieldset>
-                                <h3>@fsection.Section.Name</h3>
-                                @foreach (var field in fsection.Section.CaseReportFormResultFields)
-                                {
-                                    @Html.Partial("/Views/CaseReportForms/CaseReportFormFieldTypes/FieldTypes/_"
+                        <form class="smart-form">
+                            @foreach (var fsection in Model.Sections)
+                            {
+                                <fieldset>
+                                    <h3>@fsection.Section.Name</h3>
+                                    @foreach (var field in fsection.Section.CaseReportFormResultFields)
+                                    {
+                                        @Html.Partial("/Views/CaseReportForms/CaseReportFormFieldTypes/FieldTypes/_"
                                                 + @field.CaseReportFormFieldType.FieldPartial() + ".cshtml", field)
-                                }
-                            </fieldset>
-                        }
-                        @foreach (var field in @Model.Fields)
-                        {
-                            @Html.Partial("/Views/CaseReportForms/CaseReportFormFieldTypes/FieldTypes/_"
+                                    }
+                                </fieldset>
+                            }
+                            @foreach (var field in @Model.Fields)
+                            {
+                                @Html.Partial("/Views/CaseReportForms/CaseReportFormFieldTypes/FieldTypes/_"
                                                 + @field.CaseReportFormFieldType.FieldPartial() + ".cshtml", field)
-                        }
+                            }
+                        </form>
                     </fieldset>
 
                 </div>

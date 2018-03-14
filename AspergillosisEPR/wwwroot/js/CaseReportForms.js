@@ -66,10 +66,10 @@
             var caseReportFormId = $(this).val();
             var requestUrl = "/CaseReportForms/Patient/" + caseReportFormId;
             $.get(requestUrl, function (responseHtml) {
-                $("div.case-report-form").html(responseHtml);
-                $("div.case-report-form").removeClass("hide");
+                $("div#case-report-form").html(responseHtml);
+                $("div#case-report-form").removeClass("hide");
                 $("select[multiple='multiple']").multiSelect();
-                if (caseReportFormId === "") $("div.case-report-form").addClass("hide");
+                if (caseReportFormId === "") $("div#case-report-form").addClass("hide");
             });
         });
     }
@@ -79,9 +79,14 @@
             showCRFModal();
         },
 
+        onOptionGroupSelectChange: function () {
+            onOptionGroupSelectChange();
+        },
+
         init: function () {
             addNewPartial();
             onOptionGroupSelectChange();
+
             showCRFModal();
             Patients.deletePartialFromPopup();
             Patients.deleteDbPartialFromPopup();
