@@ -61,7 +61,7 @@ namespace AspergillosisEPR.Controllers.DataTables
             {
                 _list = _list
                         .Where(crf => crf.Name.ToString().Contains(_searchValue) 
-                                    || crf.SectionNames.Contains(_searchValue)).ToList();
+                                    || crf.SectionsNames.Contains(_searchValue)).ToList();
             }
         }
     }
