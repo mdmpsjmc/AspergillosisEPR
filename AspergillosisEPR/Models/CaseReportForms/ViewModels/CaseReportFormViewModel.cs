@@ -24,5 +24,17 @@ namespace AspergillosisEPR.Models.CaseReportForms.ViewModels
         public List<string> SectionsNames { get; set; }
         public List<string> FieldsNames { get; set; }
         public string ItemId { get; set; }
+
+        public static CaseReportFormViewModel BuildViewModel(CaseReportForm caseReportForm)
+        {
+            var viewModel = new CaseReportFormViewModel();
+            viewModel.Name = caseReportForm.Name;
+            viewModel.CaseReportFormCategoryId = caseReportForm.CaseReportFormCategoryId;
+            viewModel.CategoryName = caseReportForm.CaseReportFormCategory.Name;
+            viewModel.FieldsNames = caseReportForm.Fields.Select(f => f.Label).ToList();
+            viewModel.Fields = caseReportForm.Fields.ToList();
+            viewModel.Sections = caseReportForm.Sections.ToList();
+            return viewModel;
+        }
     }
 }

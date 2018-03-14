@@ -52,6 +52,21 @@ namespace AspergillosisEPR.Controllers.CaseReportForms
                         var formSection = new CaseReportFormFormSection();
                         formSection.CaseReportFormSectionId = sectionId;
                         sections.Add(formSection);
+
+                    }
+                }
+                if (caseReportFormViewModel.Fields != null)
+                {
+                    foreach(var field in caseReportFormViewModel.Fields)
+                    {
+                        if (field.SelectedOptionsIds == null) continue;
+                        foreach (var fieldOptionId in field.SelectedOptionsIds)
+                        {
+                            var sectionOption = new CaseReportFormFieldOption();
+                            sectionOption.CaseReportFormOptionChoiceId = fieldOptionId;
+                            sectionOption.Field = field;
+                            _context.CaseReportFormFieldOptions.Add(sectionOption);
+                        }
                     }
                 }
                 caseReportForm.Name = caseReportFormViewModel.Name;
@@ -83,5 +98,36 @@ namespace AspergillosisEPR.Controllers.CaseReportForms
                 return null;
             }
         }
+
+        public IActionResult Show(int? id)
+        {
+            var caseReportForm = _context.CaseReportForms
+                                         .Where(f => f.ID == id)
+                                         .Include(f => f.CaseReportFormCategory)
+                                         .Include(f => f.Fields)
+                                            .ThenInclude(f => f.CaseReportFormFieldType)   
+                                         .Include(f => f.Fields) 
+                                            .ThenInclude(f => f.Options)
+                                                .ThenInclude(o => o.Option)
+                                         .Include(f => f.Sections)
+                                            .ThenInclude(s => s.Section)                
+                                                .ThenInclude(s => s.CaseReportFormResultFields)
+                                                        .ThenInclude(f => f.Options)
+                                                            .ThenInclude(o => o.Option)
+                                         .Include(f => f.Sections)
+                                            .ThenInclude(s => s.Section)
+                                                .ThenInclude(s => s.CaseReportFormResultFields)
+                                                    .ThenInclude(f => f.CaseReportFormFieldType)
+                                         .FirstOrDefault();
+
+            if (caseReportForm == null)
+            {
+                return NotFound();
+            }
+            var viewModel = CaseReportFormViewModel.BuildViewModel(caseReportForm);
+            return PartialView(@"/Views/CaseReportForms/_Show.cshtml", viewModel);
+        }
+
+        
     }
 }

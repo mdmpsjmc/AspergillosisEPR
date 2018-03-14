@@ -19,14 +19,14 @@
         </div>
         <div class="row">
                 <h4>Optional (for checkbox and select/multiselect types)</h4>
-                <section class="col col-12 col-md-12 col-xs-12">
+                <section class="col col-12 col-md-12 col-xs-12" data-index="@((string)ViewBag.Index)">
                     <label asp-for="SelectedOptionsIds" class="select">
                         @Html.DropDownList("Fields[" + (string)ViewBag.Index + "].SelectedOptionGroup", (SelectList)ViewBag.OptionGroups, "Select Option Group", new { @class = "option-group", @data_index = (string)ViewBag.Index })
                         <i></i>
                         <span asp-validation-for="SelectedOptionsIds" class="text-danger"></span>
                     </label>
                 </section> 
-                <section class="col col-12 col-md-12 col-xs-12 hide options">
+                <section class="col col-12 col-md-12 col-xs-12 hide options" data-index="@((string)ViewBag.Index)">
                 </section> 
         </div>
         <div class="row">

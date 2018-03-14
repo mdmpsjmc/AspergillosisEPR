@@ -32,13 +32,13 @@
     }
 
     var showRenderedSection = function () {
-        $(document).off("click.asm").on("click.srs", "a.show-crf-section", function (e) {
+        $(document).off("click.asm").on("click.srs", "a.show-crf-section, a.show-crf-modal", function (e) {
             LoadingIndicator.show();
             e.preventDefault();
             $.get((this).href + "?klass=" + $(this).data("klass"), function (html) {
                 LoadingIndicator.hide();
                 $("div#modal-container").html(html);
-                $("div#render-section-modal").modal("show");
+                $("div#render-section-modal, div#render-crf-modal").modal("show");
                 $('input.datepicker').datetimepicker({
                     format: 'DD/MM/YYYY'
                 });

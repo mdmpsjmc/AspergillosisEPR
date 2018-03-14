@@ -1,0 +1,45 @@
+﻿@model AspergillosisEPR.Models.CaseReportForms.ViewModels.CaseReportFormViewModel;
+<div class="modal fade new-settings-modal" tabindex="-1" role="dialog" id="render-crf-modal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">Showing rendered case report form</h4>
+            </div>
+            <div class="modal-body">
+                <div class="widget-body">
+                    <fieldset>
+
+                        <header>
+                            <strong>
+                                @Model.Name
+                            </strong>
+                        </header>
+                        @foreach (var fsection in Model.Sections)
+                        {
+                            <fieldset>
+                                <h3>@fsection.Section.Name</h3>
+                                @foreach (var field in fsection.Section.CaseReportFormResultFields)
+                                {
+                                    @Html.Partial("/Views/CaseReportForms/CaseReportFormFieldTypes/FieldTypes/_"
+                                                + @field.CaseReportFormFieldType.FieldPartial() + ".cshtml", field)
+                                }
+                            </fieldset>
+                        }
+                        @foreach (var field in @Model.Fields)
+                        {
+                            @Html.Partial("/Views/CaseReportForms/CaseReportFormFieldTypes/FieldTypes/_"
+                                                + @field.CaseReportFormFieldType.FieldPartial() + ".cshtml", field)
+                        }
+                    </fieldset>
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
