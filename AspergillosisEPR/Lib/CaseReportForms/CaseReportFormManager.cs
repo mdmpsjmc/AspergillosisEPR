@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AspergillosisEPR.Models;
 
 namespace AspergillosisEPR.Lib.CaseReportForms
 {
@@ -69,5 +70,82 @@ namespace AspergillosisEPR.Lib.CaseReportForms
             }
         }
 
+        public void GetFormIdsForCaseReportForms(CaseReportFormPatientResult[] caseReportFormPatientResult)
+        {
+            for(int cursor = 0; cursor < caseReportFormPatientResult.Length; cursor++)
+            {
+                var caseReportFormResult = caseReportFormPatientResult[cursor];
+                var field = _context.CaseReportFormFields.Where(f => f.ID == caseReportFormResult.CaseReportFormFieldId)
+                                                         .Include(f => f.CaseReportFormSection)
+                                                         .Include(f => f.CaseReportForm)
+                                                         .FirstOrDefault();
+                int? formId = null;
+                if (field != null)
+                {
+                    formId = (field.CaseReportForm != null) ? field.CaseReportFormId : GetSectionFormIdForField(field);
+                }
+                caseReportFormResult.CaseReportFormId = formId.Value;
+            }
+        }
+
+        public void UpdateWithPatient(Patient patient,
+                                     CaseReportFormPatientResult[] caseReportFormPatientResult)
+        {
+            for (int cursor = 0; cursor < caseReportFormPatientResult.Length; cursor++)
+            {
+                var caseReportFormResult = caseReportFormPatientResult[cursor];
+                caseReportFormResult.Patient = patient;
+            }
+        }
+
+        private int? GetSectionFormIdForField(CaseReportFormField field)
+        {
+            if (field.CaseReportFormSectionId != null)
+            {
+                var section = _context.CaseReportFormFormSections
+                                               .Where(s => s.CaseReportFormSectionId == field.CaseReportFormSectionId)
+                                               .FirstOrDefault();
+                return section.CaseReportFormId;
+            } else
+            {
+                return null;
+            }
+        }
+
+        public void CreateOptionChoices(CaseReportFormPatientResult[] caseReportFormPatientResult)
+        {
+            for (int cursor = 0; cursor < caseReportFormPatientResult.Length; cursor++)
+            {
+                var caseReportFormResult = caseReportFormPatientResult[cursor];
+                if (caseReportFormResult.SelectedIds != null || caseReportFormResult.SelectedId != null)
+                {
+                    caseReportFormResult.Options = new List<CaseReportFormPatientResultOptionChoice>();
+                    if (caseReportFormResult.SelectedId != null)
+                    {
+                        var optionChoice = _context.CaseReportFormOptionChoices
+                                                   .Where(oc => oc.ID == caseReportFormResult.SelectedId)
+                                                   .FirstOrDefault();
+                        if (optionChoice == null) continue;
+                        var caseReportResultOptionChoice = new CaseReportFormPatientResultOptionChoice();
+                        caseReportResultOptionChoice.CaseReportFormOptionChoiceId = optionChoice.ID;
+                        caseReportFormResult.Options.Add(caseReportResultOptionChoice);
+                    }
+
+                    if (caseReportFormResult.SelectedIds != null)
+                    {
+                        foreach(var optionChoiceId in caseReportFormResult.SelectedIds)
+                        {
+                            var optionChoice = _context.CaseReportFormOptionChoices
+                                                   .Where(oc => oc.ID == optionChoiceId)
+                                                   .FirstOrDefault();
+                            if (optionChoice == null) continue;
+                            var caseReportResultOptionChoice = new CaseReportFormPatientResultOptionChoice();
+                            caseReportResultOptionChoice.CaseReportFormOptionChoiceId = optionChoice.ID;
+                            caseReportFormResult.Options.Add(caseReportResultOptionChoice);
+                        }
+                    }
+                }
+            }
+        }
     }
 }

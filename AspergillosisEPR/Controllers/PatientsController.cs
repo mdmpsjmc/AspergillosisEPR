@@ -28,6 +28,7 @@ namespace AspergillosisEPR.Controllers
         private PatientManager _patientManager;
         private DropdownListsResolver _listResolver;
         private CaseReportFormsDropdownResolver _caseReportFormListResolver;
+        private CaseReportFormManager _caseReportFormManager;
 
         public PatientsController(AspergillosisContext context)
         {
@@ -35,6 +36,7 @@ namespace AspergillosisEPR.Controllers
             _context = context;
             _listResolver = new DropdownListsResolver(context, ViewBag);
             _caseReportFormListResolver = new CaseReportFormsDropdownResolver(context);
+            _caseReportFormManager = new CaseReportFormManager(context);
 
         }
 
@@ -71,6 +73,9 @@ namespace AspergillosisEPR.Controllers
             var existingPatient = _context.Patients.FirstOrDefault(x => x.RM2Number == patient.RM2Number);
             _patientManager.Request = Request;
             CheckIsUnique(existingPatient);
+            _caseReportFormManager.GetFormIdsForCaseReportForms(caseReportFormPatientResult);
+            _caseReportFormManager.CreateOptionChoices(caseReportFormPatientResult);
+            _caseReportFormManager.UpdateWithPatient(patient, caseReportFormPatientResult);
             _patientManager.AddCollectionsFromFormToPatients(patient, 
                                                              ref diagnoses, 
                                                              ref drugs,

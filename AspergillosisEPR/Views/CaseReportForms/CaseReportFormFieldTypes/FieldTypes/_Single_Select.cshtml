@@ -6,10 +6,11 @@
     <section class="col col-5">
         <label class="select">
             <label class="select">
-                @Html.DropDownList("CaseReportFormPatientResult["+ Model.Index + "].CaseReportFormOptionChoiceId", Model.Field.Options.Select(o => o.DropdownItem()).ToList(), "Select " + Model.Field.Label)
+                @Html.DropDownList("CaseReportFormPatientResult["+ Model.Index + "].SelectedId", Model.Field.Options.Select(o => o.DropdownItem()).ToList(), "Select " + Model.Field.Label)
                 <i></i>
                 @Html.Hidden("CaseReportFormPatientResult["+ Model.Index + "].CaseReportFormFieldId", Model.Field.ID)
-            </label>
+                @Html.Hidden("CaseReportFormPatientResult[" +Model.Index + "].ValidationResult", "")
+            </label>            
         </label>
     </section>
 </div>

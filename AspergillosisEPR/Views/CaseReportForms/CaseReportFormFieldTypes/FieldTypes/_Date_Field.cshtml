@@ -8,5 +8,6 @@
             <input name="CaseReportFormPatientResult[@Model.Index].DateAnswer" placeholder="@Model.Field.Label" class="datepicker form-control">
             @Html.Hidden("CaseReportFormPatientResult["+ Model.Index + "].CaseReportFormFieldId", Model.Field.ID)
         </label>
+        @Html.Hidden("CaseReportFormPatientResult[" + Model.Index + "].ValidationResult", "")
     </section>
 </div>

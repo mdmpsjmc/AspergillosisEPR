@@ -6,8 +6,9 @@
     <section class="col col-12">
         <label class="select">
             <label class="select">
-                @Html.DropDownList("CaseReportFormPatientResult[" + Model.Index + "].CaseReportFormOptionChoiceId", Model.Field.Options.Select(o => o.DropdownItem()).ToList(), new { @multiple = "multiple" })
+                @Html.DropDownList("CaseReportFormPatientResult[" + Model.Index + "].SelectedIds", Model.Field.Options.Select(o => o.DropdownItem()).ToList(), new { @multiple = "multiple" })
                 @Html.Hidden("CaseReportFormPatientResult.CaseReportFormFieldId", Model.Field.ID)
+                @Html.Hidden("CaseReportFormPatientResult[" + Model.Index + "].ValidationResult", "")
             </label>
         </label>
     </section>

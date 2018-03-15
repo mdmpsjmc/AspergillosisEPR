@@ -7,6 +7,7 @@
         <label class="input">
             <input name="CaseReportFormPatientResult[@Model.Index].TextAnswer" placeholder="@Model.Field.Label" class="form-control">
             @Html.Hidden("CaseReportFormPatientResult["+ Model.Index + "].CaseReportFormFieldId", Model.Field.ID)
+            @Html.Hidden("CaseReportFormPatientResult[" + Model.Index + "].ValidationResult", "")
         </label>
     </section>
 </div>

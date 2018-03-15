@@ -21,6 +21,7 @@ namespace AspergillosisEPR.Models.CaseReportForms
 
         public CaseReportFormFieldType CaseReportFormFieldType { get; set; }
         public CaseReportFormSection CaseReportFormSection { get; set; }
+        public CaseReportForm CaseReportForm { get; set; }
         public ICollection<CaseReportFormFieldOption> Options { get; set; } 
         [NotMapped]
         public int[] SelectedOptionsIds { get; set; }

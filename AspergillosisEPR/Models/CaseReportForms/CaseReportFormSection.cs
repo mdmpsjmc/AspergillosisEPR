@@ -13,5 +13,6 @@ namespace AspergillosisEPR.Models.CaseReportForms
         [Display(Name = "Section Name")]
         public string Name { get; set; }
         public ICollection<CaseReportFormField> CaseReportFormResultFields { get; set; }
+        public ICollection<CaseReportFormFormSection> FormSections { get; set;}
     }
 }
