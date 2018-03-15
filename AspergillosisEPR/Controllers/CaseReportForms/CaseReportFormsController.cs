@@ -214,7 +214,8 @@ namespace AspergillosisEPR.Controllers.CaseReportForms
             }
             var caseReportFormResult = new CaseReportFormResult();
             caseReportFormResult.CaseReportFormId = id.Value;
-            caseReportFormResult.Form = caseReportForm;            
+            caseReportFormResult.Form = caseReportForm;
+            caseReportFormResult.CaseReportFormCategoryId = caseReportForm.CaseReportFormCategoryId;
             return PartialView(@"/Views/Patients/CaseReportForms/_Show.cshtml", caseReportFormResult);
         }
     }

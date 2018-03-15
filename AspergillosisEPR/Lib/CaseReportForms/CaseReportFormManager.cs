@@ -70,33 +70,41 @@ namespace AspergillosisEPR.Lib.CaseReportForms
             }
         }
 
-        public List<IGrouping<int, CaseReportFormPatientResult>> GetGroupedCaseReportFormsForPatient(int patientId)
+        public List<IGrouping<string, CaseReportFormResult>> GetGroupedCaseReportFormsForPatient(int patientId)
         {
-            var forms = _context.CaseReportFormPatientResults
+            var forms = _context.CaseReportFormResults
                                 .Where(pr => pr.PatientId == patientId)
-                                .Include(pr => pr.Options)
-                                .Include(pr => pr.FormResult)
+                                .Include(fr => fr.Results)
+                                    .ThenInclude(pr => pr.Options)
+                                .Include(fr => fr.Results)
+                                    .ThenInclude(pr => pr.Options)
+                                .Include(fr => fr.Results)
+                                .ThenInclude(pr => pr.FormResult)
                                     .ThenInclude(f => f.CaseReportFormCategory)
-                                .Include(pr => pr.FormResult)
+                                .Include(fr => fr.Results)
+                                .ThenInclude(pr => pr.FormResult)
                                     .ThenInclude(f => f.Fields)
                                        .ThenInclude(f => f.CaseReportFormFieldType)
-                                .Include(pr => pr.FormResult)
+                                .Include(fr => fr.Results)
+                                  .ThenInclude(pr => pr.FormResult)
                                     .ThenInclude(f => f.Fields)
                                         .ThenInclude(f => f.Options)
                                             .ThenInclude(o => o.Option)
-                                  .Include(pr => pr.FormResult)
+                                .Include(fr => fr.Results)
+                                  .ThenInclude(pr => pr.FormResult)
                                       .ThenInclude(f => f.Sections)
                                             .ThenInclude(s => s.Section)
                                                 .ThenInclude(s => s.CaseReportFormResultFields)
                                                         .ThenInclude(f => f.Options)
                                                             .ThenInclude(o => o.Option)
-                                  .Include(pr => pr.FormResult)
+                                .Include(fr => fr.Results)
+                                  .ThenInclude(pr => pr.FormResult)
                                          .ThenInclude(f => f.Sections)
                                             .ThenInclude(s => s.Section)
                                                 .ThenInclude(s => s.CaseReportFormResultFields)
                                                     .ThenInclude(f => f.CaseReportFormFieldType);
 
-            var grouped = forms.GroupBy( f=> f.FormResult.CaseReportFormCategoryId).ToList();
+            var grouped = forms.GroupBy( f=> f.Category.Name).ToList();
             return grouped;
         }
 

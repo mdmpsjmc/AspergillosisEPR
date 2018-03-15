@@ -1,4 +1,59 @@
-﻿
-@*
-    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model AspergillosisEPR.Models.PatientViewModels.PatientDetailsViewModel;
+@using AspergillosisEPR.Models.CaseReportForms.ViewModels;
+@if (Model.CaseReportForms != null && Model.CaseReportForms.Any())
+ {
+   int globalCursor = 0;
+   foreach (var category in Model.CaseReportForms)
+   {
+        <h3>@category.Key</h3>
+        <div class="panel-group smart-accordion-default" id="accordion-2">
+
+        @foreach (var formResult in category)
+        {
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <a data-toggle="collapse" data-parent="#accordion-2" href="#@(formResult.ID)" aria-expanded="false" class="collapsed">
+                            <i class="fa fa-lg fa-angle-down pull-right"></i> 
+                            <i class="fa fa-lg fa-angle-up pull-right"></i>
+                            @formResult.Form.Name Date: @formResult.DateTaken.ToString("dd-MM-yyyy")
+                        </a>
+                    </h4>
+                </div>
+            </div>
+            <div id="@(formResult.ID)" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
+                <div class="panel-body">
+                    <form class="smart-form">
+                    @foreach (var fsection in formResult.Form.Sections)
+                     {
+                        <fieldset>
+                            <h3>@fsection.Section.Name</h3>
+                            @for (int cursor = 0; cursor < fsection.Section.CaseReportFormResultFields.Count; cursor++)
+                             {
+                                var field = fsection.Section.CaseReportFormResultFields.ToList()[cursor];
+                                var fieldVm = new CaseReportFormFieldViewModel();
+                                fieldVm.Field = field;
+                                fieldVm.Index = globalCursor.ToString();
+                                @Html.Partial("/Views/CaseReportForms/CaseReportFormFieldTypes/FieldTypes/_"
+                                    + field.CaseReportFormFieldType.FieldPartial() + ".cshtml", fieldVm)
+                                globalCursor++;
+                             }
+                        </fieldset>
+                    }
+                    @for (int cursor = 0; cursor < formResult.Form.Fields.Count(); cursor++)
+                     {
+                        var formField = formResult.Form.Fields.ToList()[cursor];
+                        var formFieldVm = new CaseReportFormFieldViewModel();
+                         formFieldVm.Field = formField;                        
+                        formFieldVm.Index = globalCursor.ToString();
+                        @Html.Partial("/Views/CaseReportForms/CaseReportFormFieldTypes/FieldTypes/_"
+                            + formField.CaseReportFormFieldType.FieldPartial() + ".cshtml", formFieldVm);
+                        globalCursor++;
+                     }
+                    </form>
+                </div>
+            </div>
+         }
+      </div>
+   }
+}

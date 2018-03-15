@@ -21,7 +21,7 @@ namespace AspergillosisEPR.Models.PatientViewModels
         public ICollection<PatientImmunoglobulin> PatientImmunoglobulines { get; set; }
         public ICollection<PatientRadiologyFinding> PatientRadiologyFindings { get; set; }
         public ICollection<PatientMeasurement> PatientMeasurements { get; set; }
-        public List<IGrouping<int, CaseReportFormPatientResult>> CaseReportForms { get; private set; }
+        public List<IGrouping<string, CaseReportFormResult>> CaseReportForms { get; private set; }
         public List<PatientIgChart> IgCharts { get; set; }
 
         public bool ShowDiagnoses { get; set; }

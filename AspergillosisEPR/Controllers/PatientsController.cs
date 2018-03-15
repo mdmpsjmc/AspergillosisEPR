@@ -125,7 +125,9 @@ namespace AspergillosisEPR.Controllers
                 return NotFound();
             }
 
-            var patientDetailsViewModel = PatientDetailsViewModel.BuildPatientViewModel(_context, patient, _caseReportFormManager);
+            var patientDetailsViewModel = PatientDetailsViewModel
+                                                .BuildPatientViewModel(_context, patient, _caseReportFormManager);
+
             return PartialView(patientDetailsViewModel);
         }
 

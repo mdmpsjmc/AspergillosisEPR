@@ -20,6 +20,7 @@
                 </label>
             </section>
             @Html.HiddenFor(m => m.CaseReportFormId, Model.CaseReportFormId)
+            @Html.HiddenFor(m => m.CaseReportFormCategoryId, Model.CaseReportFormCategoryId)
         </div>
         @foreach (var fsection in Model.Form.Sections)
         {
