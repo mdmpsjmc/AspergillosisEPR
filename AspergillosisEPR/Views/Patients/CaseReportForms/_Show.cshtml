@@ -1,4 +1,4 @@
-﻿@model AspergillosisEPR.Models.CaseReportForms.ViewModels.CaseReportFormViewModel;
+﻿@model AspergillosisEPR.Models.CaseReportForms.CaseReportFormResult;
 @using AspergillosisEPR.Models.CaseReportForms.ViewModels;
 @{
     var globalCursor = 0;
@@ -6,11 +6,22 @@
 <fieldset>
     <header>
         <strong>
-            @Model.Name
+            @Model.Form.Name
         </strong>
     </header>
     <form class="smart-form">
-        @foreach (var fsection in Model.Sections)
+        <div class="row">
+            <section class="col col-4 label-render">
+                <label>Date Taken</label>
+            </section>
+            <section class="col col-5">
+                 <label>   
+                    <input asp-for="DateTaken" palceholder="Enter Report Date" class="datepicker form-control" type="text" value="">
+                </label>
+            </section>
+            @Html.HiddenFor(m => m.CaseReportFormId, Model.CaseReportFormId)
+        </div>
+        @foreach (var fsection in Model.Form.Sections)
         {
             <fieldset>
                 <h3>@fsection.Section.Name</h3>
@@ -26,9 +37,9 @@
                 }
             </fieldset>
         }
-        @for (int cursor = 0; cursor < @Model.Fields.Count; cursor++)
+        @for (int cursor = 0; cursor < Model.Form.Fields.Count(); cursor++)
         {
-            var formField = @Model.Fields.ToList()[cursor];
+            var formField = Model.Form.Fields.ToList()[cursor];
             var formFieldVm = new CaseReportFormFieldViewModel();
             formFieldVm.Field = formField;
             formFieldVm.Index = globalCursor.ToString();

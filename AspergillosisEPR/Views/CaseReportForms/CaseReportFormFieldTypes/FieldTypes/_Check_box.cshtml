@@ -5,12 +5,12 @@
             {
             <label class="checkbox">
                 <input type="checkbox" name="CaseReportFormPatientResult[@Model.Index].SelectedIds" value="@option.CaseReportFormOptionChoiceId">
-                @Html.Hidden("CaseReportFormPatientResult[" + Model.Index + "].CaseReportFormFieldId", Model.Field.ID)
+                @Html.Hidden("Results[" + Model.Index + "].CaseReportFormFieldId", Model.Field.ID)
                 <i></i>
                 <span class="checkbox-label">
                     @option.Option.Name
                 </span>
-                @Html.Hidden("CaseReportFormPatientResult[" + Model.Index + "].ValidationResult", "")
+                @Html.Hidden("Results[" + Model.Index + "].ValidationResult", "")
             </label>
         }
     </div>

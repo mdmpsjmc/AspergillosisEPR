@@ -1,8 +1,10 @@
 ﻿using AspergillosisEPR.Data;
+using AspergillosisEPR.Lib.CaseReportForms;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AspergillosisEPR.Models.CaseReportForms;
 
 namespace AspergillosisEPR.Models.PatientViewModels
 {
@@ -19,7 +21,7 @@ namespace AspergillosisEPR.Models.PatientViewModels
         public ICollection<PatientImmunoglobulin> PatientImmunoglobulines { get; set; }
         public ICollection<PatientRadiologyFinding> PatientRadiologyFindings { get; set; }
         public ICollection<PatientMeasurement> PatientMeasurements { get; set; }
-
+        public List<IGrouping<int, CaseReportFormPatientResult>> CaseReportForms { get; private set; }
         public List<PatientIgChart> IgCharts { get; set; }
 
         public bool ShowDiagnoses { get; set; }
@@ -46,7 +48,9 @@ namespace AspergillosisEPR.Models.PatientViewModels
             ShowWeight = true;
         }
 
-        public static PatientDetailsViewModel BuildPatientViewModel(AspergillosisContext context, Patient patient)
+        public static PatientDetailsViewModel BuildPatientViewModel(AspergillosisContext context, 
+                                                                    Patient patient,
+                                                                    CaseReportFormManager caseReportFormManager)
         {
             var primaryDiagnosis = context.DiagnosisCategories.Where(dc => dc.CategoryName == "Primary").FirstOrDefault();
             var secondaryDiagnosis = context.DiagnosisCategories.Where(dc => dc.CategoryName == "Secondary").FirstOrDefault();
@@ -94,6 +98,10 @@ namespace AspergillosisEPR.Models.PatientViewModels
             patientDetailsViewModel.PatientImmunoglobulines = patient.PatientImmunoglobulines;
             patientDetailsViewModel.PatientRadiologyFindings = patient.PatientRadiologyFindings;
             patientDetailsViewModel.PatientMeasurements = patient.PatientMeasurements.OrderByDescending(q => q.DateTaken).ToList();
+            if (caseReportFormManager != null)
+            {
+                patientDetailsViewModel.CaseReportForms = caseReportFormManager.GetGroupedCaseReportFormsForPatient(patient.ID);
+            }
             return patientDetailsViewModel;
         }
 

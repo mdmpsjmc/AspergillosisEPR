@@ -68,14 +68,21 @@ namespace AspergillosisEPR.Controllers
                                                  PatientSTGQuestionnaire[] sTGQuestionnaires,
                                                  PatientImmunoglobulin[] patientImmunoglobulin,
                                                  PatientRadiologyFinding[] patientRadiologyFinding,
-                                                 CaseReportFormPatientResult[] caseReportFormPatientResult)
+                                                 CaseReportFormResult caseReportFormResult)
         {
             var existingPatient = _context.Patients.FirstOrDefault(x => x.RM2Number == patient.RM2Number);
+            patient.CaseReportFormResults = new List<CaseReportFormResult>();
             _patientManager.Request = Request;
             CheckIsUnique(existingPatient);
-            _caseReportFormManager.GetFormIdsForCaseReportForms(caseReportFormPatientResult);
-            _caseReportFormManager.CreateOptionChoices(caseReportFormPatientResult);
-            _caseReportFormManager.UpdateWithPatient(patient, caseReportFormPatientResult);
+            if (caseReportFormResult != null && caseReportFormResult.Results != null)
+            {
+                _caseReportFormManager.GetFormIdsForCaseReportForms(caseReportFormResult.Results.ToArray());
+                _caseReportFormManager.CreateOptionChoices(caseReportFormResult.Results.ToArray());
+                _caseReportFormManager.UpdateWithPatient(patient, caseReportFormResult.Results.ToArray());
+                patient.CaseReportFormResults.Add(caseReportFormResult);
+            }
+            
+            
             _patientManager.AddCollectionsFromFormToPatients(patient, 
                                                              ref diagnoses, 
                                                              ref drugs,
@@ -118,7 +125,7 @@ namespace AspergillosisEPR.Controllers
                 return NotFound();
             }
 
-            var patientDetailsViewModel = PatientDetailsViewModel.BuildPatientViewModel(_context, patient);
+            var patientDetailsViewModel = PatientDetailsViewModel.BuildPatientViewModel(_context, patient, _caseReportFormManager);
             return PartialView(patientDetailsViewModel);
         }
 
@@ -138,7 +145,7 @@ namespace AspergillosisEPR.Controllers
                 return NotFound();
             }
 
-            var patientDetailsViewModel = PatientDetailsViewModel.BuildPatientViewModel(_context, patient);
+            var patientDetailsViewModel = PatientDetailsViewModel.BuildPatientViewModel(_context, patient, _caseReportFormManager);
             return View(patientDetailsViewModel);
         }
 

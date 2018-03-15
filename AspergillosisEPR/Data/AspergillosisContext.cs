@@ -55,6 +55,8 @@ namespace AspergillosisEPR.Data
         public DbSet<CaseReportFormFormSection> CaseReportFormFormSections { get; set; }
         public DbSet<CaseReportFormPatientResult> CaseReportFormPatientResults { get; set; }
         public DbSet<CaseReportFormPatientResultOptionChoice> CaseReportFormPatientResultOptionChoices { get; set; }
+        public DbSet<CaseReportFormResult> CaseReportFormResults { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -97,6 +99,7 @@ namespace AspergillosisEPR.Data
             modelBuilder.Entity<CaseReportFormFormSection>().ToTable("CaseReportFormFormSections");
             modelBuilder.Entity<CaseReportFormPatientResult>().ToTable("CaseReportFormPatientResults");
             modelBuilder.Entity<CaseReportFormPatientResultOptionChoice>().ToTable("CaseReportFormPatientResultOptionChoices");
+            modelBuilder.Entity<CaseReportFormResult>().ToTable("CaseReportFormResults");
         }
 
         internal void Set(Type currentType)

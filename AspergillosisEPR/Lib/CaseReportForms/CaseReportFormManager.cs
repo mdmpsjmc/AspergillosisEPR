@@ -70,6 +70,36 @@ namespace AspergillosisEPR.Lib.CaseReportForms
             }
         }
 
+        public List<IGrouping<int, CaseReportFormPatientResult>> GetGroupedCaseReportFormsForPatient(int patientId)
+        {
+            var forms = _context.CaseReportFormPatientResults
+                                .Where(pr => pr.PatientId == patientId)
+                                .Include(pr => pr.Options)
+                                .Include(pr => pr.FormResult)
+                                    .ThenInclude(f => f.CaseReportFormCategory)
+                                .Include(pr => pr.FormResult)
+                                    .ThenInclude(f => f.Fields)
+                                       .ThenInclude(f => f.CaseReportFormFieldType)
+                                .Include(pr => pr.FormResult)
+                                    .ThenInclude(f => f.Fields)
+                                        .ThenInclude(f => f.Options)
+                                            .ThenInclude(o => o.Option)
+                                  .Include(pr => pr.FormResult)
+                                      .ThenInclude(f => f.Sections)
+                                            .ThenInclude(s => s.Section)
+                                                .ThenInclude(s => s.CaseReportFormResultFields)
+                                                        .ThenInclude(f => f.Options)
+                                                            .ThenInclude(o => o.Option)
+                                  .Include(pr => pr.FormResult)
+                                         .ThenInclude(f => f.Sections)
+                                            .ThenInclude(s => s.Section)
+                                                .ThenInclude(s => s.CaseReportFormResultFields)
+                                                    .ThenInclude(f => f.CaseReportFormFieldType);
+
+            var grouped = forms.GroupBy( f=> f.FormResult.CaseReportFormCategoryId).ToList();
+            return grouped;
+        }
+
         public void GetFormIdsForCaseReportForms(CaseReportFormPatientResult[] caseReportFormPatientResult)
         {
             for(int cursor = 0; cursor < caseReportFormPatientResult.Length; cursor++)
@@ -95,20 +125,6 @@ namespace AspergillosisEPR.Lib.CaseReportForms
             {
                 var caseReportFormResult = caseReportFormPatientResult[cursor];
                 caseReportFormResult.Patient = patient;
-            }
-        }
-
-        private int? GetSectionFormIdForField(CaseReportFormField field)
-        {
-            if (field.CaseReportFormSectionId != null)
-            {
-                var section = _context.CaseReportFormFormSections
-                                               .Where(s => s.CaseReportFormSectionId == field.CaseReportFormSectionId)
-                                               .FirstOrDefault();
-                return section.CaseReportFormId;
-            } else
-            {
-                return null;
             }
         }
 
@@ -145,6 +161,22 @@ namespace AspergillosisEPR.Lib.CaseReportForms
                         }
                     }
                 }
+            }
+        }
+
+
+        private int? GetSectionFormIdForField(CaseReportFormField field)
+        {
+            if (field.CaseReportFormSectionId != null)
+            {
+                var section = _context.CaseReportFormFormSections
+                                               .Where(s => s.CaseReportFormSectionId == field.CaseReportFormSectionId)
+                                               .FirstOrDefault();
+                return section.CaseReportFormId;
+            }
+            else
+            {
+                return null;
             }
         }
     }

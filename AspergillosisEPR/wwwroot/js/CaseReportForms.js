@@ -70,6 +70,9 @@
                 $("div#case-report-form").removeClass("hide");
                 $("select[multiple='multiple']").multiSelect();
                 if (caseReportFormId === "") $("div#case-report-form").addClass("hide");
+                $('input.datepicker').datetimepicker({
+                    format: 'DD/MM/YYYY'
+                });
             });
         });
     }

@@ -1,4 +1,5 @@
 ﻿using AspergillosisEPR.Lib.Search;
+using AspergillosisEPR.Models.CaseReportForms;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -46,6 +47,7 @@ namespace AspergillosisEPR.Models
         public ICollection<PatientImmunoglobulin> PatientImmunoglobulines { get; set; }
         public ICollection<PatientRadiologyFinding> PatientRadiologyFindings { get; set; }
         public ICollection<PatientMeasurement> PatientMeasurements { get; set; }
+        public ICollection<CaseReportFormResult> CaseReportFormResults { get; set; }
 
         public PatientStatus PatientStatus { get; set; }
        

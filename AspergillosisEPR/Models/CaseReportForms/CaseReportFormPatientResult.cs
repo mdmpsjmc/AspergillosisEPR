@@ -12,6 +12,7 @@ namespace AspergillosisEPR.Models.CaseReportForms
         public int ID { get; set; }
         public int CaseReportFormFieldId { get; set; }
         public int CaseReportFormId { get; set; }    
+        public int CaseReportFormResultId { get; set; }
 
         public int PatientId { get; set; }       
 
@@ -28,8 +29,7 @@ namespace AspergillosisEPR.Models.CaseReportForms
         
         public CaseReportFormField Field { get; set; }
         public Patient Patient { get; set; }
-        public CaseReportForm Form { get; set; }
-
+        public CaseReportForm FormResult { get; set; }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {

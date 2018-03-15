@@ -31,7 +31,7 @@ namespace AspergillosisEPR.Controllers.Patients
         protected async Task<PatientDetailsViewModel> GetExportViewModel(int id)
         {
             var patient = await _patientManager.FindPatientWithRelationsByIdAsync(id);
-            var patientDetailsViewModel = PatientDetailsViewModel.BuildPatientViewModel(_context, patient);
+            var patientDetailsViewModel = PatientDetailsViewModel.BuildPatientViewModel(_context, patient, null);
             SetItemsToShowInExport(patientDetailsViewModel);
             return patientDetailsViewModel;
         }

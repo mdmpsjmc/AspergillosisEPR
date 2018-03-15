@@ -131,7 +131,7 @@
                 || field.match("sTGQuestionnaires")
                 || field.match("patientImmunoglobulin")
                 || field.match("Finding")
-                || field.match("caseReportFormPatientResult")) {
+                || field.match("results")) {
                 field = fieldCapitalized.replace("[", "_").replace("].", "__");            
             } else {
                 field = fieldCapitalized;

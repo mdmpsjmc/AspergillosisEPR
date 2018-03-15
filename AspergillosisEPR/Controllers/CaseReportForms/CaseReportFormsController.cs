@@ -212,8 +212,10 @@ namespace AspergillosisEPR.Controllers.CaseReportForms
             {
                 return NotFound();
             }
-            var viewModel = CaseReportFormViewModel.BuildViewModel(caseReportForm);
-            return PartialView(@"/Views/Patients/CaseReportForms/_Show.cshtml", viewModel);
+            var caseReportFormResult = new CaseReportFormResult();
+            caseReportFormResult.CaseReportFormId = id.Value;
+            caseReportFormResult.Form = caseReportForm;            
+            return PartialView(@"/Views/Patients/CaseReportForms/_Show.cshtml", caseReportFormResult);
         }
     }
 }
