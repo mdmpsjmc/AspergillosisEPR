@@ -16,6 +16,8 @@ using System;
 using AspergillosisEPR.Lib;
 using Microsoft.AspNetCore.Http;
 using System.ComponentModel.DataAnnotations;
+using AspergillosisEPR.Lib.CaseReportForms;
+using AspergillosisEPR.Models.CaseReportForms;
 
 namespace AspergillosisEPR.Controllers
 {
@@ -25,13 +27,15 @@ namespace AspergillosisEPR.Controllers
         private readonly AspergillosisContext _context;
         private PatientManager _patientManager;
         private DropdownListsResolver _listResolver;
-
+        private CaseReportFormsDropdownResolver _caseReportFormListResolver;
 
         public PatientsController(AspergillosisContext context)
         {
             _patientManager = new PatientManager(context, Request);
             _context = context;
             _listResolver = new DropdownListsResolver(context, ViewBag);
+            _caseReportFormListResolver = new CaseReportFormsDropdownResolver(context);
+
         }
 
         [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
@@ -41,6 +45,8 @@ namespace AspergillosisEPR.Controllers
             _listResolver.PopulateDiagnosisCategoriesDropDownList();
             _listResolver.PopulateDiagnosisTypeDropDownList();
             _listResolver.PopulatePatientStatusesDropdownList();
+            ViewBag.CaseReportForms = _caseReportFormListResolver
+                                            .PopulateCRFGroupedCategoriesDropdownList();
             return PartialView();
         }
 
@@ -60,7 +66,7 @@ namespace AspergillosisEPR.Controllers
                                                  PatientSTGQuestionnaire[] sTGQuestionnaires,
                                                  PatientImmunoglobulin[] patientImmunoglobulin,
                                                  PatientRadiologyFinding[] patientRadiologyFinding,
-                                                 string[] fields)
+                                                 CaseReportFormPatientResult[] caseReportFormPatientResult)
         {
             var existingPatient = _context.Patients.FirstOrDefault(x => x.RM2Number == patient.RM2Number);
             _patientManager.Request = Request;

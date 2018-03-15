@@ -15,7 +15,6 @@ namespace AspergillosisEPR.Data
         {
         }
 
-
         public DbSet<Patient> Patients { get; set; }
         public DbSet<DiagnosisType> DiagnosisTypes { get; set; }
         public DbSet<PatientDiagnosis> PatientDiagnoses { get; set; }

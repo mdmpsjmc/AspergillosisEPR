@@ -1,19 +1,19 @@
-﻿@model AspergillosisEPR.Models.CaseReportForms.CaseReportFormField;
+﻿@model AspergillosisEPR.Models.CaseReportForms.ViewModels.CaseReportFormFieldViewModel;
 <fieldset>
     <div class="form">
         <div class="form-group">
-            <label class="col-md-2 control-label">@Model.Label</label>
+            <label class="col-md-2 control-label">@Model.Field.Label</label>
             <div class="col-md-12">
 
-                @foreach (var option in @Model.Options)
+                @foreach (var option in @Model.Field.Options)
                 {
                     <label class="radio">
-                        <input type="radio" class="radiobox" name="CaseReportFormPatientResult.CaseReportFormOptionChoiceId" value="@option.CaseReportFormOptionChoiceId">
+                        <input type="radio" class="radiobox" name="CaseReportFormPatientResult[@(Model.Index)].CaseReportFormOptionChoiceId" value="@option.CaseReportFormOptionChoiceId">
                         <span>@option.Option.Name</span>
                     </label>
                     
                 }
-                @Html.Hidden("CaseReportFormPatientResult.CaseReportFormFieldId", Model.ID)
+                @Html.Hidden("CaseReportFormPatientResult["+ Model.Index + "].CaseReportFormFieldId", Model.Field.ID)
             </div>
         </div>
     </div>

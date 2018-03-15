@@ -1,15 +1,22 @@
-﻿@model AspergillosisEPR.Models.CaseReportForms.CaseReportForm;
-<div class="col-12 row case-report-forms" style="margin: 0px !important">
-</div>
-<div id="case-report-form">
+﻿<section class="col-3 col-md-3">
+    <label>
+        <strong>Select Case Report Form</strong>
+    </label>     
+</section>
+<section class="col-6 col-md-6">
+    <div class="row">
+        <label class="smart-form select">
+            <select asp-items="(List<SelectListItem>) @ViewBag.CaseReportForms" id="patient-case-report-form">
+                <option>Please select form</option>
+            </select>
+            <i></i>
+        </label>
+    </div>
+</section>
 
-</div>
-@if (User.IsInRole("Create Role") || User.IsInRole("Admin Role"))
-{
-    <a href="@Url.Action("CaseReportFormModal", "Partials")" class="btn btn-success add-crf add-new-patient-partial disable-default" data-visible-row="div.drug-row:visible" data-insert-into-class="div.case-report-forms" style="padding: 5px">
-        <i class="fa fa-plus"></i>
-        <span>
-            <strong>Add case report form</strong>
-        </span>
-    </a>
-}
+
+    <div class="col-12 row case-report-forms" style="margin: 0px !important">
+    </div>
+    <div id="case-report-form">
+
+    </div>

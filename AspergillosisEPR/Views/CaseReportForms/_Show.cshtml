@@ -1,4 +1,8 @@
 ﻿@model AspergillosisEPR.Models.CaseReportForms.ViewModels.CaseReportFormViewModel;
+@using AspergillosisEPR.Models.CaseReportForms.ViewModels;
+@{ 
+    var globalCursor = 0;
+}
 <div class="modal fade new-settings-modal" tabindex="-1" role="dialog" id="render-crf-modal">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -22,17 +26,27 @@
                             {
                                 <fieldset>
                                     <h3>@fsection.Section.Name</h3>
-                                    @foreach (var field in fsection.Section.CaseReportFormResultFields)
+                                    @for(int cursor = 0; cursor < fsection.Section.CaseReportFormResultFields.Count; cursor++)
                                     {
+                                        var field = fsection.Section.CaseReportFormResultFields.ToList()[cursor];
+                                        var fieldVm = new CaseReportFormFieldViewModel();
+                                        fieldVm.Field = field;
+                                        fieldVm.Index = globalCursor.ToString();
                                         @Html.Partial("/Views/CaseReportForms/CaseReportFormFieldTypes/FieldTypes/_"
-                                                + @field.CaseReportFormFieldType.FieldPartial() + ".cshtml", field)
+                                                + field.CaseReportFormFieldType.FieldPartial() + ".cshtml", fieldVm)
+                                        globalCursor++;
                                     }
                                 </fieldset>
                             }
-                            @foreach (var field in @Model.Fields)
+                            @for (int cursor = 0; cursor < @Model.Fields.Count; cursor++)
                             {
+                                var formField = @Model.Fields.ToList()[cursor];
+                                var formFieldVm = new CaseReportFormFieldViewModel();
+                                formFieldVm.Field = formField;
+                                formFieldVm.Index = globalCursor.ToString();
                                 @Html.Partial("/Views/CaseReportForms/CaseReportFormFieldTypes/FieldTypes/_"
-                                                + @field.CaseReportFormFieldType.FieldPartial() + ".cshtml", field)
+                                                + formField.CaseReportFormFieldType.FieldPartial() + ".cshtml", formFieldVm);
+                                globalCursor++;
                             }
                         </form>
                     </fieldset>

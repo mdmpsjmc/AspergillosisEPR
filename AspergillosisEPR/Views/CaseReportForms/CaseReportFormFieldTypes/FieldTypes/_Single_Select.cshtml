@@ -1,14 +1,14 @@
-﻿@model AspergillosisEPR.Models.CaseReportForms.CaseReportFormField;
+﻿@model AspergillosisEPR.Models.CaseReportForms.ViewModels.CaseReportFormFieldViewModel;
 <div class="row">
     <section class="col col-4 label-render">
-        <label>@Model.Label</label>
+        <label>@Model.Field.Label</label>
     </section>
     <section class="col col-5">
         <label class="select">
             <label class="select">
-                @Html.DropDownList("CaseReportFormPatientResult.CaseReportFormOptionChoiceId" + @Model.FieldName(), Model.Options.Select(o => o.DropdownItem()).ToList(), "Select " + Model.Label)
+                @Html.DropDownList("CaseReportFormPatientResult["+ Model.Index + "].CaseReportFormOptionChoiceId", Model.Field.Options.Select(o => o.DropdownItem()).ToList(), "Select " + Model.Field.Label)
                 <i></i>
-                @Html.Hidden("CaseReportFormPatientResult.CaseReportFormFieldId", Model.ID)
+                @Html.Hidden("CaseReportFormPatientResult["+ Model.Index + "].CaseReportFormFieldId", Model.Field.ID)
             </label>
         </label>
     </section>

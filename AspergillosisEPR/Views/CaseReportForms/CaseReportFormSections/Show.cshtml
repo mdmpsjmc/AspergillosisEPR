@@ -1,4 +1,6 @@
 ﻿@model AspergillosisEPR.Models.CaseReportForms.CaseReportFormSection;
+@using AspergillosisEPR.Models.CaseReportForms.ViewModels;
+
 <div class="modal fade new-settings-modal" tabindex="-1" role="dialog" id="render-section-modal">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -18,11 +20,15 @@
                                 </strong>
                             </header>           
                             <form class="smart-form">
-                                @foreach (var field in @Model.CaseReportFormResultFields)
+                                @for (int cursor = 0; cursor < Model.CaseReportFormResultFields.Count; cursor++)
                                 {
+                                    var field = Model.CaseReportFormResultFields.ToList()[cursor];
+                                    var fieldVm = new CaseReportFormFieldViewModel();
+                                    fieldVm.Field = field;
+                                    fieldVm.Index = cursor.ToString();
                                     @Html.Partial("/Views/CaseReportForms/CaseReportFormFieldTypes/FieldTypes/_"
-                                                + @field.CaseReportFormFieldType.FieldPartial() + ".cshtml", field)
-                                }
+                                                + field.CaseReportFormFieldType.FieldPartial() + ".cshtml", fieldVm)
+                                }                               
                             </form>
                         </fieldset>
 

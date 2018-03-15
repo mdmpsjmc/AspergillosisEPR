@@ -83,6 +83,10 @@
             onOptionGroupSelectChange();
         },
 
+        onPatientCaseReportFormSelectChange: function () {
+            onPatientCaseReportFormSelectChange();
+        },
+
         init: function () {
             addNewPartial();
             onOptionGroupSelectChange();

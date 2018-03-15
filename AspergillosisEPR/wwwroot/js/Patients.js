@@ -109,6 +109,7 @@
                             $("div#new-patient-modal").modal("hide");
                             window.patientsTable.ajax.reload(function () {
                                 currentUserWithRoles();
+
                             });
                         }
                     }
@@ -156,6 +157,7 @@
                 $("div#modal-container").html(responseHtml);
                 $("div#new-patient-modal").modal("show");
                 initPatientsDateTimePickers();
+                CaseReportForms.onPatientCaseReportFormSelectChange();
             });
         });
     }

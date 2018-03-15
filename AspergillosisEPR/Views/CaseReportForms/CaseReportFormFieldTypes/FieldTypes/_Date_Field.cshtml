@@ -1,12 +1,12 @@
-﻿@model AspergillosisEPR.Models.CaseReportForms.CaseReportFormField;
+﻿@model AspergillosisEPR.Models.CaseReportForms.ViewModels.CaseReportFormFieldViewModel;
 <div class="row">
     <section class="col col-4 label-render">
-        <label>@Model.Label</label>
+        <label>@Model.Field.Label</label>
     </section>
     <section class="col col-5">
         <label class="input">
-            <input name="CaseReportFormPatientResult.DateAnswer" placeholder="@Model.Label" class="datepicker form-control">
-            @Html.Hidden("CaseReportFormPatientResult.CaseReportFormFieldId", Model.ID)
+            <input name="CaseReportFormPatientResult[@Model.Index].DateAnswer" placeholder="@Model.Field.Label" class="datepicker form-control">
+            @Html.Hidden("CaseReportFormPatientResult["+ Model.Index + "].CaseReportFormFieldId", Model.Field.ID)
         </label>
     </section>
 </div>

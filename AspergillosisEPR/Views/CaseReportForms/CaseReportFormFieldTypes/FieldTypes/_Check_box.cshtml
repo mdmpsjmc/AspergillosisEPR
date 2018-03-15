@@ -1,11 +1,11 @@
-﻿@model AspergillosisEPR.Models.CaseReportForms.CaseReportFormField;
+﻿@model AspergillosisEPR.Models.CaseReportForms.ViewModels.CaseReportFormFieldViewModel;
 <div class="row">
     <div class="inline-group labels">
-        @foreach (var option in @Model.Options)
+        @foreach (var option in @Model.Field.Options)
             {
             <label class="checkbox">
-                <input type="checkbox" name="CaseReportFormPatientResult.CaseReportFormOptionChoiceId" value="@option.CaseReportFormOptionChoiceId">
-                @Html.Hidden("CaseReportFormPatientResult.CaseReportFormFieldId", Model.ID)
+                <input type="checkbox" name="CaseReportFormPatientResult[@Model.Index].CaseReportFormOptionChoiceId" value="@option.CaseReportFormOptionChoiceId">
+                @Html.Hidden("CaseReportFormPatientResult.CaseReportFormFieldId", Model.Field.ID)
                 <i></i>
                 <span class="checkbox-label">
                     @option.Option.Name

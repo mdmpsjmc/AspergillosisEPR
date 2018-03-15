@@ -1,12 +1,12 @@
-﻿@model AspergillosisEPR.Models.CaseReportForms.CaseReportFormField;
+﻿@model AspergillosisEPR.Models.CaseReportForms.ViewModels.CaseReportFormFieldViewModel;
 <div class="row">
     <section class="col col-4 label-render">
-        <label>@Model.Label</label>
+        <label>@Model.Field.Label</label>
     </section>
     <section class="col col-2">
         <label class="input">
-            <input name="CaseReportFormPatientResult.NumericAnswer" placeholder="@Model.Label" class="form-control">
-            @Html.Hidden("CaseReportFormPatientResult.CaseReportFormFieldId", Model.ID)
+            <input name="CaseReportFormPatientResult[@Model.Index].NumericAnswer" placeholder="@Model.Field.Label" class="form-control">
+            @Html.Hidden("CaseReportFormPatientResult[" + Model.Index  + "].CaseReportFormFieldId", Model.Field.ID)
         </label>
     </section>
 </div>
