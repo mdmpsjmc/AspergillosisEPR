@@ -6,7 +6,7 @@
     <section class="col col-5">
         <label class="select">
             <label class="select">
-                <select>
+                <select name="CaseReportFormResult[@(Model.FormIndex)].Results[@(Model.Index)].SelectedId">
                     @foreach (var option in Model.Field.Options.Select(o => o.DropdownItem()))
                     {
                         if (Model.Result != null)
@@ -29,8 +29,8 @@
                     }
                 </select>
                 <i></i>
-                @Html.Hidden("Results["+ Model.Index + "].CaseReportFormFieldId", Model.Field.ID)
-                @Html.Hidden("Results["+ Model.Index + "].ValidationResult", "")
+                @Html.Hidden("CaseReportFormResult[" + (string)ViewBag.Index + "].Results[" + Model.Index + "].CaseReportFormFieldId", Model.Field.ID)
+                @Html.Hidden("CaseReportFormResult[" + (string)ViewBag.Index + "].Results[" + Model.Index + "].ValidationResult", "")
             </label>            
         </label>
     </section>

@@ -9,13 +9,13 @@
                 {
                     var isChecked = Model?.Field.Options.Select(o => o.CaseReportFormOptionChoiceId.ToString().Contains(option.CaseReportFormOptionChoiceId.ToString())).FirstOrDefault();
                     <label class="radio">
-                        <input type="radio" class="radiobox" name="Results[@(Model.Index)].SelectedId" value="@option.CaseReportFormOptionChoiceId" @(isChecked == true ? "checked=checked" : "")>
+                        <input type="radio" class="radiobox" name="CaseReportFormResult[@(Model.FormIndex)].Results[@(Model.Index)].SelectedId" value="@option.CaseReportFormOptionChoiceId" @(isChecked == true ? "checked=checked" : "")>
                         <span>@option.Option.Name</span>
                     </label>
                     
                 }
-                @Html.Hidden("Results["+ Model.Index + "].CaseReportFormFieldId", Model.Field.ID)
-                @Html.Hidden("Results[" + Model.Index + "].ValidationResult", "")
+                @Html.Hidden("CaseReportFormResult[" + Model.FormIndex + "].Results[" + Model.Index + "].CaseReportFormFieldId", Model.Field.ID)
+                @Html.Hidden("CaseReportFormResult[" + Model.FormIndex + "].Results[" + Model.Index + "].ValidationResult", "")
             </div>
         </div>
     </div>

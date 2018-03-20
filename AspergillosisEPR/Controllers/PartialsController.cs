@@ -176,6 +176,7 @@ namespace AspergillosisEPR.Controllers
             var gropupedCategoriesList = _caseReportFormListResolver
                                             .PopulateCRFGroupedCategoriesDropdownList();
             ViewBag.CaseReportForms = gropupedCategoriesList;
+            ViewBag.Index = (string)Request.Query["index"];
             return PartialView();
         }
         private SelectList CriteriaClassesDropdownList()

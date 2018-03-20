@@ -178,7 +178,8 @@ namespace AspergillosisEPR.Controllers
                                                               [Bind("ID,DrugId,StartDate,EndDate")] PatientDrug[] drugs,
                                                               [Bind("ID, ActivityScore, SymptomScore, ImpactScore, TotalScore")] PatientSTGQuestionnaire[] sTGQuestionnaires,
                                                               [Bind("ID, DateTaken, Value, ImmunoglobulinTypeId")] PatientImmunoglobulin[] patientImmunoglobulines,
-                                                              [Bind("ID, DateTaken, FindingId, RadiologyTypeId, ChestLocationId, ChestDistributionId, GradeId, TreatmentResponseId, Note")] PatientRadiologyFinding[] radiololgyFindings)
+                                                              [Bind("ID, DateTaken, FindingId, RadiologyTypeId, ChestLocationId, ChestDistributionId, GradeId, TreatmentResponseId, Note")] PatientRadiologyFinding[] radiololgyFindings,
+                                                              CaseReportFormResult[] caseReportFormResult)
         {
             if (id == null)
             {

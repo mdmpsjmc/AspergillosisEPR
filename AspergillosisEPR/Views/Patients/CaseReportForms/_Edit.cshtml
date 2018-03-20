@@ -8,9 +8,9 @@
         {
             <h3>@category.Key</h3>
             <div class="panel-group smart-accordion-default" id="accordion-2">
-
-                @foreach (var formResult in category)
+                @for(int formCursor = 0; formCursor < category.ToList().Count(); formCursor++)
                 {
+                    var formResult = category.ToList()[formCursor];
                     <div class="panel panel-default">
                         <div class="panel-heading">
                             <h4 class="panel-title">
@@ -37,8 +37,8 @@
                                             fieldVm.Result = result;
                                             fieldVm.Field = field;
                                             fieldVm.Index = globalCursor.ToString();
-                                            @Html.Partial("/Views/CaseReportForms/CaseReportFormFieldTypes/EditableFieldTypes/_"
-                                    + field.CaseReportFormFieldType.FieldPartial() + ".cshtml", fieldVm)
+                                            fieldVm.FormIndex = formCursor.ToString();
+                                            @Html.Partial("/Views/CaseReportForms/CaseReportFormFieldTypes/EditableFieldTypes/_"+ field.CaseReportFormFieldType.FieldPartial() + ".cshtml", fieldVm)
                                             globalCursor++;
                                         }
                                     </fieldset>
@@ -51,6 +51,7 @@
                                     formFieldVm.Result = result;
                                     formFieldVm.Field = formField;
                                     formFieldVm.Index = globalCursor.ToString();
+                                    formFieldVm.FormIndex = formCursor.ToString();
                                     @Html.Partial("/Views/CaseReportForms/CaseReportFormFieldTypes/EditableFieldTypes/_"
                                              + formField.CaseReportFormFieldType.FieldPartial() + ".cshtml", formFieldVm);
                                     globalCursor++;
