@@ -228,6 +228,8 @@
                         $(this).data('placeholder');
                     }
                 });
+                $("select[multiple='multiple']").multiSelect();
+                CaseReportForms.onPatientCaseReportFormSelectChange();
             });
         });
     }

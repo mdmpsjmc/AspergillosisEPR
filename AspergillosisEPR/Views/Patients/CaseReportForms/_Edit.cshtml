@@ -1,0 +1,10 @@
+﻿<div id="existing-crf-forms"></div>
+@if (User.IsInRole("Update Role") || User.IsInRole("Admin Role"))
+{
+    <a href="@Url.Action("CaseReportFormModal", "Partials")" class="btn btn-success edit-patient-partial" data-visible-row="div.case-report-forms-new:visible" data-insert-into-class="div#existing-crf-forms" style="padding: 5px">
+        <i class="fa fa-plus"></i>
+        <span>
+            <strong>Add Case Report Form</strong>
+        </span>
+    </a>
+}

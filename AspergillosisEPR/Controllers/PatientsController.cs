@@ -165,6 +165,8 @@ namespace AspergillosisEPR.Controllers
                 return NotFound();
             }
             _listResolver.BindSelects(patient);
+            ViewBag.CaseReportForms = _caseReportFormListResolver
+                                      .PopulateCRFGroupedCategoriesDropdownList();
             return PartialView(patient);
         }
 

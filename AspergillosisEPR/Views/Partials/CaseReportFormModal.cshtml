@@ -1,9 +1,18 @@
-﻿@model List<SelectListItem>;
-<div class="row">
-    <label class="smart-form select">
-        <select asp-items="@Model" id="patient-case-report-form">
-            <option>Please select form</option>
-        </select>
-        <i></i>
-    </label>     
+﻿<div class="col-12 row case-report-forms-new" style="margin: 0px !important" data-index="">
+    <section class="col-3 col-md-3">
+        <label>
+            <strong>Select Case Report Form</strong>
+        </label>
+    </section>
+    <section class="col-6 col-md-6">
+        <div class="row">
+            <label class="smart-form select" id="case-report-form">
+                <select asp-items="(List<SelectListItem>) @ViewBag.CaseReportForms" id="patient-case-report-form">
+                    <option>Please select form</option>
+                </select>
+                <i></i>
+            </label>
+        </div>
+    </section>
+    <div class="crf-form-below"></div>
 </div>

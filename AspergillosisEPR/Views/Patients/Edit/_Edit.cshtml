@@ -34,6 +34,9 @@
                         <li>
                             <a href="#radiology" data-toggle="tab"><i class="fa fa-fw fa-lg fa-stethoscope"></i> Radiology</a>
                         </li>
+                        <li>
+                            <a href="#case-report-forms" data-toggle="tab"><i class="fa fa-fw fa-lg fa-th-list"></i> Case Report Forms</a>
+                        </li>
                     </ul>
                     <form asp-controller="Patients" asp-action="Edit" class="smart-form" data-ajax="true" data-ajax-method="POST" id="edit-patient-form">
                         <div id="new-patient-tab-content" class="tab-content padding-10">
@@ -54,6 +57,9 @@
                             </div>
                             <div class="tab-pane fade ig" id="radiology">
                                 @{ await Html.RenderPartialAsync("/Views/Patients/Edit/_RadiologyTab.cshtml"); }
+                            </div>
+                            <div class="tab-pane fade case-report-forms" id="case-report-forms">
+                                @Html.Partial("/Views/Patients/CaseReportForms/_Edit.cshtml")
                             </div>
                         </div>
                     </form>

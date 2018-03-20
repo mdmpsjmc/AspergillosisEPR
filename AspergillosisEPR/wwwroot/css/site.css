@@ -419,3 +419,8 @@ form#new-case-report-form-option-group span.select2-container.select2-container-
 div#form-sections {
     padding-left: 80px;
 }
+
+div.crf-form-below {
+    width: 750px !important;
+    float: left;
+}
