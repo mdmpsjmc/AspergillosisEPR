@@ -11,7 +11,7 @@ using System.Collections;
 using AspergillosisEPR.Helpers;
 using Microsoft.EntityFrameworkCore;
 
-namespace AspergillosisEPR.Controllers
+namespace AspergillosisEPR.Controllers.CaseReportForms
 {
     public class CaseReportFormFieldTypesController : Controller
     {

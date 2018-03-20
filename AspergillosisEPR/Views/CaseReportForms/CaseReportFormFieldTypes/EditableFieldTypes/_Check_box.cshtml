@@ -1,0 +1,18 @@
+﻿@model AspergillosisEPR.Models.CaseReportForms.ViewModels.CaseReportFormFieldResultViewModel;
+<div class="row">
+    <div class="inline-group labels">
+        @foreach (var option in @Model?.Result.Field.Options)
+        {            
+             var isChecked = Model?.Result.Options.Select(o => o.CaseReportFormOptionChoiceId.ToString().Contains(option.CaseReportFormOptionChoiceId.ToString())).FirstOrDefault();            
+            <label class="checkbox">
+                <input type="checkbox" name="Results[@Model.Index].SelectedIds" value="@option.CaseReportFormOptionChoiceId" @(isChecked == true ? "checked=\'checked\'" : "")>
+                @Html.Hidden("Results[" + Model.Index + "].CaseReportFormFieldId", Model.Field.ID)
+                <i></i>
+                <span class="checkbox-label">
+                    @option.Option.Name
+                </span>
+                @Html.Hidden("Results[" + Model.Index + "].ValidationResult", "")
+            </label>
+        }
+    </div>
+</div>

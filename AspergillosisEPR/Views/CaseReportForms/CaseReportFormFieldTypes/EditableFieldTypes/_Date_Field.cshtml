@@ -5,9 +5,9 @@
     </section>
     <section class="col col-5">
         <label class="input">
-            <input name="Results[@Model.Index].TextAnswer" placeholder="@Model.Field.Label" class="form-control" value="@Model?.Result?.TextAnswer" disabled="disabled">
+            <input name="Results[@Model.Index].DateAnswer" placeholder="@Model.Field.Label" class="datepicker form-control" value="@Model?.Result?.DateAnswer?.ToString("dd-MM-yyyy")">
             @Html.Hidden("Results["+ Model.Index + "].CaseReportFormFieldId", Model.Field.ID)
-            @Html.Hidden("Results[" + Model.Index + "].ValidationResult", "")
         </label>
+        @Html.Hidden("Results[" + Model.Index + "].ValidationResult", "")
     </section>
 </div>

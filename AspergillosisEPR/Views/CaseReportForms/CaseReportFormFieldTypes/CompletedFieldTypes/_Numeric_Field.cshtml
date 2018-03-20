@@ -5,7 +5,7 @@
     </section>
     <section class="col col-2">
         <label class="input">
-            <input name="Results[@Model.Index].NumericAnswer" placeholder="@Model.Field.Label" class="form-control" value="@Model?.Result?.NumericAnswer">
+            <input name="Results[@Model.Index].NumericAnswer" placeholder="@Model.Field.Label" class="form-control" value="@Model?.Result?.NumericAnswer" disabled="disabled">
             @Html.Hidden("Results[" + Model.Index  + "].CaseReportFormFieldId", Model.Field.ID)
             @Html.Hidden("Results[" + Model.Index + "].ValidationResult", "")
         </label>

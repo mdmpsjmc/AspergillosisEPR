@@ -67,7 +67,6 @@
             var requestUrl = "/CaseReportForms/Patient/" + caseReportFormId;
             var nextDivContainer = $(this).parents("section").next();
             $.get(requestUrl, function (responseHtml) {
-                $("div#case-report-form").html(responseHtml);               
                 if (nextDivContainer !== null && nextDivContainer !== undefined && nextDivContainer.length > 0) {
                     nextDivContainer.html(responseHtml);
                 }

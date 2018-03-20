@@ -3,10 +3,10 @@
     <section class="col col-4 label-render">
         <label>@Model.Field.Label</label>
     </section>
-    <section class="col col-5">
+    <section class="col col-2">
         <label class="input">
-            <input name="Results[@Model.Index].TextAnswer" placeholder="@Model.Field.Label" class="form-control" value="@Model?.Result?.TextAnswer" disabled="disabled">
-            @Html.Hidden("Results["+ Model.Index + "].CaseReportFormFieldId", Model.Field.ID)
+            <input name="Results[@Model.Index].NumericAnswer" placeholder="@Model.Field.Label" class="form-control" value="@Model?.Result?.NumericAnswer">
+            @Html.Hidden("Results[" + Model.Index  + "].CaseReportFormFieldId", Model.Field.ID)
             @Html.Hidden("Results[" + Model.Index + "].ValidationResult", "")
         </label>
     </section>

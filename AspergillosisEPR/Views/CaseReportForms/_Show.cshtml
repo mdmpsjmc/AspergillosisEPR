@@ -38,9 +38,9 @@
                                     }
                                 </fieldset>
                             }
-                            @for (int cursor = 0; cursor < @Model.Fields.Count; cursor++)
+                            @for (int cursor = 0; cursor < Model.Fields.Count; cursor++)
                             {
-                                var formField = @Model.Fields.ToList()[cursor];
+                                var formField = Model.Fields.ToList()[cursor];
                                 var formFieldVm = new CaseReportFormFieldViewModel();
                                 formFieldVm.Field = formField;
                                 formFieldVm.Index = globalCursor.ToString();

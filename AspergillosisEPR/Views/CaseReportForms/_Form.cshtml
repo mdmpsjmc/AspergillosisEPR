@@ -1,0 +1,52 @@
+﻿@model AspergillosisEPR.Models.CaseReportForms.CaseReportFormResult;
+@using AspergillosisEPR.Models.CaseReportForms.ViewModels;
+@{
+    var globalCursor = 0;
+}
+<fieldset>
+    <header>
+        <strong>
+            @Model.Form.Name
+        </strong>
+    </header>
+    <form class="smart-form">
+        <div class="row">
+            <section class="col col-4 label-render">
+                <label>Date Taken</label>
+            </section>
+            <section class="col col-5">
+                <label>
+                    <input asp-for="DateTaken" palceholder="Enter Report Date" class="datepicker form-control" type="text" value="">
+                </label>
+            </section>
+            @Html.HiddenFor(m => m.CaseReportFormId, Model.CaseReportFormId)
+            @Html.HiddenFor(m => m.CaseReportFormCategoryId, Model.CaseReportFormCategoryId)
+        </div>
+        @foreach (var fsection in Model.Form.Sections)
+        {
+            <fieldset>
+                <h3>@fsection.Section.Name</h3>
+                @for (int cursor = 0; cursor < fsection.Section.CaseReportFormResultFields.Count; cursor++)
+                {
+                    var field = fsection.Section.CaseReportFormResultFields.ToList()[cursor];
+                    var fieldVm = new CaseReportFormFieldViewModel();
+                    fieldVm.Field = field;
+                    fieldVm.Index = globalCursor.ToString();
+                    @Html.Partial("/Views/CaseReportForms/CaseReportFormFieldTypes/FieldTypes/_"
+                                                + field.CaseReportFormFieldType.FieldPartial() + ".cshtml", fieldVm)
+                    globalCursor++;
+                }
+            </fieldset>
+        }
+        @for (int cursor = 0; cursor < Model.Form.Fields.Count(); cursor++)
+        {
+            var formField = Model.Form.Fields.ToList()[cursor];
+            var formFieldVm = new CaseReportFormFieldViewModel();
+            formFieldVm.Field = formField;
+            formFieldVm.Index = globalCursor.ToString();
+            @Html.Partial("/Views/CaseReportForms/CaseReportFormFieldTypes/FieldTypes/_"
+                            + formField.CaseReportFormFieldType.FieldPartial() + ".cshtml", formFieldVm);
+            globalCursor++;
+        }
+    </form>
+</fieldset>

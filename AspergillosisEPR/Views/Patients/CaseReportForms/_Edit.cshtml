@@ -1,4 +1,68 @@
-﻿<div id="existing-crf-forms"></div>
+﻿@using AspergillosisEPR.Models.CaseReportForms;
+@using AspergillosisEPR.Models.CaseReportForms.ViewModels;
+<div id="existing-crf-forms">
+    @{
+        var groupedForms = (List<IGrouping<string, CaseReportFormResult>>)ViewBag.CaseReportForms;
+        int globalCursor = 0;
+        foreach (var category in groupedForms)
+        {
+            <h3>@category.Key</h3>
+            <div class="panel-group smart-accordion-default" id="accordion-2">
+
+                @foreach (var formResult in category)
+                {
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h4 class="panel-title">
+                                <a data-toggle="collapse" data-parent="#accordion-2" href="#@(formResult.ID)" aria-expanded="false" class="collapsed">
+                                    <i class="fa fa-lg fa-angle-down pull-right"></i>
+                                    <i class="fa fa-lg fa-angle-up pull-right"></i>
+                                    @formResult.Form.Name Date: @formResult.DateTaken.ToString("dd-MM-yyyy")
+                                </a>
+                            </h4>
+                        </div>
+                    </div>
+                    <div id="@(formResult.ID)" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
+                        <div class="panel-body">
+                            <form class="smart-form">
+                                @foreach (var formSection in formResult.Form.Sections)
+                                {
+                                    <fieldset>
+                                        <h3>@formSection.Section.Name</h3>
+                                        @for (int cursor = 0; cursor < formSection.Section.CaseReportFormResultFields.Count; cursor++)
+                                        {
+                                            var field = formSection.Section.CaseReportFormResultFields.ToList()[cursor];
+                                            var result = formResult.Results.Where(r => r.PatientId == Model.ID && r.CaseReportFormFieldId == field.ID).FirstOrDefault();
+                                            var fieldVm = new CaseReportFormFieldResultViewModel();
+                                            fieldVm.Result = result;
+                                            fieldVm.Field = field;
+                                            fieldVm.Index = globalCursor.ToString();
+                                            @Html.Partial("/Views/CaseReportForms/CaseReportFormFieldTypes/EditableFieldTypes/_"
+                                    + field.CaseReportFormFieldType.FieldPartial() + ".cshtml", fieldVm)
+                                            globalCursor++;
+                                        }
+                                    </fieldset>
+                                }
+                                @for (int cursor = 0; cursor < formResult.Form.Fields.Count(); cursor++)
+                                {
+                                    var formField = formResult.Form.Fields.ToList()[cursor];
+                                    var formFieldVm = new CaseReportFormFieldResultViewModel();
+                                    var result = formResult.Results.Where(r => r.CaseReportFormFieldId == formField.ID && r.CaseReportFormId == formField.CaseReportFormId && r.PatientId == Model.ID).FirstOrDefault();
+                                    formFieldVm.Result = result;
+                                    formFieldVm.Field = formField;
+                                    formFieldVm.Index = globalCursor.ToString();
+                                    @Html.Partial("/Views/CaseReportForms/CaseReportFormFieldTypes/EditableFieldTypes/_"
+                                             + formField.CaseReportFormFieldType.FieldPartial() + ".cshtml", formFieldVm);
+                                    globalCursor++;
+                                }
+                            </form>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+    }
+</div>
 @if (User.IsInRole("Update Role") || User.IsInRole("Admin Role"))
 {
     <a href="@Url.Action("CaseReportFormModal", "Partials")" class="btn btn-success edit-patient-partial" data-visible-row="div.case-report-forms-new:visible" data-insert-into-class="div#existing-crf-forms" style="padding: 5px">

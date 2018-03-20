@@ -165,8 +165,8 @@ namespace AspergillosisEPR.Controllers
                 return NotFound();
             }
             _listResolver.BindSelects(patient);
-            ViewBag.CaseReportForms = _caseReportFormListResolver
-                                      .PopulateCRFGroupedCategoriesDropdownList();
+            ViewBag.CaseReportForms = (List <IGrouping<string, CaseReportFormResult>>)  _caseReportFormManager
+                                      .GetGroupedCaseReportFormsForPatient(patient.ID);
             return PartialView(patient);
         }
 
