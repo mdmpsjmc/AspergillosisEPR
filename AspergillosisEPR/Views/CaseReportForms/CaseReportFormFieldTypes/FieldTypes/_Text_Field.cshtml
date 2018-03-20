@@ -5,9 +5,9 @@
     </section>
     <section class="col col-5">
         <label class="input">
-            <input name="Results[@Model.Index].TextAnswer" placeholder="@Model.Field.Label" class="form-control">
-            @Html.Hidden("Results["+ Model.Index + "].CaseReportFormFieldId", Model.Field.ID)
-            @Html.Hidden("Results[" + Model.Index + "].ValidationResult", "")
+            <input name="CaseReportFormResult[@Model.FormIndex].Results[@Model.Index].TextAnswer" placeholder="@Model.Field.Label" class="form-control">
+            @Html.Hidden("CaseReportFormResult[" + Model.FormIndex + "].Results[" + Model.Index + "].CaseReportFormFieldId", Model.Field.ID)
+            @Html.Hidden("CaseReportFormResult[" + Model.FormIndex + "].Results[" + Model.Index + "].ValidationResult", "")
         </label>
     </section>
 </div>

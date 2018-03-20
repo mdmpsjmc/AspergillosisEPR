@@ -25,6 +25,7 @@ namespace AspergillosisEPR.Models.CaseReportForms.ViewModels
         public List<string> FieldsNames { get; set; }
         public string ItemId { get; set; }
 
+
         public static CaseReportFormViewModel BuildViewModel(CaseReportForm caseReportForm)
         {
             var viewModel = new CaseReportFormViewModel();

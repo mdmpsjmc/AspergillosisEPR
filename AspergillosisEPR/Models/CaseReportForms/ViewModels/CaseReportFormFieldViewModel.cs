@@ -9,5 +9,6 @@ namespace AspergillosisEPR.Models.CaseReportForms.ViewModels
     {
         public CaseReportFormField Field { get; set; }
         public string Index { get; set; }
+        public string FormIndex { get; set; }
     }
 }

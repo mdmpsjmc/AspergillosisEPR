@@ -32,6 +32,7 @@
                     var fieldVm = new CaseReportFormFieldViewModel();
                     fieldVm.Field = field;
                     fieldVm.Index = globalCursor.ToString();
+                    fieldVm.FormIndex = (string)ViewBag.Index;
                     @Html.Partial("/Views/CaseReportForms/CaseReportFormFieldTypes/FieldTypes/_"
                                                 + field.CaseReportFormFieldType.FieldPartial() + ".cshtml", fieldVm)
                     globalCursor++;
@@ -39,11 +40,12 @@
             </fieldset>
          }
         @for (int cursor = 0; cursor < Model.Form.Fields.Count(); cursor++)
-         {
+        {
             var formField = Model.Form.Fields.ToList()[cursor];
             var formFieldVm = new CaseReportFormFieldViewModel();
             formFieldVm.Field = formField;
             formFieldVm.Index = globalCursor.ToString();
+            formFieldVm.FormIndex = (string)ViewBag.Index;
             @Html.Partial("/Views/CaseReportForms/CaseReportFormFieldTypes/FieldTypes/_"
                             + formField.CaseReportFormFieldType.FieldPartial() + ".cshtml", formFieldVm);
             globalCursor++;

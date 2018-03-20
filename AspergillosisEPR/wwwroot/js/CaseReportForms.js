@@ -64,7 +64,8 @@
     var onPatientCaseReportFormSelectChange = function () {
         $(document).off("change").on("change", "select#patient-case-report-form", function () {
             var caseReportFormId = $(this).val();
-            var requestUrl = "/CaseReportForms/Patient/" + caseReportFormId;
+            var formIndex = $(this).data("index");
+            var requestUrl = "/CaseReportForms/Patient/" + caseReportFormId + "?index=" + formIndex;
             var nextDivContainer = $(this).parents("section").next();
             $.get(requestUrl, function (responseHtml) {
                 if (nextDivContainer !== null && nextDivContainer !== undefined && nextDivContainer.length > 0) {

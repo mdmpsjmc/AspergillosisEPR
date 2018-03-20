@@ -7,7 +7,7 @@
     <section class="col-6 col-md-6">
         <div class="row">
             <label class="smart-form select" id="case-report-form">
-                <select asp-items="(List<SelectListItem>) @ViewBag.CaseReportForms" id="patient-case-report-form">
+                <select asp-items="(List<SelectListItem>) @ViewBag.CaseReportForms" id="patient-case-report-form" data-index="@((string) ViewBag.Index)">
                     <option>Please select form</option>
                 </select>
                 <i></i>

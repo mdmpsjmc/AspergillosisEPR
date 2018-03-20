@@ -174,11 +174,12 @@ namespace AspergillosisEPR.Controllers
         public IActionResult CaseReportFormModal()
         {
             var gropupedCategoriesList = _caseReportFormListResolver
-                                            .PopulateCRFGroupedCategoriesDropdownList();
+                                                    .PopulateCRFGroupedCategoriesDropdownList();
             ViewBag.CaseReportForms = gropupedCategoriesList;
             ViewBag.Index = (string)Request.Query["index"];
             return PartialView();
         }
+
         private SelectList CriteriaClassesDropdownList()
         {
             return ViewBag.CriteriaClasses = new SelectList(PatientSearch.CriteriaClasses().OrderBy(x => x.Value), "Value", "Key", "Patient");
