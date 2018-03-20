@@ -205,6 +205,7 @@
                     $("div#ig-charts").html(""); //clears hidden charts div. 
                     Charts.igChartsFromResponse(response, true);
                 });
+                $("select[multiple='multiple']").multiSelect();
             });
         });
     }

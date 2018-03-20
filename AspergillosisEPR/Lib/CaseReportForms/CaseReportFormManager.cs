@@ -102,7 +102,11 @@ namespace AspergillosisEPR.Lib.CaseReportForms
                                          .ThenInclude(f => f.Sections)
                                             .ThenInclude(s => s.Section)
                                                 .ThenInclude(s => s.CaseReportFormResultFields)
-                                                    .ThenInclude(f => f.CaseReportFormFieldType);
+                                                    .ThenInclude(f => f.CaseReportFormFieldType)
+                                .Include(fr => fr.Results)
+                                .ThenInclude(pr => pr.FormResult)
+                                    .ThenInclude(f => f.Fields)
+                                        .ThenInclude(f => f.CaseReportForm);
 
             var grouped = forms.GroupBy( f=> f.Category.Name).ToList();
             return grouped;
@@ -117,6 +121,7 @@ namespace AspergillosisEPR.Lib.CaseReportForms
                                                          .Include(f => f.CaseReportFormSection)
                                                          .Include(f => f.CaseReportForm)
                                                          .FirstOrDefault();
+
                 int? formId = null;
                 if (field != null)
                 {

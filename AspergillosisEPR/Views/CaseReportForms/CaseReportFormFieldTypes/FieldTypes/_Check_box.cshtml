@@ -4,7 +4,7 @@
         @foreach (var option in @Model.Field.Options)
             {
             <label class="checkbox">
-                <input type="checkbox" name="CaseReportFormPatientResult[@Model.Index].SelectedIds" value="@option.CaseReportFormOptionChoiceId">
+                <input type="checkbox" name="Results[@Model.Index].SelectedIds" value="@option.CaseReportFormOptionChoiceId">
                 @Html.Hidden("Results[" + Model.Index + "].CaseReportFormFieldId", Model.Field.ID)
                 <i></i>
                 <span class="checkbox-label">

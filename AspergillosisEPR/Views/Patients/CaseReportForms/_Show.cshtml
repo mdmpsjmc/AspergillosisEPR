@@ -23,7 +23,7 @@
             @Html.HiddenFor(m => m.CaseReportFormCategoryId, Model.CaseReportFormCategoryId)
         </div>
         @foreach (var fsection in Model.Form.Sections)
-        {
+         {
             <fieldset>
                 <h3>@fsection.Section.Name</h3>
                 @for (int cursor = 0; cursor < fsection.Section.CaseReportFormResultFields.Count; cursor++)
@@ -37,9 +37,9 @@
                     globalCursor++;
                 }
             </fieldset>
-        }
+         }
         @for (int cursor = 0; cursor < Model.Form.Fields.Count(); cursor++)
-        {
+         {
             var formField = Model.Form.Fields.ToList()[cursor];
             var formFieldVm = new CaseReportFormFieldViewModel();
             formFieldVm.Field = formField;
@@ -47,7 +47,7 @@
             @Html.Partial("/Views/CaseReportForms/CaseReportFormFieldTypes/FieldTypes/_"
                             + formField.CaseReportFormFieldType.FieldPartial() + ".cshtml", formFieldVm);
             globalCursor++;
-        }
+         }
     </form>
 
 </fieldset>                   
