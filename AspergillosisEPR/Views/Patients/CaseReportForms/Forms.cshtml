@@ -31,7 +31,7 @@
                             @for (int cursor = 0; cursor < formSection.Section.CaseReportFormResultFields.Count; cursor++)
                             {
                                 var field = formSection.Section.CaseReportFormResultFields.ToList()[cursor];
-                                var result = formResult.Results.Where(r => r.CaseReportFormFieldId == field.ID && r.PatientId == Model.Patient.ID && r.FormResult.ID == formSection.CaseReportFormId).FirstOrDefault();
+                                var result = formResult.Results.ToList()[cursor];
                                 var fieldVm = new CaseReportFormFieldResultViewModel();
                                 fieldVm.Result = result;
                                 fieldVm.Field = field;
