@@ -22,7 +22,7 @@
                             </h4>
                         </div>
                     </div>
-                    <div id="@(formResult.ID)" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
+                    <div id="@(formResult.ID)" class="panel-collapse collapse  case-report-forms-new" aria-expanded="false" style="height: 0px;">
                         <div class="panel-body">
                             <form class="smart-form">
                                 @foreach (var formSection in formResult.Form.Sections)
@@ -66,7 +66,7 @@
 </div>
 @if (User.IsInRole("Update Role") || User.IsInRole("Admin Role"))
 {
-    <a href="@Url.Action("CaseReportFormModal", "Partials")" class="btn btn-success edit-patient-partial" data-visible-row="div.case-report-forms-new:visible" data-insert-into-class="div#existing-crf-forms" style="padding: 5px">
+    <a href="@Url.Action("CaseReportFormModal", "Partials")" class="btn btn-success edit-patient-partial" data-visible-row=".case-report-forms-new" data-insert-into-class="div#existing-crf-forms" style="padding: 5px">
         <i class="fa fa-plus"></i>
         <span>
             <strong>Add Case Report Form</strong>

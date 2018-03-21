@@ -16,11 +16,11 @@
             </section>
             <section class="col col-5">
                  <label>   
-                    <input asp-for="DateTaken" palceholder="Enter Report Date" class="datepicker form-control" type="text" value="">
+                    <input name="CaseReportFormResult[@((string) ViewBag.Index)].DateTaken" palceholder="Enter Report Date" class="datepicker form-control" type="text" value="">
                 </label>
             </section>
-            @Html.HiddenFor(m => m.CaseReportFormId, Model.CaseReportFormId)
-            @Html.HiddenFor(m => m.CaseReportFormCategoryId, Model.CaseReportFormCategoryId)
+            @Html.Hidden("CaseReportFormResult[" + (string) ViewBag.Index + "].CaseReportFormId", Model.CaseReportFormId)
+            @Html.Hidden("CaseReportFormResult[" + (string) ViewBag.Index + "].CaseReportFormCategoryId", Model.CaseReportFormCategoryId)
         </div>
         @foreach (var fsection in Model.Form.Sections)
          {
