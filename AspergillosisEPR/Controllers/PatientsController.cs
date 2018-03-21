@@ -207,6 +207,30 @@ namespace AspergillosisEPR.Controllers
                             _caseReportFormManager.UpdateOptionChoices(result.Results.ToArray());
                             result.PatientId = patientToUpdate.ID;
                             patientToUpdate.CaseReportFormResults.Add(result);
+                        } else
+                        {
+                            var results = result.Results.ToArray();
+                            _caseReportFormManager.GetFormIdsForCaseReportForms(results);
+                            _caseReportFormManager.UpdateWithPatient(patientToUpdate, results);
+                            foreach (var itemResult in results)
+                            {
+                                var dbItemResult = _context.CaseReportFormPatientResults
+                                                           .Where(pr => pr.PatientId == patientToUpdate.ID
+                                                                  && pr.CaseReportFormFieldId == itemResult.CaseReportFormFieldId
+                                                                  && pr.CaseReportFormId == result.CaseReportFormId)
+                                                           .FirstOrDefault();
+                                if (dbItemResult != null)
+                                {
+                                    dbItemResult.CaseReportFormFieldId = itemResult.CaseReportFormFieldId;
+                                    dbItemResult.CaseReportFormResultId = result.ID;                                
+                                    dbItemResult.NumericAnswer = itemResult.NumericAnswer;
+                                    dbItemResult.TextAnswer = itemResult.TextAnswer;
+                                    dbItemResult.SelectedId = itemResult.SelectedId;
+                                    dbItemResult.SelectedIds = itemResult.SelectedIds;
+                                    dbItemResult.DateAnswer = itemResult.DateAnswer;                                        
+                                    _context.Update(dbItemResult);
+                                }                                
+                            }                            
                         }
                     }
                 }                

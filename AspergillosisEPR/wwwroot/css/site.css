@@ -425,3 +425,8 @@ div.crf-form-below {
     width: 750px !important;
     float: left;
 }
+
+h3.form-category {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}

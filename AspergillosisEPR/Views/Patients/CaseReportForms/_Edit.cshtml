@@ -7,7 +7,7 @@
         int categoryCursor = 0;
         foreach (var category in groupedForms)
         {
-            <h3>@category.Key</h3>
+            <h3 class="form-category">@category.Key</h3>
             <div class="panel-group smart-accordion-default" id="accordion-2">
                 @for (int formCursor = 0; formCursor < category.ToList().Count(); formCursor++)
                 {
