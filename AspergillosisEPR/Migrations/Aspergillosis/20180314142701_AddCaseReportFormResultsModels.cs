@@ -53,16 +53,6 @@ namespace AspergillosisEPR.Migrations.Aspergillosis
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     CaseReportFormOptionChoiceId = table.Column<int>(nullable: false),
                     CaseReportFormPatientResultId = table.Column<int>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_CaseReportFormPatientResultOptionChoices", x => x.ID);
-                    table.ForeignKey(
-                        name: "FK_CaseReportFormPatientResultOptionChoices_CaseReportFormPatientResults_CaseReportFormPatientResultId",
-                        column: x => x.CaseReportFormPatientResultId,
-                        principalTable: "CaseReportFormPatientResults",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(

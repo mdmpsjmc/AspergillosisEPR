@@ -185,27 +185,44 @@ namespace AspergillosisEPR.Controllers
             {
                 return NotFound();
             }
-            Patient patientToUpdate = await _patientManager.FindPatientWithFirstLevelRelationsByIdAsync(id);
+            Patient patientToUpdate = await _patientManager
+                                                    .FindPatientWithFirstLevelRelationsByIdAsync(id);
 
             _patientManager.UpdateDiagnoses(diagnoses, patientToUpdate);
             _patientManager.UpdateDrugs(drugs, patientToUpdate, Request);
             _patientManager.UpdateSGRQ(sTGQuestionnaires, patientToUpdate);
             _patientManager.UpdateImmunoglobines(patientImmunoglobulines, patientToUpdate);
             _patientManager.UpdatePatientRadiology(radiololgyFindings, patientToUpdate);
+            if (caseReportFormResult != null)
+            {
+                patientToUpdate.CaseReportFormResults = new List<CaseReportFormResult>();
+                foreach (var result in caseReportFormResult)
+                {
+                    if (result.Results != null)
+                    {                        
+                        if (result.ID == 0)
+                        {
+                            _caseReportFormManager.GetFormIdsForCaseReportForms(result.Results.ToArray());
+                            _caseReportFormManager.UpdateWithPatient(patientToUpdate, result.Results.ToArray());
+                            _caseReportFormManager.UpdateOptionChoices(result.Results.ToArray());
+                            result.PatientId = patientToUpdate.ID;
+                            patientToUpdate.CaseReportFormResults.Add(result);
+                        }
+                    }
+                }                
+            }
 
             _context.Entry(patientToUpdate).State = EntityState.Modified;
 
-            if (await TryUpdateModelAsync<Patient>(patientToUpdate,
-                "",
-                p => p.FirstName, p => p.LastName, p => p.DOB, p => p.RM2Number,
-                p => p.Gender, p => p.PatientStatusId, p => p.DateOfDeath))
+            if (ModelState.IsValid)
             {
                 try
                 {
                     _context.SaveChanges();
                 }
-                catch (DbUpdateException /* ex */)
+                catch (DbUpdateException ex)
                 {
+                    var message = ex.Message;
                     ModelState.AddModelError("", "Unable to save changes. " +
                         "Try again, and if the problem persists, " +
                         "see your system administrator.");
@@ -218,7 +235,7 @@ namespace AspergillosisEPR.Controllers
             }
 
             return Json(new { result = "ok" });
-        }
+        }        
 
         [AllowAnonymous]
         public JsonResult HasRM2Number(string RM2Number, int? Id, string initialRM2Number)

@@ -12,6 +12,7 @@
                     @option.Option.Name
                 </span>
                 @Html.Hidden("CaseReportFormResult[" + Model.FormIndex + "].Results[" + Model.Index + "].ValidationResult", "")
+                @Html.Hidden("CaseReportFormResult[" + Model.FormIndex + "].Results[" + Model.Index + "].ID", Model?.Field?.ID)
             </label>
         }
     </div>

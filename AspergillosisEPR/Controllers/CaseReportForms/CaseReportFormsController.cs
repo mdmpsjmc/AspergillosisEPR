@@ -148,7 +148,9 @@ namespace AspergillosisEPR.Controllers.CaseReportForms
             }
         }
 
-        private void BuildFormWithSections(CaseReportFormViewModel caseReportFormViewModel, out CaseReportForm caseReportForm, out List<CaseReportFormFormSection> sections)
+        private void BuildFormWithSections(CaseReportFormViewModel caseReportFormViewModel, 
+                                           out CaseReportForm caseReportForm, 
+                                           out List<CaseReportFormFormSection> sections)
         {
             caseReportForm = new CaseReportForm();
             sections = new List<CaseReportFormFormSection>();

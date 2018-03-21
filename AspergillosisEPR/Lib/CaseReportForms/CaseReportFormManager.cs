@@ -19,6 +19,55 @@ namespace AspergillosisEPR.Lib.CaseReportForms
             _context = context;
         }
 
+        public void UpdateCaseReportFormsForPatient(CaseReportFormResult[] caseReportFormResult,
+                                                    Patient patientToUpdate)
+        {
+            
+        }
+
+        public void UpdateOptionChoices(CaseReportFormPatientResult[] caseReportFormPatientResult)
+        {
+            for (int cursor = 0; cursor < caseReportFormPatientResult.Length; cursor++)
+            {
+                var caseReportFormResult = caseReportFormPatientResult[cursor];
+                if (caseReportFormResult.SelectedIds != null || caseReportFormResult.SelectedId != null)
+                {
+                    
+                    if (caseReportFormResult.SelectedId != null)
+                    {
+                        var optionChoice = _context.CaseReportFormOptionChoices
+                                                   .Where(oc => oc.ID == caseReportFormResult.SelectedId)
+                                                   .FirstOrDefault();
+                        if (optionChoice == null) continue;
+                        caseReportFormResult.Options = new List<CaseReportFormPatientResultOptionChoice>();
+                        var caseReportResultOptionChoice = new CaseReportFormPatientResultOptionChoice();
+                        caseReportResultOptionChoice.CaseReportFormOptionChoiceId = optionChoice.ID;
+                        caseReportResultOptionChoice.CaseReportFormPatientResultId = caseReportFormResult.ID;
+                        caseReportFormResult.Options.Add(caseReportResultOptionChoice);
+                        _context.Add(caseReportResultOptionChoice);
+                    }
+
+                    if (caseReportFormResult.SelectedIds != null)
+                    {
+                
+                        foreach (var optionChoiceId in caseReportFormResult.SelectedIds)
+                        {                            
+                            var optionChoice = _context.CaseReportFormOptionChoices
+                                                   .Where(oc => oc.ID == optionChoiceId)
+                                                   .FirstOrDefault();
+                            if (optionChoice == null) continue;
+                            caseReportFormResult.Options = new List<CaseReportFormPatientResultOptionChoice>();
+                            var caseReportResultOptionChoice = new CaseReportFormPatientResultOptionChoice();
+                            caseReportResultOptionChoice.CaseReportFormOptionChoiceId = optionChoice.ID;
+                            caseReportResultOptionChoice.CaseReportFormPatientResultId = caseReportFormResult.ID;
+                            caseReportFormResult.Options.Add(caseReportResultOptionChoice);
+                            _context.Add(caseReportResultOptionChoice);
+                        }
+                    }
+                }
+            }
+        }
+
         public CaseReportForm FindByIdWithAllRelations(int id)
         {
             return _context.CaseReportForms
@@ -123,7 +172,11 @@ namespace AspergillosisEPR.Lib.CaseReportForms
                                                          .FirstOrDefault();
 
                 int? formId = null;
-                if (field != null)
+                if (field == null)
+                {
+                   
+                }
+                else
                 {
                     formId = (field.CaseReportForm != null) ? field.CaseReportFormId : GetSectionFormIdForField(field);
                 }

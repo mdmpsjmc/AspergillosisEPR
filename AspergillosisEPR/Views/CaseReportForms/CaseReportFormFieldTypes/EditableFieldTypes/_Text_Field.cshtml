@@ -8,6 +8,7 @@
             <input name="CaseReportFormResult[@(Model.FormIndex)].Results[@Model.Index].TextAnswer" placeholder="@Model.Field.Label" class="form-control" value="@Model?.Result?.TextAnswer">
             @Html.Hidden("CaseReportFormResult[" + Model.FormIndex + "].Results[" + Model.Index + "].CaseReportFormFieldId", Model.Field.ID)
             @Html.Hidden("CaseReportFormResult[" + Model.FormIndex + "].Results[" + Model.Index + "].ValidationResult", "")
+            @Html.Hidden("CaseReportFormResult[" + Model.FormIndex + "].Results[" + Model.Index + "].ID", Model?.Field?.ID)
         </label>
     </section>
 </div>

@@ -9,5 +9,6 @@
             @Html.Hidden("CaseReportFormResult[" + Model.FormIndex + "].Results["+ Model.Index + "].CaseReportFormFieldId", Model.Field.ID)
         </label>
         @Html.Hidden("CaseReportFormResult[" + Model.FormIndex + "].Results[" + Model.Index + "].ValidationResult", "")
+        @Html.Hidden("CaseReportFormResult[" + Model.FormIndex + "].Results[" + Model.Index + "].ID", Model?.Field?.ID)
     </section>
 </div>

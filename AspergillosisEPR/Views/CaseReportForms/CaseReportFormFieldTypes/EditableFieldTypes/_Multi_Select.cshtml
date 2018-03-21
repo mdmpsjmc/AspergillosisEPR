@@ -11,7 +11,10 @@
                 {
                     if (Model.Result != null)
                     {
-                        var isSelected = Model.Result.Options.Select(o => o.CaseReportFormOptionChoiceId.ToString()).Contains(option.Value);
+                        var isSelected = Model
+                                            .Result
+                                            .Options
+                                            .Select(o => o.CaseReportFormOptionChoiceId.ToString()).Contains(option.Value);
                         option.Selected = isSelected;
                         if (option.Selected)
                         {
@@ -20,9 +23,7 @@
                         else
                         {
                             <option value="@option.Value" >@option.Text</option>
-
                         }
-
                     }
                     else
                     {
@@ -32,6 +33,7 @@
                 </select>
                 @Html.Hidden("CaseReportFormResult[" + Model.FormIndex + "].Results[" + Model.Index + "].CaseReportFormFieldId", Model.Field.ID)
                 @Html.Hidden("CaseReportFormResult[" + Model.FormIndex + "].Results[" + Model.Index + "].ValidationResult", "")
+                @Html.Hidden("CaseReportFormResult[" + Model.FormIndex + "].Results[" + Model.Index + "].ID", Model?.Field?.ID)
             </label>
         </label>
     </section>

@@ -29,8 +29,9 @@
                     }
                 </select>
                 <i></i>
-                @Html.Hidden("CaseReportFormResult[" + (string)ViewBag.Index + "].Results[" + Model.Index + "].CaseReportFormFieldId", Model.Field.ID)
-                @Html.Hidden("CaseReportFormResult[" + (string)ViewBag.Index + "].Results[" + Model.Index + "].ValidationResult", "")
+                @Html.Hidden("CaseReportFormResult[" + Model.FormIndex + "].Results[" + Model.Index + "].CaseReportFormFieldId", Model.Field.ID)
+                @Html.Hidden("CaseReportFormResult[" + Model.FormIndex + "].Results[" + Model.Index + "].ValidationResult", "")
+                @Html.Hidden("CaseReportFormResult[" + Model.FormIndex + "].Results[" + Model.Index + "].ID", Model?.Field?.ID)
             </label>            
         </label>
     </section>

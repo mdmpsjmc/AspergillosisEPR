@@ -192,7 +192,8 @@ namespace AspergillosisEPR.Lib
             }
         }
 
-        internal void UpdatePatientRadiology(PatientRadiologyFinding[] patientRadiologyFinding, Patient patientToUpdate)
+        internal void UpdatePatientRadiology(PatientRadiologyFinding[] patientRadiologyFinding, 
+                                             Patient patientToUpdate)
         {
             foreach (var radiology in patientRadiologyFinding)
             {
