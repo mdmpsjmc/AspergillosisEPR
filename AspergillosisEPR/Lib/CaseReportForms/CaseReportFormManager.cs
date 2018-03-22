@@ -31,44 +31,17 @@ namespace AspergillosisEPR.Lib.CaseReportForms
                     {
                         if (result.ID == 0)
                         {
-                            GetFormIdsForCaseReportForms(result.Results.ToArray());
-                            UpdateWithPatient(patientToUpdate, result.Results.ToArray());
-                            UpdateOptionChoices(result.Results.ToArray());
-                            result.PatientId = patientToUpdate.ID;
-                            patientToUpdate.CaseReportFormResults.Add(result);
-                            _context.Update(result);
+                            AddNewResultForPatient(patientToUpdate, result);
                         }
                         else
                         {
-                            var results = result.Results.ToArray();
-                            GetFormIdsForCaseReportForms(results);
-                            UpdateWithPatient(patientToUpdate, results);
-                            foreach (var itemResult in results)
-                            {
-                                var dbItemResult = _context.CaseReportFormPatientResults
-                                                           .Where(pr => pr.PatientId == patientToUpdate.ID
-                                                                  && pr.CaseReportFormFieldId == itemResult.CaseReportFormFieldId
-                                                                  && pr.CaseReportFormId == result.CaseReportFormId
-                                                                  && pr.CaseReportFormResultId == result.ID)
-                                                           .FirstOrDefault();
-                                if (dbItemResult != null)
-                                {
-                                    dbItemResult.CaseReportFormFieldId = itemResult.CaseReportFormFieldId;
-                                    dbItemResult.CaseReportFormResultId = result.ID;
-                                    dbItemResult.NumericAnswer = itemResult.NumericAnswer;
-                                    dbItemResult.TextAnswer = itemResult.TextAnswer;
-                                    dbItemResult.SelectedId = itemResult.SelectedId;
-                                    dbItemResult.SelectedIds = itemResult.SelectedIds;
-                                    dbItemResult.DateAnswer = itemResult.DateAnswer;
-                                    _context.Update(dbItemResult);
-                                }
-                            }
+                            UpdateResultForPatient(patientToUpdate, result);
                         }
                     }
                 }
             }
         }
-
+      
         public void UpdateOptionChoices(CaseReportFormPatientResult[] caseReportFormPatientResult)
         {
             for (int cursor = 0; cursor < caseReportFormPatientResult.Length; cursor++)
@@ -289,5 +262,51 @@ namespace AspergillosisEPR.Lib.CaseReportForms
                 return null;
             }
         }
+
+        private void UpdateResultForPatient(Patient patientToUpdate, CaseReportFormResult caseReportFormResult)
+        {
+            var results = caseReportFormResult.Results.ToArray();
+            GetFormIdsForCaseReportForms(results);
+            UpdateWithPatient(patientToUpdate, results);
+            foreach (var singleItemResult in results)
+            {
+                UpdateItemResultInDatabase(patientToUpdate, caseReportFormResult, singleItemResult);
+            }
+        }
+
+        private void UpdateItemResultInDatabase(Patient patientToUpdate,
+                                                CaseReportFormResult caseReportFormResult,
+                                                CaseReportFormPatientResult singleItemResult)
+        {
+            var dbItemResult = _context.CaseReportFormPatientResults
+                                                       .Where(pr => pr.PatientId == patientToUpdate.ID
+                                                              && pr.CaseReportFormFieldId == singleItemResult.CaseReportFormFieldId
+                                                              && pr.CaseReportFormId == caseReportFormResult.CaseReportFormId
+                                                              && pr.CaseReportFormResultId == caseReportFormResult.ID)
+                                                       .FirstOrDefault();
+            if (dbItemResult != null)
+            {
+                dbItemResult.CaseReportFormFieldId = singleItemResult.CaseReportFormFieldId;
+                dbItemResult.CaseReportFormResultId = caseReportFormResult.ID;
+                dbItemResult.NumericAnswer = singleItemResult.NumericAnswer;
+                dbItemResult.TextAnswer = singleItemResult.TextAnswer;
+                dbItemResult.SelectedId = singleItemResult.SelectedId;
+                dbItemResult.SelectedIds = singleItemResult.SelectedIds;
+                dbItemResult.DateAnswer = singleItemResult.DateAnswer;
+                _context.Update(dbItemResult);
+            }
+        }
+
+        private void AddNewResultForPatient(Patient patientToUpdate, 
+                                           CaseReportFormResult result)
+        {
+            GetFormIdsForCaseReportForms(result.Results.ToArray());
+            UpdateWithPatient(patientToUpdate, result.Results.ToArray());
+            UpdateOptionChoices(result.Results.ToArray());
+            result.PatientId = patientToUpdate.ID;
+            patientToUpdate.CaseReportFormResults.Add(result);
+            _context.Update(result);
+        }
+
     }
 }
