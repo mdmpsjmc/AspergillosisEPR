@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AspergillosisEPR.Models;
-
+using static AspergillosisEPR.Models.CaseReportForms.CaseReportFormPatientResultOptionChoice;
 namespace AspergillosisEPR.Lib.CaseReportForms
 {
     public class CaseReportFormManager
@@ -41,49 +41,6 @@ namespace AspergillosisEPR.Lib.CaseReportForms
                 }
             }
         }
-      
-        public void UpdateOptionChoices(CaseReportFormPatientResult[] caseReportFormPatientResult)
-        {
-            for (int cursor = 0; cursor < caseReportFormPatientResult.Length; cursor++)
-            {
-                var caseReportFormResult = caseReportFormPatientResult[cursor];
-                if (caseReportFormResult.SelectedIds != null || caseReportFormResult.SelectedId != null)
-                {
-                    
-                    if (caseReportFormResult.SelectedId != null)
-                    {
-                        var optionChoice = _context.CaseReportFormOptionChoices
-                                                   .Where(oc => oc.ID == caseReportFormResult.SelectedId)
-                                                   .FirstOrDefault();
-                        if (optionChoice == null) continue;
-                        caseReportFormResult.Options = new List<CaseReportFormPatientResultOptionChoice>();
-                        var caseReportResultOptionChoice = new CaseReportFormPatientResultOptionChoice();
-                        caseReportResultOptionChoice.CaseReportFormOptionChoiceId = optionChoice.ID;
-                        caseReportResultOptionChoice.CaseReportFormPatientResultId = caseReportFormResult.ID;
-                        caseReportFormResult.Options.Add(caseReportResultOptionChoice);
-                        _context.Add(caseReportResultOptionChoice);
-                    }
-
-                    if (caseReportFormResult.SelectedIds != null)
-                    {
-                
-                        foreach (var optionChoiceId in caseReportFormResult.SelectedIds)
-                        {                            
-                            var optionChoice = _context.CaseReportFormOptionChoices
-                                                   .Where(oc => oc.ID == optionChoiceId)
-                                                   .FirstOrDefault();
-                            if (optionChoice == null) continue;
-                            caseReportFormResult.Options = new List<CaseReportFormPatientResultOptionChoice>();
-                            var caseReportResultOptionChoice = new CaseReportFormPatientResultOptionChoice();
-                            caseReportResultOptionChoice.CaseReportFormOptionChoiceId = optionChoice.ID;
-                            caseReportResultOptionChoice.CaseReportFormPatientResultId = caseReportFormResult.ID;
-                            caseReportFormResult.Options.Add(caseReportResultOptionChoice);
-                            _context.Add(caseReportResultOptionChoice);
-                        }
-                    }
-                }
-            }
-        }
 
         public CaseReportForm FindByIdWithAllRelations(int id)
         {
@@ -106,7 +63,6 @@ namespace AspergillosisEPR.Lib.CaseReportForms
                                                     .ThenInclude(f => f.CaseReportFormFieldType)
                                          .FirstOrDefault();
         }
-
 
         public void BuildFormFor(dynamic viewBag, 
                                  List<CaseReportFormField> fields,
@@ -189,11 +145,7 @@ namespace AspergillosisEPR.Lib.CaseReportForms
                                                          .FirstOrDefault();
 
                 int? formId = null;
-                if (field == null)
-                {
-                   
-                }
-                else
+                if (field != null)
                 {
                     formId = (field.CaseReportForm != null) ? field.CaseReportFormId : GetSectionFormIdForField(field);
                 }
@@ -221,32 +173,23 @@ namespace AspergillosisEPR.Lib.CaseReportForms
                     caseReportFormResult.Options = new List<CaseReportFormPatientResultOptionChoice>();
                     if (caseReportFormResult.SelectedId != null)
                     {
-                        var optionChoice = _context.CaseReportFormOptionChoices
-                                                   .Where(oc => oc.ID == caseReportFormResult.SelectedId)
-                                                   .FirstOrDefault();
-                        if (optionChoice == null) continue;
-                        var caseReportResultOptionChoice = new CaseReportFormPatientResultOptionChoice();
-                        caseReportResultOptionChoice.CaseReportFormOptionChoiceId = optionChoice.ID;
-                        caseReportFormResult.Options.Add(caseReportResultOptionChoice);
+                        var optionChoice = CreateOptionChoiceForResult(_context, caseReportFormResult.SelectedId);
+                        optionChoice.CaseReportFormPatientResultId = caseReportFormResult.ID;
+                        caseReportFormResult.Options.Add(optionChoice);
                     }
 
                     if (caseReportFormResult.SelectedIds != null)
                     {
                         foreach(var optionChoiceId in caseReportFormResult.SelectedIds)
                         {
-                            var optionChoice = _context.CaseReportFormOptionChoices
-                                                   .Where(oc => oc.ID == optionChoiceId)
-                                                   .FirstOrDefault();
-                            if (optionChoice == null) continue;
-                            var caseReportResultOptionChoice = new CaseReportFormPatientResultOptionChoice();
-                            caseReportResultOptionChoice.CaseReportFormOptionChoiceId = optionChoice.ID;
-                            caseReportFormResult.Options.Add(caseReportResultOptionChoice);
+                            var optionChoice  = CreateOptionChoiceForResult(_context, optionChoiceId);
+                            optionChoice.CaseReportFormPatientResultId = caseReportFormResult.ID;
+                            caseReportFormResult.Options.Add(optionChoice);
                         }
                     }
                 }
             }
-        }
-
+        }        
 
         private int? GetSectionFormIdForField(CaseReportFormField field)
         {
@@ -276,24 +219,76 @@ namespace AspergillosisEPR.Lib.CaseReportForms
 
         private void UpdateItemResultInDatabase(Patient patientToUpdate,
                                                 CaseReportFormResult caseReportFormResult,
-                                                CaseReportFormPatientResult singleItemResult)
+                                                CaseReportFormPatientResult formSingleItemResult)
         {
             var dbItemResult = _context.CaseReportFormPatientResults
                                                        .Where(pr => pr.PatientId == patientToUpdate.ID
-                                                              && pr.CaseReportFormFieldId == singleItemResult.CaseReportFormFieldId
+                                                              && pr.CaseReportFormFieldId == formSingleItemResult.CaseReportFormFieldId
                                                               && pr.CaseReportFormId == caseReportFormResult.CaseReportFormId
                                                               && pr.CaseReportFormResultId == caseReportFormResult.ID)
                                                        .FirstOrDefault();
             if (dbItemResult != null)
             {
-                dbItemResult.CaseReportFormFieldId = singleItemResult.CaseReportFormFieldId;
-                dbItemResult.CaseReportFormResultId = caseReportFormResult.ID;
-                dbItemResult.NumericAnswer = singleItemResult.NumericAnswer;
-                dbItemResult.TextAnswer = singleItemResult.TextAnswer;
-                dbItemResult.SelectedId = singleItemResult.SelectedId;
-                dbItemResult.SelectedIds = singleItemResult.SelectedIds;
-                dbItemResult.DateAnswer = singleItemResult.DateAnswer;
-                _context.Update(dbItemResult);
+                UpdateSingleDbItem(caseReportFormResult, formSingleItemResult, dbItemResult);
+            }
+        }
+
+        private void UpdateSingleDbItem(CaseReportFormResult caseReportFormResult, 
+                                        CaseReportFormPatientResult updatedResult, 
+                                        CaseReportFormPatientResult existingDbItemResult)
+        {
+            existingDbItemResult.CaseReportFormFieldId = updatedResult.CaseReportFormFieldId;
+            existingDbItemResult.CaseReportFormResultId = caseReportFormResult.ID;
+            existingDbItemResult.NumericAnswer = updatedResult.NumericAnswer;
+            existingDbItemResult.TextAnswer = updatedResult.TextAnswer;
+            existingDbItemResult.SelectedId = updatedResult.SelectedId;
+            existingDbItemResult.SelectedIds = updatedResult.SelectedIds;
+            existingDbItemResult.DateAnswer = updatedResult.DateAnswer;
+
+            _context.Entry(existingDbItemResult).Collection(c => c.Options).Load();
+
+            UpdateSingleItemOptionChoices(updatedResult, existingDbItemResult);
+            _context.Update(existingDbItemResult);
+        }
+
+        private void UpdateSingleItemOptionChoices(CaseReportFormPatientResult singleItemResult, 
+                                                   CaseReportFormPatientResult dbItemResult)
+        {
+            var dbOptionChoicesIds = dbItemResult.Options
+                                                 .Select(o => o.CaseReportFormOptionChoiceId.ToString())
+                                                 .ToList();
+
+            var formOptionChoicesIds = new List<string>();
+            if (singleItemResult.SelectedId != null && singleItemResult.SelectedIds != null) return;
+            if (singleItemResult.SelectedId != null)
+            {
+                formOptionChoicesIds.Add(singleItemResult.SelectedId.ToString());
+            }
+            if (singleItemResult.SelectedIds != null)
+            {
+                var selectedIds = singleItemResult.SelectedIds.Select(i => i.ToString()).ToList();
+                formOptionChoicesIds.AddRange(selectedIds);
+            }
+
+            var toDeleteOptionIds = dbOptionChoicesIds.Except(formOptionChoicesIds);
+            var toInsertOptionIds = formOptionChoicesIds.Except(dbOptionChoicesIds);
+
+            if (toDeleteOptionIds.Count() > 0)
+            {
+                var toDelOptions = _context.CaseReportFormPatientResultOptionChoices
+                                           .Where(o => toInsertOptionIds.Contains(o.CaseReportFormOptionChoiceId.ToString())
+                                                  && o.CaseReportFormPatientResultId == dbItemResult.ID);
+                if (toDelOptions != null) _context.CaseReportFormPatientResultOptionChoices.RemoveRange(toDelOptions);
+            }
+            if (toInsertOptionIds.Count() > 0)
+            {
+                foreach(string id in toDeleteOptionIds)
+                {
+                    var optionChoice = CreateOptionChoiceForResult(_context, Int32.Parse(id));
+                    optionChoice.CaseReportFormPatientResultId = dbItemResult.ID;
+                    dbItemResult.Options.Add(optionChoice);
+                    _context.CaseReportFormPatientResultOptionChoices.Add(optionChoice);
+                }
             }
         }
 
@@ -302,11 +297,10 @@ namespace AspergillosisEPR.Lib.CaseReportForms
         {
             GetFormIdsForCaseReportForms(result.Results.ToArray());
             UpdateWithPatient(patientToUpdate, result.Results.ToArray());
-            UpdateOptionChoices(result.Results.ToArray());
+            CreateOptionChoices(result.Results.ToArray());
             result.PatientId = patientToUpdate.ID;
             patientToUpdate.CaseReportFormResults.Add(result);
             _context.Update(result);
         }
-
     }
 }
