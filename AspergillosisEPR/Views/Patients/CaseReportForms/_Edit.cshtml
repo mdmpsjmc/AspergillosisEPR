@@ -32,7 +32,6 @@
                     </div>
                     <div id="@(formResult.ID)" class="panel-collapse collapse  case-report-forms-new" aria-expanded="false" style="height: 0px;">
                         <div class="panel-body">
-                            <form class="smart-form">
                                 @foreach (var formSection in formResult.Form.Sections)
                                 {
                                     <fieldset>
@@ -44,7 +43,7 @@
                                             var fieldVm = new CaseReportFormFieldResultViewModel();
                                             fieldVm.Result = result;
                                             fieldVm.Field = field;
-                                            fieldVm.Index = globalCursor.ToString();
+                                            fieldVm.Index = cursor.ToString();
                                             fieldVm.FormIndex = categoryCursor.ToString();
                                             @Html.Partial("/Views/CaseReportForms/CaseReportFormFieldTypes/EditableFieldTypes/_" + field.CaseReportFormFieldType.FieldPartial() + ".cshtml", fieldVm)
                                             globalCursor++;
@@ -64,7 +63,6 @@
                                              + formField.CaseReportFormFieldType.FieldPartial() + ".cshtml", formFieldVm);
                                     globalCursor++;
                                 }
-                            </form>
                         </div>
                     </div>
                     categoryCursor++;
