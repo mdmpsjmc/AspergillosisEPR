@@ -68,20 +68,20 @@ namespace AspergillosisEPR.Controllers
                                                  PatientSTGQuestionnaire[] sTGQuestionnaires,
                                                  PatientImmunoglobulin[] patientImmunoglobulin,
                                                  PatientRadiologyFinding[] patientRadiologyFinding,
-                                                 CaseReportFormResult caseReportFormResult)
+                                                 CaseReportFormResult[] caseReportFormResult)
         {
             var existingPatient = _context.Patients.FirstOrDefault(x => x.RM2Number == patient.RM2Number);
             patient.CaseReportFormResults = new List<CaseReportFormResult>();
             _patientManager.Request = Request;
             CheckIsUnique(existingPatient);
-            if (caseReportFormResult != null && caseReportFormResult.Results != null)
+            if (caseReportFormResult != null && caseReportFormResult[0] != null &&  caseReportFormResult[0].Results != null)
             {
-                _caseReportFormManager.GetFormIdsForCaseReportForms(caseReportFormResult.Results.ToArray());
-                _caseReportFormManager.CreateOptionChoices(caseReportFormResult.Results.ToArray());
-                _caseReportFormManager.UpdateWithPatient(patient, caseReportFormResult.Results.ToArray());
-                patient.CaseReportFormResults.Add(caseReportFormResult);
-            }
-            
+                var results = caseReportFormResult[0].Results.ToArray();
+                _caseReportFormManager.GetFormIdsForCaseReportForms(results);
+                _caseReportFormManager.CreateOptionChoices(results);
+                _caseReportFormManager.UpdateWithPatient(patient, results);
+                patient.CaseReportFormResults.Add(caseReportFormResult[0]);
+            }            
             
             _patientManager.AddCollectionsFromFormToPatients(patient, 
                                                              ref diagnoses, 
