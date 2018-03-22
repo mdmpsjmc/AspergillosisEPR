@@ -196,8 +196,8 @@ namespace AspergillosisEPR.Lib.CaseReportForms
             if (field.CaseReportFormSectionId != null)
             {
                 var section = _context.CaseReportFormFormSections
-                                               .Where(s => s.CaseReportFormSectionId == field.CaseReportFormSectionId)
-                                               .FirstOrDefault();
+                                      .Where(s => s.CaseReportFormSectionId == field.CaseReportFormSectionId)
+                                      .FirstOrDefault();
                 return section.CaseReportFormId;
             }
             else
@@ -276,18 +276,24 @@ namespace AspergillosisEPR.Lib.CaseReportForms
             if (toDeleteOptionIds.Count() > 0)
             {
                 var toDelOptions = _context.CaseReportFormPatientResultOptionChoices
-                                           .Where(o => toInsertOptionIds.Contains(o.CaseReportFormOptionChoiceId.ToString())
+                                           .Where(o => toDeleteOptionIds.Contains(o.CaseReportFormOptionChoiceId.ToString())
                                                   && o.CaseReportFormPatientResultId == dbItemResult.ID);
-                if (toDelOptions != null) _context.CaseReportFormPatientResultOptionChoices.RemoveRange(toDelOptions);
+                if (toDelOptions != null)
+                {
+                    _context.CaseReportFormPatientResultOptionChoices.RemoveRange(toDelOptions);
+                    _context.Entry(dbItemResult).State = EntityState.Modified;
+                }
+                
             }
             if (toInsertOptionIds.Count() > 0)
             {
-                foreach(string id in toDeleteOptionIds)
+                foreach(string id in toInsertOptionIds)
                 {
                     var optionChoice = CreateOptionChoiceForResult(_context, Int32.Parse(id));
                     optionChoice.CaseReportFormPatientResultId = dbItemResult.ID;
                     dbItemResult.Options.Add(optionChoice);
                     _context.CaseReportFormPatientResultOptionChoices.Add(optionChoice);
+                    _context.Entry(dbItemResult).State = EntityState.Modified;
                 }
             }
         }
@@ -295,9 +301,10 @@ namespace AspergillosisEPR.Lib.CaseReportForms
         private void AddNewResultForPatient(Patient patientToUpdate, 
                                            CaseReportFormResult result)
         {
-            GetFormIdsForCaseReportForms(result.Results.ToArray());
-            UpdateWithPatient(patientToUpdate, result.Results.ToArray());
-            CreateOptionChoices(result.Results.ToArray());
+            var results = result.Results.ToArray();
+            GetFormIdsForCaseReportForms(results);
+            UpdateWithPatient(patientToUpdate, results);
+            CreateOptionChoices(results);
             result.PatientId = patientToUpdate.ID;
             patientToUpdate.CaseReportFormResults.Add(result);
             _context.Update(result);
