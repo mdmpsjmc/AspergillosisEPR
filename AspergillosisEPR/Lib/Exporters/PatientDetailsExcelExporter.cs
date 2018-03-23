@@ -217,7 +217,6 @@ namespace AspergillosisEPR.Lib.Exporters
         private List<object> GetCollectionFromTabName(string tabName)
         {
             var allDx = _patientDetailsVM.PrimaryDiagnoses.
-                                         Concat(_patientDetailsVM.SecondaryDiagnoses).
                                          Concat(_patientDetailsVM.OtherDiagnoses).
                                          Concat(_patientDetailsVM.PastDiagnoses).
                                          ToList();

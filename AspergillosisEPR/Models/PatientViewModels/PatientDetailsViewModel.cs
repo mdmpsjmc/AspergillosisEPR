@@ -11,7 +11,6 @@ namespace AspergillosisEPR.Models.PatientViewModels
     public class PatientDetailsViewModel
     {
         public ICollection<PatientDiagnosis> PrimaryDiagnoses { get; set; }
-        public ICollection<PatientDiagnosis> SecondaryDiagnoses { get; set; }
         public Patient Patient { get; set; }
         public ICollection<PatientDiagnosis> UnderlyingDiseases { get; set; }
         public ICollection<PatientDiagnosis> OtherDiagnoses { get; set; }
@@ -54,7 +53,6 @@ namespace AspergillosisEPR.Models.PatientViewModels
                                                                     CaseReportFormManager caseReportFormManager)
         {
             var primaryDiagnosis = context.DiagnosisCategories.Where(dc => dc.CategoryName == "Primary").FirstOrDefault();
-            var secondaryDiagnosis = context.DiagnosisCategories.Where(dc => dc.CategoryName == "Secondary").FirstOrDefault();
             var otherDiagnosis = context.DiagnosisCategories.Where(dc => dc.CategoryName == "Other").FirstOrDefault();
             var underlyingDiagnosis = context.DiagnosisCategories.Where(dc => dc.CategoryName == "Underlying diagnosis").FirstOrDefault();
             var pastDiagnosis = context.DiagnosisCategories.Where(dc => dc.CategoryName == "Past Diagnosis").FirstOrDefault();
@@ -69,12 +67,7 @@ namespace AspergillosisEPR.Models.PatientViewModels
                                                                     Where(pd => pd.DiagnosisCategoryId == primaryDiagnosis.ID).
                                                                     ToList();
             }
-            if (secondaryDiagnosis != null)
-            {
-                patientDetailsViewModel.SecondaryDiagnoses = patient.PatientDiagnoses.
-                                                                    Where(pd => pd.DiagnosisCategoryId == secondaryDiagnosis.ID).
-                                                                    ToList();
-            }
+          
             if (otherDiagnosis != null)
             {
                 patientDetailsViewModel.OtherDiagnoses = patient.PatientDiagnoses.
@@ -109,11 +102,6 @@ namespace AspergillosisEPR.Models.PatientViewModels
         public bool HasPrimaryDiagnoses()
         {
             return PrimaryDiagnoses != null && PrimaryDiagnoses.Any();
-        }
-
-        public bool HasSecondaryDiagnoses()
-        {
-            return SecondaryDiagnoses != null && SecondaryDiagnoses.Any();
         }
 
         public bool HasOtherDiagnoses()

@@ -64,7 +64,7 @@ namespace AspergillosisEPR.Lib
                         _currentDiagnosisCategory = GetDiagnosisCategoryByName("Primary");                        
                     } else if (_discoveredDiagnoses.Count == 1) 
                     {
-                        _currentDiagnosisCategory = GetDiagnosisCategoryByName("Secondary");                       
+                        _currentDiagnosisCategory = GetDiagnosisCategoryByName("Other");                       
                     }
                     DiagnosisType diagnosisType = GetDiagnosisByName(diagnosisName);
                     CreateAndAddPatientDiagnosis(diagnosisType);

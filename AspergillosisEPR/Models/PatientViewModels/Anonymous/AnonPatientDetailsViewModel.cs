@@ -31,12 +31,6 @@ namespace AspergillosisEPR.Models.PatientViewModels.Anonymous
                                                                     Where(pd => pd.DiagnosisCategoryId == primaryDiagnosis.ID).
                                                                     ToList();                
             }
-            if (secondaryDiagnosis != null)
-            {
-                patientDetailsViewModel.SecondaryDiagnoses = patient.PatientDiagnoses.
-                                                                    Where(pd => pd.DiagnosisCategoryId == secondaryDiagnosis.ID).
-                                                                    ToList();
-            }
             if (otherDiagnosis != null)
             {
                 patientDetailsViewModel.OtherDiagnoses = patient.PatientDiagnoses.

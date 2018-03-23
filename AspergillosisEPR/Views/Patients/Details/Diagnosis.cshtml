@@ -7,11 +7,7 @@
               @if (Model.HasPrimaryDiagnoses())
               {
                 @Html.Partial("/Views/Patients/Details/_DiagnosisCollection.cshtml", Model.PrimaryDiagnoses);
-              }              
-              @if (Model.HasSecondaryDiagnoses())
-              {
-                @Html.Partial("/Views/Patients/Details/_DiagnosisCollection.cshtml", Model.SecondaryDiagnoses);
-              }              
+              }                         
               @if (Model.HasUnderlyingDeases())
               {
                 @Html.Partial("/Views/Patients/Details/_DiagnosisCollection.cshtml", Model.UnderlyingDiseases);
