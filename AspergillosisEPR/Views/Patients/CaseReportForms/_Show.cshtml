@@ -16,7 +16,7 @@
             </section>
             <section class="col col-5">
                  <label>   
-                    <input name="CaseReportFormResult[@((string) ViewBag.Index)].DateTaken" palceholder="Enter Report Date" class="datepicker form-control" type="text" value="">
+                    <input íd="CaseReportFormResult_@((string) ViewBag.Index)__DateTaken" name="CaseReportFormResult[@((string) ViewBag.Index)].DateTaken" palceholder="Enter Report Date" class="datepicker form-control" type="text" value="">
                 </label>
             </section>
             @Html.Hidden("CaseReportFormResult[" + (string) ViewBag.Index + "].CaseReportFormId", Model.CaseReportFormId)

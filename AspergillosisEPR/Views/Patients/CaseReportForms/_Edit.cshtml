@@ -17,8 +17,8 @@
                     <input type="hidden" name="CaseReportFormResult[@(stringFormIndex)].ID" value="@formResult.ID" />
                     <input type="hidden" name="CaseReportFormResult[@(stringFormIndex)].CaseReportFormId" value="@formResult.CaseReportFormId" />
                     <input type="hidden" name="CaseReportFormResult[@(stringFormIndex)].CaseReportFormCategoryId" value="@formResult.CaseReportFormCategoryId" />
-                    <input type="hidden" name="CaseReportFormResult[@(stringFormIndex)].DateTaken" value="@formResult.DateTaken.ToString("dd-MM-yyyy")" />
-
+                    <input type="hidden" id="CaseReportFormResult_@(stringFormIndex)__DateTaken" name="CaseReportFormResult[@(stringFormIndex)].DateTaken" value="@formResult.DateTaken.ToString("dd-MM-yyyy")" />
+                    
                     <div class="panel panel-default">
                         <div class="panel-heading">
                             <h4 class="panel-title">
