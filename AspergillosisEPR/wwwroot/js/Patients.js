@@ -230,6 +230,7 @@
                 });
                 $("select[multiple='multiple']").multiSelect();
                 CaseReportForms.onPatientCaseReportFormSelectChange();
+                CaseReportForms.deletePartialFromPopup();
             });
         });
     }

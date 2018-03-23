@@ -3,7 +3,7 @@
 @{
     var globalCursor = 0;
 }
-<fieldset>
+<fieldset data-index="@((string) ViewBag.Index)">
     <header>
         <strong>
             @Model.Form.Name
@@ -51,5 +51,10 @@
             globalCursor++;
          }
     </form>
-
-</fieldset>                   
+    <div class="row">
+        <a href="javascript:void(0)" class="btn btn-danger remove-new-crf pull-right btn-lg" data-index="@((string) ViewBag.Index)" data-what="Case report form" data-toggle="tooltip" data-title="Remove form" style="padding: 5px">
+            <i class="fa fa-trash"></i>
+        </a>
+    </div>
+</fieldset>     
+              

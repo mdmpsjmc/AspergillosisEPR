@@ -61,6 +61,22 @@
         });
     }
 
+    var deletePartialFromPopup = function () {
+        $(document).off("click.delete-partial").on("click.delete-partial", "a.remove-new-crf", function () {
+            var whatToRemove = $(this).data("what");
+            var button = $(this);
+            var question = "Are you sure you want to remove this " + whatToRemove + "?";
+            BootstrapDialog.confirm(question, function (result, dialog) {
+                if (result) {
+                    var buttonIdx = $(button).attr("data-index");
+                    if (buttonIdx !== undefined) {
+                        $("fieldset[data-index='" + buttonIdx + "']").remove();
+                    }
+                }
+            });
+        });
+    }
+
     var onPatientCaseReportFormSelectChange = function () {
         $(document).off("change").on("change", "select#patient-case-report-form", function () {
             var caseReportFormId = $(this).val();
@@ -94,10 +110,14 @@
             onPatientCaseReportFormSelectChange();
         },
 
+        deletePartialFromPopup: function () {
+            deletePartialFromPopup();
+        },
+
         init: function () {
             addNewPartial();
             onOptionGroupSelectChange();
-
+            deletePartialFromPopup();
             showCRFModal();
             Patients.deletePartialFromPopup();
             Patients.deleteDbPartialFromPopup();
