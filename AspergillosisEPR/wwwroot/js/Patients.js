@@ -441,7 +441,7 @@
                 var tabCapitalized = tabName.charAt(0).toUpperCase() + tabName.slice(1);
                 var isChecked = index === 0 ? "checked=\"checked\"" : "";
                 var isDisabled = (index === 0 && tabCapitalized === "Details") ? "disabled=\"disabled\"" : "";
-                var htmlOption = '<label class=\"checkbox\"><input type= \"checkbox\" ' + isDisabled + ' name= \"Show' + tabCapitalized + '\" ' + isChecked + '/><i></i> <span class=\"checkbox-label\"> ' + tabName + '</span></label>'
+                var htmlOption = '<label class=\"checkbox\"><input type= \"checkbox\" ' + isDisabled + ' name= \"Show' + tabCapitalized.replace(/\s/g, '') + '\" ' + isChecked + '/><i></i> <span class=\"checkbox-label\"> ' + tabName + '</span></label>'
                 container.append(htmlOption);
             });
             $("div#export-options-modal").modal("show"); 

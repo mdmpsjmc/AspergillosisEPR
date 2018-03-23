@@ -10,6 +10,7 @@ using AspergillosisEPR.Models.PatientViewModels;
 using System.Reflection;
 using Microsoft.AspNetCore.Hosting;
 using System.IO;
+using AspergillosisEPR.Lib.CaseReportForms;
 
 namespace AspergillosisEPR.Controllers.Patients
 {
@@ -30,8 +31,9 @@ namespace AspergillosisEPR.Controllers.Patients
 
         protected async Task<PatientDetailsViewModel> GetExportViewModel(int id)
         {
+            var crfManager = new CaseReportFormManager(_context);
             var patient = await _patientManager.FindPatientWithRelationsByIdAsync(id);
-            var patientDetailsViewModel = PatientDetailsViewModel.BuildPatientViewModel(_context, patient, null);
+            var patientDetailsViewModel = PatientDetailsViewModel.BuildPatientViewModel(_context, patient, crfManager);
             SetItemsToShowInExport(patientDetailsViewModel);
             return patientDetailsViewModel;
         }
