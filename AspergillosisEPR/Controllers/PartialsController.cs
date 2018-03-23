@@ -167,6 +167,9 @@ namespace AspergillosisEPR.Controllers
                 case "PatientStatusId":
                     _listResolver.PopulatePatientStatusesDropDownList();
                     break;
+                case "FindingId":
+                    ViewBag.SearchSelect = _listResolver.PopulateRadiologyDropdownList("Finding");
+                    break;
             }
             return PartialView();
         }

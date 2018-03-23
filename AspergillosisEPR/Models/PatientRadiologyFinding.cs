@@ -1,5 +1,6 @@
 ﻿
 using AspergillosisEPR.Lib.Exporters;
+using AspergillosisEPR.Lib.Search;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System;
@@ -11,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace AspergillosisEPR.Models
 {
-    public class PatientRadiologyFinding : Exportable
+    public class PatientRadiologyFinding : Exportable, ISearchable
     {
         public int ID { get; set; }
         public int PatientId { get; set; }
@@ -60,6 +61,15 @@ namespace AspergillosisEPR.Models
                 "ChestLocation", "ChestLocationId", "ChestDistribution",
                 "ChestDistributionId", "Grade", "GradeId", 
                 "TreatmentResponse", "TreatmentResponseId"
+            };
+        }
+
+        public Dictionary<string, string> SearchableFields()
+        {
+            return new Dictionary<string, string>()
+            {
+                { "Radiology Finding", "Patient.PatientRadiologyFinding.FindingId.Select"},
+                { "Radiology Type", "Patient.PatientRadiologyFinding.RadiologyTypeId.Select"}
             };
         }
     }
