@@ -226,6 +226,7 @@ namespace AspergillosisEPR.Lib.Exporters
             dictionary.Add("Drugs", _patientDetailsVM.PatientDrugs.ToList<object>());
             dictionary.Add("SGRQ", _patientDetailsVM.STGQuestionnaires.ToList<object>());
             dictionary.Add("Ig", _patientDetailsVM.PatientImmunoglobulines.OrderBy(pi => pi.DateTaken).ToList<object>());
+            dictionary.Add("CaseReportForms", _patientDetailsVM.CaseReportForms.SelectMany(f => f).OrderBy(f => f.DateTaken).ToList<object>());
             dictionary.Add("Radiology", _patientDetailsVM.PatientRadiologyFindings.ToList<object>());
             dictionary.Add("Weight", _patientDetailsVM.PatientMeasurements.OrderByDescending(pi => pi.DateTaken).ToList<object>());
             return dictionary[tabName];
@@ -234,7 +235,8 @@ namespace AspergillosisEPR.Lib.Exporters
         private Dictionary<string, string> CollectionToBeGroupped()
         {
             var collectionToBeGroupped = new Dictionary<string, string>();
-            collectionToBeGroupped.Add("Ig", "ImmunoglobulinTypeId");            
+            collectionToBeGroupped.Add("Ig", "ImmunoglobulinTypeId");
+            collectionToBeGroupped.Add("CaseReportForms", "CaseReportFormCategoryId");
             return collectionToBeGroupped;
         }
 

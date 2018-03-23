@@ -7,9 +7,11 @@
 
                 @foreach (var option in @Model.Field.Options)
                 {
-                    var isChecked = Model?.Field.Options.Select(o => o.CaseReportFormOptionChoiceId.ToString().Contains(option.CaseReportFormOptionChoiceId.ToString())).FirstOrDefault();
+                    var ids = Model?.Result.Options.Select(o => o.CaseReportFormOptionChoiceId).ToList();
+                    var selected = ids.Where(id => ids.Contains(option.CaseReportFormOptionChoiceId)).FirstOrDefault();
+                    var isChecked = selected == option.CaseReportFormOptionChoiceId;
                     <label class="radio">
-                        <input type="radio" class="radiobox" name="Results[@(Model.Index)].SelectedId" value="@option.CaseReportFormOptionChoiceId" @(isChecked == true ? "checked=checked" : "") disabled="disabled">
+                        <input type="radio" class="radiobox" name="Results[@(Model.Index)].SelectedId" value="@option.CaseReportFormOptionChoiceId" @(isChecked ? "checked=checked" : "") disabled="disabled">
                         <span>@option.Option.Name</span>
                     </label>
                     
