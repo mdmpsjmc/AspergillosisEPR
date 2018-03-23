@@ -19,7 +19,7 @@
                     <input type="hidden" name="CaseReportFormResult[@(stringFormIndex)].CaseReportFormCategoryId" value="@formResult.CaseReportFormCategoryId" />
                     <input type="hidden" id="CaseReportFormResult_@(stringFormIndex)__DateTaken" name="CaseReportFormResult[@(stringFormIndex)].DateTaken" value="@formResult.DateTaken.ToString("dd-MM-yyyy")" />
                     
-                    <div class="panel panel-default">
+                    <div class="panel panel-default" data-index="@stringFormIndex">
                         <div class="panel-heading">
                             <h4 class="panel-title">
                                 <a data-toggle="collapse" data-parent="#accordion-2" href="#@(formResult.ID)" aria-expanded="false" class="collapsed">
@@ -65,15 +65,13 @@
                                 }
                         </div>
                         <div class="row">
-                            <a href="@Url.Action("Delete", "CaseReportFormResults", new { id = formResult.ID})" class="btn btn-danger remove-existing-item pull-right btn-lg" data-id="@formResult.ID" data-what="Case Report Form" data-toggle="tooltip" data-title="Remove Case Report Form" style="padding: 5px">
+                            <a href="@Url.Action("Delete", "CaseReportFormResults", new { id = formResult.ID})" data-index="@stringFormIndex" class="btn btn-danger remove-existing-item pull-right btn-lg" data-id="@formResult.ID" data-what="Case Report Form" data-toggle="tooltip" data-title="Remove Case Report Form" style="padding: 5px">
                                 <i class="fa fa-trash"></i>
                             </a>
                         </div>
                     </div>
-                    categoryCursor++;
-                  
+                    categoryCursor++;              
                 }
-
             </div>
         }
     }

@@ -328,6 +328,10 @@
                         $('#loading').hide();
                         if (textStatus === "success") {
                             button.parent().parent().remove();
+                            var buttonIdx = button.attr("data-index");
+                            if (buttonIdx !== undefined) {
+                                $("div.panel-default[data-index='" + buttonIdx + "']").parent().remove();
+                            }
                         }
                     }).always(function () {
                         LoadingIndicator.hide();
