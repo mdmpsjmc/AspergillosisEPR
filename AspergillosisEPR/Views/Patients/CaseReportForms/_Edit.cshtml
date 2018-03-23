@@ -25,7 +25,7 @@
                                 <a data-toggle="collapse" data-parent="#accordion-2" href="#@(formResult.ID)" aria-expanded="false" class="collapsed">
                                     <i class="fa fa-lg fa-angle-down pull-right"></i>
                                     <i class="fa fa-lg fa-angle-up pull-right"></i>
-                                    @formResult.Form.Name Date: @formResult.DateTaken.ToString("dd-MM-yyyy")
+                                    @formResult.Form.Name Date: @formResult?.DateTaken.ToString("dd-MM-yyyy")
                                 </a>
                             </h4>
                         </div>

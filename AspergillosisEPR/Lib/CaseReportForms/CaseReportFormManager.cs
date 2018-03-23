@@ -128,8 +128,8 @@ namespace AspergillosisEPR.Lib.CaseReportForms
                                 .Include(fr => fr.Results)
                                 .ThenInclude(pr => pr.FormResult)
                                     .ThenInclude(f => f.Fields)
-                                        .ThenInclude(f => f.CaseReportForm);
-
+                                        .ThenInclude(f => f.CaseReportForm)
+                                .OrderByDescending(f => f.DateTaken);
             var grouped = forms.GroupBy( f=> f.Category.Name).ToList();
             return grouped;
         }

@@ -74,7 +74,7 @@ namespace AspergillosisEPR.Controllers
             patient.CaseReportFormResults = new List<CaseReportFormResult>();
             _patientManager.Request = Request;
             CheckIsUnique(existingPatient);
-            if (caseReportFormResult != null && caseReportFormResult[0] != null &&  caseReportFormResult[0].Results != null)
+            if (caseReportFormResult != null && caseReportFormResult.Length > 0 &&  caseReportFormResult[0].Results != null)
             {
                 var results = caseReportFormResult[0].Results.ToArray();
                 _caseReportFormManager.GetFormIdsForCaseReportForms(results);
