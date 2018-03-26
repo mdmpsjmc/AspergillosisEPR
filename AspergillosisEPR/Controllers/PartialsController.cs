@@ -153,6 +153,7 @@ namespace AspergillosisEPR.Controllers
         {
             string klass = Request.Query["klass"];
             ViewBag.Index = (string)Request.Query["index"];
+            string field = Request.Query["field"];
             switch (klass)
             {
                 case "DrugId":
@@ -167,8 +168,14 @@ namespace AspergillosisEPR.Controllers
                 case "PatientStatusId":
                     _listResolver.PopulatePatientStatusesDropDownList();
                     break;
+                case "GradeId":
+                case "TreatmentResponseId":
+                case "ChestLocationId":
+                case "ChestDistributionId":
+                case "RadiologyTypeId":
                 case "FindingId":
-                    ViewBag.SearchSelect = _listResolver.PopulateRadiologyDropdownList("Finding");
+                    var radiologyCollection = klass.Replace("Id", String.Empty);
+                    ViewBag.SearchSelect = _listResolver.PopulateRadiologyDropdownList(radiologyCollection);
                     break;
             }
             return PartialView();

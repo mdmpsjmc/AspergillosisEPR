@@ -1,5 +1,6 @@
 ﻿using AspergillosisEPR.Data;
 using AspergillosisEPR.Models;
+using AspergillosisEPR.Models.Radiology;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;

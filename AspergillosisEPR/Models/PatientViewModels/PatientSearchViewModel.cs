@@ -213,7 +213,7 @@ namespace AspergillosisEPR.Models.PatientViewModels
                 case "Patient":
                     Predicate = Predicate.And(m => m.PatientStatusId.ToString() == SearchValue);
                     break;
-                case "PatientRadiologyFinidng":
+                case "PatientRadiologyFinding":
 
                     Predicate = Predicate.And(m => m.PatientRadiologyFindings.
                                                     Where(pd => pd.GetType().GetProperty(searchField).GetValue(pd, null).ToString() == SearchValue).

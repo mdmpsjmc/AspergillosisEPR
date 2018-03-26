@@ -6,6 +6,7 @@ using System.ComponentModel.DataAnnotations;
 using System;
 using AspergillosisEPR.Models.CaseReportForms;
 using AspergillosisEPR.Models.CaseReportForms.ViewModels;
+using AspergillosisEPR.Models.Radiology;
 
 namespace AspergillosisEPR.Data
 {

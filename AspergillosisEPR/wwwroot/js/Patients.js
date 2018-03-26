@@ -126,19 +126,29 @@
         for (var i = 0; i < Object.keys(errors).length; i++) {
             var field = Object.keys(errors)[i];
             var fieldCapitalized = field.charAt(0).toUpperCase() + field.slice(1);
+
             if (field.match("diagnoses")
                 || field.match("drugs")
                 || field.match("sTGQuestionnaires")
                 || field.match("patientImmunoglobulin")
                 || field.match("Finding")
                 || field.match("caseReportFormResult")) {
+                var fieldName = fieldCapitalized;
                 field = fieldCapitalized.replace(new RegExp("\\[", "g"), "_").replace(new RegExp("].","g"), "__");            
             } else {
                 field = fieldCapitalized;
             }           
             var htmlCode = "<label for='" + fieldCapitalized + "' class='text-danger'></label>";
             var fieldError = errors[Object.keys(errors)[i]];
-            $(htmlCode).html(fieldError).appendTo($("input#" + field + ", select#" + field + ", input#" + field.toUpperCase()).parent());
+            var fieldWithError = $("input#" + field + ", select#" + field + ", input#" + field.toUpperCase());
+            if (fieldWithError.length > 0) {
+                var fieldToAppend = fieldWithError.parent();
+                $(htmlCode).html(fieldError).appendTo(fieldToAppend);
+            } else {
+                var fieldToAppendName = "input[name='" + fieldName + "']";
+                var fieldToAppend = $(fieldToAppendName).parent();
+                $(htmlCode).html(fieldError).appendTo(fieldToAppend);
+            }
         }
     }
 
@@ -164,6 +174,7 @@
                 initPatientsDateTimePickers();
                 CaseReportForms.onPatientCaseReportFormSelectChange();
             });
+            CaseReportForms.deletePartialFromPopup();
         });
     }
 

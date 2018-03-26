@@ -1,4 +1,5 @@
 ﻿using AspergillosisEPR.Models;
+using AspergillosisEPR.Models.Radiology;
 using System;
 using System.Collections.Generic;
 using System.Linq;

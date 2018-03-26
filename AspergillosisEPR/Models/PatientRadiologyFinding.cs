@@ -1,6 +1,7 @@
 ﻿
 using AspergillosisEPR.Lib.Exporters;
 using AspergillosisEPR.Lib.Search;
+using AspergillosisEPR.Models.Radiology;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System;
@@ -68,8 +69,12 @@ namespace AspergillosisEPR.Models
         {
             return new Dictionary<string, string>()
             {
-                { "Radiology Finding", "Patient.PatientRadiologyFinding.FindingId.Select"},
-                { "Radiology Type", "Patient.PatientRadiologyFinding.RadiologyTypeId.Select"}
+                { "Radiology Finding", "PatientRadiologyFinding.FindingId.Select"},
+                { "Radiology Type", "PatientRadiologyFinding.RadiologyTypeId.Select"},
+                { "Chest Distribution", "PatientRadiologyFinding.ChestDistributionId.Select"},
+                { "Chest Location", "PatientRadiologyFinding.ChestLocationId.Select"},
+                { "Grade", "PatientRadiologyFinding.GradeId.Select"},
+                { "Treatment Response", "PatientRadiologyFinding.TreatmentResponseId.Select"}
             };
         }
     }
