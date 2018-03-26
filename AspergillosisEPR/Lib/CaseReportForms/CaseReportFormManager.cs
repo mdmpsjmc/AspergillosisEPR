@@ -94,7 +94,14 @@ namespace AspergillosisEPR.Lib.CaseReportForms
 
         public List<IGrouping<string, CaseReportFormResult>> GetGroupedCaseReportFormsForPatient(int patientId)
         {
-            var forms = _context.CaseReportFormResults
+            IOrderedQueryable<CaseReportFormResult> forms = GetPatientsForms(patientId);
+            var grouped = forms.GroupBy(f => f.Category.Name).ToList();
+            return grouped;
+        }
+
+        public IOrderedQueryable<CaseReportFormResult> GetPatientsForms(int patientId)
+        {
+            return _context.CaseReportFormResults
                                 .Where(pr => pr.PatientId == patientId)
                                 .Include(fr => fr.Results)
                                     .ThenInclude(pr => pr.Options)
@@ -130,8 +137,6 @@ namespace AspergillosisEPR.Lib.CaseReportForms
                                     .ThenInclude(f => f.Fields)
                                         .ThenInclude(f => f.CaseReportForm)
                                 .OrderByDescending(f => f.DateTaken);
-            var grouped = forms.GroupBy( f=> f.Category.Name).ToList();
-            return grouped;
         }
 
         public void GetFormIdsForCaseReportForms(CaseReportFormPatientResult[] caseReportFormPatientResult)

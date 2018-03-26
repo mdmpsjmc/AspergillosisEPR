@@ -1,0 +1,54 @@
+﻿@model AspergillosisEPR.Models.CaseReportForms.ViewModels.CaseReportFormResultWithGlobalIndex;
+@using AspergillosisEPR.Models.CaseReportForms.ViewModels;
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h4 class="panel-title">
+            <a data-toggle="collapse" data-parent="#accordion-2" href="#@(Model.Result.ID)" aria-expanded="false" class="collapsed">
+                <i class="fa fa-lg fa-angle-down pull-right"></i>
+                <i class="fa fa-lg fa-angle-up pull-right"></i>
+                @Model.Result.Form.Name Date: @Model.Result.DateTaken.ToString("dd-MM-yyyy")
+            </a>
+        </h4>
+    </div>
+</div>
+<div id="@(Model.Result.ID)" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
+    <div class="panel-body">
+        <form class="smart-form">
+            @foreach (var formSection in Model.Result.Form.Sections)
+            {
+                <fieldset>
+                    <h3>@formSection.Section.Name</h3>
+                    @for (int cursor = 0; cursor < formSection.Section.CaseReportFormResultFields.Count; cursor++)
+                    {
+                        var field = formSection.Section.CaseReportFormResultFields.ToList()[cursor];
+                        var result = Model.Result.Results.Where(r => r.PatientId == Model.Patient.ID && r.CaseReportFormFieldId == field.ID).FirstOrDefault();
+                        var fieldVm = new CaseReportFormFieldResultViewModel();
+                        fieldVm.Result = result;
+                        fieldVm.Field = field;
+                        fieldVm.Index = Model.GlobalIndex.ToString();
+                        @Html.Partial("/Views/CaseReportForms/CaseReportFormFieldTypes/CompletedFieldTypes/_"
+                                    + field.CaseReportFormFieldType.FieldPartial() + ".cshtml", fieldVm)
+                        Model.GlobalIndex++;
+                    }
+                </fieldset>
+            }
+            @for (int cursor = 0; cursor < Model.Result.Form.Fields.Count(); cursor++)
+            {
+                var formField = Model.Result.Form.Fields.ToList()[cursor];
+                var formFieldVm = new CaseReportFormFieldResultViewModel();
+                var result = Model.Result.Results.Where(r => r.CaseReportFormFieldId == formField.ID && r.CaseReportFormId == formField.CaseReportFormId && r.PatientId == Model.Patient.ID).FirstOrDefault();
+                formFieldVm.Result = result;
+                formFieldVm.Field = formField;
+                formFieldVm.Index = Model.GlobalIndex.ToString();
+                @Html.Partial("/Views/CaseReportForms/CaseReportFormFieldTypes/CompletedFieldTypes/_"
+                                             + formField.CaseReportFormFieldType.FieldPartial() + ".cshtml", formFieldVm);
+                Model.GlobalIndex++;
+            }
+        </form>
+        <div class="row">
+            <a href="@Url.Action("CaseReportForm", "PdfExports", new { id = Model.Patient.ID, formId= Model.Result.ID })" data-id="@Model.Patient.ID" data-form-id="@Model.Result.ID" class="disable-default btn btn-danger download-crf-pdf pull-right" data-index="@((string) ViewBag.Index)" data-toggle="tooltip" data-title="Download as PDF" style="padding: 5px">
+                <i class="fa fa-file-pdf-o"></i>
+            </a>
+        </div>
+    </div>
+</div>

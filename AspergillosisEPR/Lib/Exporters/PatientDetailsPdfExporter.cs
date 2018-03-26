@@ -1,4 +1,6 @@
 ﻿using AspergillosisEPR.Data;
+using AspergillosisEPR.Models.CaseReportForms;
+using AspergillosisEPR.Models.CaseReportForms.ViewModels;
 using AspergillosisEPR.Models.PatientViewModels;
 using DinkToPdf;
 using DinkToPdf.Contracts;
@@ -40,6 +42,12 @@ namespace AspergillosisEPR.Lib.Exporters
         public async Task<byte[]> GenerateVisitDetailsPdf(PatientVisitDetailsViewModel patientVisitDetailsViewModel)
         {
             string htmlView = await _htmlRenderService.RenderToStringAsync("/Views/PatientVisits/PdfVisitDetails.cshtml", patientVisitDetailsViewModel);
+            return GeneratePdfFromHtml(htmlView);
+        }
+
+        public async Task<byte[]> GenerateCaseReportFormPdf(CaseReportFormResultWithGlobalIndex result)
+        {
+            string htmlView = await _htmlRenderService.RenderToStringAsync("/Views/Patients/CaseReportForms/_FormResult.cshtml", result);
             return GeneratePdfFromHtml(htmlView);
         }
 

@@ -1,8 +1,10 @@
 ﻿using AspergillosisEPR.Controllers.Patients;
 using AspergillosisEPR.Data;
 using AspergillosisEPR.Lib;
+using AspergillosisEPR.Lib.CaseReportForms;
 using AspergillosisEPR.Lib.Exporters;
 using AspergillosisEPR.Models;
+using AspergillosisEPR.Models.CaseReportForms.ViewModels;
 using AspergillosisEPR.Models.PatientViewModels;
 using DinkToPdf;
 using DinkToPdf.Contracts;
@@ -22,6 +24,7 @@ namespace AspergillosisEPR.Controllers.Patients
     {
         private PatientDetailsPdfExporter _pdfConverter;
         private UserManager<ApplicationUser> _userManager;
+        private CaseReportFormManager _caseReportFormManager;
 
         public PdfExportsController(IConverter dinkToPdfConverter, 
                                     IViewRenderService htmlRenderService, 
@@ -33,6 +36,8 @@ namespace AspergillosisEPR.Controllers.Patients
             _pdfConverter = new PatientDetailsPdfExporter(dinkToPdfConverter, htmlRenderService, hostingEnvironment);
             _fileStoragePath = _hostingEnvironment.ContentRootPath + PatientDetailsPdfExporter.EXPORTED_PDFS_DIRECTORY;
             _userManager = userManager;
+            _caseReportFormManager = new CaseReportFormManager(context);
+
         }
         [HttpPost]
         public async Task<IActionResult> Details(int id, string sgrqChart, int igChartsLength)
@@ -57,6 +62,25 @@ namespace AspergillosisEPR.Controllers.Patients
             ViewBag.ShowButtons = false;
             patientDetailsVM.ShowOtherVisits = otherVisits;
             var pdfBytes = _pdfConverter.GenerateVisitDetailsPdf(patientDetailsVM);
+            return GetFileContentResult(pdfBytes.Result, ".pdf", "application/pdf");
+        }
+
+        [HttpPost]
+        [Route("case-report-form/")]
+        public IActionResult CaseReportForm(int id, int formId)
+        {
+            var form = _caseReportFormManager.GetPatientsForms(id)
+                                             .Where(f => f.ID == formId)
+                                             .FirstOrDefault();
+            var patient = _context.Patients
+                                  .Where(p => p.ID == id)
+                                  .FirstOrDefault();
+
+            var resultWithIndex = new CaseReportFormResultWithGlobalIndex();
+            resultWithIndex.Patient = patient;
+            resultWithIndex.Result = form;
+            resultWithIndex.GlobalIndex = 1;            
+            var pdfBytes = _pdfConverter.GenerateCaseReportFormPdf(resultWithIndex);
             return GetFileContentResult(pdfBytes.Result, ".pdf", "application/pdf");
         }
 

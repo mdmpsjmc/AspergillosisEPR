@@ -77,6 +77,15 @@
         });
     }
 
+    var downloadSingleFormAsPdf = function () {
+        $(document).off("click.crf-pdf").on("click.crf-pdf", "a.download-crf-pdf", function () {
+            var pdfDownloadUrl = $(this).attr("href");
+            var button = $(this);
+            var requestData = {"formId": $(this).data("form-id") };
+            AjaxFileDownload.execute(pdfDownloadUrl, requestData, "Case_Report_Form_" + button.data("id") + ".pdf", "application/pdf");  
+        });
+    }
+
     var onPatientCaseReportFormSelectChange = function () {
         $(document).off("change").on("change", "select#patient-case-report-form", function () {
             var caseReportFormId = $(this).val();
@@ -123,6 +132,7 @@
             Patients.deleteDbPartialFromPopup();
             showRenderedSection();
             onPatientCaseReportFormSelectChange();
+            downloadSingleFormAsPdf();
             SimpleDataTable.initializeWithColumns("crf_sectionsDT", "table#case_report_forms_sections_datatable", "CaseReportFormSection", [
                 { "data": "name", "name": "Name", "autoWidth": true, "sortable": false},               
                 { "data": "fieldNames", "name": "FieldNames", "autoWidth": true, "sortable": false }, 
