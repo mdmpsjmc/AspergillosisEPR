@@ -10,5 +10,11 @@ namespace AspergillosisEPR.Models.CaseReportForms.ViewModels
         public int GlobalIndex { get; set; }
         public CaseReportFormResult Result {get; set;}
         public Patient Patient { get; set; }
-    }
+        public bool ShowButtons { get; set; }
+
+        public CaseReportFormResultWithGlobalIndex()
+        {
+            ShowButtons = true;
+        }
+     }
 }

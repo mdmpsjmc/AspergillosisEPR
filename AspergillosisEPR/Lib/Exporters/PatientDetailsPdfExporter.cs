@@ -47,7 +47,7 @@ namespace AspergillosisEPR.Lib.Exporters
 
         public async Task<byte[]> GenerateCaseReportFormPdf(CaseReportFormResultWithGlobalIndex result)
         {
-            string htmlView = await _htmlRenderService.RenderToStringAsync("/Views/Patients/CaseReportForms/_FormResult.cshtml", result);
+            string htmlView = await _htmlRenderService.RenderToStringAsync("/Views/CaseReportForms/_PdfForm.cshtml", result);
             return GeneratePdfFromHtml(htmlView);
         }
 

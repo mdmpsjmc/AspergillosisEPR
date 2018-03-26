@@ -79,8 +79,10 @@ namespace AspergillosisEPR.Controllers.Patients
             var resultWithIndex = new CaseReportFormResultWithGlobalIndex();
             resultWithIndex.Patient = patient;
             resultWithIndex.Result = form;
-            resultWithIndex.GlobalIndex = 1;            
+            resultWithIndex.GlobalIndex = 1;
+            resultWithIndex.ShowButtons = false;
             var pdfBytes = _pdfConverter.GenerateCaseReportFormPdf(resultWithIndex);
+            ViewBag.Index = "0";
             return GetFileContentResult(pdfBytes.Result, ".pdf", "application/pdf");
         }
 

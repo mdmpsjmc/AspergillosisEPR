@@ -1,4 +1,11 @@
-﻿
-@*
-    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model AspergillosisEPR.Models.CaseReportForms.ViewModels.CaseReportFormResultWithGlobalIndex;
+@using AspergillosisEPR.Models.CaseReportForms.ViewModels;
+@{
+    Layout = "~/Views/Shared/_PdfLayout.cshtml";
+    ViewData["Title"] = Model.Patient.FullName + " Case Report Form";
+}
+
+<h3>@Model.Result.Category.Name</h3>
+<div class="panel-group" id="accordion-2">
+   @Html.Partial("/Views/Patients/CaseReportForms/_FormResult.cshtml", Model)
+</div>
