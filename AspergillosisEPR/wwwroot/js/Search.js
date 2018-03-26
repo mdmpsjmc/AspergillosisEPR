@@ -238,6 +238,11 @@
     }
    
     return {
+        onSearchClassSelectChange: function () {
+            onSearchClassSelectChange();   
+            onFieldSelectChangeAddDatepicker();
+        },
+
         init: function () {
             initializeSearch();
             onAddSearchCriteriaClick();
