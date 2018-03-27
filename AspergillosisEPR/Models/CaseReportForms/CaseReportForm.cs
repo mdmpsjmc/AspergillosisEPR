@@ -14,7 +14,12 @@ namespace AspergillosisEPR.Models.CaseReportForms
         public IEnumerable<CaseReportFormField> Fields { get; set; }
         public IEnumerable<CaseReportFormFormSection> Sections { get; set; }
         public CaseReportFormCategory CaseReportFormCategory { get; set; }
+        public bool IsLocked { get; set; }
 
-       
+        public CaseReportForm()
+        {
+            IsLocked = false;
+        }
+
     }
 }
