@@ -23,7 +23,7 @@ namespace AspergillosisEPR.Controllers.Patients
         private static string EXCEL_2007_CONTENT_TYPE = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
         
         public ExcelExportsController(AspergillosisContext context,
-                                             IHostingEnvironment hostingEnvironment) : base(context, hostingEnvironment)
+                                      IHostingEnvironment hostingEnvironment) : base(context, hostingEnvironment)
         {
             _fileStoragePath = _hostingEnvironment.ContentRootPath + EXPORTED_EXCEL_DIRECTORY;
         }
@@ -33,7 +33,9 @@ namespace AspergillosisEPR.Controllers.Patients
             PatientDetailsViewModel patientDetailsVM = await GetExportViewModel(id);
             patientDetailsVM.STGQuestionnaires = patientDetailsVM.STGQuestionnaires.OrderBy((q => q.DateTaken)).ToList();
             bool isAnonymous = User.IsInRole("Anonymous Role") && !User.IsInRole("Read Role");
-            var exporter = new PatientDetailsExcelExporter(patientDetailsVM, DetailsDisplayControlProperties(), Request.Form, isAnonymous);
+            var exporter = new PatientDetailsExcelExporter(patientDetailsVM, 
+                                                           DetailsDisplayControlProperties(), Request.Form,
+                                                           _context, isAnonymous);
             return GetFileContentResult(exporter.ToOutputBytes(), ".xlsx", EXCEL_2007_CONTENT_TYPE);
         }       
     }

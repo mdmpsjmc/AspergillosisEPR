@@ -1,4 +1,6 @@
-﻿using AspergillosisEPR.Extensions;
+﻿using AspergillosisEPR.Data;
+using AspergillosisEPR.Extensions;
+using AspergillosisEPR.Lib.CaseReportForms;
 using AspergillosisEPR.Models.PatientViewModels;
 using Microsoft.AspNetCore.Http;
 using NPOI.SS.UserModel;
@@ -18,6 +20,7 @@ namespace AspergillosisEPR.Lib.Exporters
         private PatientDetailsViewModel _patientDetailsVM;
         private List<PropertyInfo> _controlDisplayProperties;
         private IFormCollection _form;
+        private AspergillosisContext _context;
         private bool isSGRQChartIncluded;
         private bool isIgChartIncluded;
         public bool IsAnonymous; 
@@ -26,7 +29,9 @@ namespace AspergillosisEPR.Lib.Exporters
         public static string EXCEL_2007_CONTENT_TYPE = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
 
         public PatientDetailsExcelExporter(PatientDetailsViewModel patientDetailsViewModel, 
-                                           List<PropertyInfo> controlDisplayProperties, IFormCollection form, 
+                                           List<PropertyInfo> controlDisplayProperties, 
+                                           IFormCollection form, 
+                                           AspergillosisContext context, 
                                            bool isAnonymous = false)
         {
             _outputWorkbook = new XSSFWorkbook();
@@ -34,6 +39,7 @@ namespace AspergillosisEPR.Lib.Exporters
             _controlDisplayProperties = controlDisplayProperties;
             _form = form;
             IsAnonymous = isAnonymous;
+            _context = context;
         }
 
         public byte[] ToOutputBytes()
@@ -42,9 +48,26 @@ namespace AspergillosisEPR.Lib.Exporters
             {
                 ISheet currentSheet = _outputWorkbook.CreateSheet("Details");
                 SetHorizontalCellValuesFromProperties(_patientDetailsVM.Patient, currentSheet);
-            }            
+                BuildCaseReportForms(currentSheet);
+            }
             CreateSheetNamesFromSelectedTabs();
             return SerializeWorkbook();
+        }
+
+        private void BuildCaseReportForms(ISheet currentSheet)
+        {
+            var caseReportFormExporter = new CaseReportFormExcelExporter(_context, currentSheet, _outputWorkbook);
+            foreach (var category in _patientDetailsVM.CaseReportForms)
+            {
+                int resultFormIndex = 0;
+                foreach (var resultForm in category)
+                {
+                    var formLabel = resultForm.Form.Name + "#" + resultForm.ID;
+                    var categorySheet = _outputWorkbook.CreateSheet(formLabel);
+                    caseReportFormExporter.SetValuesFromProperties(resultForm, categorySheet, resultFormIndex);
+                    resultFormIndex++;
+                }
+            }
         }
 
         private void CreateSheetNamesFromSelectedTabs()
@@ -58,6 +81,7 @@ namespace AspergillosisEPR.Lib.Exporters
                 {
                     if (propertyName == "SGRQ") isSGRQChartIncluded = true;
                     if (propertyName == "Ig") isIgChartIncluded = true;
+                    if (propertyName == "CaseReportForms") continue;
                     ISheet currentSheet = _outputWorkbook.CreateSheet(propertyName);
                     var items = GetCollectionFromTabName(propertyName);
                     if (CollectionToBeGroupped().Keys.Contains(propertyName))

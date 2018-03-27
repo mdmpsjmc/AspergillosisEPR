@@ -38,8 +38,7 @@ namespace AspergillosisEPR.Data
                new CaseReportFormFieldType { Name = "Single Select"},
                new CaseReportFormFieldType { Name = "Multi Select"},
                new CaseReportFormFieldType { Name = "Check-box" },
-               new CaseReportFormFieldType { Name = "Radio-button" },
-               new CaseReportFormFieldType { Name = "Time-select" }
+               new CaseReportFormFieldType { Name = "Radio-button" }
             };
 
             foreach (var item in caseReportFormFieldTypes)

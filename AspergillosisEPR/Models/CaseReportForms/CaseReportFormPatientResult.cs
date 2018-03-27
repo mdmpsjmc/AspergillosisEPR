@@ -1,4 +1,6 @@
-﻿using System;
+﻿using AspergillosisEPR.Data;
+using Microsoft.EntityFrameworkCore.Internal;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -44,6 +46,34 @@ namespace AspergillosisEPR.Models.CaseReportForms
                     $"You need to provide result/value for this field",
                     new[] { "ValidationResult" });
             }           
+        }
+
+        public string DetermineValue(AspergillosisContext context)
+        {
+            if (NumericAnswer != null)
+            {
+                return NumericAnswer.ToString();
+            }
+            else if (DateAnswer != null)
+            {
+                return DateAnswer.Value.ToString("dd-MM-yyyy");
+            }
+            else if (TextAnswer != null)
+            {
+                return TextAnswer;
+            }
+            else if (Options != null)
+            {
+                var optionsIds = Options.Select(o => o.CaseReportFormOptionChoiceId).ToList();
+
+                return context.CaseReportFormOptionChoices
+                              .Where(o => optionsIds.Contains(o.ID))
+                              .Select(o => o.Name)
+                              .ToList()
+                              .Join(",")
+                              .ToString(); 
+            }
+            return "";
         }
     }
 }
