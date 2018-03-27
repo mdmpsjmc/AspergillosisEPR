@@ -8,6 +8,7 @@ using AspergillosisEPR.Data;
 using Microsoft.AspNetCore.Authorization;
 using AspergillosisEPR.Helpers;
 using System.Collections;
+using AspergillosisEPR.Models.Patients;
 
 namespace AspergillosisEPR.Controllers
 {

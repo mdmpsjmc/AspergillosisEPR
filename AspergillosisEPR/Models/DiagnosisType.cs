@@ -1,4 +1,5 @@
 ﻿using AspergillosisEPR.Lib.Search;
+using AspergillosisEPR.Models.Patients;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;

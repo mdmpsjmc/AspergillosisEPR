@@ -15,6 +15,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Linq.Dynamic.Core;
 using System.Globalization;
 using AspergillosisEPR.Extensions.Validations;
+using AspergillosisEPR.Models.Patients;
 
 namespace AspergillosisEPR.Controllers
 {

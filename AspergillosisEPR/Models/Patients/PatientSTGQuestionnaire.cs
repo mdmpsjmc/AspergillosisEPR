@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace AspergillosisEPR.Models
+namespace AspergillosisEPR.Models.Patients
 {
     public class PatientSTGQuestionnaire : Exportable, ISearchable
     {

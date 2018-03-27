@@ -1,5 +1,6 @@
 ﻿using AspergillosisEPR.Lib.Search;
 using AspergillosisEPR.Models.CaseReportForms;
+using AspergillosisEPR.Models.Patients;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;

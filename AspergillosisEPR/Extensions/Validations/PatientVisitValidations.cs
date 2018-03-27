@@ -1,4 +1,5 @@
 ﻿using AspergillosisEPR.Models;
+using AspergillosisEPR.Models.Patients;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;

@@ -132,7 +132,11 @@ namespace AspergillosisEPR.Controllers
         public IActionResult CriteriaPartial()
         {
             string klassName = Request.Query["searchClass"];
-            Type type = Type.GetType("AspergillosisEPR.Models." + klassName);
+            Type type = Type.GetType("AspergillosisEPR.Models.Patients." + klassName);
+            if (type == null)
+            {
+                type = Type.GetType("AspergillosisEPR.Models." + klassName);
+            }
             var searchVm = new PatientSearchViewModel();
             searchVm.Index = (string) Request.Query["index"];
             dynamic instance = Activator.CreateInstance(type);

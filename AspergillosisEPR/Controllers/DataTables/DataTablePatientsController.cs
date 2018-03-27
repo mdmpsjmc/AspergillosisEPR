@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using AspergillosisEPR.Models.PatientViewModels;
 using Microsoft.AspNetCore.Authorization;
 using AspergillosisEPR.Helpers;
+using AspergillosisEPR.Models.Patients;
 
 namespace AspergillosisEPR.Controllers.DataTables
 {

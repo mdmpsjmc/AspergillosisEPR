@@ -1,4 +1,5 @@
 ﻿using AspergillosisEPR.Models;
+using AspergillosisEPR.Models.Patients;
 using System;
 using System.Linq;
 

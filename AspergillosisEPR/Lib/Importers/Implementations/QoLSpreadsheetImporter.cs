@@ -10,6 +10,7 @@ using System.Collections;
 using AspergillosisEPR.Models;
 using System.Reflection;
 using AspergillosisEPR.Helpers;
+using AspergillosisEPR.Models.Patients;
 
 namespace AspergillosisEPR.Lib.Importers.Implementations
 {

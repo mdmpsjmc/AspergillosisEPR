@@ -19,6 +19,7 @@ using AspergillosisEPR.Helpers;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using AspergillosisEPR.Lib.Importers;
 using Microsoft.EntityFrameworkCore;
+using AspergillosisEPR.Models.Patients;
 
 namespace AspergillosisEPR.Controllers
 {

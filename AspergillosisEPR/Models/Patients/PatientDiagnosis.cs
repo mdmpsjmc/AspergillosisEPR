@@ -6,7 +6,7 @@ using Newtonsoft.Json;
 using AspergillosisEPR.Lib.Exporters;
 using System.Reflection;
 using System.Linq;
-namespace AspergillosisEPR.Models
+namespace AspergillosisEPR.Models.Patients
 {
     public class PatientDiagnosis : Exportable, ISearchable
     {

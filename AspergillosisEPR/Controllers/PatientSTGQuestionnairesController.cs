@@ -8,6 +8,7 @@ using AspergillosisEPR.Models;
 using AspergillosisEPR.Helpers;
 using System.Collections;
 using System.Linq;
+using AspergillosisEPR.Models.Patients;
 
 namespace AspergillosisEPR.Controllers
 {

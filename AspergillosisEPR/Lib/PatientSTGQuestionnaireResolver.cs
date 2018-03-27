@@ -1,5 +1,6 @@
 ﻿using AspergillosisEPR.Data;
 using AspergillosisEPR.Models;
+using AspergillosisEPR.Models.Patients;
 using System;
 using System.Collections.Generic;
 using System.Globalization;

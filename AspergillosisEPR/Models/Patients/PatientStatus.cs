@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
 
-namespace AspergillosisEPR.Models
+namespace AspergillosisEPR.Models.Patients
 {
     public class PatientStatus
     {

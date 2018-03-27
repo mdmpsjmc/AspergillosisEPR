@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace AspergillosisEPR.Models
+namespace AspergillosisEPR.Models.Patients
 {
     public class PatientImmunoglobulin : Exportable
     {

@@ -1,6 +1,7 @@
 ﻿using AspergillosisEPR.Data;
 using AspergillosisEPR.Helpers;
 using AspergillosisEPR.Lib;
+using AspergillosisEPR.Models.Patients;
 using System;
 using System.Collections.Generic;
 using System.Linq;

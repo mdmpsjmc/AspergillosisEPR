@@ -1,4 +1,5 @@
-﻿@model List<AspergillosisEPR.Models.PatientMeasurement>;
+﻿@using AspergillosisEPR.Models.Patients;
+@model List<AspergillosisEPR.Models.Patients.PatientMeasurement>;
 @if (User.IsInRole("Create Role") || User.IsInRole("Admin Role"))
 {
     <a href="@Url.Action("New", "PatientMeasurements")" class="btn btn-success add-measurement add-new-patient-partial disable-default" data-visible-row="div.drug-row:visible" data-insert-into-class="div.measurement-form" style="padding: 5px;margin-top: 15px; margin-bottom: 10px">

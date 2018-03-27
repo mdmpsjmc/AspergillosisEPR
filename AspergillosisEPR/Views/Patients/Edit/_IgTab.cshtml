@@ -1,4 +1,6 @@
 ﻿@model AspergillosisEPR.Models.Patient
+@using AspergillosisEPR.Models.Patients;
+
 <div class="col-12 row ig-form" style="margin: 0px !important">
     @for (int i = 0; i < Model.PatientImmunoglobulines.OrderByDescending(q => q.DateTaken).ToList().Count; i++)
     {

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using AspergillosisEPR.Models.Patients;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace AspergillosisEPR.Models.AspergillosisViewModels

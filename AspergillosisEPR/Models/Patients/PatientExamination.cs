@@ -7,7 +7,7 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 
-namespace AspergillosisEPR.Models
+namespace AspergillosisEPR.Models.Patients
 {
     public abstract class PatientExamination
     {

@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AspergillosisEPR.Models.CaseReportForms;
+using AspergillosisEPR.Models.Patients;
 
 namespace AspergillosisEPR.Models.PatientViewModels
 {

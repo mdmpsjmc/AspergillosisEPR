@@ -1,5 +1,6 @@
 ﻿using AspergillosisEPR.Data;
 using AspergillosisEPR.Helpers;
+using AspergillosisEPR.Models.Patients;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;

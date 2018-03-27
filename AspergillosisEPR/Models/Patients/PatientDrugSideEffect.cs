@@ -1,4 +1,4 @@
-﻿namespace AspergillosisEPR.Models
+﻿namespace AspergillosisEPR.Models.Patients
 {
     public class PatientDrugSideEffect
     {

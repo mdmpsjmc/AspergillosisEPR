@@ -11,7 +11,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace AspergillosisEPR.Models
+namespace AspergillosisEPR.Models.Patients
 {
     public class PatientRadiologyFinding : Exportable, ISearchable
     {

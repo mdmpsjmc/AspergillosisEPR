@@ -18,6 +18,7 @@ using Microsoft.AspNetCore.Http;
 using System.ComponentModel.DataAnnotations;
 using AspergillosisEPR.Lib.CaseReportForms;
 using AspergillosisEPR.Models.CaseReportForms;
+using AspergillosisEPR.Models.Patients;
 
 namespace AspergillosisEPR.Controllers
 {
