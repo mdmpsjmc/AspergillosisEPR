@@ -65,9 +65,14 @@
                                 }
                         </div>
                         <div class="row">
-                            <a href="@Url.Action("Delete", "CaseReportFormResults", new { id = formResult.ID})" data-index="@stringFormIndex" class="btn btn-danger remove-existing-item pull-right btn-lg" data-id="@formResult.ID" data-what="Case Report Form" data-toggle="tooltip" data-title="Remove Case Report Form" style="padding: 5px">
+                            <a href="@Url.Action("Delete", "CaseReportFormResults", new { id = formResult.ID})" data-index="@stringFormIndex" class="btn btn-danger remove-existing-item pull-right" data-id="@formResult.ID" data-what="Case Report Form" data-toggle="tooltip" data-title="Remove Case Report Form" style="padding: 5px">
                                 <i class="fa fa-trash"></i>
                             </a>
+                            &nbsp;&nbsp;
+                            <a href="@Url.Action("CaseReportForm", "PdfExports", new { id = formResult.PatientId, formId= formResult.ID })" data-id="@formResult.PatientId" data-form-id="@formResult.ID" class="disable-default btn btn-danger download-crf-pdf pull-right" data-toggle="tooltip" data-title="Download as PDF" style="padding: 5px">
+                                <i class="fa fa-file-pdf-o"></i>
+                            </a>
+                            &nbsp;                         
                         </div>
                     </div>
                     categoryCursor++;              
