@@ -78,12 +78,11 @@ namespace AspergillosisEPR.Controllers
             if (caseReportFormResult != null && caseReportFormResult.Length > 0 &&  caseReportFormResult[0].Results != null)
             {
                 var results = caseReportFormResult[0].Results.ToArray();
-                _caseReportFormManager.GetFormIdsForCaseReportForms(results);
-                _caseReportFormManager.CreateOptionChoices(results);
-                _caseReportFormManager.UpdateWithPatient(patient, results);
+                _caseReportFormManager.CreateCaseReportFormForResults(patient, results);
                 patient.CaseReportFormResults.Add(caseReportFormResult[0]);
-            }            
-            
+                _caseReportFormManager.LockForm(caseReportFormResult[0].CaseReportFormId);
+            }
+
             _patientManager.AddCollectionsFromFormToPatients(patient, 
                                                              ref diagnoses, 
                                                              ref drugs,
@@ -108,7 +107,7 @@ namespace AspergillosisEPR.Controllers
             {
                 return null;
             }
-        }
+        }       
 
         [Authorize(Roles = ("Admin Role, Read Role"))]
         [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]

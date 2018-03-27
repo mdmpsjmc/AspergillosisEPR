@@ -42,6 +42,7 @@ namespace AspergillosisEPR.Lib.CaseReportForms
             }
         }
 
+   
         public CaseReportForm FindByIdWithAllRelations(int id)
         {
             return _context.CaseReportForms
@@ -153,9 +154,40 @@ namespace AspergillosisEPR.Lib.CaseReportForms
                 if (field != null)
                 {
                     formId = (field.CaseReportForm != null) ? field.CaseReportFormId : GetSectionFormIdForField(field);
-                }
+                }                
                 caseReportFormResult.CaseReportFormId = formId.Value;
             }
+        }
+
+        public void LockForm(int? formId)
+        {
+            var formInSubject = _context.CaseReportForms
+                                        .Where(f => f.ID == formId)
+                                        .FirstOrDefault();
+
+            formInSubject.IsLocked = true;
+            _context.CaseReportForms.Update(formInSubject);
+        }
+
+        public void TryUnlockForm(int caseReportFormId)
+        {
+            var formInSubject = _context.CaseReportForms
+                                       .Where(f => f.ID == caseReportFormId)
+                                       .FirstOrDefault();
+            var resultsCount = _context.CaseReportFormResults
+                                       .Where(r => r.CaseReportFormId == caseReportFormId)
+                                       .Count()-1;
+            formInSubject.IsLocked = resultsCount > 0;
+            _context.CaseReportForms.Update(formInSubject);
+        }
+
+
+        public void CreateCaseReportFormForResults(Patient patient, 
+                                                   CaseReportFormPatientResult[] results)
+        {
+            GetFormIdsForCaseReportForms(results);
+            CreateOptionChoices(results);
+            UpdateWithPatient(patient, results);
         }
 
         public void UpdateWithPatient(Patient patient,
@@ -242,6 +274,7 @@ namespace AspergillosisEPR.Lib.CaseReportForms
                                         CaseReportFormPatientResult updatedResult, 
                                         CaseReportFormPatientResult existingDbItemResult)
         {
+            
             existingDbItemResult.CaseReportFormFieldId = updatedResult.CaseReportFormFieldId;
             existingDbItemResult.CaseReportFormResultId = caseReportFormResult.ID;
             existingDbItemResult.NumericAnswer = updatedResult.NumericAnswer;
@@ -254,6 +287,7 @@ namespace AspergillosisEPR.Lib.CaseReportForms
 
             UpdateSingleItemOptionChoices(updatedResult, existingDbItemResult);
             _context.Update(existingDbItemResult);
+            LockForm(updatedResult.CaseReportFormId);
         }
 
         private void UpdateSingleItemOptionChoices(CaseReportFormPatientResult singleItemResult, 
@@ -313,6 +347,7 @@ namespace AspergillosisEPR.Lib.CaseReportForms
             result.PatientId = patientToUpdate.ID;
             patientToUpdate.CaseReportFormResults.Add(result);
             _context.Update(result);
+            LockForm(result.CaseReportFormId);
         }
     }
 }

@@ -24,7 +24,7 @@ namespace AspergillosisEPR.Models.CaseReportForms.ViewModels
         public List<string> SectionsNames { get; set; }
         public List<string> FieldsNames { get; set; }
         public string ItemId { get; set; }
-
+        public string IsLocked { get; internal set; }
 
         public static CaseReportFormViewModel BuildViewModel(CaseReportForm caseReportForm)
         {
@@ -35,6 +35,7 @@ namespace AspergillosisEPR.Models.CaseReportForms.ViewModels
             viewModel.FieldsNames = caseReportForm.Fields.Select(f => f.Label).ToList();
             viewModel.Fields = caseReportForm.Fields.ToList();
             viewModel.Sections = caseReportForm.Sections.ToList();
+            viewModel.IsLocked = caseReportForm.IsLocked ? "<label class='label label-danger'>YES</label>" : "<label class='label label-success'>NO</label>";
             return viewModel;
         }
     }

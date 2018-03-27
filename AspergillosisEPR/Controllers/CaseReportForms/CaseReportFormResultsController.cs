@@ -33,6 +33,7 @@ namespace AspergillosisEPR.Controllers.CaseReportForms
             _context.RemoveRange(optionChoices);
             _context.RemoveRange(results);
             _context.CaseReportFormResults.Remove(form);
+            _caseReportFormResolver.TryUnlockForm(form.CaseReportFormId);
             _context.SaveChanges();
             return Json(new { ok = "ok" });
         }

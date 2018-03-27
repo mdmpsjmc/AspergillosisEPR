@@ -69,10 +69,10 @@ namespace AspergillosisEPR.Controllers.DataTables
                             _list = _list.Where(p => p.PrimaryDiagnosis.Contains(partialSearch)).ToList();
                             break;
                         case 2:
-                            _list = _list.Where(p => p.FirstName.Contains(partialSearch)).ToList();
+                            _list = _list.Where(p => p.FirstName.ToLower().Contains(partialSearch.ToLower())).ToList();
                             break;
                         case 3:
-                            _list = _list.Where(p => p.LastName.Contains(partialSearch)).ToList();
+                            _list = _list.Where(p => p.LastName.ToLower().Contains(partialSearch.ToLower())).ToList();
                             break;
                         case 4:
                             _list = _list.Where(p => p.Gender.ToString().ToLower() == partialSearch.ToLower()).ToList();

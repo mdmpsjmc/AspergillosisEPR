@@ -46,6 +46,7 @@ namespace AspergillosisEPR.Controllers.DataTables
                 var viewModel = new CaseReportFormViewModel()
                 {
                     ItemId = result.ID.ToString(),
+                    IsLocked = result.IsLocked ? "<label class='label label-danger'>YES</label>" : "<label class='label label-success'>NO</label>",
                     Name = result.Name, 
                     CategoryName = result.CaseReportFormCategory.Name,
                     SectionsNames = result.Sections.Select(s => s.Section.Name).ToList(),

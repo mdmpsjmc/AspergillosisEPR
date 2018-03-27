@@ -189,15 +189,21 @@
             ]);
             SimpleDataTable.initializeWithColumns("case_report_formDT", "table#case_report_forms_datatable", "CaseReportForm", [
                 { "data": "itemId", "name": "ItemId", "autoWidth": true },
+                { "data": "isLocked", "name": "IsLocked", "autoWidth": true },
                 { "data": "name", "name": "Name", "autoWidth": true },
                 { "data": "categoryName", "name": "CategoryName", "autoWidth": true },
                 { "data": "sectionsNames", "name": "SectionsNames", "autoWidth": true },
                 { "data": "fieldsNames", "name": "FieldsNames", "autoWidth": true },
                 {
                     "render": function (data, type, object, meta) {
-                        return '<a class="btn btn-info details-link disable-default show-crf-section" data-what="item" data-klass="CaseReportForms" data-tab="crfs" data-child-tab="CaseReportFormSection" data-warning="All patient information related to this items will be  irreversibly lost from database if you remove it" style="display: none" data-role="Delete Role" href="/CaseReportForms/Show/' + object.itemId + '" data-id="' + object.itemId + '"><i class=\'fa fa-eye\' ></i>&nbsp;Show</a>&nbsp;' +
-                            '<a class="btn btn-primary edit-crf-link disable-default" data-klass="CaseReportForm"  data-tab="crfs"  style="display: none" data-role="Update Role" href="/CaseReportForms/Edit/' + object.itemId + '" data-id="' + object.itemId + '"><i class=\'fa fa-edit\' ></i>&nbsp;Edit</a>&nbsp;' +
-                            '<a class="btn btn-danger delete-link disable-default" data-what="item" data-klass="CaseReportForm" data-tab="crfs" data-child-tab="CaseReportForm" data-warning="All patient information related to this items will be  irreversibly lost from database if you remove it" style="display: none" data-role="Delete Role" href="/CaseReportForms/Delete/' + object.itemId + '" data-id="' + object.itemId + '"><i class=\'fa fa-trash\' ></i>&nbsp;Delete</a>&nbsp;'
+                        if (object.isLocked.match("YES") == null) {
+                            return '<a class="btn btn-info details-link disable-default show-crf-section" data-what="item" data-klass="CaseReportForms" data-tab="crfs" data-child-tab="CaseReportFormSection" data-warning="All patient information related to this items will be  irreversibly lost from database if you remove it" style="display: none" data-role="Delete Role" href="/CaseReportForms/Show/' + object.itemId + '" data-id="' + object.itemId + '"><i class=\'fa fa-eye\' ></i>&nbsp;Show</a>&nbsp;' +
+                                '<a class="btn btn-primary edit-crf-link disable-default" data-klass="CaseReportForm"  data-tab="crfs"  style="display: none" data-role="Update Role" href="/CaseReportForms/Edit/' + object.itemId + '" data-id="' + object.itemId + '"><i class=\'fa fa-edit\' ></i>&nbsp;Edit</a>&nbsp;' +
+                                '<a class="btn btn-danger delete-link disable-default" data-what="item" data-klass="CaseReportForm" data-tab="crfs" data-child-tab="CaseReportForm" data-warning="All patient information related to this items will be  irreversibly lost from database if you remove it" style="display: none" data-role="Delete Role" href="/CaseReportForms/Delete/' + object.itemId + '" data-id="' + object.itemId + '"><i class=\'fa fa-trash\' ></i>&nbsp;Delete</a>&nbsp;'
+                        } else {
+                            return '<a class="btn btn-info details-link disable-default show-crf-section" data-what="item" data-klass="CaseReportForms" data-tab="crfs" data-child-tab="CaseReportFormSection" data-warning="All patient information related to this items will be  irreversibly lost from database if you remove it" style="display: none" data-role="Delete Role" href="/CaseReportForms/Show/' + object.itemId + '" data-id="' + object.itemId + '"><i class=\'fa fa-eye\' ></i>&nbsp;Show</a>&nbsp;';
+                        }
+                        
                     },
                     "sortable": false,
                     "width": 250,
