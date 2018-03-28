@@ -54,5 +54,73 @@ namespace AspergillosisEPR.Controllers
                 return null;
             }
         }
+
+        [Authorize(Roles = "Admin Role, Update Role")]
+        public async Task<IActionResult> Edit(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var medicalTrial = await _context.MedicalTrials
+                                             .AsNoTracking()
+                                             .SingleOrDefaultAsync(m => m.ID == id);
+            if (medicalTrial == null)
+            {
+                return NotFound();
+            }
+            return PartialView(medicalTrial);
+        }
+
+        [HttpPost, ActionName("Edit")]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin Role, Update Role")]
+        public async Task<IActionResult> EditMedicalTrial(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var medicalTrial = await _context.MedicalTrials
+                                             .AsNoTracking()
+                                             .SingleOrDefaultAsync(m => m.ID == id);
+            medicalTrial.Name = Request.Form["Name"];
+            medicalTrial.Description = Request.Form["Description"];
+            if (TryValidateModel(medicalTrial))
+            {
+                try
+                {
+                    _context.MedicalTrials.Update(medicalTrial);
+                    _context.SaveChanges();
+                }
+                catch (DbUpdateException /* ex */)
+                {
+                    ModelState.AddModelError("", "Unable to save changes. " +
+                        "Try again, and if the problem persists, " +
+                        "see your system administrator.");
+                }
+            }
+            else
+            {
+                Hashtable errors = ModelStateHelper.Errors(ModelState);
+                return Json(new { success = false, errors });
+            }
+
+            return Json(new { result = "ok" });
+        }
+
+
+        [HttpPost, ActionName("Delete")]
+        [Authorize(Roles = "Admin Role, Delete Role")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            var medicalTrial = await _context.MedicalTrials.SingleOrDefaultAsync(p => p.ID == id);
+            _context.MedicalTrials.Remove(medicalTrial);
+            await _context.SaveChangesAsync();
+            return Json(new { ok = "ok" });
+        }
     }
 }
