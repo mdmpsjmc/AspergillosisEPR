@@ -28,6 +28,7 @@
             PatientVisits.init();
             CaseReportForms.init();
             AnonPatients.init();
+            MedicalTrials.init();
         }
     }
 
