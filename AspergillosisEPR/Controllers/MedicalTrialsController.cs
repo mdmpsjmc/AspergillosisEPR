@@ -11,21 +11,27 @@ using System.Collections;
 using AspergillosisEPR.Helpers;
 using Microsoft.EntityFrameworkCore;
 using AspergillosisEPR.Models.MedicalTrials;
+using AspergillosisEPR.Lib;
 
 namespace AspergillosisEPR.Controllers
 {
     public class MedicalTrialsController : Controller
     {
         private AspergillosisContext _context;
+        private DropdownListsResolver _listResolver;
 
         public MedicalTrialsController(AspergillosisContext context)
         {
             _context = context;
+            _listResolver = new DropdownListsResolver(context, ViewBag);
         }
 
         [Authorize(Roles = "Admin Role, Create Role")]
         public IActionResult New()
         {
+            ViewBag.PrivateInvestigatorsIds = _listResolver.PopulatePrimaryInvestigatorDropdownList();
+            ViewBag.MedicalTrialsTypeIds = _listResolver.PopulateMedicalTrialTypesDropdownList();
+            ViewBag.MedicalTrialsStatusesIds = _listResolver.PopulateMedicalTrialStatusesDropdownList();
             return PartialView();
         }
 

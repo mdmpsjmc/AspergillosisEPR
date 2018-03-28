@@ -1,0 +1,64 @@
+﻿@model AspergillosisEPR.Models.MedicalTrials.MedicalTrial
+<fieldset>
+    <div class="row">
+            <label asp-for="Name" class="input">
+                <i class="icon-append fa fa-hospital-o"></i>
+                <input asp-for="Name" placeholder="Trial name">
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </label>
+        <section class="col col-6">
+            <label asp-for="MedicalTrialPrincipalInvestigatorId" class="select">
+                <select asp-for="MedicalTrialPrincipalInvestigatorId" asp-items="(SelectList) ViewBag.PrivateInvestigatorsIds">
+                    <option value="">Select Primary Investigator</option>
+                </select>
+                <span asp-validation-for="MedicalTrialPrincipalInvestigatorId" class="text-danger"></span>
+                <i class="icon-append fa fa-user"></i>
+            </label>
+        </section>
+        <section class="col col-6">
+            <label asp-for="Number" class="input">
+                <i class="icon-append fa fa-sticky-note"></i>
+                <input asp-for="Number" placeholder="Trial number">
+                <span asp-validation-for="Number" class="text-danger"></span>
+            </label>
+        </section>
+        <section class="col col-6">
+            <label asp-for="RandDNumber" class="input">
+                <i class="icon-append fa fa-sticky-note"></i>
+                <input asp-for="RandDNumber" placeholder="Enter R&D Number (optional)">
+                <span asp-validation-for="RandDNumber" class="text-danger"></span>
+            </label>
+        </section>
+        <section class="col col-6">
+            <label asp-for="RECNumber" class="input">
+                <i class="icon-append fa fa-sticky-note"></i>
+                <input asp-for="RECNumber" placeholder="Enter RED Number (optional)">
+                <span asp-validation-for="RECNumber" class="text-danger"></span>
+            </label>
+        </section>
+        <section class="col col-6">
+            <label asp-for="MedicalTrialTypeId" class="select">
+                <select asp-for="MedicalTrialTypeId" asp-items="(SelectList) ViewBag.MedicalTrialsTypeIds">
+                    <option value="">Select Trial Type</option>
+                </select>
+                <span asp-validation-for="MedicalTrialTypeId" class="text-danger"></span>
+                <i class="icon-append fa fa-user"></i>
+            </label>
+        </section>        
+        <section class="col col-6">
+            <label asp-for="MedicalTrialStatusId" class="select">
+                <select asp-for="MedicalTrialStatusId" asp-items="(SelectList) ViewBag.MedicalTrialsStatusesIds">
+                    <option value="">Select Trial Status</option>
+                </select>
+                <span asp-validation-for="MedicalTrialStatusId" class="text-danger"></span>
+                <i class="icon-append fa fa-user"></i>
+            </label>
+        </section>
+    </div>
+    <section class="col col-12">
+        <label class="textarea">
+            <i class="icon-append fa fa-comment"></i>
+            @Html.TextArea("Description", null, new { @class = "comment", @rows = 5, @placeholder = "Trial Description (optional)", @style="width: 500px" })
+        </label>
+    </section>
+</fieldset>

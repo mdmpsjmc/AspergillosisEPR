@@ -19,8 +19,8 @@ namespace AspergillosisEPR.Models.MedicalTrials
         public string RandDNumber { get; set; }
         public string RECNumber { get; set; }
         public int? MedicalTrialPrincipalInvestigatorId { get; set; }
-        public int? MedicalTrialTypeId { get; set; }
-        public int? MedicalTrialStatusId { get; set; }
+        public int MedicalTrialTypeId { get; set; }
+        public int MedicalTrialStatusId { get; set; }
 
         public MedicalTrialPrincipalInvestigator PrincipalInvestigator { get; set; }
         public MedicalTrialType TrialType { get; set; }

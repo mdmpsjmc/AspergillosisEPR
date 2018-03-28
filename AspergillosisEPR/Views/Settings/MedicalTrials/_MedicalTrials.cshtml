@@ -1,0 +1,25 @@
+﻿@model AspergillosisEPR.Models.SettingsViewModels.SettingsViewModel
+<div class="table-responsive">
+    @if (User.IsInRole("Create Role") || User.IsInRole("Admin Role"))
+    {
+        <div class="button">
+            <a href="@Url.Action("New", "MedicalTrials")" class="btn btn-success add-settings-item disable-default" data-klass="MedicalTrial" data-tab="medical-trials">
+                <i class="fa fa-plus"></i> Add new medical trial
+            </a>
+        </div>
+    }   
+    <table class="table table-bordered table-hover table-stripped" id="medical_trials_datatable" style="width: 100%" data-url="/DataTableMedicalTrials/Load">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Trial Name</th>
+                <th>Description</th>
+                @if (User.IsInRole("Update Role") || User.IsInRole("Admin Role"))
+                {
+                    <th>Action</th>
+                }
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+</div>

@@ -21,6 +21,38 @@ namespace AspergillosisEPR.Lib
             _viewBag = viewBag;
         }
 
+        public SelectList PopulatePrimaryInvestigatorDropdownList(object selectedItem = null)
+        {
+            var investigators = _context
+                                       .MedicalTrialsPrincipalInvestigators
+                                       .Include(i => i.PersonTitle)
+                                       .ToList();
+            var selectListItems = new List<SelectListItem>();
+            foreach(var investigator in investigators)
+            {
+                var optionItem = new SelectListItem()
+                {
+                    Text = investigator.PersonTitle.Name + " " + investigator.FirstName + " " + investigator.LastName,
+                    Value = investigator.ID.ToString()
+                };
+                selectListItems.Add(optionItem);
+            }
+            var selectList = new SelectList(investigators, "Value", "Text");
+            return selectList;
+        }   
+        
+        public SelectList PopulateMedicalTrialTypesDropdownList(object selectedItem = null)
+        {
+            var trialTypes = _context.MedicalTrialTypes.ToList();
+            return new SelectList(trialTypes, "ID", "Name");
+        }
+
+        public SelectList PopulateMedicalTrialStatusesDropdownList(object selectedItem = null)
+        {
+            var statuses = _context.MedicalTrialStatuses.ToList();
+            return new SelectList(statuses, "ID", "Name");
+        }
+
         public SelectList PopulateRadiologyDropdownList(string collectionName, object selectedItem = null)
         {
             _radiologyDbCollectionResolver = new RadiologyDbCollectionResolver(_context, collectionName);
