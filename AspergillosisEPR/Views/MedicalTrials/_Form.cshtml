@@ -9,7 +9,7 @@
         <section class="col col-6">
             <label asp-for="MedicalTrialPrincipalInvestigatorId" class="select">
                 <select asp-for="MedicalTrialPrincipalInvestigatorId" asp-items="(SelectList) ViewBag.PrivateInvestigatorsIds">
-                    <option value="">Select Primary Investigator</option>
+                    <option value="">Select Principal Investigator</option>
                 </select>
                 <span asp-validation-for="MedicalTrialPrincipalInvestigatorId" class="text-danger"></span>
                 <i class="icon-append fa fa-user"></i>
