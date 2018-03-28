@@ -30,6 +30,7 @@ namespace AspergillosisEPR
                     var context2 = services.GetRequiredService<ApplicationDbContext>();
                     AppDbInitializer.Initialize(context2);
                     CaseReportFormsDataInitializer.AddSelectFieldTypes(context);
+                    MedicalTiralsDataInitializer.AddMedicalTrialsModels(context);
                 }
                 catch (Exception ex)
                 {

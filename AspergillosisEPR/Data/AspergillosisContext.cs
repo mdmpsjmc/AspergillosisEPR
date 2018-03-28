@@ -8,6 +8,7 @@ using AspergillosisEPR.Models.CaseReportForms;
 using AspergillosisEPR.Models.CaseReportForms.ViewModels;
 using AspergillosisEPR.Models.Radiology;
 using AspergillosisEPR.Models.Patients;
+using AspergillosisEPR.Models.MedicalTrials;
 
 namespace AspergillosisEPR.Data
 {
@@ -58,8 +59,14 @@ namespace AspergillosisEPR.Data
         public DbSet<CaseReportFormPatientResult> CaseReportFormPatientResults { get; set; }
         public DbSet<CaseReportFormPatientResultOptionChoice> CaseReportFormPatientResultOptionChoices { get; set; }
         public DbSet<CaseReportFormResult> CaseReportFormResults { get; set; }
-        public DbSet<MedicalTrial> MedicalTrials { get; set; }
 
+        public DbSet<PersonTitle> PersonTitles { get; set; }
+        public DbSet<MedicalTrial> MedicalTrials { get; set; }
+        public DbSet<PatientMedicalTrial> PatientMedicalTrials { get; set; }
+        public DbSet<MedicalTrialPatientStatus> MedicalTrialPatientStatuses { get; set; }
+        public DbSet<MedicalTrialPrincipalInvestigator> MedicalTrialsPrincipalInvestigators { get; set; }
+        public DbSet<MedicalTrialStatus> MedicalTrialStatuses { get; set; }
+        public DbSet<MedicalTrialType> MedicalTrialTypes { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -104,13 +111,15 @@ namespace AspergillosisEPR.Data
             modelBuilder.Entity<CaseReportFormPatientResultOptionChoice>().ToTable("CaseReportFormPatientResultOptionChoices");
             modelBuilder.Entity<CaseReportFormResult>().ToTable("CaseReportFormResults");
 
+            modelBuilder.Entity<PersonTitle>().ToTable("PersonTitles");
             modelBuilder.Entity<MedicalTrial>().ToTable("MedicalTrials");
+            modelBuilder.Entity<PatientMedicalTrial>().ToTable("PatientMedicalTrials");
+            modelBuilder.Entity<MedicalTrialPatientStatus>().ToTable("MedicalTrialPatientStatuses");
+            modelBuilder.Entity<MedicalTrialPrincipalInvestigator>().ToTable("MedicalTrialPrincipalInvestigators");
+            modelBuilder.Entity<MedicalTrialStatus>().ToTable("MedicalTrialStatuses");
+            modelBuilder.Entity<MedicalTrialType>().ToTable("MedicalTrialTypes");
         }
 
-        internal void Set(Type currentType)
-        {
-            throw new NotImplementedException();
-        }
     }
 
 

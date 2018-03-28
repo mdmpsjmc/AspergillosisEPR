@@ -283,7 +283,19 @@ div.dt-buttons {
     opacity: .5;
 }
 
-.dt-button {
+.tab-styled-custom2 {
+    margin-top: 2px;
+    font-size: 41px;
+    margin-left: 24px;
+    width: 10px;
+    color: gray;
+    display: block;
+    float: left;
+    margin-top: -7px;
+    margin-right: -10px;
+    opacity: .5;
+}
+    .dt-button {
     color: white !important;
     font-size: 15px !important;
 }

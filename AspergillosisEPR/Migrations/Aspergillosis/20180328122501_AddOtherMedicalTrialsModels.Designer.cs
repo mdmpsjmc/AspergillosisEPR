@@ -12,9 +12,10 @@ using System;
 namespace AspergillosisEPR.Migrations.Aspergillosis
 {
     [DbContext(typeof(AspergillosisContext))]
-    partial class AspergillosisContextModelSnapshot : ModelSnapshot
+    [Migration("20180328122501_AddOtherMedicalTrialsModels")]
+    partial class AddOtherMedicalTrialsModels
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -395,7 +396,7 @@ namespace AspergillosisEPR.Migrations.Aspergillosis
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("Name");
+                    b.Property<int>("Name");
 
                     b.HasKey("ID");
 

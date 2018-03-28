@@ -10,6 +10,7 @@ using AspergillosisEPR.Extensions.Validations;
 using System.Collections;
 using AspergillosisEPR.Helpers;
 using Microsoft.EntityFrameworkCore;
+using AspergillosisEPR.Models.MedicalTrials;
 
 namespace AspergillosisEPR.Controllers
 {
