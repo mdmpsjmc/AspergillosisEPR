@@ -8,7 +8,7 @@
             </label>
         <section class="col col-6">
             <label asp-for="MedicalTrialPrincipalInvestigatorId" class="select">
-                <select asp-for="MedicalTrialPrincipalInvestigatorId" asp-items="(SelectList) ViewBag.PrivateInvestigatorsIds">
+                <select asp-for="MedicalTrialPrincipalInvestigatorId" asp-items="(SelectList) ViewBag.InvestigatorsIds">
                     <option value="">Select Principal Investigator</option>
                 </select>
                 <span asp-validation-for="MedicalTrialPrincipalInvestigatorId" class="text-danger"></span>
@@ -32,7 +32,7 @@
         <section class="col col-6">
             <label asp-for="RECNumber" class="input">
                 <i class="icon-append fa fa-sticky-note"></i>
-                <input asp-for="RECNumber" placeholder="Enter RED Number (optional)">
+                <input asp-for="RECNumber" placeholder="Enter REC Number (optional)">
                 <span asp-validation-for="RECNumber" class="text-danger"></span>
             </label>
         </section>

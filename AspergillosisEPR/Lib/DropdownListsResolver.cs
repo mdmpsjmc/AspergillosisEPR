@@ -43,7 +43,7 @@ namespace AspergillosisEPR.Lib
                 };
                 selectListItems.Add(optionItem);
             }
-            var selectList = new SelectList(investigators, "Value", "Text");
+            var selectList = new SelectList(selectListItems, "Value", "Text");
             return selectList;
         }
 

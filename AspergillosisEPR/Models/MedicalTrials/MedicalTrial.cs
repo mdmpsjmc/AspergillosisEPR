@@ -15,11 +15,15 @@ namespace AspergillosisEPR.Models.MedicalTrials
         public string Name { get; set; }
         [Column(TypeName = "ntext")]
         public string Description { get; set; }
+        [Required]
+        [Display(Name = "Trial Number")]
         public string Number { get; set; }
         public string RandDNumber { get; set; }
         public string RECNumber { get; set; }
         public int? MedicalTrialPrincipalInvestigatorId { get; set; }
+        [Required]        
         public int MedicalTrialTypeId { get; set; }
+        [Required]
         public int MedicalTrialStatusId { get; set; }
 
         public MedicalTrialPrincipalInvestigator PrincipalInvestigator { get; set; }

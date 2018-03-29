@@ -29,7 +29,7 @@ namespace AspergillosisEPR.Controllers.MedicalTrials
         [Authorize(Roles = "Admin Role, Create Role")]
         public IActionResult New()
         {
-            ViewBag.PrivateInvestigatorsIds = _listResolver.PopulatePrimaryInvestigatorDropdownList();
+            ViewBag.InvestigatorsIds = _listResolver.PopulatePrimaryInvestigatorDropdownList();
             ViewBag.MedicalTrialsTypeIds = _listResolver.PopulateMedicalTrialTypesDropdownList();
             ViewBag.MedicalTrialsStatusesIds = _listResolver.PopulateMedicalTrialStatusesDropdownList();
             return PartialView(@"/Views/MedicalTrials/MedicalTrials/New.cshtml");
@@ -77,6 +77,14 @@ namespace AspergillosisEPR.Controllers.MedicalTrials
             {
                 return NotFound();
             }
+
+            ViewBag.PrincipalInvestigatorsIds = _listResolver
+                                                    .PopulatePrimaryInvestigatorDropdownList(medicalTrial.MedicalTrialPrincipalInvestigatorId);
+            ViewBag.MedicalTrialsTypeIds = _listResolver
+                                                    .PopulateMedicalTrialTypesDropdownList(medicalTrial.MedicalTrialTypeId);
+            ViewBag.MedicalTrialsStatusesIds = _listResolver
+                                                    .PopulateMedicalTrialStatusesDropdownList(medicalTrial.MedicalTrialStatusId);
+
             return PartialView(@"/Views/MedicalTrials/MedicalTrials/Edit.cshtml", medicalTrial);
         }
 
