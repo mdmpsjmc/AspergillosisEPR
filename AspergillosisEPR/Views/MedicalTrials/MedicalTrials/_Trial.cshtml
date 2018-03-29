@@ -1,0 +1,60 @@
+﻿@model AspergillosisEPR.Models.MedicalTrials.MedicalTrial
+<div class="row">
+    <div class="col-sm-12">
+        <div class="row">           
+            <div class="col-sm-12">
+                <h1>
+                    <small><strong> @(Model.Name)</strong></small>
+                </h1>
+                <ul class="list-unstyled">
+                    <li>
+                        <p class="text-muted">
+                            Trial Number<i class="fa fa-angle-right"></i>&nbsp;&nbsp;<span class="txt-color-darken">@(Model.Number)</span>
+                        </p>
+                    </li>
+                    <li>
+                        <p class="text-muted">
+                            Trial Type<i class="fa fa-angle-right"></i>&nbsp;&nbsp;<span class="txt-color-darken">@(Model.TrialType.Name)</span>
+                        </p>
+                    </li>    
+                    <li>
+                        <p class="text-muted">
+                            Principal Investigator<i class="fa fa-angle-right"></i>&nbsp;&nbsp;<span class="txt-color-darken">@(Model.PrincipalInvestigator.Name())</span>
+                        </p>
+                    </li>           
+                    @if (!string.IsNullOrEmpty(Model.RandDNumber))
+                    {
+                        <li>
+                            <p class="text-muted">
+                                R&D Number<i class="fa fa-angle-right"></i>&nbsp;&nbsp;<span class="txt-color-darken">@(Model.RandDNumber)</span>
+                            </p>
+                        </li>
+
+                    }
+                    @if (!string.IsNullOrEmpty(Model.RECNumber))
+                    {
+                        <li>
+                            <p class="text-muted">
+                                REC Number<i class="fa fa-angle-right"></i>&nbsp;&nbsp;<span class="txt-color-darken">@(Model.RECNumber)</span>
+                            </p>
+                        </li>
+                    }
+                    <li>
+                        <p class="text-muted">
+                            Trial Status<i class="fa fa-angle-right"></i>&nbsp;&nbsp;<span class="txt-color-darken">@(Model.TrialStatus.Name)</span>
+                        </p>
+                    </li>     
+                    @if (!string.IsNullOrEmpty(Model.Description))
+                    {
+                        <li>
+                            <p class="text-muted">
+                                Description<i class="fa fa-angle-right"></i>&nbsp;&nbsp;<span class="txt-color-darken"><pre>@(Model.Description)</pre></span>
+                            </p>
+                        </li>
+                    }
+                </ul>
+                <br>
+            </div>
+        </div>
+    </div>
+</div>

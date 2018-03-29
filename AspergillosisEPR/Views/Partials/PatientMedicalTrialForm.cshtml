@@ -1,0 +1,47 @@
+﻿@model AspergillosisEPR.Models.Patients.PatientMedicalTrial
+<div class="patient-medical-trail">
+    <fieldset>
+        <div class="row">
+            <section class="col col-6">
+                <label asp-for="MedicalTrialId" class="select">
+                    <select asp-for="MedicalTrialId" asp-items="(SelectList) ViewBag.MedicalTrialsIds">
+                        <option value="">Select Medical Trail</option>
+                    </select>
+                    <i class="icon-append fa fa-user"></i>
+                </label>
+            </section>    
+            <section class="col col-6">
+                <label asp-for="PatientMedicalTrialStatusId" class="select">
+                    <select asp-for="PatientMedicalTrialStatusId" asp-items="(SelectList) ViewBag.PatientMedicalTrialStatusesIds">
+                        <option value="">Select Patient Status</option>
+                    </select>
+                    <i class="icon-append fa fa-user"></i>
+                </label>
+            </section>           
+        </div> 
+    </fieldset>
+    <fieldset>
+        <div class="row">
+            <section class="col col-4">
+                <label asp-for="IdentifiedDate" class="input">
+                    <i class="icon-append fa fa-calendar"></i>
+                    <input name="IdentifiedDate" id="IdentifiedDate" placeholder="Identified date" class="datepicker">
+                </label>
+            </section>
+            <section class="col col-4">
+                <label asp-for="ConsentedDate" class="input">
+                    <i class="icon-append fa fa-calendar"></i>
+                    <input name="ConsentedDate" id="ConsentedDate" placeholder="Consented date" class="datepicker">
+                </label>
+            </section>
+            <section class="col col-4">
+                <label asp-for="RecruitedDate" class="input">
+                    <i class="icon-append fa fa-calendar"></i>
+                    <input name="RecruitedDate" id="RecruitedDate" placeholder="Recruited date" class="datepicker">
+                </label>
+            </section>
+            <section class="col col-4">
+            </section>
+        </div>
+</fieldset>
+</div>

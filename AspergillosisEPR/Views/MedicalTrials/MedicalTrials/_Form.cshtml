@@ -4,14 +4,12 @@
             <label asp-for="Name" class="input">
                 <i class="icon-append fa fa-hospital-o"></i>
                 <input asp-for="Name" placeholder="Trial name">
-                <span asp-validation-for="Name" class="text-danger"></span>
             </label>
         <section class="col col-6">
             <label asp-for="MedicalTrialPrincipalInvestigatorId" class="select">
                 <select asp-for="MedicalTrialPrincipalInvestigatorId" asp-items="(SelectList) ViewBag.InvestigatorsIds">
                     <option value="">Select Principal Investigator</option>
                 </select>
-                <span asp-validation-for="MedicalTrialPrincipalInvestigatorId" class="text-danger"></span>
                 <i class="icon-append fa fa-user"></i>
             </label>
         </section>
@@ -19,21 +17,18 @@
             <label asp-for="Number" class="input">
                 <i class="icon-append fa fa-sticky-note"></i>
                 <input asp-for="Number" placeholder="Trial number">
-                <span asp-validation-for="Number" class="text-danger"></span>
             </label>
         </section>
         <section class="col col-6">
             <label asp-for="RandDNumber" class="input">
                 <i class="icon-append fa fa-sticky-note"></i>
                 <input asp-for="RandDNumber" placeholder="Enter R&D Number (optional)">
-                <span asp-validation-for="RandDNumber" class="text-danger"></span>
             </label>
         </section>
         <section class="col col-6">
             <label asp-for="RECNumber" class="input">
                 <i class="icon-append fa fa-sticky-note"></i>
                 <input asp-for="RECNumber" placeholder="Enter REC Number (optional)">
-                <span asp-validation-for="RECNumber" class="text-danger"></span>
             </label>
         </section>
         <section class="col col-6">
@@ -41,7 +36,6 @@
                 <select asp-for="MedicalTrialTypeId" asp-items="(SelectList) ViewBag.MedicalTrialsTypeIds">
                     <option value="">Select Trial Type</option>
                 </select>
-                <span asp-validation-for="MedicalTrialTypeId" class="text-danger"></span>
                 <i class="icon-append fa fa-user"></i>
             </label>
         </section>        
@@ -50,7 +44,6 @@
                 <select asp-for="MedicalTrialStatusId" asp-items="(SelectList) ViewBag.MedicalTrialsStatusesIds">
                     <option value="">Select Trial Status</option>
                 </select>
-                <span asp-validation-for="MedicalTrialStatusId" class="text-danger"></span>
                 <i class="icon-append fa fa-user"></i>
             </label>
         </section>

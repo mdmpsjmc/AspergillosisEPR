@@ -21,6 +21,25 @@ namespace AspergillosisEPR.Lib
             _viewBag = viewBag;
         }
 
+        public SelectList PopulatePatientMedicalTrialsStatusesDropdownList()
+        {
+            var statuses = _context.MedicalTrialPatientStatuses
+                                   .ToList();
+
+            return new SelectList(statuses, "ID", "Name");
+        }
+
+        public SelectList PouplateMedicalTrialsDropdownList()
+        {
+            var trails = _context.MedicalTrials
+                            .Include(mt => mt.TrialStatus)
+                            .Include(mt => mt.TrialType)
+                            .Include(mt => mt.PrincipalInvestigator)
+                               .ThenInclude(pi => pi.PersonTitle);
+
+            return new SelectList(trails, "ID", "Name");
+        }
+
         public SelectList PopulatePersonTitlesDropdownList()
         {
             var titles = _context.PersonTitles.ToList();
@@ -219,7 +238,5 @@ namespace AspergillosisEPR.Lib
                            select se;
             _viewBag.SearchSelect = new SelectList(statuses, "ID", "Name");
         }
-
-
     }
 }

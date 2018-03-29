@@ -125,7 +125,20 @@ namespace AspergillosisEPR.Controllers.MedicalTrials
 
             return Json(new { result = "ok" });
         }
-        
+
+        public IActionResult Details(int? id)
+        {
+            var medicalTrial = _context.MedicalTrials
+                                       .Include(t => t.PrincipalInvestigator)
+                                           .ThenInclude(i => i.PersonTitle)
+                                       .Include(t => t.TrialStatus)
+                                       .Include(t => t.TrialType)
+                                       .SingleOrDefaultAsync(p => p.ID == id)
+                                       .Result;
+
+            return PartialView(@"/Views/MedicalTrials/MedicalTrials/Details.cshtml", medicalTrial);
+        }
+
         [HttpPost, ActionName("Delete")]
         [Authorize(Roles = "Admin Role, Delete Role")]
         [ValidateAntiForgeryToken]

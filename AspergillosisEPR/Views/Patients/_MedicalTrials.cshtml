@@ -1,4 +1,11 @@
-﻿
-@*
-    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿<div class="col-12 medical-trails-forms" style="margin: 0px !important">
+</div>
+@if (User.IsInRole("Create Role") || User.IsInRole("Admin Role"))
+{
+    <a href="@Url.Action("PatientMedicalTrialForm", "Partials")" data-visible-row="div.patient-medical-trail:visible"  class="btn btn-success enroll-trial add-new-patient-partial" data-insert-into-class="div.medical-trails-forms" style="padding: 5px">
+        <i class="fa fa-plus"></i>
+        <span>
+            <strong>Enroll this patient to a trial</strong>
+        </span>
+    </a>
+}

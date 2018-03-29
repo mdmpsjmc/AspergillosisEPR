@@ -51,7 +51,7 @@ namespace AspergillosisEPR.Controllers.DataTables
                     RandDNumber = medicalTrial.RandDNumber,
                     RECNumber = medicalTrial.RECNumber,
                     TrialStatus = medicalTrial.TrialStatus.Name,
-                    PrincipalInvestigator = medicalTrial.PrincipalInvestigator.Name(),
+                    PrincipalInvestigator = medicalTrial?.PrincipalInvestigator?.Name(),
                     TrialType = medicalTrial.TrialType.Name
                 };
                 _list.Add(trialVm);

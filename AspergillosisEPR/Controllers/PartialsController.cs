@@ -194,6 +194,13 @@ namespace AspergillosisEPR.Controllers
             return PartialView();
         }
 
+        public IActionResult PatientMedicalTrialForm()
+        {
+            ViewBag.MedicalTrialsIds = _listResolver.PouplateMedicalTrialsDropdownList();
+            ViewBag.PatientMedicalTrialStatusesIds = _listResolver.PopulatePatientMedicalTrialsStatusesDropdownList();
+            return PartialView();
+        }
+
         private SelectList CriteriaClassesDropdownList()
         {
             return ViewBag.CriteriaClasses = new SelectList(PatientSearch.CriteriaClasses().OrderBy(x => x.Value), "Value", "Key", "Patient");
