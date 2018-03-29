@@ -1,0 +1,24 @@
+﻿@model AspergillosisEPR.Models.MedicalTrials.MedicalTrial
+<div class="modal fade new-settings-modal" tabindex="-1" role="dialog" id="edit-medical-trial-modal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">Edit Medical Trial</h4>
+            </div>
+            <div class="modal-body">
+                <div class="widget-body">
+                    <form asp-controller="MedicalTrials" asp-action="Edit" class="smart-form settings-form" data-ajax="true" data-ajax-method="POST" id="edit-medical-trial-form">
+                       @Html.Partial("/Views/MedicalTrials/MedicalTrials/_Form.cshtml", Model)
+                    </form>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-success submit-settings-item" data-tab="medical-trials">SAVE</button>
+            </div>
+        </div>
+    </div>
+</div>

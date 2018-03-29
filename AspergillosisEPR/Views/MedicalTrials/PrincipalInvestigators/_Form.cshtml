@@ -1,0 +1,28 @@
+﻿@model AspergillosisEPR.Models.MedicalTrials.MedicalTrialPrincipalInvestigator
+<fieldset>
+    <div class="row">
+        <section class="col col-2">
+            <label asp-for="PersonTitleId" class="select">
+                <select asp-for="PersonTitleId" asp-items="(SelectList) ViewBag.PersonTitlesIds">
+                    <option value="">Title</option>
+                </select>
+                <span asp-validation-for="PersonTitleId" class="text-danger"></span>
+                <i class="icon-append fa fa-user"></i>
+            </label>
+        </section>    
+        <section class="col col-5">
+            <label asp-for="FirstName" class="input">
+                <i class="icon-append fa fa-user"></i>
+                <input asp-for="FirstName" placeholder="First name">
+                <span asp-validation-for="FirstName" class="text-danger"></span>
+            </label>
+        </section>
+        <section class="col col-5">
+            <label asp-for="LastName" class="input">
+                <i class="icon-append fa fa-user"></i>
+                <input asp-for="LastName" placeholder="Last name">
+                <span asp-validation-for="LastName" class="text-danger"></span>
+            </label>
+        </section>    
+</div>
+</fieldset>

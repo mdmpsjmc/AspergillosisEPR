@@ -1,4 +1,26 @@
-﻿
-@*
-    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model AspergillosisEPR.Models.SettingsViewModels.SettingsViewModel
+<div class="table-responsive">
+    @if (User.IsInRole("Create Role") || User.IsInRole("Admin Role"))
+    {
+        <div class="button">
+            <a href="@Url.Action("New", "PrincipalInvestigators")" class="btn btn-success add-settings-item disable-default" data-klass="MedicalTrialsPrincipalInvestigator" data-tab="medical-trials">
+                <i class="fa fa-plus"></i> Add new principal investigator
+            </a>
+        </div>
+    }
+    <table class="table table-bordered table-hover table-stripped" id="principal_investigators_datatable" style="width: 100%" data-url="/DataTablePrincipleInvestigators/Load">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Title</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                @if (User.IsInRole("Update Role") || User.IsInRole("Admin Role"))
+                {
+                    <th>Action</th>
+                }
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+</div>
