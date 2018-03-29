@@ -18,5 +18,10 @@ namespace AspergillosisEPR.Models.MedicalTrials
         public int PersonTitleId { get; set; }
 
         public PersonTitle PersonTitle { get; set; }
+
+        public string Name()
+        {
+            return PersonTitle.Name + " " + FirstName + " " + LastName;
+        }
     }
 }

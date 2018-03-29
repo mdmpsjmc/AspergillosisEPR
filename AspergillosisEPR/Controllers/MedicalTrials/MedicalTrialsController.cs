@@ -38,7 +38,7 @@ namespace AspergillosisEPR.Controllers.MedicalTrials
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin Role, Create Role")]
-        public async Task<IActionResult> Create([Bind("Name, Description")] MedicalTrial medicalTrial)
+        public async Task<IActionResult> Create(MedicalTrial medicalTrial)
         {
             try
             {
@@ -63,51 +63,51 @@ namespace AspergillosisEPR.Controllers.MedicalTrials
         }
 
         [Authorize(Roles = "Admin Role, Update Role")]
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit(int? id, MedicalTrial medicalTrial)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var medicalTrial = await _context.MedicalTrials
-                                             .AsNoTracking()
-                                             .SingleOrDefaultAsync(m => m.ID == id);
-            if (medicalTrial == null)
+            var dbMedicalTrial = await _context.MedicalTrials
+                                               .AsNoTracking()
+                                               .SingleOrDefaultAsync(m => m.ID == id);
+            if (dbMedicalTrial == null)
             {
                 return NotFound();
             }
 
-            ViewBag.PrincipalInvestigatorsIds = _listResolver
-                                                    .PopulatePrimaryInvestigatorDropdownList(medicalTrial.MedicalTrialPrincipalInvestigatorId);
+            ViewBag.InvestigatorsIds = _listResolver
+                                              .PopulatePrimaryInvestigatorDropdownList(dbMedicalTrial.MedicalTrialPrincipalInvestigatorId);
             ViewBag.MedicalTrialsTypeIds = _listResolver
-                                                    .PopulateMedicalTrialTypesDropdownList(medicalTrial.MedicalTrialTypeId);
+                                              .PopulateMedicalTrialTypesDropdownList(dbMedicalTrial.MedicalTrialTypeId);
             ViewBag.MedicalTrialsStatusesIds = _listResolver
-                                                    .PopulateMedicalTrialStatusesDropdownList(medicalTrial.MedicalTrialStatusId);
+                                              .PopulateMedicalTrialStatusesDropdownList(dbMedicalTrial.MedicalTrialStatusId);
 
-            return PartialView(@"/Views/MedicalTrials/MedicalTrials/Edit.cshtml", medicalTrial);
+            return PartialView(@"/Views/MedicalTrials/MedicalTrials/Edit.cshtml", dbMedicalTrial);
         }
 
         [HttpPost, ActionName("Edit")]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin Role, Update Role")]
-        public async Task<IActionResult> EditMedicalTrial(int? id)
+        public async Task<IActionResult> EditMedicalTrial(int? id, MedicalTrial medicalTrial)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var medicalTrial = await _context.MedicalTrials
-                                             .AsNoTracking()
-                                             .SingleOrDefaultAsync(m => m.ID == id);
-            medicalTrial.Name = Request.Form["Name"];
-            medicalTrial.Description = Request.Form["Description"];
-            if (TryValidateModel(medicalTrial))
+            var dbMedicalTrial = await _context.MedicalTrials
+                                               .AsNoTracking()
+                                               .SingleOrDefaultAsync(m => m.ID == id);
+
+            UpdateMedicalTrial(dbMedicalTrial, medicalTrial);
+            if (TryValidateModel(dbMedicalTrial))
             {
                 try
                 {
-                    _context.MedicalTrials.Update(medicalTrial);
+                    _context.MedicalTrials.Update(dbMedicalTrial);
                     _context.SaveChanges();
                 }
                 catch (DbUpdateException /* ex */)
@@ -125,8 +125,7 @@ namespace AspergillosisEPR.Controllers.MedicalTrials
 
             return Json(new { result = "ok" });
         }
-
-
+        
         [HttpPost, ActionName("Delete")]
         [Authorize(Roles = "Admin Role, Delete Role")]
         [ValidateAntiForgeryToken]
@@ -137,5 +136,19 @@ namespace AspergillosisEPR.Controllers.MedicalTrials
             await _context.SaveChangesAsync();
             return Json(new { ok = "ok" });
         }
+
+        private void UpdateMedicalTrial(MedicalTrial dbMedicalTrial, 
+                                        MedicalTrial medicalTrial)
+        {
+            dbMedicalTrial.Description = medicalTrial.Description;
+            dbMedicalTrial.MedicalTrialPrincipalInvestigatorId = medicalTrial.MedicalTrialPrincipalInvestigatorId;
+            dbMedicalTrial.MedicalTrialStatusId = medicalTrial.MedicalTrialStatusId;
+            dbMedicalTrial.MedicalTrialTypeId = medicalTrial.MedicalTrialTypeId;
+            dbMedicalTrial.Name = medicalTrial.Name;
+            dbMedicalTrial.Number = medicalTrial.Number;
+            dbMedicalTrial.RandDNumber = medicalTrial.RandDNumber;
+            dbMedicalTrial.RECNumber = medicalTrial.RECNumber;
+        }
+
     }
 }

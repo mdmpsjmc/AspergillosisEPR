@@ -12,8 +12,10 @@
         <thead>
             <tr>
                 <th>ID</th>
-                <th>Trial Name</th>
-                <th>Description</th>
+                <th>Name</th>
+                <th>Type</th>
+                <th>Number</th>
+                <th>Principal Investigator</th>
                 @if (User.IsInRole("Update Role") || User.IsInRole("Admin Role"))
                 {
                     <th>Action</th>
