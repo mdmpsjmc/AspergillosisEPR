@@ -201,6 +201,16 @@ namespace AspergillosisEPR.Controllers
             return PartialView();
         }
 
+
+        [Authorize(Roles = "Update Role, Admin Role")]
+        public IActionResult EditPatientMedicalTrialForm()
+        {
+            ViewBag.Index = (string)Request.Query["index"];
+            ViewBag.MedicalTrialsIds = _listResolver.PouplateMedicalTrialsDropdownList();
+            ViewBag.PatientMedicalTrialStatusesIds = _listResolver.PopulatePatientMedicalTrialsStatusesDropdownList();
+            return PartialView();
+        }
+
         private SelectList CriteriaClassesDropdownList()
         {
             return ViewBag.CriteriaClasses = new SelectList(PatientSearch.CriteriaClasses().OrderBy(x => x.Value), "Value", "Key", "Patient");

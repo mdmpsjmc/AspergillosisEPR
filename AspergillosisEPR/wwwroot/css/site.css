@@ -111,6 +111,11 @@ div.tab-pane#ig{
     max-height: 400px
 }
 
+div.tab-pane#medical-trials {
+    overflow-y: auto;
+    min-height: 400px;
+    max-height: 400px
+}
 
 div.ig-chart-modal .modal-body {
     overflow-y: auto;

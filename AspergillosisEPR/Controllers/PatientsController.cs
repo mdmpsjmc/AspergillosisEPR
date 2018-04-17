@@ -167,11 +167,11 @@ namespace AspergillosisEPR.Controllers
                 return NotFound();
             }
             _listResolver.BindSelects(patient);
+            _listResolver.BindMedicalTrialsSelects(ViewBag, patient);
             ViewBag.CaseReportForms = (List <IGrouping<string, CaseReportFormResult>>)  _caseReportFormManager
                                       .GetGroupedCaseReportFormsForPatient(patient.ID);
             return PartialView(patient);
         }
-
 
         [Authorize(Roles = ("Admin Role, Update Role"))]
         [HttpPost, ActionName("Edit")]
@@ -181,6 +181,7 @@ namespace AspergillosisEPR.Controllers
                                                               [Bind("ID, ActivityScore, SymptomScore, ImpactScore, TotalScore")] PatientSTGQuestionnaire[] sTGQuestionnaires,
                                                               [Bind("ID, DateTaken, Value, ImmunoglobulinTypeId")] PatientImmunoglobulin[] patientImmunoglobulines,
                                                               [Bind("ID, DateTaken, FindingId, RadiologyTypeId, ChestLocationId, ChestDistributionId, GradeId, TreatmentResponseId, Note")] PatientRadiologyFinding[] radiololgyFindings,
+                                                              PatientMedicalTrial[] patientMedicalTrial,
                                                               CaseReportFormResult[] caseReportFormResult)
         {
             if (id == null)

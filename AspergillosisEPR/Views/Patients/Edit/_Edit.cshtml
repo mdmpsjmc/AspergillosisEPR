@@ -37,6 +37,13 @@
                             <a href="#radiology" data-toggle="tab"><i class="fa fa-fw fa-lg fa-stethoscope"></i> Radiology</a>
                         </li>
                         <li>
+                            <a href="#medical-trials" data-toggle="tab">
+                                <span class="mi-patient-chart-3879 tab-styled-custom2">
+                                    <span class="path2"></span>
+                                </span> Trials
+                            </a>
+                        </li>
+                        <li>
                             <a href="#case-report-forms" data-toggle="tab"><i class="fa fa-fw fa-lg fa-th-list"></i> Case Report Forms</a>
                         </li>
                     </ul>
@@ -59,6 +66,9 @@
                             </div>
                             <div class="tab-pane fade ig" id="radiology">
                                 @{ await Html.RenderPartialAsync("/Views/Patients/Edit/_RadiologyTab.cshtml"); }
+                            </div>
+                            <div class="tab-pane fade" id="medical-trials">
+                                @{ await Html.RenderPartialAsync("/Views/Patients/Edit/_MedicalTrials.cshtml"); }
                             </div>
                             <div class="tab-pane fade case-report-forms" id="case-report-forms">
                                 @Html.Partial("/Views/Patients/CaseReportForms/_Edit.cshtml")

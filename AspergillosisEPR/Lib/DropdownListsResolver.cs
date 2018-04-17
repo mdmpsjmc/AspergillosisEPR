@@ -21,15 +21,15 @@ namespace AspergillosisEPR.Lib
             _viewBag = viewBag;
         }
 
-        public SelectList PopulatePatientMedicalTrialsStatusesDropdownList()
+        public SelectList PopulatePatientMedicalTrialsStatusesDropdownList(object selectedItem = null)
         {
             var statuses = _context.MedicalTrialPatientStatuses
                                    .ToList();
 
-            return new SelectList(statuses, "ID", "Name");
+            return new SelectList(statuses, "ID", "Name", selectedItem);
         }
 
-        public SelectList PouplateMedicalTrialsDropdownList()
+        public SelectList PouplateMedicalTrialsDropdownList(object selectedItem = null)
         {
             var trails = _context.MedicalTrials
                             .Include(mt => mt.TrialStatus)
@@ -37,7 +37,7 @@ namespace AspergillosisEPR.Lib
                             .Include(mt => mt.PrincipalInvestigator)
                                .ThenInclude(pi => pi.PersonTitle);
 
-            return new SelectList(trails, "ID", "Name");
+            return new SelectList(trails, "ID", "Name", selectedItem);
         }
 
         public SelectList PopulatePersonTitlesDropdownList()
@@ -131,6 +131,22 @@ namespace AspergillosisEPR.Lib
             return new SelectList(drugsQuery.AsNoTracking(), "ID", "Name", selectedCategory);
         }
 
+        public void BindMedicalTrialsSelects(dynamic ViewBag, Patient patient)
+        {
+            List<SelectList> patientMedicalTrials = new List<SelectList>();
+            List<SelectList> patientMedicalTrialsStatuses = new List<SelectList>();
+
+            for (int i = 0; i < patient.MedicalTrials.OrderByDescending(t => t.IdentifiedDate).Count(); i++)
+            {
+                var item = patient.MedicalTrials.OrderByDescending(t => t.IdentifiedDate).ToList()[i];
+                patientMedicalTrials.Add(PouplateMedicalTrialsDropdownList(item.MedicalTrialId));
+                patientMedicalTrialsStatuses.Add(PopulatePatientMedicalTrialsStatusesDropdownList(item.PatientMedicalTrialStatusId));
+            }
+
+            ViewBag.MedicalTrialsIds = patientMedicalTrials;
+            ViewBag.MedicalTrialStatusIds = patientMedicalTrialsStatuses;
+        }
+
         public void BindSelects(Patient patient)
         {
             List<SelectList> diagnosesTypes = new List<SelectList>();
@@ -144,8 +160,7 @@ namespace AspergillosisEPR.Lib
             List<SelectList> chestLocations = new List<SelectList>();
             List<SelectList> grades = new List<SelectList>();
             List<SelectList> treatmentResponses = new List<SelectList>();
-
-
+       
 
             for (int i = 0; i < patient.PatientDiagnoses.Count; i++)
             {
@@ -205,6 +220,7 @@ namespace AspergillosisEPR.Lib
             _viewBag.ChestDistributionId = chestDistributions;
             _viewBag.GradeId = grades;
             _viewBag.TreatmentResponseId = treatmentResponses;
+       
             PopulatePatientStatusesDropdownList(patient.PatientStatusId);
         }
 

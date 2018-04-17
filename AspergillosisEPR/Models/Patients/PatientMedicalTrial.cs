@@ -14,8 +14,11 @@ namespace AspergillosisEPR.Models.Patients
         public int MedicalTrialId { get; set; }
         public int PatientMedicalTrialStatusId { get; set; }
         [Required]
+        [DisplayFormat(DataFormatString = "{dd-MM-yyyy}")]
         public DateTime IdentifiedDate { get; set; }
+        [DisplayFormat(DataFormatString = "{dd-MM-yyyy}")]
         public DateTime? ConsentedDate { get; set; }
+        [DisplayFormat(DataFormatString = "{dd-MM-yyyy}")]
         public DateTime? RecruitedDate { get; set; }
         public bool Consented { get; set; }
 

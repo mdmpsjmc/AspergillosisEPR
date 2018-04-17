@@ -1,0 +1,52 @@
+﻿@model AspergillosisEPR.Models.Patients.PatientMedicalTrial;
+<div class="patient-medical-trail">
+    <fieldset>
+        <div class="row">
+            <section class="col col-6">
+                <label asp-for="@(Model.MedicalTrialId)" class="select">
+                    @Html.DropDownList("PatientMedicalTrial[" + (string)ViewBag.Index + "].MedicalTrialId", (SelectList)ViewBag.MedicalTrialsIds, "Select Medical Model")
+                    <i></i>
+                    <span asp-validation-for="@(Model.MedicalTrialId)" class="text-danger"></span>
+                </label>
+            </section>
+            <section class="col col-6">
+                <label asp-for="@(Model.PatientMedicalTrialStatusId)" class="select">
+                    @Html.DropDownList("PatientMedicalTrial[" + (string)ViewBag.Index + "].PatientMedicalTrialStatusId", (SelectList)ViewBag.PatientMedicalTrialStatusesIds, "Select Model Status")
+                    <i></i>
+                    <span asp-validation-for="@(Model.PatientMedicalTrialStatusId)" class="text-danger"></span>
+                </label>
+            </section>
+        </div>
+    </fieldset>
+    <fieldset>
+        <section class="col col-6">
+            <label asp-for="@Model.Consented" class="checkbox">
+                <input type="checkbox" asp-for="@Model.Consented"  name="PatientMedicalTrial[@((string)ViewBag.Index)].Consented" id="PatientMedicalTrial_@((string)ViewBag.Index)__Consented">
+                <i></i> Patient Consented?
+            </label>
+        </section>
+        <section class="col col-4">
+            <label asp-for="@Model.ConsentedDate" class="input">
+                <i class="icon-append fa fa-calendar"></i>
+                <input asp-for="@Model.ConsentedDate" placeholder="Consented date" class="date-taken" type="text"  name="PatientMedicalTrial[@((string)ViewBag.Index)].ConsentedDate" id="PatientMedicalTrial_@((string)ViewBag.Index)__ConsentedDate">
+            </label>
+        </section>
+    </fieldset>
+    <fieldset>
+        <div class="row">
+            <section class="col col-6">
+                <label asp-for="@Model.IdentifiedDate" class="input">
+                    <i class="icon-append fa fa-calendar"></i>
+                    <input asp-for="@Model.IdentifiedDate" placeholder="Identified date" class="date-taken" type="text"  name="PatientMedicalTrial[@((string)ViewBag.Index)].IdentifiedDate" id="PatientMedicalTrial_@((string)ViewBag.Index)__IdentifiedDate">
+                </label>
+            </section>
+            <section class="col col-6">
+                <label asp-for="@Model.RecruitedDate" class="input">
+                    <i class="icon-append fa fa-calendar"></i>
+                    <input asp-for="@Model.RecruitedDate" placeholder="Recruited date" class="date-taken" type="text" name="PatientMedicalTrial[@((string)ViewBag.Index)].RecruitedDate" id="PatientMedicalTrial_@((string)ViewBag.Index)__RecruitedDate">
+                </label>
+            </section>
+            <section class="col col-4"></section>
+        </div>
+    </fieldset>
+</div>
