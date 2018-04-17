@@ -132,6 +132,7 @@
                 || field.match("sTGQuestionnaires")
                 || field.match("patientImmunoglobulin")
                 || field.match("Finding")
+                || field.match("patientMedicalTrial")
                 || field.match("caseReportFormResult")) {
                 var fieldName = fieldCapitalized;
                 field = fieldCapitalized.replace(new RegExp("\\[", "g"), "_").replace(new RegExp("].","g"), "__");            

@@ -93,6 +93,17 @@ namespace AspergillosisEPR.Lib
             }
         }
 
+        public void AddMedicalTrials(Patient patient, PatientMedicalTrial[] patientMedicalTrial)
+        {
+            patient.MedicalTrials = new List<PatientMedicalTrial>();
+            foreach(var trial in patientMedicalTrial)
+            {
+                trial.PatientId = patient.ID;
+                _context.PatientMedicalTrials.Add(trial);
+                patient.MedicalTrials.Add(trial);
+            }
+        }
+
         public void UpdateDiagnoses(PatientDiagnosis[] diagnoses, Patient patientToUpdate)
         {
             foreach (var diagnosis in diagnoses)
