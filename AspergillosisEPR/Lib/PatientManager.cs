@@ -54,6 +54,10 @@ namespace AspergillosisEPR.Lib
                                  .Include(p => p.PatientRadiologyFindings)
                                     .ThenInclude(prf => prf.TreatmentResponse)
                                 .Include(p => p.PatientRadiologyFindings)
+                                .Include(p => p.MedicalTrials)
+                                    .ThenInclude(mt => mt.MedicalTrial)
+                                .Include(p => p.MedicalTrials)
+                                    .ThenInclude(mt => mt.PatientMedicalTrialStatus)
                                 .Include(p => p.PatientMeasurements)
                                 .AsNoTracking()
                                 .SingleOrDefaultAsync(m => m.ID == id);

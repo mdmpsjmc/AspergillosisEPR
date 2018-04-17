@@ -37,6 +37,13 @@
                             <a href="#measurements" data-toggle="tab"><i class="fa fa-fw fa-lg fa-dashboard"></i> Weight</a>
                         </li>
                         <li>
+                            <a href="#medical-trials" data-toggle="tab">
+                                <span class="mi-patient-chart-3879 tab-styled-custom2">
+                                    <span class="path2"></span>
+                                </span> Trials
+                            </a>
+                        </li>
+                        <li>
                             <a href="#case-report-forms" data-toggle="tab"><i class="fa fa-fw fa-lg fa-th-list"></i> Case Report Forms</a>
                         </li>
                     </ul>
@@ -65,6 +72,9 @@
                         </div>
                         <div class="tab-pane fade measurements" id="measurements">
                             @Html.Partial("/Views/Patients/Details/Measurements.cshtml")
+                        </div>
+                        <div class="tab-pane fade" id="medical-trials">
+                            @{ await Html.RenderPartialAsync("/Views/Patients/Details/_MedicalTrials.cshtml"); }
                         </div>
                         <div class="tab-pane fade case-report-forms" id="case-report-forms">
                             @Html.Partial("/Views/Patients/CaseReportForms/Forms.cshtml")

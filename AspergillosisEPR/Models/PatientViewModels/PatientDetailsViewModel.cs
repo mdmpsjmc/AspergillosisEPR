@@ -17,6 +17,7 @@ namespace AspergillosisEPR.Models.PatientViewModels
         public ICollection<PatientDiagnosis> OtherDiagnoses { get; set; }
         public ICollection<PatientDiagnosis> PastDiagnoses { get; set; }
         public ICollection<PatientDrug> PatientDrugs { get; set; }
+        public ICollection<PatientMedicalTrial> MedicalTrials { get; private set; }
         public ICollection<PatientSTGQuestionnaire> STGQuestionnaires { get; set; }
         public ICollection<PatientImmunoglobulin> PatientImmunoglobulines { get; set; }
         public ICollection<PatientRadiologyFinding> PatientRadiologyFindings { get; set; }
@@ -89,6 +90,7 @@ namespace AspergillosisEPR.Models.PatientViewModels
                                                                     ToList();
             }
             patientDetailsViewModel.PatientDrugs = patient.PatientDrugs;
+            patientDetailsViewModel.MedicalTrials = patient.MedicalTrials;
             patientDetailsViewModel.STGQuestionnaires = patient.STGQuestionnaires;
             patientDetailsViewModel.PatientImmunoglobulines = patient.PatientImmunoglobulines;
             patientDetailsViewModel.PatientRadiologyFindings = patient.PatientRadiologyFindings;

@@ -1,0 +1,50 @@
+﻿@model AspergillosisEPR.Models.Patients.PatientMedicalTrial
+<div class="col col-12 col-sm-12 col-md-12">
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <tr>
+                <td>Status:</td>
+                <td class="text-uppercase">@Model.PatientMedicalTrialStatus.Name</td>
+            </tr>
+            <tr>
+                @if (Model.Consented)
+                {
+                    <td>Consented</td>
+                    <td>
+                        <label  class="label label-success">
+                            YES
+                        </label>
+                    </td>
+                    @if(Model.ConsentedDate != null)
+                    { 
+                        <td>Consented Date</td>
+                        <td>@Model.ConsentedDate.Value.ToString("dd/MMM/yyy")</td>
+                    }
+                }
+                else
+                {
+                    <td>Consented</td>
+                    <td class="label label-danger">
+                        <label class="label label-success">
+                            NO
+                        </label>
+                    </td>
+                }
+            </tr>
+            @if(Model.IdentifiedDate != null)
+            {
+                <tr>
+                    <td>Identified Date</td>
+                    <td>@Model.IdentifiedDate.ToString("dd/MMM/yyy")</td>
+                </tr>              
+            }
+            @if (Model.RecruitedDate != null)
+            {
+                <tr>
+                    <td>Recruited Date</td>
+                    <td>@Model.RecruitedDate.Value.ToString("dd/MMM/yyy")</td>
+                </tr>
+            }
+        </table>
+    </div>
+</div>

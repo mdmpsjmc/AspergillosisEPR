@@ -21,5 +21,7 @@ namespace AspergillosisEPR.Models.Patients
 
         public Patient Patient { get; set; }
         public MedicalTrial MedicalTrial { get; set; }
+        
+        public MedicalTrialStatus PatientMedicalTrialStatus { get; set; }
     }
 }
