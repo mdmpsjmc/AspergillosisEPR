@@ -56,6 +56,11 @@
                     <section class="col col-4"></section>
                 </div>
             </fieldset>
+                <div class="row">
+                    <a href="@Url.Action("Delete", "PatientMedicalTrials", new { patientId = trial.PatientId, id = trial.ID})" class="btn btn-danger remove-existing-item pull-right" data-id="@trial.ID" data-what="Patient Trial Enrollment" data-toggle="tooltip" data-title="Remove Patient Trial Enrollment" style="padding: 5px">
+                        <i class="fa fa-trash"></i>
+                    </a>
+                </div>
         </div>
     }
     </div>

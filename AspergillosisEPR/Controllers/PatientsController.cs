@@ -271,6 +271,8 @@ namespace AspergillosisEPR.Controllers
             {
                 _context.Entry(trial).Reference(t => t.MedicalTrial).Load();
                 _context.Entry(trial).Reference(t => t.PatientMedicalTrialStatus).Load();
+                var medicalTrial = trial.MedicalTrial;
+                _context.Entry(medicalTrial).Reference(t => t.TrialStatus).Load();
             }
         }
 

@@ -18,6 +18,7 @@
                     <div id="@(trial.ID)" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
                         <div class="panel-body">
                             <pre>@trial.MedicalTrial.Description</pre>
+                            <strong>Trial Status:</strong>&nbsp;<label class="text-uppercase label-primary" style="color: white">@trial.MedicalTrial.TrialStatus.Name</label>
                             @Html.Partial("/Views/MedicalTrials/MedicalTrials/_PatientDetails.cshtml", trial)
                         </div>
                     </div>
