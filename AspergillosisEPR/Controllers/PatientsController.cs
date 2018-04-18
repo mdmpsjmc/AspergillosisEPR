@@ -121,7 +121,7 @@ namespace AspergillosisEPR.Controllers
             }
 
             var patient = await _patientManager.FindPatientWithRelationsByIdAsync(id);
-
+            LoadReleatedMedicalTrials(patient);
             if (patient == null)
             {
                 return NotFound();
@@ -131,7 +131,7 @@ namespace AspergillosisEPR.Controllers
                                                 .BuildPatientViewModel(_context, patient, _caseReportFormManager);
 
             return PartialView(patientDetailsViewModel);
-        }
+        }      
 
         [Authorize(Roles = ("Admin Role, Read Role"))]
         [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
@@ -162,6 +162,7 @@ namespace AspergillosisEPR.Controllers
                 return NotFound();
             }
             Patient patient = await _patientManager.FindPatientWithRelationsByIdAsync(id);
+            LoadReleatedMedicalTrials(patient);
             if (patient == null)
             {
                 return NotFound();
@@ -263,11 +264,21 @@ namespace AspergillosisEPR.Controllers
             return Json(new { ok = "ok" });
         }
 
+        private void LoadReleatedMedicalTrials(Patient patient)
+        {
+            _context.Entry(patient).Collection(c => c.MedicalTrials).Load();
+            foreach (var trial in patient.MedicalTrials)
+            {
+                _context.Entry(trial).Reference(t => t.MedicalTrial).Load();
+                _context.Entry(trial).Reference(t => t.PatientMedicalTrialStatus).Load();
+            }
+        }
+
         private void CheckIsUnique(Patient existingPatient)
         {
             if (existingPatient != null)
             {
-                ModelState.AddModelError("RM2Number", "Patient with this RM2 Number already exists in database");
+                ModelState.AddModelError("RM2Number", "Patient with this identifier already exists in database");
             }
         }
     }
