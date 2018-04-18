@@ -3,13 +3,13 @@
 @if (Model.MedicalTrials != null && Model.MedicalTrials.Any())
 {
     <div class="col-sm-12">
-        <div class="panel-group smart-accordion-default" id="accordion-2">
+        <div class="panel-group smart-accordion-default" id="trial-2">
             @foreach (var trial in Model.MedicalTrials.OrderByDescending(t => t.IdentifiedDate))
             {
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <h4 class="panel-title">
-                            <a data-toggle="collapse" data-parent="#accordion-2" href="#@(trial.ID)" aria-expanded="false" class="collapsed">
+                            <a data-toggle="collapse" data-parent="#trial-2" href="trial#@(trial.ID)" aria-expanded="false" class="collapsed">
                                 <i class="fa fa-lg fa-angle-down pull-right"></i> <i class="fa fa-lg fa-angle-up pull-right"></i>
                                 @trial.MedicalTrial.Name
                             </a>

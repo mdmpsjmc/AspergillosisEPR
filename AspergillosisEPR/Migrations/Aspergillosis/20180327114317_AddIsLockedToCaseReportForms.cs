@@ -12,8 +12,7 @@ namespace AspergillosisEPR.Migrations.Aspergillosis
                 name: "IsLocked",
                 table: "CaseReportForms",
                 nullable: false,
-                defaultValue: false);
-          
+                defaultValue: false);          
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

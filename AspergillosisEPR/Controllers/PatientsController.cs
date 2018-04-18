@@ -181,7 +181,7 @@ namespace AspergillosisEPR.Controllers
                                                               [Bind("ID, ActivityScore, SymptomScore, ImpactScore, TotalScore")] PatientSTGQuestionnaire[] sTGQuestionnaires,
                                                               [Bind("ID, DateTaken, Value, ImmunoglobulinTypeId")] PatientImmunoglobulin[] patientImmunoglobulines,
                                                               [Bind("ID, DateTaken, FindingId, RadiologyTypeId, ChestLocationId, ChestDistributionId, GradeId, TreatmentResponseId, Note")] PatientRadiologyFinding[] radiololgyFindings,
-                                                              PatientMedicalTrial[] patientMedicalTrial,
+                                                              [Bind("ID, PatientId, MedicalTrialId, PatientMedicalTrialStatusId, IdentifiedDate, ConsentedDate, RecruitedDate, Consented")] PatientMedicalTrial[] patientMedicalTrial,
                                                               CaseReportFormResult[] caseReportFormResult)
         {
             if (id == null)
@@ -196,6 +196,8 @@ namespace AspergillosisEPR.Controllers
             _patientManager.UpdateSGRQ(sTGQuestionnaires, patientToUpdate);
             _patientManager.UpdateImmunoglobines(patientImmunoglobulines, patientToUpdate);
             _patientManager.UpdatePatientRadiology(radiololgyFindings, patientToUpdate);
+            _patientManager.UpdatePatientMedicalTrials(patientMedicalTrial, patientToUpdate);
+
             _caseReportFormManager.UpdateCaseReportFormsForPatient(caseReportFormResult, patientToUpdate);
 
             _context.Entry(patientToUpdate).State = EntityState.Modified;

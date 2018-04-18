@@ -250,7 +250,6 @@
                 duration: 2000,
                 onComplete: function (animation) {
                     var imageUrl = stackedLine.toBase64Image(); 
-                    console.log(imageUrl);
                     $("img#sgrq-chart-image").attr("src", imageUrl);
                     $("a.export-trigger").removeAttr("disabled");
                 }

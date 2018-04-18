@@ -208,7 +208,7 @@ namespace AspergillosisEPR.Lib
             }
         }
 
-        internal void UpdatePatientRadiology(PatientRadiologyFinding[] patientRadiologyFinding, 
+        public void UpdatePatientRadiology(PatientRadiologyFinding[] patientRadiologyFinding, 
                                              Patient patientToUpdate)
         {
             foreach (var radiology in patientRadiologyFinding)
@@ -230,6 +230,35 @@ namespace AspergillosisEPR.Lib
                     radiologyToUpdate.Note = radiology.Note;
                     radiologyToUpdate.TreatmentResponseId = radiology.TreatmentResponseId;
                     _context.Update(radiologyToUpdate);
+                }
+            }
+        }
+
+        public void UpdatePatientMedicalTrials(PatientMedicalTrial[] trials, 
+                                               Patient patientToUpdate)
+        {
+            if (patientToUpdate.MedicalTrials == null)
+            {
+                patientToUpdate.MedicalTrials = new List<PatientMedicalTrial>();
+            }
+            foreach (var trial in trials)
+            {
+                if (trial.ID == 0)
+                {
+                    trial.PatientId = patientToUpdate.ID;
+                    patientToUpdate.MedicalTrials.Add(trial);
+                    _context.Update(trial);
+                }
+                else
+                {
+                    var trialToUpdate = _context.PatientMedicalTrials.SingleOrDefault(t => t.ID == trial.ID);
+                    trialToUpdate.Consented = trial.Consented;
+                    trialToUpdate.ConsentedDate = trial.ConsentedDate;
+                    trialToUpdate.RecruitedDate = trial.RecruitedDate;
+                    trialToUpdate.IdentifiedDate = trial.IdentifiedDate;
+                    trialToUpdate.MedicalTrialId = trial.MedicalTrialId;
+                    trialToUpdate.PatientMedicalTrialStatusId = trial.PatientMedicalTrialStatusId;
+                    _context.Update(trialToUpdate);
                 }
             }
         }

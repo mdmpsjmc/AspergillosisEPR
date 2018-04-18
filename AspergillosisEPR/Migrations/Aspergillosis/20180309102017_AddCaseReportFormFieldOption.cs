@@ -64,13 +64,7 @@ namespace AspergillosisEPR.Migrations.Aspergillosis
                 table: "CaseReportFormFieldOptions",
                 column: "CaseReportFormOptionChoiceId");
 
-            migrationBuilder.AddForeignKey(
-                name: "FK_PatientMeasurements_Patients_PatientId",
-                table: "PatientMeasurements",
-                column: "PatientId",
-                principalTable: "Patients",
-                principalColumn: "ID",
-                onDelete: ReferentialAction.Cascade);
+      
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
