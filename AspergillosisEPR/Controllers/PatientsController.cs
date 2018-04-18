@@ -143,7 +143,7 @@ namespace AspergillosisEPR.Controllers
             }
 
             var patient = await _patientManager.FindPatientWithRelationsByIdAsync(id);
-
+            LoadReleatedMedicalTrials(patient);
             if (patient == null)
             {
                 return NotFound();

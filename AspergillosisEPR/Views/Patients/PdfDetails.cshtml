@@ -62,3 +62,9 @@ else
     <h2>Case Report Forms</h2>
     @Html.Partial("/Views/Patients/CaseReportForms/_PdfForms.cshtml")
 }
+
+@if (Model.ShowTrials)
+{
+    <h2>Enrolled Trials</h2>
+    @Html.Partial("/Views/Patients/MedicalTrials/_PdfDetails.cshtml")
+}

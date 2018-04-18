@@ -34,6 +34,7 @@ namespace AspergillosisEPR.Models.PatientViewModels
         public bool ShowWeight { get; set; }
         public bool ShowDetails { get; set; }
         public bool ShowCaseReportForms { get; set; }
+        public bool ShowTrials { get; set; }
 
         public string SgrqImageChartFile { get; set; }
 
@@ -90,6 +91,7 @@ namespace AspergillosisEPR.Models.PatientViewModels
                                                                     ToList();
             }
             patientDetailsViewModel.PatientDrugs = patient.PatientDrugs;
+            LoadReleatedMedicalTrials(context, patient);
             patientDetailsViewModel.MedicalTrials = patient.MedicalTrials;
             patientDetailsViewModel.STGQuestionnaires = patient.STGQuestionnaires;
             patientDetailsViewModel.PatientImmunoglobulines = patient.PatientImmunoglobulines;
@@ -121,5 +123,18 @@ namespace AspergillosisEPR.Models.PatientViewModels
         {
             return PastDiagnoses != null && PastDiagnoses.Any();
         }
+
+        private static void LoadReleatedMedicalTrials(AspergillosisContext context, Patient patient)
+        {
+            context.Entry(patient).Collection(c => c.MedicalTrials).Load();
+            foreach (var trial in patient.MedicalTrials)
+            {
+                context.Entry(trial).Reference(t => t.MedicalTrial).Load();
+                context.Entry(trial).Reference(t => t.PatientMedicalTrialStatus).Load();
+                var medicalTrial = trial.MedicalTrial;
+                context.Entry(medicalTrial).Reference(t => t.TrialStatus).Load();
+            }
+        }
+
     }
 }
