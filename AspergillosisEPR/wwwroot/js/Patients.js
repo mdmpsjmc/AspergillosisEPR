@@ -176,6 +176,7 @@
                 CaseReportForms.onPatientCaseReportFormSelectChange();
             });
             CaseReportForms.deletePartialFromPopup();
+            deletePartialFromPopup();
         });
     }
 
@@ -243,6 +244,7 @@
                 $("select[multiple='multiple']").multiSelect();
                 CaseReportForms.onPatientCaseReportFormSelectChange();
                 CaseReportForms.deletePartialFromPopup();
+                deletePartialFromPopup();
             });
         });
     }
