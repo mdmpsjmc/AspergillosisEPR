@@ -145,7 +145,7 @@ namespace AspergillosisEPR.Lib.Exporters
            
             var propertyName = property.Name;
             if (propertyName == "PatientId") return;
-            if (propertyName.Contains("Id") && !propertyName.Contains("Ids"))
+            if (propertyName.Contains("Id") && !propertyName.Contains("Ids") && !propertyName.StartsWith("Id"))
             {
                 var navigationPropertyName = propertyName.Replace("Id", "");
                 var navigationProperty = item.GetType().GetProperty(navigationPropertyName);
@@ -158,7 +158,16 @@ namespace AspergillosisEPR.Lib.Exporters
                 valueCell.SetCellValue(nameValue);
             } else
             {
-                switch (Type.GetTypeCode(property.PropertyType))
+                TypeCode typeCode;
+                if (property.PropertyType.IsGenericType && property.PropertyType.GetGenericTypeDefinition() == typeof(Nullable<>))
+                {
+                    Type propertyType = Nullable.GetUnderlyingType(property.PropertyType);
+                    typeCode = Type.GetTypeCode(propertyType);
+                } else
+                {
+                    typeCode = Type.GetTypeCode(property.PropertyType);
+                }
+                switch (typeCode)
                 {
                     case TypeCode.Decimal:
                         IDataFormat format = _outputWorkbook.CreateDataFormat();
@@ -180,7 +189,7 @@ namespace AspergillosisEPR.Lib.Exporters
                     case TypeCode.DateTime:
                         var datePropertyValue = Convert.ToDateTime(property.GetValue(item));
                         valueCell.SetCellValue(datePropertyValue.ToString("dd/MM/yyyy"));
-                        break;
+                        break;                    
                     default:
                         var propVal = property.GetValue(item)?.ToString();
                         valueCell.SetCellType(CellType.String);
@@ -251,6 +260,7 @@ namespace AspergillosisEPR.Lib.Exporters
             dictionary.Add("Ig", _patientDetailsVM.PatientImmunoglobulines.OrderBy(pi => pi.DateTaken).ToList<object>());
             dictionary.Add("CaseReportForms", _patientDetailsVM.CaseReportForms.SelectMany(f => f).OrderBy(f => f.DateTaken).ToList<object>());
             dictionary.Add("Radiology", _patientDetailsVM.PatientRadiologyFindings.ToList<object>());
+            dictionary.Add("Trials", _patientDetailsVM.MedicalTrials.OrderByDescending(t => t.IdentifiedDate).ToList<object>());
             dictionary.Add("Weight", _patientDetailsVM.PatientMeasurements.OrderByDescending(pi => pi.DateTaken).ToList<object>());
             return dictionary[tabName];
         }

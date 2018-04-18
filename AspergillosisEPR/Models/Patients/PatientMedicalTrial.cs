@@ -1,4 +1,5 @@
-﻿using AspergillosisEPR.Models.MedicalTrials;
+﻿using AspergillosisEPR.Lib.Exporters;
+using AspergillosisEPR.Models.MedicalTrials;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace AspergillosisEPR.Models.Patients
 {
-    public class PatientMedicalTrial
+    public class PatientMedicalTrial : Exportable
     {
         public int ID { get; set; }
         public int PatientId { get; set; }
@@ -26,5 +27,13 @@ namespace AspergillosisEPR.Models.Patients
         public MedicalTrial MedicalTrial { get; set; }
         
         public MedicalTrialPatientStatus PatientMedicalTrialStatus { get; set; }
+
+        override public List<string> ExcludedProperties()
+        {
+            return new List<string>()
+            {
+                "PatientId", "Patient", "PatientMedicalTrialStatus", "MedicalTrial"
+            };
+        }
     }
 }
