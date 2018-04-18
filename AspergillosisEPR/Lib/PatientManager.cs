@@ -98,6 +98,10 @@ namespace AspergillosisEPR.Lib
 
         public void AddMedicalTrials(Patient patient, PatientMedicalTrial[] patientMedicalTrial)
         {
+            if (patientMedicalTrial.Length == 1 && patientMedicalTrial[0] == null)
+            {
+                return;
+            }
             patient.MedicalTrials = new List<PatientMedicalTrial>();
             foreach(var trial in patientMedicalTrial)
             {

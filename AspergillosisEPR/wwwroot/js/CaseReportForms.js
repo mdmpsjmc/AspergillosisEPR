@@ -102,6 +102,7 @@
                 $('input.datepicker').datetimepicker({
                     format: 'DD/MM/YYYY'
                 });
+                CaseReportForms.deletePartialFromPopup();
             });
         });
     }

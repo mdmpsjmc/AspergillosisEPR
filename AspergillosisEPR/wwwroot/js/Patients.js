@@ -174,9 +174,11 @@
                 $("div#new-patient-modal").modal("show");
                 initPatientsDateTimePickers();
                 CaseReportForms.onPatientCaseReportFormSelectChange();
+                onPatientStatusChange();
+                CaseReportForms.deletePartialFromPopup();
+                deletePartialFromPopup();
             });
-            CaseReportForms.deletePartialFromPopup();
-            deletePartialFromPopup();
+          
         });
     }
 
@@ -245,6 +247,7 @@
                 CaseReportForms.onPatientCaseReportFormSelectChange();
                 CaseReportForms.deletePartialFromPopup();
                 deletePartialFromPopup();
+                onPatientStatusChange();
             });
         });
     }
