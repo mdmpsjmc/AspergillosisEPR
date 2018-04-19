@@ -159,7 +159,8 @@ namespace AspergillosisEPR.Lib.Exporters
             } else
             {
                 TypeCode typeCode;
-                if (property.PropertyType.IsGenericType && property.PropertyType.GetGenericTypeDefinition() == typeof(Nullable<>))
+                bool isNullableValue = property.PropertyType.IsGenericType && property.PropertyType.GetGenericTypeDefinition() == typeof(Nullable<>);
+                if (isNullableValue)
                 {
                     Type propertyType = Nullable.GetUnderlyingType(property.PropertyType);
                     typeCode = Type.GetTypeCode(propertyType);
