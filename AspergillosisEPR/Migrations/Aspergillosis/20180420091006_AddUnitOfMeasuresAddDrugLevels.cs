@@ -25,13 +25,7 @@ namespace AspergillosisEPR.Migrations.Aspergillosis
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_PatientDrugLevel", x => x.ID);
-                    table.ForeignKey(
-                        name: "FK_PatientDrugLevel_Drugs_DrugId",
-                        column: x => x.DrugId,
-                        principalTable: "Drugs",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Cascade);
+                    table.PrimaryKey("PK_PatientDrugLevel", x => x.ID);                  
                     table.ForeignKey(
                         name: "FK_PatientDrugLevel_Patients_PatientId",
                         column: x => x.PatientId,

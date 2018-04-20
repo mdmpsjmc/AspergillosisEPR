@@ -17,15 +17,7 @@ namespace AspergillosisEPR.Migrations.Aspergillosis
             migrationBuilder.CreateIndex(
                 name: "IX_PatientDrugLevel_UnitOfMeasurementId",
                 table: "PatientDrugLevel",
-                column: "UnitOfMeasurementId");
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_PatientDrugLevel_UnitOfMeasurements_UnitOfMeasurementId",
-                table: "PatientDrugLevel",
-                column: "UnitOfMeasurementId",
-                principalTable: "UnitOfMeasurements",
-                principalColumn: "ID",
-                onDelete: ReferentialAction.Cascade);
+                column: "UnitOfMeasurementId");         
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

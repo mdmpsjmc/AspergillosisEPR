@@ -13,19 +13,18 @@ namespace AspergillosisEPR.Lib
 {
     public class PatientDrugLevelResolver
     {
-        private AspergillosisContext _context;
-        private Drug _drug;
-        private UnitOfMeasurement _uom;
+        private AspergillosisContext _context;        
         public PatientDrugLevel PatientDrugLevel;
 
-        public PatientDrugLevelResolver(AspergillosisContext context, String drugName)
+
+        public PatientDrugLevelResolver(AspergillosisContext context, Drug drug, UnitOfMeasurement uom)
         {
             _context = context;
-            PatientDrugLevel = new PatientDrugLevel();
-            _drug = _context.Drugs.Where(d => d.Name.Contains(drugName)).FirstOrDefault();
-            _uom = _context.UnitOfMeasurements.Where(uom => uom.Name.Contains("mg/L")).FirstOrDefault();
-            PatientDrugLevel.Drug = _drug;
-            PatientDrugLevel.Unit = _uom;
+            PatientDrugLevel = new PatientDrugLevel()
+            {
+                Drug = drug,
+                Unit = uom
+            };                        
         }
 
         public void SetProperty(string propertyName, string propertyValue)

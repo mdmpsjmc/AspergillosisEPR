@@ -17,12 +17,16 @@ namespace AspergillosisEPR.Lib.Importers.Implementations
     {
         private static string IMPORTED_DRUG_LEVEL_NAME = "Itraconazole";
         private PatientDrugLevelResolver _resolver;
+        private Drug _drug;
+        private UnitOfMeasurement _uom;
         public IntraDrugLevelExcelImporter(FileStream stream, 
                                            IFormFile file, 
                                            string fileExtension, AspergillosisContext context) : base(stream, file, fileExtension, context)
         {
             
             _context = context;
+            _drug = _context.Drugs.Where(d => d.Name.Contains(IMPORTED_DRUG_LEVEL_NAME)).FirstOrDefault();
+            _uom = _context.UnitOfMeasurements.Where(uom => uom.Name.Contains("mg/L")).FirstOrDefault();
         }
 
         public static Hashtable HeadersDictionary()
@@ -49,24 +53,31 @@ namespace AspergillosisEPR.Lib.Importers.Implementations
 
                 if (existingImportedPatient != null)
                 {
-                    var concatenated = patientFromExcel.DrugLevels.ToList().Concat(existingImportedPatient.DrugLevels.ToList());
+                    var concatenated = patientFromExcel.DrugLevels.ToList().
+                                            Concat(existingImportedPatient.DrugLevels.ToList());
+
                     existingImportedPatient.DrugLevels = concatenated.ToList();
                     patientFromExcel = existingImportedPatient;
                 }
 
-                CompareIfAlreadyImportedInDatabase(patientFromExcel, existingImportedPatient);
+                CheckIfAlreadyImportedInDatabase(patientFromExcel, existingImportedPatient);
             };
             InitializeSheetProcessingForRows(HeadersDictionary(), currentSheet, sheetProcessingAction);
         }
 
-        private void CompareIfAlreadyImportedInDatabase(Patient patientFromExcel, Patient existingImportedPatient)
+        private void CheckIfAlreadyImportedInDatabase(Patient patientFromExcel, Patient existingImportedPatient)
         {
             var dbPatient = FindPatientInDatabase(patientFromExcel);
+            if (dbPatient != null && !string.IsNullOrEmpty(patientFromExcel.NhsNumber)) dbPatient.NhsNumber = patientFromExcel.NhsNumber;
+
             if (dbPatient != null)
             {
-                var drugLevels = patientFromExcel.DrugLevels.Select(dl => dl.ResultValue).ToList()
-                                                                   .Except(dbPatient.DrugLevels.Select(dl => dl.ResultValue).ToList());
-                var toInsertDrugLevels = patientFromExcel.DrugLevels.Where(dl => drugLevels.Contains(dl.ResultValue));
+                var excelPatientDrugLevelList = patientFromExcel.DrugLevels.Select(dl => dl.ResultValue).ToList();
+                var dbPatientDrugLevelList = dbPatient.DrugLevels.Select(dl => dl.ResultValue).ToList();
+                var newDrugLevels = excelPatientDrugLevelList.Except(dbPatientDrugLevelList);
+
+                var toInsertDrugLevels = patientFromExcel.DrugLevels.Where(dl => newDrugLevels.Contains(dl.ResultValue));
+
                 foreach (var drugLevel in toInsertDrugLevels)
                 {
                     dbPatient.DrugLevels.Add(drugLevel);
@@ -109,7 +120,8 @@ namespace AspergillosisEPR.Lib.Importers.Implementations
             {
                 return null;
             }
-            var dbPatient = _context.Patients.Where(p => p.FirstName.ToLower() == importedPatient.FirstName.ToLower()
+            string justFirstName = importedPatient.FirstName.Split(" ")[0].ToLower();
+            var dbPatient = _context.Patients.Where(p => p.FirstName.ToLower() == justFirstName
                                                       && p.LastName.ToLower() == importedPatient.LastName.ToLower()
                                                       && p.DOB.Date == importedPatient.DOB.Date)
                                              .Include(p => p.DrugLevels)
@@ -126,7 +138,7 @@ namespace AspergillosisEPR.Lib.Importers.Implementations
 
         private Patient ReadCellsForPatient(Patient patient, IRow row, int cellCount)
         {
-            _resolver = new PatientDrugLevelResolver(_context, IMPORTED_DRUG_LEVEL_NAME);
+            _resolver = new PatientDrugLevelResolver(_context, _drug, _uom);
             for (int cellCursor = 0; cellCursor < cellCount; cellCursor++)
             {
                 
