@@ -16,6 +16,10 @@ namespace AspergillosisEPR.Models.Patients
         public decimal ResultValue { get; set; }
         public string ComparisionCharacter { get; set; }
 
+        public Drug Drug { get; set; }
+        public Patient Patient { get; set; }
+        public UnitOfMeasurement Unit { get; set; }
+
         public static List<string> ComparisionCharacters()
         {
             return new List<string>()

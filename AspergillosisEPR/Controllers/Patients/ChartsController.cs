@@ -62,7 +62,7 @@ namespace AspergillosisEPR.Controllers.Patients
                                 .AsNoTracking()
                                 .SingleOrDefaultAsync(m => m.ID == patientId);
 
-            var measurements = patient.PatientMeasurements.OrderByDescending(q => q.DateTaken)
+            var measurements = patient.PatientMeasurements.OrderBy(q => q.DateTaken)
                                                           .ToList();
 
             var viewModelChartData = PatientMeasurementsChartViewModel

@@ -13,9 +13,9 @@ namespace AspergillosisEPR.Data
             var importer = context.DBImportTypes.Where(dbit => dbit.ImporterClass == "IntraDrugLevelExcelImporter").FirstOrDefault();
             if (importer == null)
             {
-                var dbImportType = new DbImportType { Name = "Import Intraconazole Drug Levels", ImporterClass = "IntraDrugLevelExcelImporter" };
+                var dbImportType = new DbImportType { Name = "Import Intraconazole Drug Levels (Caroline Moore)", ImporterClass = "IntraDrugLevelExcelImporter" };
                 context.DBImportTypes.Add(dbImportType);
-                context.SaveChangesAsync();
+                context.SaveChanges();
             }
             else
             {

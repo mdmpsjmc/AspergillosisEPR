@@ -20,7 +20,6 @@ namespace AspergillosisEPR.Models
         [Required]
         [Display(Name = "First Name")]
         public string FirstName { get; set; }
-        [Required]
         public string Gender { get; set; }
 
         [Required]
@@ -34,13 +33,13 @@ namespace AspergillosisEPR.Models
         [Remote("HasRM2Number", "Patients", AdditionalFields = "ID, InitialRM2Number",
                 ErrorMessage = "Patient RM2 Number already exists in database")]
         public string RM2Number { get; set; }
-
         public int? PatientStatusId { get; set; }
 
         [DataType(DataType.Date)]
         [Display(Name = "Date of Death")]
         [DisplayFormat(DataFormatString = "{dd-MM-yyyy}")]
         public DateTime? DateOfDeath { get; set; }
+        public string NhsNumber { get; set; }
 
         public ICollection<PatientDiagnosis> PatientDiagnoses { get; set; }
         public ICollection<PatientDrug> PatientDrugs { get; set; }
@@ -50,6 +49,8 @@ namespace AspergillosisEPR.Models
         public ICollection<PatientMeasurement> PatientMeasurements { get; set; }
         public ICollection<CaseReportFormResult> CaseReportFormResults { get; set; }
         public ICollection<PatientMedicalTrial> MedicalTrials { get; set; }
+        public ICollection<PatientDrugLevel> DrugLevels { get; set; }
+
 
         public PatientStatus PatientStatus { get; set; }
        

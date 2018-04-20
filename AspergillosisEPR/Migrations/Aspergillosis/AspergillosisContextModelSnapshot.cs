@@ -336,14 +336,15 @@ namespace AspergillosisEPR.Migrations.Aspergillosis
 
                     b.Property<int?>("MedicalTrialPrincipalInvestigatorId");
 
-                    b.Property<int?>("MedicalTrialStatusId");
+                    b.Property<int>("MedicalTrialStatusId");
 
-                    b.Property<int?>("MedicalTrialTypeId");
+                    b.Property<int>("MedicalTrialTypeId");
 
                     b.Property<string>("Name")
                         .IsRequired();
 
-                    b.Property<string>("Number");
+                    b.Property<string>("Number")
+                        .IsRequired();
 
                     b.Property<string>("RECNumber");
 
@@ -377,9 +378,11 @@ namespace AspergillosisEPR.Migrations.Aspergillosis
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("FirstName");
+                    b.Property<string>("FirstName")
+                        .IsRequired();
 
-                    b.Property<string>("LastName");
+                    b.Property<string>("LastName")
+                        .IsRequired();
 
                     b.Property<int>("PersonTitleId");
 
@@ -426,11 +429,12 @@ namespace AspergillosisEPR.Migrations.Aspergillosis
                     b.Property<string>("FirstName")
                         .IsRequired();
 
-                    b.Property<string>("Gender")
-                        .IsRequired();
+                    b.Property<string>("Gender");
 
                     b.Property<string>("LastName")
                         .IsRequired();
+
+                    b.Property<string>("NhsNumber");
 
                     b.Property<int?>("PatientStatusId");
 
@@ -490,6 +494,36 @@ namespace AspergillosisEPR.Migrations.Aspergillosis
                     b.HasIndex("PatientId");
 
                     b.ToTable("PatientDrugs");
+                });
+
+            modelBuilder.Entity("AspergillosisEPR.Models.Patients.PatientDrugLevel", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("ComparisionCharacter");
+
+                    b.Property<DateTime>("DateReceived");
+
+                    b.Property<DateTime>("DateTaken");
+
+                    b.Property<int>("DrugId");
+
+                    b.Property<int>("PatientId");
+
+                    b.Property<decimal>("ResultValue");
+
+                    b.Property<int>("UnitOfMeasurementId");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("DrugId");
+
+                    b.HasIndex("PatientId");
+
+                    b.HasIndex("UnitOfMeasurementId");
+
+                    b.ToTable("PatientDrugLevel");
                 });
 
             modelBuilder.Entity("AspergillosisEPR.Models.Patients.PatientDrugSideEffect", b =>
@@ -596,7 +630,7 @@ namespace AspergillosisEPR.Migrations.Aspergillosis
 
                     b.Property<DateTime?>("ConsentedDate");
 
-                    b.Property<DateTime?>("IdentifiedDate");
+                    b.Property<DateTime>("IdentifiedDate");
 
                     b.Property<int>("MedicalTrialId");
 
@@ -611,6 +645,8 @@ namespace AspergillosisEPR.Migrations.Aspergillosis
                     b.HasIndex("MedicalTrialId");
 
                     b.HasIndex("PatientId");
+
+                    b.HasIndex("PatientMedicalTrialStatusId");
 
                     b.ToTable("PatientMedicalTrials");
                 });
@@ -811,6 +847,18 @@ namespace AspergillosisEPR.Migrations.Aspergillosis
                     b.ToTable("SideEffects");
                 });
 
+            modelBuilder.Entity("AspergillosisEPR.Models.UnitOfMeasurement", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Name");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("UnitOfMeasurements");
+                });
+
             modelBuilder.Entity("AspergillosisEPR.Models.ImmunologyExamination", b =>
                 {
                     b.HasBaseType("AspergillosisEPR.Models.Patients.PatientExamination");
@@ -966,11 +1014,13 @@ namespace AspergillosisEPR.Migrations.Aspergillosis
 
                     b.HasOne("AspergillosisEPR.Models.MedicalTrials.MedicalTrialStatus", "TrialStatus")
                         .WithMany()
-                        .HasForeignKey("MedicalTrialStatusId");
+                        .HasForeignKey("MedicalTrialStatusId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("AspergillosisEPR.Models.MedicalTrials.MedicalTrialType", "TrialType")
                         .WithMany()
-                        .HasForeignKey("MedicalTrialTypeId");
+                        .HasForeignKey("MedicalTrialTypeId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("AspergillosisEPR.Models.MedicalTrials.MedicalTrialPrincipalInvestigator", b =>
@@ -1016,6 +1066,24 @@ namespace AspergillosisEPR.Migrations.Aspergillosis
                     b.HasOne("AspergillosisEPR.Models.Patient", "Patient")
                         .WithMany("PatientDrugs")
                         .HasForeignKey("PatientId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("AspergillosisEPR.Models.Patients.PatientDrugLevel", b =>
+                {
+                    b.HasOne("AspergillosisEPR.Models.Drug", "Drug")
+                        .WithMany()
+                        .HasForeignKey("DrugId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("AspergillosisEPR.Models.Patient", "Patient")
+                        .WithMany("DrugLevels")
+                        .HasForeignKey("PatientId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("AspergillosisEPR.Models.UnitOfMeasurement", "Unit")
+                        .WithMany()
+                        .HasForeignKey("UnitOfMeasurementId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
@@ -1091,6 +1159,11 @@ namespace AspergillosisEPR.Migrations.Aspergillosis
                     b.HasOne("AspergillosisEPR.Models.Patient", "Patient")
                         .WithMany("MedicalTrials")
                         .HasForeignKey("PatientId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("AspergillosisEPR.Models.MedicalTrials.MedicalTrialPatientStatus", "PatientMedicalTrialStatus")
+                        .WithMany()
+                        .HasForeignKey("PatientMedicalTrialStatusId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

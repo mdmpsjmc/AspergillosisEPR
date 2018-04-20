@@ -68,6 +68,10 @@ namespace AspergillosisEPR.Data
         public DbSet<MedicalTrialStatus> MedicalTrialStatuses { get; set; }
         public DbSet<MedicalTrialType> MedicalTrialTypes { get; set; }
 
+        public DbSet<PatientDrugLevel> PatientDrugLevels { get; set; }
+        public DbSet<UnitOfMeasurement> UnitOfMeasurements { get; set; }
+
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Patient>().ToTable("Patients");
@@ -118,6 +122,8 @@ namespace AspergillosisEPR.Data
             modelBuilder.Entity<MedicalTrialPrincipalInvestigator>().ToTable("MedicalTrialPrincipalInvestigators");
             modelBuilder.Entity<MedicalTrialStatus>().ToTable("MedicalTrialStatuses");
             modelBuilder.Entity<MedicalTrialType>().ToTable("MedicalTrialTypes");
+            modelBuilder.Entity<PatientDrugLevel>().ToTable("PatientDrugLevel");
+            modelBuilder.Entity<UnitOfMeasurement>().ToTable("UnitOfMeasurements");
         }
 
     }

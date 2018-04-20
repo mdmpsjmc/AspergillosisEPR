@@ -8,6 +8,6 @@ namespace AspergillosisEPR.Models
     public class UnitOfMeasurement
     {
         public int ID { get; set; }
-        public int Name { get; set; }
+        public string Name { get; set; }
     }
 }

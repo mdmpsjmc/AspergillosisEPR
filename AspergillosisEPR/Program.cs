@@ -31,6 +31,8 @@ namespace AspergillosisEPR
                     AppDbInitializer.Initialize(context2);
                     CaseReportFormsDataInitializer.AddSelectFieldTypes(context);
                     MedicalTiralsDataInitializer.AddMedicalTrialsModels(context);
+                    IntraDrugLevelExcelTypeSeed.Seed(context);
+                    UnitOfMeasureMgLSeed.Seed(context);
                 }
                 catch (Exception ex)
                 {
