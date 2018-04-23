@@ -122,6 +122,7 @@ namespace AspergillosisEPR.Controllers
 
             var patient = await _patientManager.FindPatientWithRelationsByIdAsync(id);
             LoadReleatedMedicalTrials(patient);
+            LoadRelatedDrugLevels(patient);
             if (patient == null)
             {
                 return NotFound();
@@ -131,7 +132,7 @@ namespace AspergillosisEPR.Controllers
                                                 .BuildPatientViewModel(_context, patient, _caseReportFormManager);
 
             return PartialView(patientDetailsViewModel);
-        }      
+        }
 
         [Authorize(Roles = ("Admin Role, Read Role"))]
         [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
@@ -273,6 +274,16 @@ namespace AspergillosisEPR.Controllers
                 _context.Entry(trial).Reference(t => t.PatientMedicalTrialStatus).Load();
                 var medicalTrial = trial.MedicalTrial;
                 _context.Entry(medicalTrial).Reference(t => t.TrialStatus).Load();
+            }
+        }
+
+        private void LoadRelatedDrugLevels(Patient patient)
+        {
+            _context.Entry(patient).Collection(c => c.DrugLevels).Load();
+            foreach (var patientDrugLevel in patient.DrugLevels)
+            {
+                _context.Entry(patientDrugLevel).Reference<Drug>(t => t.Drug).Load();
+                _context.Entry(patientDrugLevel).Reference<UnitOfMeasurement>(t => t.Unit).Load();
             }
         }
 

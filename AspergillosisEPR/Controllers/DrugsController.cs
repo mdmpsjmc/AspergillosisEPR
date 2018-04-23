@@ -24,11 +24,9 @@ namespace AspergillosisEPR.Controllers
 
         [Authorize(Roles = "Admin Role, Create Role")]
         public IActionResult New()
-        {
-            
+        {            
             return PartialView(SetupViewModel());
         }
-
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -139,8 +137,5 @@ namespace AspergillosisEPR.Controllers
             addNewItemVM.Tab = "drugs";
             return addNewItemVM;
         }
-    }
-
-
-   
+    }   
 }

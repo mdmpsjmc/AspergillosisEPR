@@ -24,6 +24,7 @@ namespace AspergillosisEPR.Models.PatientViewModels
         public ICollection<PatientMeasurement> PatientMeasurements { get; set; }
         public List<IGrouping<string, CaseReportFormResult>> CaseReportForms { get; private set; }
         public List<PatientIgChart> IgCharts { get; set; }
+        public ICollection<PatientDrugLevel> DrugLevels { get; set; }
 
         public bool ShowDiagnoses { get; set; }
         public bool ShowDrugs { get; set; }
@@ -97,6 +98,8 @@ namespace AspergillosisEPR.Models.PatientViewModels
             patientDetailsViewModel.PatientImmunoglobulines = patient.PatientImmunoglobulines;
             patientDetailsViewModel.PatientRadiologyFindings = patient.PatientRadiologyFindings;
             patientDetailsViewModel.PatientMeasurements = patient.PatientMeasurements.OrderByDescending(q => q.DateTaken).ToList();
+            patientDetailsViewModel.DrugLevels = patient.DrugLevels.OrderByDescending(q => q.DateTaken).ToList();
+
             if (caseReportFormManager != null)
             {
                 patientDetailsViewModel.CaseReportForms = caseReportFormManager.GetGroupedCaseReportFormsForPatient(patient.ID);

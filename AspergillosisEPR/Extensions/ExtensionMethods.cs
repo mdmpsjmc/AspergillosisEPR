@@ -39,6 +39,16 @@ namespace AspergillosisEPR.Extensions
             return Char.ToLowerInvariant(str[0]) + str.Substring(1);
         }
 
+
+        public static string FirstCharacterToUpper(this string str)
+        {
+            if (string.IsNullOrEmpty(str))
+                return str;
+
+            return Char.ToUpperInvariant(str[0]) + str.Substring(1).ToLower();
+        }
+
+
         public static string GetValueFromProperty(object obj, string Name)
         {
             var methods = Name.Split('.');

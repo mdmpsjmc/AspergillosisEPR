@@ -15,10 +15,23 @@ namespace AspergillosisEPR.Models.Patients
         public DateTime DateReceived { get; set; }
         public decimal ResultValue { get; set; }
         public string ComparisionCharacter { get; set; }
+        public string LabNumber { get; set; }
 
         public Drug Drug { get; set; }
         public Patient Patient { get; set; }
         public UnitOfMeasurement Unit { get; set; }
+        
+
+        public string Result()
+        {
+            if (!string.IsNullOrEmpty(ComparisionCharacter))
+            {
+                return ComparisionCharacter + ResultValue.ToString();
+            } else
+            {
+                return ResultValue.ToString();
+            }
+        }
 
         public static List<string> ComparisionCharacters()
         {

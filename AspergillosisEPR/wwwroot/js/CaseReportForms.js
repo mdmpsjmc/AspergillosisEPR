@@ -193,8 +193,8 @@
                 { "data": "isLocked", "name": "IsLocked", "autoWidth": true },
                 { "data": "name", "name": "Name", "autoWidth": true },
                 { "data": "categoryName", "name": "CategoryName", "autoWidth": true },
-                { "data": "sectionsNames", "name": "SectionsNames", "autoWidth": true },
-                { "data": "fieldsNames", "name": "FieldsNames", "autoWidth": true },
+                { "data": "sectionsNames", "name": "SectionsNames", "autoWidth": true, "sortable": false },
+                { "data": "fieldsNames", "name": "FieldsNames", "autoWidth": true, "sortable": false },
                 {
                     "render": function (data, type, object, meta) {
                         if (object.isLocked.match("YES") == null) {

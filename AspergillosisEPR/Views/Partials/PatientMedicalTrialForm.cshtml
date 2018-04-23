@@ -26,7 +26,7 @@
     <fieldset>
         <section class="col col-6">
             <label asp-for="Consented" class="checkbox">
-                <input type="checkbox" asp-for="Consented">
+                <input type="checkbox" asp-for="Consented" name="PatientMedicalTrial[@(i.ToString())].Consented" id="PatientMedicalTrial_@(i.ToString())__Consented">
                 <i></i> Patient Consented?
             </label>
         </section>

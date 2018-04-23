@@ -13,7 +13,11 @@
                 <h1>
                     @(Model.Patient.FirstName) <span class="semi-bold">@(Model.Patient.LastName)</span>
                     <br>
-                    <small><strong> @(Model.Patient.RM2Number)</strong></small>
+                    <small><strong>RM2: @(Model.Patient.RM2Number)</strong></small>
+                    @if (!string.IsNullOrEmpty(Model.Patient.NhsNumber))
+                    {
+                        <br><small><strong>NHS: @(Model.Patient.NhsNumber)</strong></small>
+                    }
                 </h1>
                 <ul class="list-unstyled">
                     <li>

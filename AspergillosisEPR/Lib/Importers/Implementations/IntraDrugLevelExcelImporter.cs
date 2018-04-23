@@ -10,6 +10,7 @@ using System.Collections;
 using AspergillosisEPR.Models;
 using System.Reflection;
 using Microsoft.EntityFrameworkCore;
+using AspergillosisEPR.Extensions;
 
 namespace AspergillosisEPR.Lib.Importers.Implementations
 {
@@ -24,9 +25,7 @@ namespace AspergillosisEPR.Lib.Importers.Implementations
                                            string fileExtension, AspergillosisContext context) : base(stream, file, fileExtension, context)
         {
             
-            _context = context;
-            _drug = _context.Drugs.Where(d => d.Name.Contains(IMPORTED_DRUG_LEVEL_NAME)).FirstOrDefault();
-            _uom = _context.UnitOfMeasurements.Where(uom => uom.Name.Contains("mg/L")).FirstOrDefault();
+            _context = context;       
         }
 
         public static Hashtable HeadersDictionary()
@@ -34,12 +33,15 @@ namespace AspergillosisEPR.Lib.Importers.Implementations
             return new Hashtable()
             {
                   { "SURNAME", "Patient.LastName" },
+                  { "RM2Number", "Patient.RM2Number"},
                   { "FORENAME", "Patient.FirstName" },
                   { "RM2", "Patient.RM2Number" },
                   { "NHSNO", "Patient.NhsNumber"},
                   { "DOB", "Patient.DOB"},
+                  { "SEX", "Patient.Gender" },
                   { "DATE TAKEN", "PatientDrugLevel.DateTaken"},
                   { "DATE RECEIVED", "PatientDrugLevel.DateReceived"},
+                  { "LAB NO", "PatientDrugLevel.LabNumber" },
                   { "RESULT -  mg/L", "PatientDrugLevel.ResultValue"}
              };
         }
@@ -48,6 +50,9 @@ namespace AspergillosisEPR.Lib.Importers.Implementations
         {
             Action<Patient, IRow, int> sheetProcessingAction = (patient, row, cellCount) =>
             {
+                _drug = _context.Drugs.Where(d => d.Name.Contains(IMPORTED_DRUG_LEVEL_NAME)).FirstOrDefault();
+                _uom = _context.UnitOfMeasurements.Where(uom => uom.Name.Contains("mg/L")).FirstOrDefault();
+
                 var patientFromExcel = ReadCellsForPatient(patient, row, cellCount);
                 var existingImportedPatient = FindPatientInImported(patientFromExcel);
 
@@ -86,7 +91,6 @@ namespace AspergillosisEPR.Lib.Importers.Implementations
             }
             else
             {
-                patientFromExcel.RM2Number = "0";
                 if (patientFromExcel.IsValid() && existingImportedPatient == null)
                 {
                     Imported.Add(patientFromExcel);
@@ -100,9 +104,7 @@ namespace AspergillosisEPR.Lib.Importers.Implementations
             {
                 return null;
             }
-            var exisingImportedPatient = Imported.Where(p => p.FirstName.ToLower() == importedPatient.FirstName.ToLower()
-                                                            && p.LastName.ToLower() == importedPatient.LastName.ToLower()
-                                                              && p.DOB.Date == importedPatient.DOB.Date)                                           
+            var exisingImportedPatient = Imported.Where(p => p.RM2Number == importedPatient.RM2Number)                                           
                                         .FirstOrDefault();
             if (exisingImportedPatient != null)
             {
@@ -120,10 +122,7 @@ namespace AspergillosisEPR.Lib.Importers.Implementations
             {
                 return null;
             }
-            string justFirstName = importedPatient.FirstName.Split(" ")[0].ToLower();
-            var dbPatient = _context.Patients.Where(p => p.FirstName.ToLower() == justFirstName
-                                                      && p.LastName.ToLower() == importedPatient.LastName.ToLower()
-                                                      && p.DOB.Date == importedPatient.DOB.Date)
+            var dbPatient = _context.Patients.Where(p => p.RM2Number == importedPatient.RM2Number)
                                              .Include(p => p.DrugLevels)
                                              .FirstOrDefault();
 
@@ -161,8 +160,19 @@ namespace AspergillosisEPR.Lib.Importers.Implementations
                 switch (klassAndField[0])
                 {
                     case "Patient":
-                        string propertyName = klassAndField[1];                       
-                        SetPatientProperty(patient, propertyName, row, cellCursor, propertyValue);
+                        string propertyName = klassAndField[1];             
+                        if (propertyName == "Gender")
+                        {
+                            if (propertyValue == "F")
+                            {
+                                propertyValue = "Female";
+                            } else if (propertyValue == "M")
+                            {
+                                propertyValue = "Male";
+                            }
+                        }
+                        string valueToSet = propertyValue.Replace("RM2", String.Empty).FirstCharacterToUpper();
+                        SetPatientProperty(patient, propertyName, row, cellCursor, valueToSet);
                         break;
                     case "PatientDrugLevel":
                         resolver.SetProperty(klassAndField[1], propertyValue);

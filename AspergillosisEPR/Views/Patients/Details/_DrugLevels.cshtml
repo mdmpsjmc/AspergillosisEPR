@@ -1,4 +1,44 @@
-﻿
-@*
-    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model AspergillosisEPR.Models.PatientViewModels.PatientDetailsViewModel
+
+@if (Model.DrugLevels != null && Model.DrugLevels.Any())
+{
+    <div class="col-sm-12">
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>Drug</th>
+                    <th>Lab Number</th>
+                    <th>Date Taken</th>
+                    <th>Date Received</th>
+                    <th>Result</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var drugLevel in Model.DrugLevels)
+                     {
+                    <tr>
+                        <td>@(drugLevel.Drug.Name)</td>
+                        <td>@(drugLevel.LabNumber)</td>
+                        <td>@(drugLevel.DateTaken.ToString("dd/MM/yyyy"))</td>
+                        <td>@(drugLevel.DateReceived.ToString("dd/MM/yyyy"))</td>
+                        <td>@(drugLevel.Result())</td>
+                    </tr>
+                     }
+            </tbody>
+        </table>
+
+
+    </div>
+
+}
+else
+{
+    <div class="col-sm-12">
+        <div class="alert alert-info alert-block">
+            <h4 class="alert-heading">Info!</h4>
+            <i class="fa fa-info-circle"></i>
+            This patient does not currently have any drug levels in database
+        </div>
+    </div>
+
+}

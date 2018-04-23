@@ -111,7 +111,8 @@ div.tab-pane#ig{
     max-height: 400px
 }
 
-div.tab-pane#medical-trials {
+div.tab-pane#medical-trials,
+div.tab-pane#drug-levels {
     overflow-y: auto;
     min-height: 400px;
     max-height: 400px
