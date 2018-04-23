@@ -1,47 +1,18 @@
-﻿@model AspergillosisEPR.Models.PatientViewModels.PatientDetailsViewModel
-
-@if (Model.PatientDrugs != null && Model.PatientDrugs.Any())
-{
-    <div class="col-sm-12">
-        <table class="table table-bordered table-striped">
-            <thead>
-                <tr>
-                    <th>Drug</th>
-                    <th>Start Date</th>
-                    <th>End Date</th>
-                    <th>Side Effects</th>    
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var drug in Model.PatientDrugs)
-                     {
-                        <tr>
-                            <td>@(drug.Drug.Name)</td>
-                            <td>@(drug.StartDate.ToString("dd/MM/yyyy"))</td>
-                            @if (drug.EndDate == null) {
-                            <td>None</td>
-                            } else {
-                            <td>@(drug.EndDate.Value.ToString("dd/MM/yyyy"))</td>
-                            }
-
-                            <td>@(string.Join(",", drug.SideEffects.Select( se => se.SideEffect.Name )))</td>
-                        </tr>
-                     }   
-            </tbody>
-        </table>
-        
-
-    </div>
-
-}
-else
-{
-    <div class="col-sm-12">
-        <div class="alert alert-info alert-block">
-            <h4 class="alert-heading">Info!</h4>
-            <i class="fa fa-info-circle"></i>
-            This patient does not currently take any drugs
+﻿<div class="tab-content">
+    <ul class="nav nav-tabs">
+        <li class="active">
+            <a href="#drug-monitoring" data-toggle="tab">Drugs</a>
+        </li>
+        <li class="">
+            <a href="#drug-levels" data-toggle="tab">Drug Levels</a>
+        </li>
+    </ul>
+    <div class="tab-content padding-10">
+        <div class="tab-pane active in" id="drug-monitoring">
+            @Html.Partial("/Views/Patients/Details/_Drugs.cshtml")
         </div>
+        <div class="tab-pane fade" id="drug-levels">
+            @Html.Partial("/Views/Patients/Details/_DrugLevels.cshtml")
+        </div>      
     </div>
-
-}
+</div>

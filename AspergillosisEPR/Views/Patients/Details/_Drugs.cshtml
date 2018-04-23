@@ -1,0 +1,47 @@
+﻿@model AspergillosisEPR.Models.PatientViewModels.PatientDetailsViewModel
+
+@if (Model.PatientDrugs != null && Model.PatientDrugs.Any())
+{
+    <div class="col-sm-12">
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>Drug</th>
+                    <th>Start Date</th>
+                    <th>End Date</th>
+                    <th>Side Effects</th>    
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var drug in Model.PatientDrugs)
+                     {
+                        <tr>
+                            <td>@(drug.Drug.Name)</td>
+                            <td>@(drug.StartDate.ToString("dd/MM/yyyy"))</td>
+                            @if (drug.EndDate == null) {
+                            <td>None</td>
+                            } else {
+                            <td>@(drug.EndDate.Value.ToString("dd/MM/yyyy"))</td>
+                            }
+
+                            <td>@(string.Join(",", drug.SideEffects.Select( se => se.SideEffect.Name )))</td>
+                        </tr>
+                     }   
+            </tbody>
+        </table>
+        
+
+    </div>
+
+}
+else
+{
+    <div class="col-sm-12">
+        <div class="alert alert-info alert-block">
+            <h4 class="alert-heading">Info!</h4>
+            <i class="fa fa-info-circle"></i>
+            This patient does not currently take any drugs
+        </div>
+    </div>
+
+}
