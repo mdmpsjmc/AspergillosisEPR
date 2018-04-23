@@ -23,7 +23,9 @@ else
 @if (Model.ShowDrugs)
 {
     <h2>Drugs monitoring</h2>
-  @Html.Partial("/Views/Patients/Details/Drugs.cshtml")
+    @Html.Partial("/Views/Patients/Details/_Drugs.cshtml")
+    <h3>Drug levels</h3>
+    @Html.Partial("/Views/Patients/Details/_DrugLevels.cshtml")
 }
 
 @if (Model.ShowSGRQ)

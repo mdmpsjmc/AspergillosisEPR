@@ -89,11 +89,11 @@ namespace AspergillosisEPR.Controllers.DataTables
             string format = "dd/MM/yyyy";
             try
             {
-                var date = DateTime.ParseExact(partialSearch.Trim(), format, CultureInfo.InvariantCulture);
+                var searchDate = DateTime.ParseExact(partialSearch.Trim(), format, CultureInfo.InvariantCulture);
                 _list = _list.Where(p => {
                     double fieldValue = p.GetType().GetProperty(fieldName).GetValue(p, null);
-                    DateTime dateOfBirth = DateHelper.UnixTimeStampToDateTime(fieldValue);
-                    return dateOfBirth.Date == date.Date && dateOfBirth.Month == date.Month && dateOfBirth.Year == date.Year;
+                    DateTime dateField = DateHelper.UnixTimeStampToDateTime(fieldValue);
+                    return dateField.Date == searchDate.Date && dateField.Month == searchDate.Month && dateField.Year == searchDate.Year;
                 }).ToList();
             }
             catch (FormatException ex)

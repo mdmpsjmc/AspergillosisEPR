@@ -93,6 +93,7 @@ namespace AspergillosisEPR.Models.PatientViewModels
             }
             patientDetailsViewModel.PatientDrugs = patient.PatientDrugs;
             LoadReleatedMedicalTrials(context, patient);
+            LoadRelatedDrugLevels(context, patient);
             patientDetailsViewModel.MedicalTrials = patient.MedicalTrials;
             patientDetailsViewModel.STGQuestionnaires = patient.STGQuestionnaires;
             patientDetailsViewModel.PatientImmunoglobulines = patient.PatientImmunoglobulines;
@@ -136,6 +137,16 @@ namespace AspergillosisEPR.Models.PatientViewModels
                 context.Entry(trial).Reference(t => t.PatientMedicalTrialStatus).Load();
                 var medicalTrial = trial.MedicalTrial;
                 context.Entry(medicalTrial).Reference(t => t.TrialStatus).Load();
+            }
+        }
+
+        private static void LoadRelatedDrugLevels(AspergillosisContext context, Patient patient)
+        {
+            context.Entry(patient).Collection(c => c.DrugLevels).Load();
+            foreach (var patientDrugLevel in patient.DrugLevels)
+            {
+                context.Entry(patientDrugLevel).Reference<Drug>(t => t.Drug).Load();
+                context.Entry(patientDrugLevel).Reference<UnitOfMeasurement>(t => t.Unit).Load();
             }
         }
 
