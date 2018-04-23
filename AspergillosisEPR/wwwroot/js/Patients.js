@@ -190,7 +190,7 @@
             var insertIntoClass = $(this).data("insert-into-class"); 
             var index = $(visibleRow).length;
             $.get($(this).attr("href") + "?index=" + index, function (responseHtml) {
-                LoadingIndicator.hide();                          
+                LoadingIndicator.hide();
                 $(insertIntoClass).append(responseHtml);
                 initPatientsDateTimePickers();
                 $("select.select2").select2({
@@ -199,6 +199,8 @@
                         $(this).data('placeholder');
                     }
                 });
+            }).always(function () {
+                LoadingIndicator.hide();
             });
         })
     }
