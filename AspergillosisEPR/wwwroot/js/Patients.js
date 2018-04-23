@@ -68,7 +68,7 @@
                     {
                         "data": "dob", "name": "DOB", "autoWidth": true,
                         "render": function(data) {
-                            return moment.unix(data).format("MM/DD/YYYY");
+                            return moment.unix(data).format("DD/MM/YYYY");
                         }                    
                     },
                     {
@@ -362,7 +362,8 @@
     var addFilteringColumns = function () {
         $('#patients_datatable tfoot th').each(function () {
             var title = $(this).text();
-            $(this).html('<input type="text" class="form-control ' + title + '" placeholder="Search ' + title + '" />');
+            var isDatepicker = title.match("Date") ? " table-datepicker " : "";
+            $(this).html('<input type="text" class="form-control ' + title + isDatepicker + '" placeholder="Search ' + title + '" />');
         });
 
         window.patientsTable.columns().every(function () {
@@ -375,6 +376,12 @@
                         .draw();
                 }
             });
+        });
+
+        $("input.table-datepicker").datetimepicker({
+            format: "DD/MM/YYYY"
+        }).on('dp.change', function (ev) {
+            $("input.table-datepicker").trigger("change");
         });
     }
 

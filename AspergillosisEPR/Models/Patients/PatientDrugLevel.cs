@@ -26,10 +26,10 @@ namespace AspergillosisEPR.Models.Patients
         {
             if (!string.IsNullOrEmpty(ComparisionCharacter))
             {
-                return ComparisionCharacter + ResultValue.ToString();
+                return ComparisionCharacter + ResultValue.ToString() + " " + Unit.Name;
             } else
             {
-                return ResultValue.ToString();
+                return ResultValue.ToString() + " " + Unit.Name;
             }
         }
 

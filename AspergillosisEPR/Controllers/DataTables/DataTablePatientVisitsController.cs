@@ -69,7 +69,7 @@ namespace AspergillosisEPR.Controllers
                     switch (cursor)
                     {
                         case 1:
-                            _list = _list.Where(p => DateTimeOffset.FromUnixTimeSeconds(long.Parse(p.VisitDate.ToString())).UtcDateTime.ToString().Contains(partialSearch)).ToList();
+                            SearchListByDate(partialSearch, "VisitDate");
                             break;
                         case 2:
                             _list = _list.Where(p => p.PatientName.Contains(partialSearch)).ToList();

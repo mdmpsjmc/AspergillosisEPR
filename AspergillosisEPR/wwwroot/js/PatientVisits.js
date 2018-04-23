@@ -125,6 +125,8 @@
 
         $("input.table-datepicker").datetimepicker({
             format: "DD/MM/YYYY"
+        }).on('dp.change', function (ev) {
+            $("input.table-datepicker").trigger("change");
         });
     }
 

@@ -171,7 +171,11 @@ namespace AspergillosisEPR.Lib.Importers.Implementations
                                 propertyValue = "Male";
                             }
                         }
-                        string valueToSet = propertyValue.Replace("RM2", String.Empty).FirstCharacterToUpper();
+                        string valueToSet = propertyValue.Replace("RM2", String.Empty);
+                        if (propertyName == "FirstName" || propertyName == "LastName")
+                        {
+                            valueToSet = valueToSet.ToUpper();
+                        }
                         SetPatientProperty(patient, propertyName, row, cellCursor, valueToSet);
                         break;
                     case "PatientDrugLevel":

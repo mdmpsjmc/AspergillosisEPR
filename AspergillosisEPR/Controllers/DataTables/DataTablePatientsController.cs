@@ -10,6 +10,7 @@ using AspergillosisEPR.Models.PatientViewModels;
 using Microsoft.AspNetCore.Authorization;
 using AspergillosisEPR.Helpers;
 using AspergillosisEPR.Models.Patients;
+using System.Globalization;
 
 namespace AspergillosisEPR.Controllers.DataTables
 {
@@ -78,12 +79,12 @@ namespace AspergillosisEPR.Controllers.DataTables
                             _list = _list.Where(p => p.Gender.ToString().ToLower() == partialSearch.ToLower()).ToList();
                             break;
                         case 5:
-                            _list = _list.Where(p => DateTimeOffset.FromUnixTimeSeconds(long.Parse(p.DOB.ToString())).UtcDateTime.ToString().Contains(partialSearch)).ToList();
-                            break;
+                           SearchListByDate(partialSearch, "DOB");
+                           break;
                     }
                 }
             }
-        }
+        }    
 
         protected void AppendDiagnosesToPatients(List<PatientDiagnosis> patientDiagnoses)
         {
