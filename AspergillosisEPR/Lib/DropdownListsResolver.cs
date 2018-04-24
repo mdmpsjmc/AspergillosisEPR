@@ -224,6 +224,14 @@ namespace AspergillosisEPR.Lib
             PopulatePatientStatusesDropdownList(patient.PatientStatusId);
         }
 
+        public SelectList PouplateUnitsDropdownList(object selectedStatus = null)
+        {
+            var units = from u in _context.UnitOfMeasurements
+                           orderby u.Name
+                           select u;
+           return new SelectList(units, "ID", "Name", selectedStatus);
+        }
+
         public void PopulatePatientStatusesDropdownList(object selectedStatus = null)
         {
             var statuses = from se in _context.PatientStatuses
