@@ -96,6 +96,21 @@ namespace AspergillosisEPR.Lib
             }
         }
 
+        public void AddDrugLevels(Patient patient, PatientDrugLevel[] drugLevels)
+        {
+            if (drugLevels.Length == 1 && drugLevels[0] == null)
+            {
+                return;
+            }
+            patient.DrugLevels = new List<PatientDrugLevel>();
+            foreach (var drugLevel in drugLevels)
+            {
+                drugLevel.PatientId = patient.ID;
+                _context.PatientDrugLevels.Add(drugLevel);
+                patient.DrugLevels.Add(drugLevel);
+            }
+        }
+
         public void AddMedicalTrials(Patient patient, PatientMedicalTrial[] patientMedicalTrial)
         {
             if (patientMedicalTrial.Length == 1 && patientMedicalTrial[0] == null)

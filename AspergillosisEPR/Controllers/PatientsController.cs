@@ -70,6 +70,7 @@ namespace AspergillosisEPR.Controllers
                                                  PatientImmunoglobulin[] patientImmunoglobulin,
                                                  PatientRadiologyFinding[] patientRadiologyFinding,
                                                  PatientMedicalTrial[] patientMedicalTrial,
+                                                 PatientDrugLevel[] drugLevels,
                                                  CaseReportFormResult[] caseReportFormResult)
         {
             var existingPatient = _context.Patients.FirstOrDefault(x => x.RM2Number == patient.RM2Number);
@@ -91,6 +92,7 @@ namespace AspergillosisEPR.Controllers
                                                              patientImmunoglobulin,
                                                              ref patientRadiologyFinding);
             _patientManager.AddMedicalTrials(patient, patientMedicalTrial);
+            _patientManager.AddDrugLevels(patient, drugLevels);
             try
             {
                 if (ModelState.IsValid)

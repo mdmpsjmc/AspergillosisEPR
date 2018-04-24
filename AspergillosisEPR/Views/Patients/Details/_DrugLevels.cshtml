@@ -6,6 +6,7 @@
         <table class="table table-bordered table-striped">
             <thead>
                 <tr>
+                    <th>ID</th>
                     <th>Drug</th>
                     <th>Lab Number</th>
                     <th>Date Taken</th>
@@ -17,6 +18,7 @@
                 @foreach (var drugLevel in Model.DrugLevels)
                      {
                     <tr>
+                        <td>@drugLevel.ID</td>
                         <td>@(drugLevel.Drug.Name)</td>
                         <td>@(drugLevel.LabNumber)</td>
                         <td>@(drugLevel.DateTaken.ToString("dd/MM/yyyy"))</td>
@@ -26,8 +28,6 @@
                      }
             </tbody>
         </table>
-
-
     </div>
 
 }
