@@ -166,12 +166,15 @@ namespace AspergillosisEPR.Controllers
             }
             Patient patient = await _patientManager.FindPatientWithRelationsByIdAsync(id);
             LoadReleatedMedicalTrials(patient);
+            LoadRelatedDrugLevels(patient);
             if (patient == null)
             {
                 return NotFound();
             }
             _listResolver.BindSelects(patient);
             _listResolver.BindMedicalTrialsSelects(ViewBag, patient);
+            _listResolver.BindDrugLevelSelects(ViewBag, patient);
+
             ViewBag.CaseReportForms = (List <IGrouping<string, CaseReportFormResult>>)  _caseReportFormManager
                                       .GetGroupedCaseReportFormsForPatient(patient.ID);
             return PartialView(patient);

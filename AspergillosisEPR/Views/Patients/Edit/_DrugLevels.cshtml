@@ -1,0 +1,73 @@
+﻿@model AspergillosisEPR.Models.Patient
+@using AspergillosisEPR.Models.Patients;
+
+<div class="col-12 row drug-level-form" style="margin: 0px !important">
+    @for (int i = 0; i < Model.DrugLevels.OrderByDescending(q => q.DateTaken).ToList().Count; i++)
+    {
+        PatientDrugLevel drugLevel = Model.DrugLevels.OrderByDescending(q => q.DateTaken).ToList()[i];
+        <div class="drug-level-form">
+            <fieldset>
+                <div class="row">
+                    <label class="select">
+                        <label asp-for="@drugLevel.DrugId" class="select">
+                            @Html.DropDownList("DrugLevels["+i +"].DrugId", (SelectList)ViewBag.DrugId[i], "Select Drug")
+                            <i></i>
+                        </label>
+                    </label>
+                </div>
+            </fieldset>
+            <section class="col col-6">
+                <label class="input">
+                    <i class="icon-append fa fa-calendar"></i>
+                    <input asp-for="@drugLevel.DateReceived" placeholder="Date Received" class="datepicker" type="text" name="DrugLevels[@(i)].DateReceived" id="DrugLevels_@(i)__DateReceived">
+                </label>
+            </section>
+            <section class="col col-6">
+                <label class="input">
+                    <i class="icon-append fa fa-calendar"></i>
+                    <input asp-for="@drugLevel.DateTaken" placeholder="Date Taken" class="datepicker" type="text" name="DrugLevels[@(i)].DateTaken" id="DrugLevels_@(i)__DateTaken">
+                </label>
+            </section>
+            <div class="row">
+                <section class="col col-2">
+                    <label class="select">
+                        @Html.DropDownList("DrugLevels[" + ((string)ViewBag.Index) + ".ComparisionCharacter", new SelectList(PatientDrugLevel.ComparisionCharacters()), "none")
+                        <i></i>
+                    </label>
+                </section>
+                <section class="col col-4">
+                    <label class="input">
+                        <i class="icon-append fa fa-flask"></i>
+                        <input asp-for="@drugLevel.ResultValue" placeholder="Result" type="text" name="DrugLevels[@(i)].ResultValue" id="DrugLevels_@(i)__ResultValue">
+                    </label>
+                </section>
+                <section class="col col-2">
+                    <label class="select">
+                        @Html.DropDownList("DrugLevels[" + i + "].ComparisionCharacter", (SelectList)ViewBag.UnitId[i], "Unit")
+                        <i></i>                     
+                    </label>
+                </section>
+                <section class="col col-4">
+                    <label class="input">
+                        <i class="icon-append fa fa-flask"></i>
+                        <input asp-for="@drugLevel.LabNumber" placeholder="Lab Number" type="text" name="DrugLevels[@i].LabNumber" id="DrugLevels_@(i)__LabNumber">
+                    </label>
+                </section>
+            </div>
+            <div class="row">
+                <a href="javascript:void(0)" class="btn btn-danger remove-new-drug pull-right btn-lg" data-what="drug level" data-toggle="tooltip" data-title="Remove drug level" style="padding: 5px">
+                    <i class="fa fa-trash"></i>
+                </a>
+            </div>
+        </div>
+    }
+</div>
+@if (User.IsInRole("Update Role") || User.IsInRole("Admin Role"))
+{
+    <a href="@Url.Action("EditDrugLevelForm", "Partials")" class="btn btn-success edit-drug-level edit-patient-partial" data-visible-row="div.patient-medical-trail:visible" data-insert-into-class="div.drug-level-form" style="padding: 5px">
+        <i class="fa fa-plus"></i>
+        <span>
+            <strong>Add patient drug level</strong>
+        </span>
+    </a>
+}

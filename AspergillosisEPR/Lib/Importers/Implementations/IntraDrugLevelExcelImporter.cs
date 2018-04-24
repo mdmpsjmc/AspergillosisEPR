@@ -20,6 +20,9 @@ namespace AspergillosisEPR.Lib.Importers.Implementations
         private PatientDrugLevelResolver _resolver;
         private Drug _drug;
         private UnitOfMeasurement _uom;
+        private int _patientAliveStatus;
+        private int _patientDeceasedStatus;
+
         public IntraDrugLevelExcelImporter(FileStream stream, 
                                            IFormFile file, 
                                            string fileExtension, AspergillosisContext context) : base(stream, file, fileExtension, context)
@@ -38,10 +41,12 @@ namespace AspergillosisEPR.Lib.Importers.Implementations
                   { "RM2", "Patient.RM2Number" },
                   { "NHSNO", "Patient.NhsNumber"},
                   { "DOB", "Patient.DOB"},
+                  { "DOD", "Patient.DateOfDeath"}, 
                   { "SEX", "Patient.Gender" },
                   { "DATE TAKEN", "PatientDrugLevel.DateTaken"},
                   { "DATE RECEIVED", "PatientDrugLevel.DateReceived"},
                   { "LAB NO", "PatientDrugLevel.LabNumber" },
+                  { "DEATH_INDICATOR", "Patient.PatientStatusId"},
                   { "RESULT -  mg/L", "PatientDrugLevel.ResultValue"}
              };
         }
@@ -52,6 +57,8 @@ namespace AspergillosisEPR.Lib.Importers.Implementations
             {
                 _drug = _context.Drugs.Where(d => d.Name.Contains(IMPORTED_DRUG_LEVEL_NAME)).FirstOrDefault();
                 _uom = _context.UnitOfMeasurements.Where(uom => uom.Name.Contains("mg/L")).FirstOrDefault();
+                _patientAliveStatus = _context.PatientStatuses.Where(s => s.Name == "Active").FirstOrDefault().ID;
+                _patientDeceasedStatus = _context.PatientStatuses.Where(s => s.Name == "Deceased").FirstOrDefault().ID;
 
                 var patientFromExcel = ReadCellsForPatient(patient, row, cellCount);
                 var existingImportedPatient = FindPatientInImported(patientFromExcel);
@@ -176,6 +183,11 @@ namespace AspergillosisEPR.Lib.Importers.Implementations
                         {
                             valueToSet = valueToSet.ToUpper();
                         }
+                        if (propertyName == "PatientStatusId")
+                        {
+                            valueToSet = GetPatientStatusId(propertyValue);
+
+                        }
                         SetPatientProperty(patient, propertyName, row, cellCursor, valueToSet);
                         break;
                     case "PatientDrugLevel":
@@ -184,6 +196,19 @@ namespace AspergillosisEPR.Lib.Importers.Implementations
                 }
             }
         }
+
+        private string GetPatientStatusId(string propertyValue)
+        {
+            if (propertyValue == "Y")
+            {
+                propertyValue = _patientDeceasedStatus.ToString();
+            }
+            else if ((propertyValue == "N") || string.IsNullOrEmpty(propertyValue))
+            {
+                propertyValue = _patientAliveStatus.ToString();
+            }
+            return propertyValue;
+        }    
 
         private void SetPatientProperty(Patient patient, string propertyName, 
                                        IRow row, int cellCursor, string propertyValue)
@@ -197,6 +222,16 @@ namespace AspergillosisEPR.Lib.Importers.Implementations
                 {
                     dateRowValue = row.GetCell(cellCursor).DateCellValue;
                     propertyInfo.SetValue(patient, dateRowValue);
+                }
+                else if (propertyInfo.PropertyType == typeof(int?) || propertyInfo.PropertyType == typeof(int))
+                {
+                    int propertyIntValue = Int32.Parse(propertyValue);
+                    propertyInfo.SetValue(patient, propertyIntValue);
+                }
+                else if (propertyInfo.PropertyType == typeof(DateTime) || propertyInfo.PropertyType == typeof(DateTime?))
+                {
+                    propertyInfo.
+                         SetValue(patient, Convert.ChangeType(propertyValue, typeof(DateTime)), null);
                 }
                 else
                 {

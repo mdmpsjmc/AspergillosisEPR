@@ -224,6 +224,23 @@ namespace AspergillosisEPR.Lib
             PopulatePatientStatusesDropdownList(patient.PatientStatusId);
         }
 
+        internal void BindDrugLevelSelects(dynamic viewBag, Patient patient)
+        {
+            List<SelectList> drugs = new List<SelectList>();
+            List<SelectList> units = new List<SelectList>();
+            List<SelectList> chars = new List<SelectList>();
+
+            for (int i = 0; i < patient.DrugLevels.OrderByDescending(t => t.DateTaken).Count(); i++)
+            {
+                var item = patient.DrugLevels.OrderByDescending(t => t.DateTaken).ToList()[i];
+                drugs.Add(DrugsDropDownList(item.DrugId));
+                units.Add(PouplateUnitsDropdownList(item.UnitOfMeasurementId));
+            }
+
+            viewBag.DrugId = drugs;
+            viewBag.UnitId = units;
+        }
+
         public SelectList PouplateUnitsDropdownList(object selectedStatus = null)
         {
             var units = from u in _context.UnitOfMeasurements
