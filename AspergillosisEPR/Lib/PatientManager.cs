@@ -72,6 +72,7 @@ namespace AspergillosisEPR.Lib
                                 .Include(p => p.STGQuestionnaires)
                                 .Include(p => p.PatientImmunoglobulines)
                                 .Include(p => p.PatientRadiologyFindings)
+                                .Include(p => p.DrugLevels)
                                 .AsNoTracking()
                                 .SingleOrDefaultAsync(m => m.ID == id);
         }
@@ -222,6 +223,29 @@ namespace AspergillosisEPR.Lib
                     drugToUpdate.EndDate = drug.EndDate;
                     drugToUpdate.DrugId = drug.DrugId;
                     _context.Update(drugToUpdate);
+                }
+            }
+        }
+
+        internal void UpdatePatientDrugLevels(PatientDrugLevel[] drugLevels, Patient patientToUpdate)
+        {
+            foreach (var drugLevel in drugLevels)
+            {
+                if (drugLevel.ID == 0)
+                {
+                    drugLevel.PatientId = patientToUpdate.ID;
+                    _context.Update(drugLevel);
+                }
+                else
+                {
+                    var drugLevelToUpdate = patientToUpdate.DrugLevels.SingleOrDefault(s => s.ID == drugLevel.ID);
+                    drugLevelToUpdate.DrugId = drugLevel.DrugId;
+                    drugLevelToUpdate.UnitOfMeasurementId = drugLevel.UnitOfMeasurementId;
+                    drugLevelToUpdate.LabNumber = drugLevel.LabNumber;
+                    drugLevelToUpdate.ResultValue = drugLevel.ResultValue;
+                    drugLevelToUpdate.DateReceived = drugLevel.DateReceived;
+                    drugLevelToUpdate.DateTaken = drugLevel.DateTaken;
+                    _context.Update(drugLevelToUpdate);
                 }
             }
         }

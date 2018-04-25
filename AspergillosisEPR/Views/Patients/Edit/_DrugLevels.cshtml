@@ -6,6 +6,7 @@
     {
         PatientDrugLevel drugLevel = Model.DrugLevels.OrderByDescending(q => q.DateTaken).ToList()[i];
         <div class="patient-drug-level">
+            @Html.Hidden("DrugLevels[" + i.ToString() + "].ID", drugLevel.ID)
             <fieldset>
                 <div class="row">
                     <label class="select">

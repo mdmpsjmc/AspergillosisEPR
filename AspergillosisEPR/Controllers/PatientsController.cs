@@ -189,6 +189,7 @@ namespace AspergillosisEPR.Controllers
                                                               [Bind("ID, DateTaken, Value, ImmunoglobulinTypeId")] PatientImmunoglobulin[] patientImmunoglobulines,
                                                               [Bind("ID, DateTaken, FindingId, RadiologyTypeId, ChestLocationId, ChestDistributionId, GradeId, TreatmentResponseId, Note")] PatientRadiologyFinding[] radiololgyFindings,
                                                               [Bind("ID, PatientId, MedicalTrialId, PatientMedicalTrialStatusId, IdentifiedDate, ConsentedDate, RecruitedDate, Consented")] PatientMedicalTrial[] patientMedicalTrial,
+                                                              [Bind("ID, PatientId, DrugId, UnitOfMeasurementId, DateTaken, DateReceived, ResultValue, ComparisionCharacter")] PatientDrugLevel[] drugLevels,
                                                               CaseReportFormResult[] caseReportFormResult)
         {
             if (id == null)
@@ -204,6 +205,7 @@ namespace AspergillosisEPR.Controllers
             _patientManager.UpdateImmunoglobines(patientImmunoglobulines, patientToUpdate);
             _patientManager.UpdatePatientRadiology(radiololgyFindings, patientToUpdate);
             _patientManager.UpdatePatientMedicalTrials(patientMedicalTrial, patientToUpdate);
+            _patientManager.UpdatePatientDrugLevels(drugLevels, patientToUpdate); 
 
             _caseReportFormManager.UpdateCaseReportFormsForPatient(caseReportFormResult, patientToUpdate);
 

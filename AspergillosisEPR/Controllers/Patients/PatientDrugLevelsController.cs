@@ -8,10 +8,10 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace AspergillosisEPR.Controllers.Patients
 {
-    [Route("Patients/{patientId:int}/MedicalTrials")]
-    public class PatientMedicalTrialsController : PatientBaseController
+    [Route("Patients/{patientId:int}/DrugLevels")]
+    public class PatientDrugLevelsController : PatientBaseController
     {
-        public PatientMedicalTrialsController(AspergillosisContext context) : base(context)
+        public PatientDrugLevelsController(AspergillosisContext context) : base(context)
         {
         }
 
@@ -21,8 +21,8 @@ namespace AspergillosisEPR.Controllers.Patients
         [Route("delete/{id:int}")]
         public async Task<IActionResult> Delete(int id)
         {
-            var trial =  _context.PatientMedicalTrials.Where(t => t.ID == id).FirstOrDefault();
-            _context.PatientMedicalTrials.Remove(trial);
+            var drugLevel =  _context.PatientDrugLevels.Where(t => t.ID == id).FirstOrDefault();
+            _context.PatientDrugLevels.Remove(drugLevel);
             await _context.SaveChangesAsync();
             return Json(new { ok = "ok" });
         }

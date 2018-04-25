@@ -20,12 +20,12 @@ namespace AspergillosisEPR.Models.Patients
         public int UnitOfMeasurementId { get; set; }
 
         [DataType(DataType.Date)]
-        [Display(Name = "Date of Death")]
+        [Display(Name = "Date Taken")]
         [DisplayFormat(DataFormatString = "{dd-MM-yyyy}")]
         public DateTime DateTaken { get; set; }
 
         [DataType(DataType.Date)]
-        [Display(Name = "Date of Death")]
+        [Display(Name = "Date Received")]
         [DisplayFormat(DataFormatString = "{dd-MM-yyyy}")]
         public DateTime DateReceived { get; set; }
 
