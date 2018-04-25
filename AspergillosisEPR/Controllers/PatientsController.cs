@@ -290,7 +290,7 @@ namespace AspergillosisEPR.Controllers
             foreach (var patientDrugLevel in patient.DrugLevels)
             {
                 _context.Entry(patientDrugLevel).Reference<Drug>(t => t.Drug).Load();
-                _context.Entry(patientDrugLevel).Reference<UnitOfMeasurement>(t => t.Unit).Load();
+                _context.Entry(patientDrugLevel).Reference<UnitOfMeasurement>(t => t.UnitOfMeasurement).Load();
             }
         }
 

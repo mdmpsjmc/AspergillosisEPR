@@ -36,6 +36,7 @@ namespace AspergillosisEPR.Models.PatientViewModels
         public bool ShowDetails { get; set; }
         public bool ShowCaseReportForms { get; set; }
         public bool ShowTrials { get; set; }
+        public bool ShowDrugLevels { get; set; }
 
         public string SgrqImageChartFile { get; set; }
 
@@ -50,6 +51,7 @@ namespace AspergillosisEPR.Models.PatientViewModels
             ShowButtons = true;
             ShowWeight = true;
             ShowCaseReportForms = true;
+            ShowDrugLevels = true;
         }
 
         public static PatientDetailsViewModel BuildPatientViewModel(AspergillosisContext context, 
@@ -146,7 +148,7 @@ namespace AspergillosisEPR.Models.PatientViewModels
             foreach (var patientDrugLevel in patient.DrugLevels)
             {
                 context.Entry(patientDrugLevel).Reference<Drug>(t => t.Drug).Load();
-                context.Entry(patientDrugLevel).Reference<UnitOfMeasurement>(t => t.Unit).Load();
+                context.Entry(patientDrugLevel).Reference<UnitOfMeasurement>(t => t.UnitOfMeasurement).Load();
             }
         }
 

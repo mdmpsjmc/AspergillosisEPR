@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AspergillosisEPR.Lib.Exporters;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -6,8 +7,9 @@ using System.Threading.Tasks;
 
 namespace AspergillosisEPR.Models.Patients
 {
-    public class PatientDrugLevel
+    public class PatientDrugLevel : Exportable
     {
+
         public int ID { get; set; }
         public int PatientId { get; set; }
 
@@ -37,17 +39,24 @@ namespace AspergillosisEPR.Models.Patients
 
         public Drug Drug { get; set; }
         public Patient Patient { get; set; }
-        public UnitOfMeasurement Unit { get; set; }
-        
+        public UnitOfMeasurement UnitOfMeasurement { get; set; }
+
+        override public List<string> ExcludedProperties()
+        {
+            return new List<string>()
+            {
+                "PatientId", "Patient", "Drug", "UnitOfMeasurement"
+            };
+        }
 
         public string Result()
         {
             if (!string.IsNullOrEmpty(ComparisionCharacter))
             {
-                return ComparisionCharacter + ResultValue.ToString() + " " + Unit.Name;
+                return ComparisionCharacter + ResultValue.ToString() + " " + UnitOfMeasurement.Name;
             } else
             {
-                return ResultValue.ToString() + " " + Unit.Name;
+                return ResultValue.ToString() + " " + UnitOfMeasurement.Name;
             }
         }
 

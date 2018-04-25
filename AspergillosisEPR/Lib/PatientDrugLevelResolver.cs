@@ -23,7 +23,7 @@ namespace AspergillosisEPR.Lib
             PatientDrugLevel = new PatientDrugLevel()
             {
                 Drug = drug,
-                Unit = uom
+                UnitOfMeasurement = uom
             };                        
         }
 

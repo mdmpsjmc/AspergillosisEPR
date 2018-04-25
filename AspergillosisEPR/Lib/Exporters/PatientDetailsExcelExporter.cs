@@ -77,16 +77,16 @@ namespace AspergillosisEPR.Lib.Exporters
                 var propertyName = propertyInfo.Name.ToString().Replace("Show", "");
                 var displayKeyValue = _form[propertyInfo.Name];
 
-                if (displayKeyValue == "on")
+                if (displayKeyValue == "on" || (propertyName == "DrugLevels" && _form["ShowDrugs"] == "on"))
                 {
                     if (propertyName == "SGRQ") isSGRQChartIncluded = true;
                     if (propertyName == "Ig") isIgChartIncluded = true;
                     if (propertyName == "CaseReportForms") continue;
                     ISheet currentSheet = _outputWorkbook.CreateSheet(propertyName);
                     var items = GetCollectionFromTabName(propertyName);
-                    if (CollectionToBeGroupped().Keys.Contains(propertyName))
+                    if (CollectionsToBeGroupped().Keys.Contains(propertyName))
                     {
-                        var groupedItems = items.GroupBy(i => i.GetPropertyValue(CollectionToBeGroupped()[propertyName]));
+                        var groupedItems = items.GroupBy(i => i.GetPropertyValue(CollectionsToBeGroupped()[propertyName]));
                         AddCollectionDataToCurrentSheet(groupedItems.SelectMany(gi => gi).ToList(), currentSheet);
                     }
                     else 
@@ -257,6 +257,7 @@ namespace AspergillosisEPR.Lib.Exporters
             var dictionary = new Dictionary<string, List<object>>();
             dictionary.Add("Diagnoses", allDx.ToList<object>());
             dictionary.Add("Drugs", _patientDetailsVM.PatientDrugs.ToList<object>());
+            dictionary.Add("DrugLevels", _patientDetailsVM.DrugLevels.ToList<object>());
             dictionary.Add("SGRQ", _patientDetailsVM.STGQuestionnaires.ToList<object>());
             dictionary.Add("Ig", _patientDetailsVM.PatientImmunoglobulines.OrderBy(pi => pi.DateTaken).ToList<object>());
             dictionary.Add("CaseReportForms", _patientDetailsVM.CaseReportForms.SelectMany(f => f).OrderBy(f => f.DateTaken).ToList<object>());
@@ -266,7 +267,7 @@ namespace AspergillosisEPR.Lib.Exporters
             return dictionary[tabName];
         }
 
-        private Dictionary<string, string> CollectionToBeGroupped()
+        private Dictionary<string, string> CollectionsToBeGroupped()
         {
             var collectionToBeGroupped = new Dictionary<string, string>();
             collectionToBeGroupped.Add("Ig", "ImmunoglobulinTypeId");

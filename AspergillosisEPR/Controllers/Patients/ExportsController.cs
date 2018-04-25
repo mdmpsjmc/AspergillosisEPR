@@ -41,19 +41,35 @@ namespace AspergillosisEPR.Controllers.Patients
         protected void SetItemsToShowInExport(PatientDetailsViewModel patientDetailsViewModel)
         {
             var displayControlKeys = Request.Form.Keys.Where(k => k.Contains("Show")).ToList();
-
+            if (displayControlKeys.Contains("ShowDrugs"))
+            {
+                displayControlKeys.Add("ShowDrugLevels");
+            }
             foreach (var key in DetailsDisplayControlProperties())
             {
                 var displayKeyValue = Request.Form[key.Name];
                 var propertyInfo = patientDetailsViewModel.GetType().GetProperty(key.Name);
                 if (displayKeyValue == "on")
                 {
-                    propertyInfo.SetValue(patientDetailsViewModel, true);                    
+                    propertyInfo.SetValue(patientDetailsViewModel, true);
                 }
                 else
                 {
                     propertyInfo.SetValue(patientDetailsViewModel, false);
                 }
+            }
+            AddDrugLevelsIfDrugsChecked(patientDetailsViewModel);
+        }
+
+        private static void AddDrugLevelsIfDrugsChecked(PatientDetailsViewModel patientDetailsViewModel)
+        {
+            if (patientDetailsViewModel.ShowDrugs)
+            {
+                patientDetailsViewModel.ShowDrugLevels = true;
+            }
+            else
+            {
+                patientDetailsViewModel.ShowDrugLevels = false;
             }
         }
 
