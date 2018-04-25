@@ -70,5 +70,26 @@ namespace AspergillosisEPR.Controllers.Patients
 
             return Json(viewModelChartData);
         }
+
+        [Route("DrugLevels")]
+        [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
+        public async Task<ActionResult> DrugLevels(int patientId)
+        {
+            var patient = await _context.Patients
+                                .Include(p => p.DrugLevels)
+                                    .ThenInclude(p => p.UnitOfMeasurement)
+                                .Include(p => p.DrugLevels)
+                                    .ThenInclude(d => d.Drug)
+                                .AsNoTracking()
+                                .SingleOrDefaultAsync(m => m.ID == patientId);
+
+            var drugLevels = patient.DrugLevels.OrderBy(q => q.DateTaken)
+                                                          .ToList();
+
+            var viewModelChartData = PatientDrugLevelsChartViewModel
+                                                    .Build(drugLevels, patient);
+
+            return Json(viewModelChartData);
+        }
     }
 }

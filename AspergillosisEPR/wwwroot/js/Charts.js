@@ -37,7 +37,52 @@
             case "measurement":
                 measurementChartFromResponse(response);
                 break;
+            case "drug-level":
+                drugLevelChartFromResponse(response);
+                break;
         }
+    }
+
+    var drugLevelChartFromResponse = function(response) {
+        var drugLevel = [];
+        var labels = [];
+        var drugName = response[0].drug;
+
+        $.each(response, function (index, chartItem) {
+            var stringDate = moment.unix(chartItem.dateTaken).format("ll");
+            drugLevel.push({ x: stringDate, y: chartItem.numericResult });
+            labels.push(stringDate);
+        });
+
+        var chartData = {
+            labels: labels,
+            datasets: [
+                {
+                    label: drugName + " Drug Level",
+                    backgroundColor: "rgba(255,99,132,0.2)",
+                    borderColor: "rgba(255,99,132,1)",
+                    borderWidth: 1,
+                    hoverBackgroundColor: "rgba(255,99,132,0.4)",
+                    hoverBorderColor: "rgba(255,99,132,1)",
+                    data: drugLevel
+                }
+            ]
+        };
+
+        var options = {
+            animation: {
+                duration: 2000,
+                onComplete: function (animation) {
+
+                }
+            },
+
+        };
+        var stackedLine = new Chart(document.getElementById("drug-level-chart-canvas"), {
+            type: 'line',
+            data: chartData,
+            options: options
+        });
     }
 
     var measurementChartFromResponse = function (response) {
@@ -273,6 +318,8 @@
             initializeChart("click.show-sgrq", "a.show-sgrq-chart", "div#sgrq-chart-", "sgrq");
             initializeChart("click.show-ig-chart", "a.show-immunology-chart", "div#ig-chart-", "ig", false);
             initializeChart("click.show-measurement-chart", "a.show-measurement-chart", "div#measurement-chart-", "measurement", false);
+            initializeChart("click.show-drug-levels-chart", "a.show-drug-levels-chart", "div#drug-levels-chart-", "drug-level", false);
+
         },
 
         sgrqChartFromResponse: function (response) {
