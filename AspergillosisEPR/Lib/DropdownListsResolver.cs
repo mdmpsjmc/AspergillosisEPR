@@ -1,5 +1,6 @@
 ﻿using AspergillosisEPR.Data;
 using AspergillosisEPR.Models;
+using AspergillosisEPR.Models.Patients;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -59,6 +60,23 @@ namespace AspergillosisEPR.Lib
                 {
                     Text = investigator.PersonTitle.Name + " " + investigator.FirstName + " " + investigator.LastName,
                     Value = investigator.ID.ToString()
+                };
+                selectListItems.Add(optionItem);
+            }
+            var selectList = new SelectList(selectListItems, "Value", "Text");
+            return selectList;
+        }
+
+        public SelectList PopulateComparisionChars(string selectedItem = null)
+        {
+            var selectListItems = new List<SelectListItem>();
+            foreach (var character in PatientDrugLevel.ComparisionCharacters())
+            {
+                var optionItem = new SelectListItem()
+                {
+                    Text = character,
+                    Value = character,
+                    Selected = character == selectedItem
                 };
                 selectListItems.Add(optionItem);
             }
@@ -224,7 +242,7 @@ namespace AspergillosisEPR.Lib
             PopulatePatientStatusesDropdownList(patient.PatientStatusId);
         }
 
-        internal void BindDrugLevelSelects(dynamic viewBag, Patient patient)
+        public void BindDrugLevelSelects(dynamic viewBag, Patient patient)
         {
             List<SelectList> drugs = new List<SelectList>();
             List<SelectList> units = new List<SelectList>();
@@ -235,10 +253,12 @@ namespace AspergillosisEPR.Lib
                 var item = patient.DrugLevels.OrderByDescending(t => t.DateTaken).ToList()[i];
                 drugs.Add(DrugsDropDownList(item.DrugId));
                 units.Add(PouplateUnitsDropdownList(item.UnitOfMeasurementId));
+                chars.Add(PopulateComparisionChars(item.ComparisionCharacter));
             }
 
             viewBag.DrugId = drugs;
             viewBag.UnitId = units;
+            viewBag.Chars = chars;
         }
 
         public SelectList PouplateUnitsDropdownList(object selectedStatus = null)

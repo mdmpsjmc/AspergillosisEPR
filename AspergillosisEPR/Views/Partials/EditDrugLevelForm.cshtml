@@ -1,0 +1,58 @@
+﻿@using AspergillosisEPR.Models.Patients;
+@model AspergillosisEPR.Models.Patients.PatientDrugLevel;    
+<div class="patient-drug-level">
+    <fieldset>
+        <div class="row">
+            <label class="select">
+                <label asp-for="@Model.DrugId" class="select">
+                    @Html.DropDownList("Models[" + (string)ViewBag.Index + "].DrugId", (SelectList)ViewBag.DrugId, "Select Drug")
+                    <i></i>
+                </label>
+            </label>
+        </div>
+    </fieldset>
+    <section class="col col-6">
+        <label class="input">
+            <i class="icon-append fa fa-calendar"></i>
+            <input asp-for="@Model.DateReceived" placeholder="Date Received" class="date-taken" type="text" name="Models[@((string)ViewBag.Index)].DateReceived" id="Models_@((string)ViewBag.Index)__DateReceived">
+        </label>
+    </section>
+    <section class="col col-6">
+        <label class="input">
+            <i class="icon-append fa fa-calendar"></i>
+            <input asp-for="@Model.DateTaken" placeholder="Date Taken" class="date-taken" type="text" name="Models[@((string)ViewBag.Index)].DateTaken" id="Models_@((string)ViewBag.Index)__DateTaken">
+        </label>
+    </section>
+    <div class="row">
+        <section class="col col-2">
+            <label asp-for="ComparisionCharacter" class="select">
+                @Html.DropDownListFor(m => m.ComparisionCharacter, new SelectList(PatientDrugLevel.ComparisionCharacters()), "none")
+                <i></i>
+                <span asp-validation-for="ComparisionCharacter" class="text-danger"></span>
+            </label>
+        </section>
+        <section class="col col-4">
+            <label class="input">
+                <i class="icon-append fa fa-flask"></i>
+                <input asp-for="@Model.ResultValue" placeholder="Result" type="text" name="Models[@((string)ViewBag.Index))].ResultValue" id="Models_@((string)ViewBag.Index))__ResultValue">
+            </label>
+        </section>
+        <section class="col col-2">
+            <label class="select">
+                @Html.DropDownList("Models[" + ((string)ViewBag.Index) + "].UnitOfMeasurementId", (SelectList)ViewBag.UnitId, "none")
+                <i></i>
+            </label>
+        </section>
+        <section class="col col-4">
+            <label class="input">
+                <i class="icon-append fa fa-flask"></i>
+                <input asp-for="@Model.LabNumber" placeholder="Lab Number" type="text" name="Models[@((string)ViewBag.Index)].LabNumber" id="Models_@(((string)ViewBag.Index))__LabNumber">
+            </label>
+        </section>
+    </div>
+    <div class="row">
+        <a href="javascript:void(0)" class="btn btn-danger remove-new-drug pull-right" data-what="drug level" data-toggle="tooltip" data-title="Remove drug level" style="padding: 5px">
+            <i class="fa fa-trash"></i>
+        </a>
+    </div>
+</div>

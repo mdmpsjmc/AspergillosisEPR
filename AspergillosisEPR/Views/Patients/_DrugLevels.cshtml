@@ -3,7 +3,7 @@
 </div>
 @if (User.IsInRole("Create Role") || User.IsInRole("Admin Role"))
 {
-    <a href="@Url.Action("DrugLevelForm", "Partials")" class="btn btn-success add-drug-level add-new-patient-partial disable-default" data-visible-row="div.drug-level-row:visible" data-insert-into-class="div.drug-level-form" style="padding: 5px">
+    <a href="@Url.Action("DrugLevelForm", "Partials")" class="btn btn-success add-drug-level add-new-patient-partial disable-default" data-visible-row="div.patient-drug-level-row:visible" data-insert-into-class="div.drug-level-form" style="padding: 5px">
         <i class="fa fa-plus"></i>
         <span>
             <strong>Add patient drug level</strong>
