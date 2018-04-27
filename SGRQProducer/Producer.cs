@@ -17,7 +17,7 @@ namespace SGRQProducer
         static void Main(string[] args)
         {
             var builder = new ConfigurationBuilder()
-                              .SetBasePath(Directory.GetCurrentDirectory())
+                              .SetBasePath(Directory.GetCurrentDirectory())                             
                               .AddJsonFile("appsettings.json");
 
             configuration = builder.Build();
@@ -26,8 +26,7 @@ namespace SGRQProducer
             ConfigureServices(serviceCollection);
 
             var serviceProvider = serviceCollection.BuildServiceProvider();
-            var logger = serviceProvider.GetService<ILogger<Producer>>();
-            
+            var logger = serviceProvider.GetService<ILogger<Producer>>();            
 
             _apiClient = new SGRQApiClient(configuration);
 
@@ -69,7 +68,5 @@ namespace SGRQProducer
             services.AddLogging(configure => configure.AddConsole())
                 .AddTransient<Producer>();            
         }
-
-
     }
 }
