@@ -2,6 +2,15 @@
   "version": 3,
   "targets": {
     ".NETCoreApp,Version=v2.0": {
+      "FluentScheduler/5.3.0": {
+        "type": "package",
+        "compile": {
+          "lib/netstandard1.4/FluentScheduler.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard1.4/FluentScheduler.dll": {}
+        }
+      },
       "Microsoft.CSharp/4.3.0": {
         "type": "package",
         "dependencies": {
@@ -1778,6 +1787,21 @@
     }
   },
   "libraries": {
+    "FluentScheduler/5.3.0": {
+      "sha512": "XBLwqw3FFdkG6qIrxg7M9mIsigZje+qKTinWZWfyr47IN6O/0z6fFUoQCVEBvY0lk1puf4hU0VnVhN/kPNZL+A==",
+      "type": "package",
+      "path": "fluentscheduler/5.3.0",
+      "files": [
+        "fluentscheduler.5.3.0.nupkg.sha512",
+        "fluentscheduler.nuspec",
+        "lib/net40/FluentScheduler.dll",
+        "lib/net40/FluentScheduler.pdb",
+        "lib/net40/FluentScheduler.xml",
+        "lib/netstandard1.4/FluentScheduler.dll",
+        "lib/netstandard1.4/FluentScheduler.pdb",
+        "lib/netstandard1.4/FluentScheduler.xml"
+      ]
+    },
     "Microsoft.CSharp/4.3.0": {
       "sha512": "GzRKyWuHKJSbkx1ZISdqCgGifsowjfu9qhzJgYN+xa3tYTFKqQc1OvGvvwyvQBkQmB0YUPgBrSnWHaEZ0kwUgg==",
       "type": "package",
@@ -6024,6 +6048,7 @@
   },
   "projectFileDependencyGroups": {
     ".NETCoreApp,Version=v2.0": [
+      "FluentScheduler >= 5.3.0",
       "Microsoft.Extensions.Configuration.EnvironmentVariables >= 2.0.1",
       "Microsoft.Extensions.Configuration.Json >= 2.0.1",
       "Microsoft.Extensions.DependencyInjection >= 2.0.0",
@@ -6092,6 +6117,10 @@
           "RestSharp": {
             "target": "Package",
             "version": "106.2.2"
+          },
+          "FluentScheduler": {
+            "target": "Package",
+            "version": "5.3.0"
           },
           "Microsoft.NETCore.App": {
             "target": "Package",
