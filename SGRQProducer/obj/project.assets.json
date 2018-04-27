@@ -4050,6 +4050,9 @@
   },
   "project": {
     "version": "1.0.0",
+    "restoreSettings": {
+      "hideWarningsAndErrors": true
+    },
     "restore": {
       "projectUniqueName": "C:\\Users\\user\\source\\repos\\AspergillosisEPR.old\\SGRQProducer\\SGRQProducer.csproj",
       "projectName": "SGRQProducer",
@@ -4085,11 +4088,6 @@
     "frameworks": {
       "netcoreapp2.0": {
         "dependencies": {
-          "Microsoft.NETCore.App": {
-            "target": "Package",
-            "version": "2.0",
-            "autoReferenced": true
-          },
           "Microsoft.Extensions.Configuration.Json": {
             "target": "Package",
             "version": "2.0.1"
@@ -4097,6 +4095,11 @@
           "RestSharp": {
             "target": "Package",
             "version": "106.2.2"
+          },
+          "Microsoft.NETCore.App": {
+            "target": "Package",
+            "version": "2.0",
+            "autoReferenced": true
           }
         },
         "imports": [

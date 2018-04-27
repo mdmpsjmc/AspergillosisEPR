@@ -5,19 +5,21 @@ using System.IO;
 
 namespace SGRQProducer
 {
-    class Program
+    class Producer
     {
         private static IConfigurationRoot configuration;
+        private static SGRQApiClient _apiClient;
 
         static void Main(string[] args)
         {
             var builder = new ConfigurationBuilder()
                               .SetBasePath(Directory.GetCurrentDirectory())
                               .AddJsonFile("appsettings.json");
-
             configuration = builder.Build();
-            string foo = configuration.GetSection("sgrqApiUrl").Value;
-            Console.WriteLine(foo);
+            _apiClient = new SGRQApiClient(configuration);
+            configuration = builder.Build();
+            _apiClient.FetchAfterDate("2018-02-28");
+            
         }
     }
 }
