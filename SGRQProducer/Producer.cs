@@ -13,6 +13,7 @@ namespace SGRQProducer
     {
         private static IConfigurationRoot configuration;
         private static SGRQApiClient _apiClient;
+        private static string _routingKey = "sgrq_queue";
 
         static void Main(string[] args)
         {
@@ -42,7 +43,7 @@ namespace SGRQProducer
 
             using (var channel = connection.CreateModel())
             {
-                channel.QueueDeclare(queue: "sgrq_queue",
+                channel.QueueDeclare(queue: _routingKey,
                                      durable: true,
                                      exclusive: false,
                                      autoDelete: false,
@@ -55,7 +56,7 @@ namespace SGRQProducer
                 properties.Persistent = true;
 
                 channel.BasicPublish(exchange: "",
-                                     routingKey: "sgrq_queue",
+                                     routingKey: _routingKey,
                                      basicProperties: properties,
                                      body: body);
                 

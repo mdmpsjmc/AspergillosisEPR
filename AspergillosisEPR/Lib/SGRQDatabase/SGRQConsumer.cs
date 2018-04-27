@@ -1,4 +1,7 @@
-﻿using Newtonsoft.Json;
+﻿using AspergillosisEPR.Models.SGRQDatabase;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using System;
@@ -11,13 +14,20 @@ namespace AspergillosisEPR.Lib.SGRQDatabase
 {
     public class SGRQConsumer
     {
-        public static void Main()
+        private static string _routingKey = "sgrq_queue";
+
+        public static void Run()
         {
+            var serviceCollection = new ServiceCollection();
+            ConfigureServices(serviceCollection);
+            var serviceProvider = serviceCollection.BuildServiceProvider();
+            var logger = serviceProvider.GetService<ILogger<SGRQConsumer>>();
+
             var factory = new ConnectionFactory() { HostName = "localhost" };
             using (var connection = factory.CreateConnection())
             using (var channel = connection.CreateModel())
             {
-                channel.QueueDeclare(queue: "sgrq_queue",
+                channel.QueueDeclare(queue: _routingKey,
                                      durable: true,
                                      exclusive: false,
                                      autoDelete: false,
@@ -25,25 +35,36 @@ namespace AspergillosisEPR.Lib.SGRQDatabase
 
                 channel.BasicQos(prefetchSize: 0, prefetchCount: 1, global: false);
 
-                Console.WriteLine(" [*] Waiting for messages.");
+                logger.LogInformation(" [*] Waiting for messages.");
 
                 var consumer = new EventingBasicConsumer(channel);
                 consumer.Received += (model, ea) =>
                 {
                     var body = ea.Body;
                     var message = Encoding.UTF8.GetString(body);
-                    Console.WriteLine(" [x] Received {0}", message);
 
-                    var sgrqs = JsonConvert.DeserializeObject(message);
+                    logger.LogInformation(" [x] Received {0}", message);
 
-                    Console.WriteLine(" [x] Done");
+                    RootObject sgrqs = (RootObject) JsonConvert.DeserializeObject(message);
+                    foreach(var sgrqQuestionnaire in sgrqs.sgrq)
+                    {
+                        logger.LogInformation(sgrqQuestionnaire.NAC_ID);
+                    }
+                    logger.LogInformation(" [x] Done");
 
                     channel.BasicAck(deliveryTag: ea.DeliveryTag, multiple: false);
                 };
-                channel.BasicConsume(queue: "sgrq_queue",
+                channel.BasicConsume(queue: _routingKey,
                                      autoAck: false,
                                      consumer: consumer);
             }
+        }
+
+
+        private static void ConfigureServices(IServiceCollection services)
+        {
+            services.AddLogging(configure => configure.AddConsole())
+                .AddTransient<SGRQConsumer>();
         }
     }
 }

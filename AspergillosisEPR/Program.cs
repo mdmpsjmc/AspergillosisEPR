@@ -4,6 +4,7 @@ using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.DependencyInjection;
+using AspergillosisEPR.Lib.SGRQDatabase;
 
 namespace AspergillosisEPR
 {
@@ -40,7 +41,7 @@ namespace AspergillosisEPR
                     logger.LogError(ex, "An error occurred while seeding the database.");
                 }
             }
-
+            SGRQConsumer.Run();
             host.Run();
         }
 
