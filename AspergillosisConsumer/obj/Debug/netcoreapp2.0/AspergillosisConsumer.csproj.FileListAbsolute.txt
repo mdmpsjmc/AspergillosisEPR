@@ -1,0 +1,16 @@
+C:\Users\user\source\repos\AspergillosisEPR.old\AspergillosisConsumer\bin\Debug\netcoreapp2.0\AspergillosisConsumer.deps.json
+C:\Users\user\source\repos\AspergillosisEPR.old\AspergillosisConsumer\bin\Debug\netcoreapp2.0\AspergillosisConsumer.runtimeconfig.json
+C:\Users\user\source\repos\AspergillosisEPR.old\AspergillosisConsumer\bin\Debug\netcoreapp2.0\AspergillosisConsumer.runtimeconfig.dev.json
+C:\Users\user\source\repos\AspergillosisEPR.old\AspergillosisConsumer\bin\Debug\netcoreapp2.0\AspergillosisConsumer.dll
+C:\Users\user\source\repos\AspergillosisEPR.old\AspergillosisConsumer\obj\Debug\netcoreapp2.0\AspergillosisConsumer.csprojResolveAssemblyReference.cache
+C:\Users\user\source\repos\AspergillosisEPR.old\AspergillosisConsumer\obj\Debug\netcoreapp2.0\AspergillosisConsumer.csproj.CoreCompileInputs.cache
+C:\Users\user\source\repos\AspergillosisEPR.old\AspergillosisConsumer\obj\Debug\netcoreapp2.0\AspergillosisConsumer.AssemblyInfoInputs.cache
+C:\Users\user\source\repos\AspergillosisEPR.old\AspergillosisConsumer\obj\Debug\netcoreapp2.0\AspergillosisConsumer.AssemblyInfo.cs
+C:\Users\user\source\repos\AspergillosisEPR.old\AspergillosisConsumer\bin\Debug\netcoreapp2.0\xunit.runner.visualstudio.dotnetcore.testadapter.dll
+C:\Users\user\source\repos\AspergillosisEPR.old\AspergillosisConsumer\bin\Debug\netcoreapp2.0\xunit.runner.reporters.netcoreapp10.dll
+C:\Users\user\source\repos\AspergillosisEPR.old\AspergillosisConsumer\bin\Debug\netcoreapp2.0\xunit.runner.utility.netcoreapp10.dll
+C:\Users\user\source\repos\AspergillosisEPR.old\AspergillosisConsumer\bin\Debug\netcoreapp2.0\AspergillosisEPR.dll
+C:\Users\user\source\repos\AspergillosisEPR.old\AspergillosisConsumer\bin\Debug\netcoreapp2.0\AspergillosisEPR.pdb
+C:\Users\user\source\repos\AspergillosisEPR.old\AspergillosisConsumer\bin\Debug\netcoreapp2.0\AspergillosisConsumer.pdb
+C:\Users\user\source\repos\AspergillosisEPR.old\AspergillosisConsumer\obj\Debug\netcoreapp2.0\AspergillosisConsumer.dll
+C:\Users\user\source\repos\AspergillosisEPR.old\AspergillosisConsumer\obj\Debug\netcoreapp2.0\AspergillosisConsumer.pdb

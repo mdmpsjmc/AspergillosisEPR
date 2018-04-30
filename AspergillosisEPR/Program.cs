@@ -4,7 +4,6 @@ using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.DependencyInjection;
-using AspergillosisEPR.Lib.SGRQDatabase;
 using FluentScheduler;
 
 namespace AspergillosisEPR
@@ -14,10 +13,6 @@ namespace AspergillosisEPR
         public static void Main(string[] args)
         {
             var host = BuildWebHost(args);
-            var registry = new Registry();
-            registry.Schedule(() => 
-                SGRQConsumer.Run()
-             ).ToRunNow().AndEvery(30).Seconds();
             using (var scope = host.Services.CreateScope())
             {
                 var services = scope.ServiceProvider;
@@ -57,5 +52,6 @@ namespace AspergillosisEPR
                 .UseKestrel()
                 .UseStartup<Startup>()
                 .Build();
+
     }
 }

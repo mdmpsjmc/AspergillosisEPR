@@ -20,6 +20,7 @@ using System.Runtime.Loader;
 using System.Reflection;
 using static AspergillosisEPR.Services.ViewToString;
 using AspNetCore.RouteAnalyzer;
+using FluentScheduler;
 
 namespace AspergillosisEPR
 {
@@ -184,7 +185,6 @@ namespace AspergillosisEPR
                 }                
             }
         }
-
 
         internal class CustomAssemblyLoadContext : AssemblyLoadContext
         {
