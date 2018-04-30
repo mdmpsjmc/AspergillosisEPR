@@ -1,21 +1,20 @@
-﻿using FluentScheduler;
-using Microsoft.Extensions.PlatformAbstractions;
+﻿using Microsoft.Extensions.PlatformAbstractions;
 using PeterKottas.DotNetCore.WindowsService;
 using PeterKottas.DotNetCore.WindowsService.Base;
 using PeterKottas.DotNetCore.WindowsService.Interfaces;
 using System;
+using System.Collections.Generic;
 using System.IO;
-using System.Timers;
+using System.Text;
 
-
-namespace RabbitProducers
+namespace RabbitConsumers.SGRQ
 {
-    class SGRQProducerService :  MicroService, IMicroService
+    class SGRQConsumerService : MicroService, IMicroService
     {
         private IMicroServiceController controller;
-        private static int INTERVAL_IN_MILISECONDS = 60000;
+        private static int INTERVAL_IN_MILISECONDS = 10000;
 
-        public SGRQProducerService(IMicroServiceController controller)
+        public SGRQConsumerService(IMicroServiceController controller)
         {
             this.controller = controller;
         }
@@ -25,9 +24,10 @@ namespace RabbitProducers
             this.StartBase();
             Timers.Start("Poller", INTERVAL_IN_MILISECONDS, () =>
             {
-                Console.WriteLine("Reading Saint Georges Respiratory Questionnaires into exchange queue at {0}\n", DateTime.Now.ToString("o"));
-                var producer = new SGRQRabbitMQProducer();
-                producer.Produce();
+                Console.WriteLine("Consuming Saint Georges Respiratory Questionnaires into database at {0}\n", DateTime.Now.ToString("o"));
+                var consumer = new SGRQRabbitMQConsumer();
+                consumer.Consume();
+
             },
             (e) =>
             {
@@ -44,15 +44,15 @@ namespace RabbitProducers
 
         public static void Main(string[] args)
         {
-            var fileName = Path.Combine(PlatformServices.Default.Application.ApplicationBasePath, "log.txt");
-            ServiceRunner<SGRQProducerService>.Run(config =>
+            ServiceRunner<SGRQConsumerService>.Run(config =>
             {
+                var fileName = Path.Combine(PlatformServices.Default.Application.ApplicationBasePath, "log.txt");
                 var name = config.GetDefaultName();
                 config.Service(serviceConfig =>
                 {
                     serviceConfig.ServiceFactory((extraArguments, controller) =>
                     {
-                        return new SGRQProducerService(controller);
+                        return new SGRQConsumerService(controller);
                     });
 
                     serviceConfig.OnStart((service, extraParams) =>
@@ -75,5 +75,9 @@ namespace RabbitProducers
                 });
             });
         }
+
     }
+
+ 
+
 }
