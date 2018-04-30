@@ -14,3 +14,4 @@ C:\Users\user\source\repos\AspergillosisEPR.old\AspergillosisConsumer\bin\Debug\
 C:\Users\user\source\repos\AspergillosisEPR.old\AspergillosisConsumer\bin\Debug\netcoreapp2.0\AspergillosisConsumer.pdb
 C:\Users\user\source\repos\AspergillosisEPR.old\AspergillosisConsumer\obj\Debug\netcoreapp2.0\AspergillosisConsumer.dll
 C:\Users\user\source\repos\AspergillosisEPR.old\AspergillosisConsumer\obj\Debug\netcoreapp2.0\AspergillosisConsumer.pdb
+C:\Users\user\source\repos\AspergillosisEPR.old\AspergillosisConsumer\bin\Debug\netcoreapp2.0\appsettings.json

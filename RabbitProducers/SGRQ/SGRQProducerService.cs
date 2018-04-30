@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.PlatformAbstractions;
+﻿using FluentScheduler;
+using Microsoft.Extensions.PlatformAbstractions;
 using PeterKottas.DotNetCore.WindowsService;
 using PeterKottas.DotNetCore.WindowsService.Base;
 using PeterKottas.DotNetCore.WindowsService.Interfaces;
@@ -6,47 +7,38 @@ using System;
 using System.IO;
 using System.Timers;
 
+
 namespace RabbitProducers
 {
-    class SGRQProducer :  IMicroService
+    class SGRQProducer :  MicroService, IMicroService
     {
-        public SGRQProducer()
-        {
-
-        }
         private IMicroServiceController controller;
-
-        private System.Timers.Timer timer = new System.Timers.Timer(1000);
+        private static int INTERVAL_IN_MILISECONDS = 30000;
 
         public SGRQProducer(IMicroServiceController controller)
         {
             this.controller = controller;
         }
 
-        private string fileName = Path.Combine(PlatformServices.Default.Application.ApplicationBasePath, "log.txt");
         public void Start()
         {
+            this.StartBase();
+            Timers.Start("Poller", INTERVAL_IN_MILISECONDS, () =>
+            {
+                Console.WriteLine("Reading Saint Georges Respiratory Questionnaires into exchange queue at {0}\n", DateTime.Now.ToString("o"));
+                var producer = new SGRQRabbitMQProducer();
+                producer.Produce();
+            },
+            (e) =>
+            {
+                Console.WriteLine("Exception while polling: {0}\n", e.ToString());
+            });
             Console.WriteLine("I started");
-            Console.WriteLine(fileName);
-            File.AppendAllText(fileName, "Started\n");
-
-            /**
-             * A timer is a simple example. But this could easily 
-             * be a port or messaging queue client
-             */
-            timer.Elapsed += _timer_Elapsed;
-            timer.Start();
-        }
-
-        private void _timer_Elapsed(object sender, ElapsedEventArgs e)
-        {
-            File.AppendAllText(fileName, string.Format("Polling at {0}\n", DateTime.Now.ToString("o")));
         }
 
         public void Stop()
         {
-            timer.Stop();
-            File.AppendAllText(fileName, "Stopped\n");
+            this.StopBase();
             Console.WriteLine("I stopped");
         }
 

@@ -1,21 +1,19 @@
 ﻿
 using AspergillosisEPR.Lib.RabbitMq;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using RabbitMQ.Client;
 using System;
 using System.IO;
 using System.Text;
 
-namespace AspergillosisEPR.RabbitMq
+namespace RabbitProducers
+
 {
-    class Producer
+    class SGRQRabbitMQProducer
     {
         private static IConfigurationRoot configuration;
         private static SGRQApiClient _apiClient;
 
-        public Producer()
+        public SGRQRabbitMQProducer()
         {
         }
 
