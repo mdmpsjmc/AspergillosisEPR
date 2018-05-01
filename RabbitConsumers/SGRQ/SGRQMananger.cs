@@ -29,22 +29,43 @@ namespace RabbitConsumers.SGRQ
             {
                 foreach(var sgrq in message.sgrq)
                 {
-                    var patient = _context.Patients.Where(p => p.RM2Number == sgrq.RM2Number())
-                                                   .FirstOrDefault();
-                    if (patient == null)
+                    if (FindByOriginalId(sgrq.ID) == null)
                     {
-                        AddNewTemporaryPatient();
-                    } else
-                    {
-                        var questionnaire = BuildPatientSTGQuestionnaire(patient, sgrq);
+                        var patient = _context.Patients
+                                              .Where(p => p.RM2Number == sgrq.RM2Number())
+                                              .FirstOrDefault();
+                        if (patient == null)
+                        {
+                            AddPatientToTemporaryRM2List(sgrq);
+                        }
+                        else
+                        {
+                            var questionnaire = BuildPatientSTGQuestionnaire(patient, sgrq);
+                            _context.PatientSTGQuestionnaires.Add(questionnaire);
+                        }                       
                     }
+                    else
+                    {
+                        continue;
+                    }                    
                 }
             }
             _context.SaveChanges();
             return questionnaires;
         }
 
-        private object BuildPatientSTGQuestionnaire(Patient patient, Sgrq sgrq)
+        private void AddPatientToTemporaryRM2List(Sgrq sgrq)
+        {            
+        }
+
+        private PatientSTGQuestionnaire FindByOriginalId(int iD)
+        {
+            return _context.PatientSTGQuestionnaires
+                           .Where(sgrq => sgrq.OriginalImportedId == sgrq.ID.ToString())
+                           .FirstOrDefault();
+        }
+
+        private PatientSTGQuestionnaire BuildPatientSTGQuestionnaire(Patient patient, Sgrq sgrq)
         {
             var questionnaire = new PatientSTGQuestionnaire()
             {
@@ -53,15 +74,10 @@ namespace RabbitConsumers.SGRQ
                 SymptomScore = decimal.Parse(sgrq.SymptomScore.ToString()),
                 ImpactScore = decimal.Parse(sgrq.ImpactScore.ToString()), 
                 TotalScore = decimal.Parse(sgrq.TotalScore.ToString()),
+                OriginalImportedId = sgrq.ID.ToString(),
                 DateTaken = DateTime.ParseExact(sgrq.Date, "yyyy-MM-dd", CultureInfo.InvariantCulture)
-            };
-            _context.PatientSTGQuestionnaires.Add(questionnaire);
+            };            
             return questionnaire;
-        }
-     
-        private void AddNewTemporaryPatient()
-        {
-            
-        }
+        }          
     }
 }

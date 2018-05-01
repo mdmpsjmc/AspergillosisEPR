@@ -19,11 +19,14 @@ namespace RabbitConsumers
 
         public void Consume()
         {          
-            RabbitMqService rabbitMqService = new RabbitMqService("sgrq");           
+            RabbitMqService rabbitMqService = new RabbitMqService("sgrq");
+
             Console.WriteLine(" [*] Waiting for messages.");
+
             var messages = rabbitMqService.ReceiveOneWayMessages();
             var objectMessages = new List<RootObject>();
-            for(int cursor=0; cursor < messages.Count; cursor++ )
+
+            for (int cursor=0; cursor < messages.Count; cursor++ )
              {
                 var rabbitMessage = messages[cursor];
                 var objectMessage = JsonConvert.DeserializeObject<RootObject>(rabbitMessage);
