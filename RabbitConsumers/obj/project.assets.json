@@ -15285,6 +15285,9 @@
   },
   "project": {
     "version": "1.0.0",
+    "restoreSettings": {
+      "hideWarningsAndErrors": true
+    },
     "restore": {
       "projectUniqueName": "C:\\Users\\user\\source\\repos\\AspergillosisEPR.old\\RabbitConsumers\\RabbitConsumers.csproj",
       "projectName": "RabbitConsumers",
@@ -15324,34 +15327,34 @@
     "frameworks": {
       "netcoreapp2.0": {
         "dependencies": {
-          "Microsoft.NETCore.App": {
-            "target": "Package",
-            "version": "2.0",
-            "autoReferenced": true
-          },
-          "FluentScheduler": {
-            "target": "Package",
-            "version": "5.3.0"
-          },
           "Microsoft.Extensions.Configuration.Json": {
-            "target": "Package",
-            "version": "2.0.1"
-          },
-          "Microsoft.Extensions.DependencyInjection": {
-            "target": "Package",
-            "version": "2.0.0"
-          },
-          "Microsoft.Extensions.Logging": {
-            "target": "Package",
-            "version": "2.0.1"
-          },
-          "Microsoft.Extensions.Logging.Console": {
             "target": "Package",
             "version": "2.0.1"
           },
           "PeterKottas.DotNetCore.WindowsService": {
             "target": "Package",
             "version": "2.0.6"
+          },
+          "Microsoft.Extensions.DependencyInjection": {
+            "target": "Package",
+            "version": "2.0.0"
+          },
+          "FluentScheduler": {
+            "target": "Package",
+            "version": "5.3.0"
+          },
+          "Microsoft.NETCore.App": {
+            "target": "Package",
+            "version": "2.0",
+            "autoReferenced": true
+          },
+          "Microsoft.Extensions.Logging.Console": {
+            "target": "Package",
+            "version": "2.0.1"
+          },
+          "Microsoft.Extensions.Logging": {
+            "target": "Package",
+            "version": "2.0.1"
           },
           "RabbitMQ.Client": {
             "target": "Package",

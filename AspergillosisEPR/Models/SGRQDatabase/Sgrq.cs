@@ -26,5 +26,10 @@ namespace AspergillosisEPR.Models.SGRQDatabase
         public int ActivityScore { get; set; }
         public double TotalScore { get; set; }
         public object notes { get; set; }
+
+        public string RM2Number()
+        {
+            return NAC_ID.Replace("CPA", String.Empty);
+        }
     }
 }

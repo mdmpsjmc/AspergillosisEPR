@@ -75,9 +75,5 @@ namespace RabbitConsumers.SGRQ
                 });
             });
         }
-
     }
-
- 
-
 }

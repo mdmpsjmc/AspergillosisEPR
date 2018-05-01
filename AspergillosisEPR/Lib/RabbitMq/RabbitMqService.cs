@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using AspergillosisEPR.Models.SGRQDatabase;
+using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using System;
@@ -55,9 +57,10 @@ namespace AspergillosisEPR.Lib.RabbitMq
             model.QueueBind(_queue, _exchange, _messagesIdentifier);
         }
 
-        public void ReceiveOneWayMessages()
+        public List<string> ReceiveOneWayMessages()
         {
             IModel model = Connection.CreateModel();
+            var messages = new List<string>();
             SetupInitialMessageQueue(model);
             model.BasicQos(0, 1, false); //basic quality of service
             EventingBasicConsumer consumer = new EventingBasicConsumer(model);
@@ -65,11 +68,12 @@ namespace AspergillosisEPR.Lib.RabbitMq
             consumer.Received += (arg, ea) =>
             {
                     var body = ea.Body;
-                    var message = Encoding.UTF8.GetString(body);
-
+                    var message = Encoding.UTF8.GetString(body);                    
+                    messages.Add(message);
                     Console.Write(" [x] Received {0}", message);
                     model.BasicAck(ea.DeliveryTag, false);
-            };          
+            };
+            return messages;
         }
     }
 }
