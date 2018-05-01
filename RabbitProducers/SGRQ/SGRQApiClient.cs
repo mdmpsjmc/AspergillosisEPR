@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Net;
 using System.Text;
 
-namespace RabbitProducers
+namespace RabbitProducers.SGRQ
 {
     class SGRQApiClient
     {
@@ -41,6 +41,40 @@ namespace RabbitProducers
                 badResponse.StatusCode = HttpStatusCode.Unauthorized;
                 return badResponse;
             }
+        }
+
+        public IRestResponse FetchAfterGreaterThanId(string greaterThanId)
+        {
+            var response = Login();
+            if (response.IsSuccessful)
+            {
+                _token = response.Content.Replace("\"", String.Empty);
+                Console.WriteLine("Obtained session token is: " + _token);
+                return FetchQuestionnairesAfterId(greaterThanId);
+            }
+            else
+            {
+                var badResponse = new RestResponse();
+                badResponse.StatusCode = HttpStatusCode.Unauthorized;
+                return badResponse;
+            }
+        }
+
+        private IRestResponse FetchQuestionnairesAfterId(string greaterThanId)
+        {
+            var client = new RestClient();
+            client.BaseUrl = new Uri(_baseUrl);
+            client.CookieContainer = _cookieJar;
+            var request = new RestRequest();
+            request.Resource = _sgrqPath + "/sgrq";
+            request.AddQueryParameter("transform", "1");
+            request.AddQueryParameter("csrf", _token);
+            request.AddQueryParameter("filter", "ID,gt," + greaterThanId);
+            request.AddHeader("XSRF-TOKEN", _token);
+            request.AddHeader("Content-Type", FORM_CONTENT_TYPE);
+            IRestResponse response = client.Execute(request);
+            if (response.IsSuccessful) return response;
+            return null;
         }
 
         private IRestResponse FetchQuestionnaires(string allAfterDate)

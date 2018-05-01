@@ -29,26 +29,22 @@ namespace RabbitConsumers.SGRQ
             {
                 foreach(var sgrq in message.sgrq)
                 {
-                    if (FindByOriginalId(sgrq.ID) == null)
+                    if (FindByOriginalId(sgrq.ID) != null) continue;
+
+                    var patient = _context.Patients
+                                          .Where(p => p.RM2Number == sgrq.RM2Number())
+                                          .FirstOrDefault();
+
+                    if (patient == null)
                     {
-                        var patient = _context.Patients
-                                              .Where(p => p.RM2Number == sgrq.RM2Number())
-                                              .FirstOrDefault();
-                        if (patient == null)
-                        {
-                            AddPatientToTemporaryRM2List(sgrq);
-                        }
-                        else
-                        {
-                            var questionnaire = BuildPatientSTGQuestionnaire(patient, sgrq);
-                            _context.PatientSTGQuestionnaires.Add(questionnaire);
-                        }                       
+                       AddPatientToTemporaryRM2List(sgrq);
                     }
                     else
                     {
-                        continue;
-                    }                    
-                }
+                       var questionnaire = BuildPatientSTGQuestionnaire(patient, sgrq);
+                       _context.PatientSTGQuestionnaires.Add(questionnaire);
+                    }                       
+                }  
             }
             _context.SaveChanges();
             return questionnaires;
@@ -61,7 +57,7 @@ namespace RabbitConsumers.SGRQ
         private PatientSTGQuestionnaire FindByOriginalId(int iD)
         {
             return _context.PatientSTGQuestionnaires
-                           .Where(sgrq => sgrq.OriginalImportedId == sgrq.ID.ToString())
+                           .Where(sgrq => sgrq.OriginalImportedId == iD.ToString())
                            .FirstOrDefault();
         }
 

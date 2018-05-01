@@ -14,6 +14,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\AspergillosisEPR\AspergillosisEPR.csproj" />
+    <ProjectReference Include="..\RabbitConsumers\RabbitConsumers.csproj" />
   </ItemGroup>
 
   <ItemGroup>

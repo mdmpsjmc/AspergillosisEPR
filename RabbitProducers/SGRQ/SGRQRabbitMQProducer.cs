@@ -1,21 +1,21 @@
 ﻿
+using AspergillosisEPR.Data;
 using AspergillosisEPR.Lib.RabbitMq;
 using Microsoft.Extensions.Configuration;
+using RabbitConsumers;
+using RabbitConsumers.SGRQ;
+using RabbitProducers;
 using System;
 using System.IO;
 using System.Text;
 
-namespace RabbitProducers
+namespace RabbitProducers.SGRQ
 
 {
     class SGRQRabbitMQProducer
     {
         private static IConfigurationRoot configuration;
-        private static SGRQApiClient _apiClient;
-
-        public SGRQRabbitMQProducer()
-        {
-        }
+        private static SGRQApiClient _apiClient;        
 
         public void Produce()
         {
@@ -26,11 +26,16 @@ namespace RabbitProducers
             configuration = builder.Build();
             
             _apiClient = new SGRQApiClient(configuration);
+        
+            var lastInsertedId = new SGRQLastInsertedId().Get();
+            if (lastInsertedId == null)
+            {
+                lastInsertedId = configuration.GetSection("sgrqInitialId").Value;
+            }
 
-            Console.WriteLine("Search date is: ", GetProcessingDate());
+            Console.WriteLine("Last inserted ID is: ", lastInsertedId);          
 
-            var response = _apiClient.FetchAfterDate(GetProcessingDate());
-
+            var response = _apiClient.FetchAfterGreaterThanId(lastInsertedId);
             if (response == null) return;
 
             RabbitMqService rabbitMqService = new RabbitMqService("sgrq");
@@ -40,18 +45,6 @@ namespace RabbitProducers
             rabbitMqService.SetupProducing(message);
 
             Console.WriteLine(" [x] Sent {0}", message);
-
-        }
-
-        private string GetProcessingDate()
-        {
-           
-                return "2018-02-28";
-          
-        }
-
-     
-
-       
+        }                    
     }
 }

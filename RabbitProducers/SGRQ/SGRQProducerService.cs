@@ -3,12 +3,13 @@ using Microsoft.Extensions.PlatformAbstractions;
 using PeterKottas.DotNetCore.WindowsService;
 using PeterKottas.DotNetCore.WindowsService.Base;
 using PeterKottas.DotNetCore.WindowsService.Interfaces;
+using RabbitConsumers;
 using System;
 using System.IO;
 using System.Timers;
 
 
-namespace RabbitProducers
+namespace RabbitProducers.SGRQ
 {
     class SGRQProducerService :  MicroService, IMicroService
     {

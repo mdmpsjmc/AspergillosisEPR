@@ -12,7 +12,8 @@
           "FluentScheduler": "5.3.0",
           "Microsoft.Extensions.Configuration.Json": "2.0.1",
           "Microsoft.Extensions.DependencyInjection": "2.0.0",
-          "PeterKottas.DotNetCore.WindowsService": "2.0.6"
+          "PeterKottas.DotNetCore.WindowsService": "2.0.6",
+          "RabbitConsumers": "1.0.0"
         },
         "runtime": {
           "RabbitProducers.dll": {}
@@ -4135,6 +4136,21 @@
         "runtime": {
           "AspergillosisEPR.dll": {}
         }
+      },
+      "RabbitConsumers/1.0.0": {
+        "dependencies": {
+          "AspergillosisEPR": "1.0.0",
+          "FluentScheduler": "5.3.0",
+          "Microsoft.Extensions.Configuration.Json": "2.0.1",
+          "Microsoft.Extensions.DependencyInjection": "2.0.0",
+          "Microsoft.Extensions.Logging": "2.0.1",
+          "Microsoft.Extensions.Logging.Console": "2.0.1",
+          "PeterKottas.DotNetCore.WindowsService": "2.0.6",
+          "RabbitMQ.Client": "5.0.1"
+        },
+        "runtime": {
+          "RabbitConsumers.dll": {}
+        }
       }
     }
   },
@@ -6609,6 +6625,11 @@
       "hashPath": "zkweb.system.drawing.4.0.0.nupkg.sha512"
     },
     "AspergillosisEPR/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "RabbitConsumers/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""
