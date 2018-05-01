@@ -6,3 +6,7 @@ AspergillosisEPR/appsettings.json
 AspergillosisEPR/wwwroot/Upload/*
 AspergillosisEPR/wwwroot/Files/*
 AspergillosisEPR/wwwroot/lib/datatables/*
+RabbitProducers/obj/*
+RabbitProducers/bin/*
+RabbitConsumers/obj/*
+RabbitConsumers/bin/*
