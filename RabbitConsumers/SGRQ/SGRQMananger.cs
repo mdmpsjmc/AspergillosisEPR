@@ -2,6 +2,7 @@
 using AspergillosisEPR.Models;
 using AspergillosisEPR.Models.Patients;
 using AspergillosisEPR.Models.SGRQDatabase;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -15,10 +16,10 @@ namespace RabbitConsumers.SGRQ
         private List<RootObject> _messages;
         private AspergillosisContext _context;
 
-        public SGRQMananger(List<RootObject> messages, AspergillosisContext context)
+        public SGRQMananger(List<RootObject> messages)
         {
             _messages = messages;
-            _context = context;
+            _context = new AspergillosisContextFactory().CreateDbContext();
         }
 
         public List<PatientSTGQuestionnaire> GetObjects()
@@ -35,12 +36,11 @@ namespace RabbitConsumers.SGRQ
                         AddNewTemporaryPatient();
                     } else
                     {
-
                         var questionnaire = BuildPatientSTGQuestionnaire(patient, sgrq);
-
                     }
                 }
             }
+            _context.SaveChanges();
             return questionnaires;
         }
 
@@ -49,7 +49,7 @@ namespace RabbitConsumers.SGRQ
             var questionnaire = new PatientSTGQuestionnaire()
             {
                 PatientId = patient.ID, 
-                ActivityScore = sgrq.ActivityScore,
+                ActivityScore = decimal.Parse(sgrq.ActivityScore.ToString()),
                 SymptomScore = decimal.Parse(sgrq.SymptomScore.ToString()),
                 ImpactScore = decimal.Parse(sgrq.ImpactScore.ToString()), 
                 TotalScore = decimal.Parse(sgrq.TotalScore.ToString()),
@@ -58,7 +58,7 @@ namespace RabbitConsumers.SGRQ
             _context.PatientSTGQuestionnaires.Add(questionnaire);
             return questionnaire;
         }
-
+     
         private void AddNewTemporaryPatient()
         {
             

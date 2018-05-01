@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace AspergillosisEPR.Lib.RabbitMq
@@ -65,15 +66,26 @@ namespace AspergillosisEPR.Lib.RabbitMq
             model.BasicQos(0, 1, false); //basic quality of service
             EventingBasicConsumer consumer = new EventingBasicConsumer(model);
             model.BasicConsume(_queue, false, consumer);
-            consumer.Received += (arg, ea) =>
-            {
-                    var body = ea.Body;
-                    var message = Encoding.UTF8.GetString(body);                    
-                    messages.Add(message);
-                    Console.Write(" [x] Received {0}", message);
-                    model.BasicAck(ea.DeliveryTag, false);
-            };
+            AutoResetEvent waitHandle = new AutoResetEvent(false);
+            consumer.Received += GetMessageBody(model, messages, waitHandle);
+            waitHandle.WaitOne();
             return messages;
+        }
+
+        private static EventHandler<BasicDeliverEventArgs> GetMessageBody(IModel model, 
+                                                                          List<string> messages,
+                                                                           AutoResetEvent waitHandle)
+                                                                                      
+        {
+            return (arg, ea) =>
+            {
+                var body = ea.Body;
+                var message = Encoding.UTF8.GetString(body);
+                messages.Add(message);
+                Console.Write(" [x] Received {0}", message);
+                model.BasicAck(ea.DeliveryTag, false);
+                waitHandle.Set();
+            };
         }
     }
 }

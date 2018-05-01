@@ -3,11 +3,13 @@ using AspergillosisEPR.Models.SGRQDatabase;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using RabbitConsumers.SGRQ;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading;
 
 namespace RabbitConsumers
 {
@@ -21,11 +23,14 @@ namespace RabbitConsumers
             Console.WriteLine(" [*] Waiting for messages.");
             var messages = rabbitMqService.ReceiveOneWayMessages();
             var objectMessages = new List<RootObject>();
-            foreach (var rabbitMessage in messages)
-            {
-                var objectMessage = (RootObject)JsonConvert.DeserializeObject(rabbitMessage);
+            for(int cursor=0; cursor < messages.Count; cursor++ )
+             {
+                var rabbitMessage = messages[cursor];
+                var objectMessage = JsonConvert.DeserializeObject<RootObject>(rabbitMessage);
                 objectMessages.Add(objectMessage);
-            }
+             }
+            var manager = new SGRQMananger(objectMessages);
+            manager.GetObjects();
         }
     }
 }
