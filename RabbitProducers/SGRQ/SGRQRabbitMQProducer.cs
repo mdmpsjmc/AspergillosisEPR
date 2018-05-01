@@ -33,7 +33,7 @@ namespace RabbitProducers.SGRQ
                 lastInsertedId = configuration.GetSection("sgrqInitialId").Value;
             }
 
-            Console.WriteLine("Last inserted ID is: ", lastInsertedId);          
+            Console.WriteLine("Last inserted ID is: "+ lastInsertedId);          
 
             var response = _apiClient.FetchAfterGreaterThanId(lastInsertedId);
             if (response == null) return;

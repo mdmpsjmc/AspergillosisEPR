@@ -14,7 +14,7 @@ namespace RabbitProducers.SGRQ
     class SGRQProducerService :  MicroService, IMicroService
     {
         private IMicroServiceController controller;
-        private static int INTERVAL_IN_MILISECONDS = 60000;
+        private static int INTERVAL_IN_MILISECONDS = 900000; // 15 min in miliseconds
 
         public SGRQProducerService(IMicroServiceController controller)
         {

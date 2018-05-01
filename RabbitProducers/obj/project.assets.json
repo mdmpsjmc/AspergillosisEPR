@@ -15309,6 +15309,9 @@
   },
   "project": {
     "version": "1.0.0",
+    "restoreSettings": {
+      "hideWarningsAndErrors": true
+    },
     "restore": {
       "projectUniqueName": "C:\\Users\\user\\source\\repos\\AspergillosisEPR.old\\RabbitProducers\\RabbitProducers.csproj",
       "projectName": "RabbitProducers",
@@ -15333,11 +15336,11 @@
       "frameworks": {
         "netcoreapp2.0": {
           "projectReferences": {
-            "C:\\Users\\user\\source\\repos\\AspergillosisEPR.old\\AspergillosisEPR\\AspergillosisEPR.csproj": {
-              "projectPath": "C:\\Users\\user\\source\\repos\\AspergillosisEPR.old\\AspergillosisEPR\\AspergillosisEPR.csproj"
-            },
             "C:\\Users\\user\\source\\repos\\AspergillosisEPR.old\\RabbitConsumers\\RabbitConsumers.csproj": {
               "projectPath": "C:\\Users\\user\\source\\repos\\AspergillosisEPR.old\\RabbitConsumers\\RabbitConsumers.csproj"
+            },
+            "C:\\Users\\user\\source\\repos\\AspergillosisEPR.old\\AspergillosisEPR\\AspergillosisEPR.csproj": {
+              "projectPath": "C:\\Users\\user\\source\\repos\\AspergillosisEPR.old\\AspergillosisEPR\\AspergillosisEPR.csproj"
             }
           }
         }
@@ -15351,26 +15354,26 @@
     "frameworks": {
       "netcoreapp2.0": {
         "dependencies": {
-          "Microsoft.NETCore.App": {
-            "target": "Package",
-            "version": "2.0",
-            "autoReferenced": true
-          },
-          "FluentScheduler": {
-            "target": "Package",
-            "version": "5.3.0"
-          },
           "Microsoft.Extensions.Configuration.Json": {
             "target": "Package",
             "version": "2.0.1"
+          },
+          "PeterKottas.DotNetCore.WindowsService": {
+            "target": "Package",
+            "version": "2.0.6"
           },
           "Microsoft.Extensions.DependencyInjection": {
             "target": "Package",
             "version": "2.0.0"
           },
-          "PeterKottas.DotNetCore.WindowsService": {
+          "FluentScheduler": {
             "target": "Package",
-            "version": "2.0.6"
+            "version": "5.3.0"
+          },
+          "Microsoft.NETCore.App": {
+            "target": "Package",
+            "version": "2.0",
+            "autoReferenced": true
           }
         },
         "imports": [
