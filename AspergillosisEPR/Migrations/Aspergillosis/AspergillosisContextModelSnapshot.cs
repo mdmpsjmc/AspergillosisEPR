@@ -858,7 +858,7 @@ namespace AspergillosisEPR.Migrations.Aspergillosis
 
                     b.Property<bool>("ImportedAsRealPatient");
 
-                    b.Property<int>("RM2Number");
+                    b.Property<string>("RM2Number");
 
                     b.HasKey("ID");
 

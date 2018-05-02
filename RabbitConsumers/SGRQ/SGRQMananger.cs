@@ -42,6 +42,7 @@ namespace RabbitConsumers.SGRQ
                     else
                     {
                        var questionnaire = BuildPatientSTGQuestionnaire(patient, sgrq);
+                       if (questionnaire == null) continue;
                        _context.PatientSTGQuestionnaires.Add(questionnaire);
                     }                       
                 }  
@@ -69,17 +70,25 @@ namespace RabbitConsumers.SGRQ
 
         private PatientSTGQuestionnaire BuildPatientSTGQuestionnaire(Patient patient, Sgrq sgrq)
         {
-            var questionnaire = new PatientSTGQuestionnaire()
+            try
             {
-                PatientId = patient.ID, 
-                ActivityScore = decimal.Parse(sgrq.ActivityScore.ToString()),
-                SymptomScore = decimal.Parse(sgrq.SymptomScore.ToString()),
-                ImpactScore = decimal.Parse(sgrq.ImpactScore.ToString()), 
-                TotalScore = decimal.Parse(sgrq.TotalScore.ToString()),
-                OriginalImportedId = sgrq.ID.ToString(),
-                DateTaken = DateTime.ParseExact(sgrq.Date, "yyyy-MM-dd", CultureInfo.InvariantCulture)
-            };            
-            return questionnaire;
+                var questionnaire = new PatientSTGQuestionnaire()
+                {
+                    PatientId = patient.ID,
+                    ActivityScore = decimal.Parse(sgrq.ActivityScore.ToString()),
+                    SymptomScore = decimal.Parse(sgrq.SymptomScore.ToString()),
+                    ImpactScore = decimal.Parse(sgrq.ImpactScore.ToString()),
+                    TotalScore = decimal.Parse(sgrq.TotalScore.ToString()),
+                    OriginalImportedId = sgrq.ID.ToString(),
+                    DateTaken = DateTime.ParseExact(sgrq.Date, "yyyy-MM-dd", CultureInfo.InvariantCulture)
+                };
+                return questionnaire;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+          
         }          
     }
 }
