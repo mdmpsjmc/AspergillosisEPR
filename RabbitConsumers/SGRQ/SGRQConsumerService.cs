@@ -12,7 +12,7 @@ namespace RabbitConsumers.SGRQ
     class SGRQConsumerService : MicroService, IMicroService
     {
         private IMicroServiceController controller;
-        private static int INTERVAL_IN_MILISECONDS = 10000;
+        private static int INTERVAL_IN_MILISECONDS = 60000;
 
         public SGRQConsumerService(IMicroServiceController controller)
         {

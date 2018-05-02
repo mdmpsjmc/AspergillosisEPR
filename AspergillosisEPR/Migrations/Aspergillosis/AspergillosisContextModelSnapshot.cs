@@ -851,6 +851,20 @@ namespace AspergillosisEPR.Migrations.Aspergillosis
                     b.ToTable("SideEffects");
                 });
 
+            modelBuilder.Entity("AspergillosisEPR.Models.TemporaryNewPatient", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<bool>("ImportedAsRealPatient");
+
+                    b.Property<int>("RM2Number");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("TemporaryNewPatients");
+                });
+
             modelBuilder.Entity("AspergillosisEPR.Models.UnitOfMeasurement", b =>
                 {
                     b.Property<int>("ID")

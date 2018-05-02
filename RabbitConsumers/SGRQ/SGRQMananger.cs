@@ -51,7 +51,13 @@ namespace RabbitConsumers.SGRQ
         }
 
         private void AddPatientToTemporaryRM2List(Sgrq sgrq)
-        {            
+        {
+            var temporaryPatient = new TemporaryNewPatient()
+            {
+                ImportedAsRealPatient = false,
+                RM2Number = sgrq.RM2Number()
+            };
+            _context.TemporaryNewPatient.Add(temporaryPatient);
         }
 
         private PatientSTGQuestionnaire FindByOriginalId(int iD)
