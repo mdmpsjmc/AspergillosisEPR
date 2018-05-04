@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AspergillosisEPR", "Aspergi
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RabbitConsumers", "RabbitConsumers\RabbitConsumers.csproj", "{B4FF49A8-9BA5-44FC-A779-0E798FBB2D28}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RabbitProducers", "RabbitProducers\RabbitProducers.csproj", "{57A6547A-E845-4C01-9155-9DD89A03F08D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RabbitProducersStandard", "RabbitProducersStandard\RabbitProducersStandard.csproj", "{E20436FF-9757-4BE4-AAF6-64E6738AB5C0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,10 +23,10 @@ Global
 		{B4FF49A8-9BA5-44FC-A779-0E798FBB2D28}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B4FF49A8-9BA5-44FC-A779-0E798FBB2D28}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B4FF49A8-9BA5-44FC-A779-0E798FBB2D28}.Release|Any CPU.Build.0 = Release|Any CPU
-		{57A6547A-E845-4C01-9155-9DD89A03F08D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{57A6547A-E845-4C01-9155-9DD89A03F08D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{57A6547A-E845-4C01-9155-9DD89A03F08D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{57A6547A-E845-4C01-9155-9DD89A03F08D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E20436FF-9757-4BE4-AAF6-64E6738AB5C0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E20436FF-9757-4BE4-AAF6-64E6738AB5C0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E20436FF-9757-4BE4-AAF6-64E6738AB5C0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E20436FF-9757-4BE4-AAF6-64E6738AB5C0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

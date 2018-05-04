@@ -56,6 +56,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="F:\Version\update.sql" Link="update.sql" />
     <None Include="web.config" />
   </ItemGroup>
 
