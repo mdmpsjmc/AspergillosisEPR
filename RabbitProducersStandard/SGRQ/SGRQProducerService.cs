@@ -36,16 +36,15 @@ namespace RabbitProducersStandard.SGRQ
             {
                 // running as console app
                 Start(args);
-
-                Console.WriteLine("Press any key to stop...");
-                Console.ReadKey(true);
-
+                var _logger = NLog.LogManager.GetCurrentClassLogger();
+                _logger.Info("Done");                
                 Stop();
             }
         }
 
         private static void Start(string[] args)
         {
+            NLogConfigurationFactory.Configure();
             var producer = new SGRQRabbitMQProducer();
             producer.Produce();
         }

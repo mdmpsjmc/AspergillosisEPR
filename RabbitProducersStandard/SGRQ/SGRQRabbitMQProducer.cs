@@ -5,6 +5,7 @@ using System;
 using System.IO;
 using System.Text;
 using RabbitProducersStandard.RabbitMq;
+using NLog;
 
 namespace RabbitProducersStandard.SGRQ
 
@@ -12,7 +13,8 @@ namespace RabbitProducersStandard.SGRQ
     class SGRQRabbitMQProducer
     {
         private static IConfigurationRoot configuration;
-        private static SGRQApiClient _apiClient;        
+        private static SGRQApiClient _apiClient;
+        private static Logger _logger = LogManager.GetCurrentClassLogger();
 
         public void Produce()
         {
@@ -30,7 +32,7 @@ namespace RabbitProducersStandard.SGRQ
                 lastInsertedId = configuration.GetSection("sgrqInitialId").Value;
             }
 
-            Console.WriteLine("Last inserted ID is: "+ lastInsertedId);          
+            _logger.Info("Last inserted ID is: "+ lastInsertedId);          
 
             var response = _apiClient.FetchAfterGreaterThanId(lastInsertedId);
             if (response == null) return;
@@ -41,7 +43,7 @@ namespace RabbitProducersStandard.SGRQ
             var body = Encoding.UTF8.GetBytes(message.ToCharArray());
             rabbitMqService.SetupProducing(message);
 
-            Console.WriteLine(" [x] Sent {0}", message);
+           _logger.Info(" [x] Sent {0}", message);
         }                    
     }
 }

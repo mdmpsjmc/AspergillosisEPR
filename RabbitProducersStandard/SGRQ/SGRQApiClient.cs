@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Text;
+using NLog;
 
 namespace RabbitProducersStandard.SGRQ
 {
@@ -20,6 +21,7 @@ namespace RabbitProducersStandard.SGRQ
         CookieContainer _cookieJar = new CookieContainer();
         private static string FORM_CONTENT_TYPE = "application/x-www-form-urlencoded";
         private bool _isProxyEnabled;
+        private Logger _logger;
 
         public SGRQApiClient(IConfigurationRoot configuration)
         {
@@ -30,7 +32,8 @@ namespace RabbitProducersStandard.SGRQ
             _sgrqPassword = configuration.GetSection("sgrqPassword").Value;
             _proxyIp = configuration.GetSection("proxyIp").Value;
             _proxyPort = Int32.Parse(configuration.GetSection("proxyPort").Value);
-            _isProxyEnabled = true;
+            _isProxyEnabled = configuration.GetSection("proxyUse").Value == "true" ? true : false;
+            _logger = NLog.LogManager.GetCurrentClassLogger();            
         }
 
         public IRestResponse FetchAfterDate(string allAfterDate)
@@ -39,7 +42,7 @@ namespace RabbitProducersStandard.SGRQ
             if (response.IsSuccessful)
             {
                 _token = response.Content.Replace("\"", String.Empty);
-                Console.WriteLine("Obtained session token is: " + _token);
+                _logger.Info("Obtained session token is: " + _token);
                 return FetchQuestionnaires(allAfterDate);
             } else
             {
@@ -55,7 +58,7 @@ namespace RabbitProducersStandard.SGRQ
             if (response.IsSuccessful)
             {
                 _token = response.Content.Replace("\"", String.Empty);
-                Console.WriteLine("Obtained session token is: " + _token);
+                _logger.Info("Obtained session token is: " + _token);
                 return FetchQuestionnairesAfterId(greaterThanId);
             }
             else
@@ -80,6 +83,7 @@ namespace RabbitProducersStandard.SGRQ
             request.AddHeader("XSRF-TOKEN", _token);
             request.AddHeader("Content-Type", FORM_CONTENT_TYPE);
             IRestResponse response = client.Execute(request);
+            _logger.Info("RESPONSE:" + response.Content);
             if (response.IsSuccessful) return response;
             return null;
         }
