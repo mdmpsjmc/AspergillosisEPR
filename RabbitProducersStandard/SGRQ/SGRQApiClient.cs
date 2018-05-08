@@ -33,7 +33,20 @@ namespace RabbitProducersStandard.SGRQ
             _proxyIp = configuration.GetSection("proxyIp").Value;
             _proxyPort = Int32.Parse(configuration.GetSection("proxyPort").Value);
             _isProxyEnabled = configuration.GetSection("proxyUse").Value == "true" ? true : false;
-            _logger = NLog.LogManager.GetCurrentClassLogger();            
+            _logger = LogManager.GetCurrentClassLogger();
+            logIfProxyUsed();
+        }
+
+        private void logIfProxyUsed()
+        {
+            if (_isProxyEnabled)
+            {
+                _logger.Info("Using proxy: " + _proxyIp + ":" + _proxyPort);
+            }                
+            else
+            {
+                _logger.Info("NOT using Proxy");
+            }
         }
 
         public IRestResponse FetchAfterDate(string allAfterDate)

@@ -1,6 +1,8 @@
 ﻿using AspergillosisEPR.Data;
 using Microsoft.EntityFrameworkCore;
 using RabbitConsumers;
+using RabbitConsumers.DbFactories;
+using RabbitConsumers.Factories;
 using System;
 using System.Collections.Generic;
 using System.Linq;

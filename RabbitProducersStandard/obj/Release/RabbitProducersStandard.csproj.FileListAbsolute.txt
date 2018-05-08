@@ -146,3 +146,7 @@ C:\Users\user\source\repos\AspergillosisEPR.old\RabbitProducersStandard\obj\Rele
 C:\Users\user\source\repos\AspergillosisEPR.old\RabbitProducersStandard\bin\Release\appsettings.json
 C:\Users\user\source\repos\AspergillosisEPR.old\RabbitProducersStandard\bin\Release\NLog.dll
 C:\Users\user\source\repos\AspergillosisEPR.old\RabbitProducersStandard\bin\Release\NLog.xml
+C:\Users\user\source\repos\AspergillosisEPR.old\RabbitProducersStandard\bin\Release\RabbitProducersStandard.exe.manifest
+C:\Users\user\source\repos\AspergillosisEPR.old\RabbitProducersStandard\bin\Release\RabbitProducersStandard.application
+C:\Users\user\source\repos\AspergillosisEPR.old\RabbitProducersStandard\obj\Release\RabbitProducersStandard.exe.manifest
+C:\Users\user\source\repos\AspergillosisEPR.old\RabbitProducersStandard\obj\Release\RabbitProducersStandard.application
