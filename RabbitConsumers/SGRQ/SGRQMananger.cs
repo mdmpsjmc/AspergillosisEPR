@@ -3,6 +3,7 @@ using AspergillosisEPR.Models;
 using AspergillosisEPR.Models.Patients;
 using AspergillosisEPR.Models.SGRQDatabase;
 using Microsoft.Extensions.DependencyInjection;
+using RabbitConsumers.DbFactories;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
