@@ -6,6 +6,9 @@ using System.IO;
 using System.Text;
 using RabbitProducersStandard.RabbitMq;
 using NLog;
+using RabbitProducersStandard.Data;
+using System.Diagnostics;
+using System.Data.Entity;
 
 namespace RabbitProducersStandard.SGRQ
 
@@ -41,9 +44,28 @@ namespace RabbitProducersStandard.SGRQ
            
             var message = response.Content;
             var body = Encoding.UTF8.GetBytes(message.ToCharArray());
-            rabbitMqService.SetupProducing(message);
+
+            rabbitMqService.SetupProducing(message);           
 
            _logger.Info(" [x] Sent {0}", message);
-        }                    
+            ProduceSGRQForTemporaryImportedPatients(SGRQLastInsertedId.Context, rabbitMqService);
+            Process.GetCurrentProcess().Kill();
+        }
+
+        private void ProduceSGRQForTemporaryImportedPatients(AspEPRContext context, 
+                                                                   RabbitMqService rabbitMqService)
+        {
+            var patients = new SGRQImportedTemporaryPatients(context).Get();
+            foreach(var tempPatient in patients)
+            {
+                var response = _apiClient.FetchForRM2Number(tempPatient.RM2Number);
+                var message = response.Content;
+                var body = Encoding.UTF8.GetBytes(message.ToCharArray());
+                rabbitMqService.SetupProducing(message);
+                context.Entry(tempPatient).State = EntityState.Modified;
+                context.TemporaryNewPatient.Remove(tempPatient);
+            }
+            context.SaveChanges();
+        }
     }
 }

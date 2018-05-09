@@ -19,9 +19,10 @@ namespace RabbitConsumers.PatientAdministrationSystem
         public List<string> GetNewRM2Numbers()
         {
            return  _context.TemporaryNewPatient
-                           .Where(p => !string.IsNullOrEmpty(p.RM2Number) && p.ImportedAsRealPatient == false)
+                           .Where(p => !string.IsNullOrEmpty(p.RM2Number) && p.ImportedAsRealPatient == false && !p.RM2Number.Contains("test"))
                            .ToList()
-                           .Select(p => p.RM2Number.Replace("RM2", String.Empty).Trim())
+                           .Select(p => p.RM2Number.Replace("RM2", String.Empty).Trim().Replace("rm2", String.Empty))
+                           .Distinct()
                            .ToList();
         }
 

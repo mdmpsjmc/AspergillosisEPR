@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace RabbitProducersStandard.Models
 {
-    class PatientSTGQuestionnaire
+    public class PatientSTGQuestionnaire
     {
         public int ID { get; set; }
         public string OriginalImportedId { get; set; }

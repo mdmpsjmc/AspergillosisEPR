@@ -3,6 +3,7 @@ using AspergillosisEPR.Models.SGRQDatabase;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using RabbitConsumers.PatientAdministrationSystem;
 using RabbitConsumers.SGRQ;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
@@ -34,6 +35,8 @@ namespace RabbitConsumers
              }
             var manager = new SGRQMananger(objectMessages);
             manager.GetObjects();
+            var patientListResolver = new RM2NumberPatientsResolver();
+            var patients = patientListResolver.Resolve();
         }
     }
 }

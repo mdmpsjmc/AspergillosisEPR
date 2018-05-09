@@ -7,16 +7,16 @@ namespace RabbitProducersStandard.SGRQ
 {
     public class SGRQLastInsertedId
     {
-        private AspEPRContext _context;
+        public static AspEPRContext Context;
 
         public SGRQLastInsertedId()
         {
-            _context = new AspEPRContext();
+            Context = new AspEPRContext();
         }
 
         public string Get()
         {
-            var sgrq = _context.PatientSTGQuestionnaires
+            var sgrq =  Context.PatientSTGQuestionnaires
                                .Where(q => q.OriginalImportedId != null)
                                .ToList()
                                .OrderByDescending(q => Int32.Parse(q.OriginalImportedId))
@@ -24,5 +24,6 @@ namespace RabbitProducersStandard.SGRQ
             if (sgrq == null) return null;
             return sgrq.OriginalImportedId;
         }
+
     }
 }

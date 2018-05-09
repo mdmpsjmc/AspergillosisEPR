@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace RabbitProducersStandard.Data
 {
-    class AspEPRContext : DbContext
+    public class AspEPRContext : DbContext
     {
 
         public AspEPRContext() : base("AspEPRContext")
@@ -16,5 +16,6 @@ namespace RabbitProducersStandard.Data
         }
 
         public DbSet<PatientSTGQuestionnaire> PatientSTGQuestionnaires { get; set; }
+        public DbSet<TemporaryNewPatient> TemporaryNewPatient { get; set; }
     }
 }

@@ -38,7 +38,8 @@ namespace RabbitConsumers.PatientAdministrationSystem
             {
                 var importedPatients = new List<Patient>();
                 var lpiData = _pasContext.LpiPatientData                            
-                            .Where(lpi => PrefixedWithRM2Numbers().Contains(lpi.FACIL_ID) && !string.IsNullOrEmpty(lpi.FACIL_ID));
+                            .Where(lpi => PrefixedWithRM2Numbers().Contains(lpi.FACIL_ID) 
+                                                        && !string.IsNullOrEmpty(lpi.FACIL_ID));
 
                 foreach (var lpiPatient in lpiData)
                 {

@@ -41,7 +41,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
+    <Optimize>false</Optimize>
     <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
@@ -139,9 +139,11 @@
   <ItemGroup>
     <Compile Include="Data\AspEPRContext.cs" />
     <Compile Include="Models\PatientSTGQuestionnaire.cs" />
+    <Compile Include="Models\TemporaryNewPatient.cs" />
     <Compile Include="NLogConfigurationFactory.cs" />
     <Compile Include="RabbitMq\RabbitMqService.cs" />
     <Compile Include="RestApiBase.cs" />
+    <Compile Include="SGRQ\SGRQImportedTemporaryPatients.cs" />
     <Compile Include="SGRQ\SGRQApiClient.cs" />
     <Compile Include="SGRQ\SGRQLastInsertedId.cs" />
     <Compile Include="SGRQ\SGRQProducerService.cs" />

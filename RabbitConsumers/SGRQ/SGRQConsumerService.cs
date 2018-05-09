@@ -34,9 +34,7 @@ namespace RabbitConsumers.SGRQ
             {
                 Console.WriteLine("Exception while polling: {0}\n", e.ToString());
             });
-            Console.WriteLine("I started");
-            var patientListResolver = new RM2NumberPatientsResolver();
-            var patients = patientListResolver.Resolve();
+            Console.WriteLine("I started");        
         }
 
         public void Stop()
