@@ -13,12 +13,5 @@ namespace RabbitConsumers.PatientAdministrationSystem.Data
         public PASDbContext(DbContextOptions<PASDbContext> options) : base(options)
         {           
         }
-
-       protected override void OnModelCreating(ModelBuilder builder)
-        {
-            base.OnModelCreating(builder);
-             builder.Entity<LpiPatientData>().ToTable("LPI_PATIENT_DATA");
-        }
-
     }
 }

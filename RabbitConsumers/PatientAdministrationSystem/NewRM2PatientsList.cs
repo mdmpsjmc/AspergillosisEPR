@@ -19,10 +19,16 @@ namespace RabbitConsumers.PatientAdministrationSystem
         public List<string> GetNewRM2Numbers()
         {
            return  _context.TemporaryNewPatient
-                           .Where(p => !string.IsNullOrEmpty(p.RM2Number))
+                           .Where(p => !string.IsNullOrEmpty(p.RM2Number) && p.ImportedAsRealPatient == false)
                            .ToList()
-                           .Select(p => p.RM2Number.Replace("RM2", String.Empty))
+                           .Select(p => p.RM2Number.Replace("RM2", String.Empty).Trim())
                            .ToList();
         }
+
+        public AspergillosisContext Context()
+        {
+            return _context;
+        }
+            
     }
 }

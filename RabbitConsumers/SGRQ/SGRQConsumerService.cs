@@ -2,6 +2,7 @@
 using PeterKottas.DotNetCore.WindowsService;
 using PeterKottas.DotNetCore.WindowsService.Base;
 using PeterKottas.DotNetCore.WindowsService.Interfaces;
+using RabbitConsumers.PatientAdministrationSystem;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -34,6 +35,8 @@ namespace RabbitConsumers.SGRQ
                 Console.WriteLine("Exception while polling: {0}\n", e.ToString());
             });
             Console.WriteLine("I started");
+            var patientListResolver = new RM2NumberPatientsResolver();
+            var patients = patientListResolver.Resolve();
         }
 
         public void Stop()
