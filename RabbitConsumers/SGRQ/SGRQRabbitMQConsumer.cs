@@ -22,8 +22,6 @@ namespace RabbitConsumers
         {          
             RabbitMqService rabbitMqService = new RabbitMqService("sgrq");
 
-            Console.WriteLine(" [*] Waiting for messages.");
-
             var messages = rabbitMqService.ReceiveOneWayMessages();
             var objectMessages = new List<RootObject>();
 
@@ -32,11 +30,10 @@ namespace RabbitConsumers
                 var rabbitMessage = messages[cursor];
                 var objectMessage = JsonConvert.DeserializeObject<RootObject>(rabbitMessage);
                 objectMessages.Add(objectMessage);
-             }
+             }      
+
             var manager = new SGRQMananger(objectMessages);
-            manager.GetObjects();
-            var patientListResolver = new RM2NumberPatientsResolver();
-            var patients = patientListResolver.Resolve();
+            manager.GetObjects();          
         }
     }
 }

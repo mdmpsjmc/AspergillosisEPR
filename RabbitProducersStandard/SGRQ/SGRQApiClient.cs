@@ -32,7 +32,7 @@ namespace RabbitProducersStandard.SGRQ
             _sgrqPassword = configuration.GetSection("sgrqPassword").Value;
             _proxyIp = configuration.GetSection("proxyIp").Value;
             _proxyPort = Int32.Parse(configuration.GetSection("proxyPort").Value);
-            _isProxyEnabled = configuration.GetSection("proxyUse").Value == "true" ? true : false;
+            _isProxyEnabled = configuration.GetSection("proxyUse").Value == "True" ? true : false;
             _logger = LogManager.GetCurrentClassLogger();
             logIfProxyUsed();
         }

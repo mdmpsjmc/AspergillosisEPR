@@ -152,3 +152,5 @@
 2018-05-09 14:23:43.0822|INFO|RabbitProducersStandard.SGRQ.SGRQApiClient|Obtained session token is: N580252341
 2018-05-09 14:23:43.2352|INFO|RabbitProducersStandard.SGRQ.SGRQApiClient|RESPONSE:{"sgrq":[]}
 2018-05-09 14:23:43.3782|INFO|RabbitProducersStandard.SGRQ.SGRQRabbitMQProducer| [x] Sent {"sgrq":[]}
+2018-05-10 08:08:39.6562|INFO|RabbitProducersStandard.SGRQ.SGRQApiClient|NOT using Proxy
+2018-05-10 08:10:04.9892|INFO|RabbitProducersStandard.SGRQ.SGRQApiClient|Using proxy: http://192.168.52.98:8080

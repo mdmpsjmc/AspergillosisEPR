@@ -537,7 +537,7 @@
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>y449fnV8flmV8ttFGUMcpfgzynE195/cQkN7d9dwFss=</dsig:DigestValue>
+        <dsig:DigestValue>JcCx9El27P8aTKJlTG4GvFPHhW/CQYetPoOlhluL/6o=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
@@ -565,13 +565,13 @@
       </hash>
     </dependentAssembly>
   </dependency>
-  <file name="RabbitProducersStandard.exe.config" size="19271">
+  <file name="RabbitProducersStandard.exe.config" size="19250">
     <hash>
       <dsig:Transforms>
         <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
       </dsig:Transforms>
       <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-      <dsig:DigestValue>jvlzrMFwjkwi3xmnHlKszkyI0fFPAW0Sm8ZadLD47Jo=</dsig:DigestValue>
+      <dsig:DigestValue>kU1ekR5jrzjOKQ7EyKVMdgO/N/MEJz+P44PzQRO+hhY=</dsig:DigestValue>
     </hash>
   </file>
 </asmv1:assembly>

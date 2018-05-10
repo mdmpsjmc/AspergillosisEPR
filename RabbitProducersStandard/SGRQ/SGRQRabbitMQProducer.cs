@@ -53,7 +53,7 @@ namespace RabbitProducersStandard.SGRQ
         }
 
         private void ProduceSGRQForTemporaryImportedPatients(AspEPRContext context, 
-                                                                   RabbitMqService rabbitMqService)
+                                                             RabbitMqService rabbitMqService)
         {
             var patients = new SGRQImportedTemporaryPatients(context).Get();
             foreach(var tempPatient in patients)

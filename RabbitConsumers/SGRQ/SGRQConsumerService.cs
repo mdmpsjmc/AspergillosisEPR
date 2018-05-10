@@ -26,6 +26,10 @@ namespace RabbitConsumers.SGRQ
             Timers.Start("Poller", INTERVAL_IN_MILISECONDS, () =>
             {
                 Console.WriteLine("Consuming Saint Georges Respiratory Questionnaires into database at {0}\n", DateTime.Now.ToString("o"));
+
+                var patientListResolver = new RM2NumberPatientsResolver();
+                var patients = patientListResolver.Resolve();
+
                 var consumer = new SGRQRabbitMQConsumer();
                 consumer.Consume();
 
