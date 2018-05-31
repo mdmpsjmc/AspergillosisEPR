@@ -5,6 +5,10 @@
     <GenerateProgramFile>false</GenerateProgramFile>
 
   </PropertyGroup>
+  
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <Optimize>false</Optimize>
+  </PropertyGroup>
 
   <ItemGroup>
     <None Remove="Properties\PublishProfiles\CustomProfile.pubxml" />

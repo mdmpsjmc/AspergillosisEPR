@@ -65,8 +65,10 @@ namespace AspergillosisEPR.Lib.Importers.Implementations
 
                 if (existingImportedPatient != null)
                 {
-                    var concatenated = patientFromExcel.DrugLevels.ToList().
-                                            Concat(existingImportedPatient.DrugLevels.ToList());
+                    var concatenated = patientFromExcel
+                                           .DrugLevels
+                                           .ToList()
+                                           .Concat(existingImportedPatient.DrugLevels.ToList());
 
                     existingImportedPatient.DrugLevels = concatenated.ToList();
                     patientFromExcel = existingImportedPatient;
@@ -186,7 +188,6 @@ namespace AspergillosisEPR.Lib.Importers.Implementations
                         if (propertyName == "PatientStatusId")
                         {
                             valueToSet = GetPatientStatusId(propertyValue);
-
                         }
                         SetPatientProperty(patient, propertyName, row, cellCursor, valueToSet);
                         break;

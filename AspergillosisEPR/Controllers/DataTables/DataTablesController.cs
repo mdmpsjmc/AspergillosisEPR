@@ -100,7 +100,6 @@ namespace AspergillosisEPR.Controllers.DataTables
             {
                 _list = new List<dynamic>();
             }
-
         }
 
     }
