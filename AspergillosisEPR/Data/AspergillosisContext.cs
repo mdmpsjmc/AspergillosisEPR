@@ -72,6 +72,8 @@ namespace AspergillosisEPR.Data
         public DbSet<UnitOfMeasurement> UnitOfMeasurements { get; set; }
         public DbSet<TemporaryNewPatient> TemporaryNewPatient { get; set; }
 
+        public DbSet<PulmonaryFunctionTest> PulmonaryFunctionTests { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
