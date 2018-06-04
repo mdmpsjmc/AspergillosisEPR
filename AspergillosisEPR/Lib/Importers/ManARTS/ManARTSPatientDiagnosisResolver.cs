@@ -85,8 +85,8 @@ namespace AspergillosisEPR.Lib.Importers.ManARTS
         private DiagnosisType FindDiagnosisByName(string diagnosisName)
         {
             return _context.DiagnosisTypes
-                                   .Where(dt => dt.Name == diagnosisName || dt.ShortName == diagnosisName)
-                                   .FirstOrDefault();
+                           .Where(dt => dt.Name == diagnosisName || dt.ShortName == diagnosisName)
+                           .FirstOrDefault();
         }
     }
 }

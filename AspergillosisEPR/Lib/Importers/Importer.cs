@@ -15,6 +15,5 @@ namespace AspergillosisEPR.Lib.Importers
         protected  AspergillosisContext _context;
         protected  string _fileExtension { get; set; }
         public List<dynamic> Imported { get; set; }
-
     }
 }
