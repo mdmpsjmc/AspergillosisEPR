@@ -50,7 +50,10 @@ namespace AspergillosisEPR.Lib.Importers.ManARTS
             var patientDiagnosis = new PatientDiagnosis();
             patientDiagnosis.Patient = _patient;
             patientDiagnosis.DiagnosisType = _dbDiagnosis;
-            patientDiagnosis.Description = _diagnosisFromExcel.Notes.Trim();            
+            patientDiagnosis.Description = _diagnosisFromExcel.Notes?.Trim();
+            int year = 0;
+            Int32.TryParse(_diagnosisFromExcel.Year, out year);
+            patientDiagnosis.DiagnosisDate = new DateTime(year, DateTimeKind.Unspecified);
             return patientDiagnosis;
         }
 

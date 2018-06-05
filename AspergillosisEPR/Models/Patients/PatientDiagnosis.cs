@@ -6,6 +6,8 @@ using Newtonsoft.Json;
 using AspergillosisEPR.Lib.Exporters;
 using System.Reflection;
 using System.Linq;
+using System;
+
 namespace AspergillosisEPR.Models.Patients
 {
     public class PatientDiagnosis : Exportable, ISearchable
@@ -24,7 +26,7 @@ namespace AspergillosisEPR.Models.Patients
         public DiagnosisType DiagnosisType { get; set; }
         public DiagnosisCategory DiagnosisCategory { get; set; }
 
-        
+        public DateTime? DiagnosisDate { get; set; }
 
         public Dictionary<string, string> SearchableFields()
         {

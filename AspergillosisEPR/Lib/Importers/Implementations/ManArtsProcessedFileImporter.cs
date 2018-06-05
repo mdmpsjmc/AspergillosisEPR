@@ -45,11 +45,14 @@ namespace AspergillosisEPR.Lib.Importers.Implementations
             NewDiagnosesFromSpreadsheet();
             Action<Patient, IRow, int> sheetProcessingAction = (patient, row, cellCount) =>
             {
-                _context.Entry(patient).Collection(p => p.PatientDiagnoses).Load();
-                patient.PatientDiagnoses.ToList().ForEach(pd =>
+                if (patient.ID > 0)
                 {
-                    _context.Entry(pd).Reference(d => d.DiagnosisType).Load();
-                });
+                    _context.Entry(patient).Collection(p => p.PatientDiagnoses).Load();
+                    patient.PatientDiagnoses.ToList().ForEach(pd =>
+                    {
+                        _context.Entry(pd).Reference(d => d.DiagnosisType).Load();
+                    });
+                }             
                 _patientAliveStatus = _context.PatientStatuses.Where(s => s.Name == "Active").FirstOrDefault().ID;
                 _patientDeceasedStatus = _context.PatientStatuses.Where(s => s.Name == "Deceased").FirstOrDefault().ID;
                 var patientFromExcel = ReadCellsForPatient(patient, row, cellCount);
@@ -100,14 +103,24 @@ namespace AspergillosisEPR.Lib.Importers.Implementations
             int notesHeaderIndex = _headers.IndexOf(notesHeader);
             int yearsHeaderIndex = _headers.IndexOf(yearHeader);
             int primarySecondaryHeaderIndex = _headers.IndexOf(primarySecondaryHeader);
+            int cpaTypeHeaderIndex = _headers.IndexOf("CPAType");
 
-            var manartsDiagnosis = new ManARTSDiagnosis()
+            var manartsDiagnosis = new ManARTSDiagnosis();
+            manartsDiagnosis.Name = diagnosisName;
+            manartsDiagnosis.Notes = (notesHeaderIndex != -1) ? row.GetCell(notesHeaderIndex, MissingCellPolicy.RETURN_BLANK_AS_NULL)?.StringCellValue : null;
+            manartsDiagnosis.Year = (notesHeaderIndex != -1) ? row.GetCell(yearsHeaderIndex, MissingCellPolicy.RETURN_BLANK_AS_NULL)?.NumericCellValue.ToString() : null;
+            manartsDiagnosis.PrimarySecondary = (primarySecondaryHeaderIndex != -1) ? row.GetCell(primarySecondaryHeaderIndex, MissingCellPolicy.RETURN_BLANK_AS_NULL)?.StringCellValue : null;            
+            if (diagnosisName == "CPA")
             {
-                Name = diagnosisName,
-                Notes = row.GetCell(notesHeaderIndex-1, MissingCellPolicy.RETURN_BLANK_AS_NULL)?.StringCellValue,
-                Year = row.GetCell(yearsHeaderIndex-1, MissingCellPolicy.RETURN_BLANK_AS_NULL)?.StringCellValue,
-                PrimarySecondary = row.GetCell(primarySecondaryHeaderIndex-1, MissingCellPolicy.RETURN_BLANK_AS_NULL)?.NumericCellValue
-            };
+                string cpaType = row.GetCell(cpaTypeHeaderIndex)?.StringCellValue;
+                if (!string.IsNullOrEmpty(manartsDiagnosis.Notes))
+                {
+                    manartsDiagnosis.Notes = manartsDiagnosis.Notes + " " + cpaType;
+                } else
+                {
+                    manartsDiagnosis.Notes = cpaType;
+                }               
+            }
             return manartsDiagnosis;
         }
 

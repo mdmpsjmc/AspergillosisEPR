@@ -10,6 +10,6 @@ namespace AspergillosisEPR.Lib.Importers.ManARTS
         public string Name { get; set; }
         public string Notes { get; set; }
         public string Year { get; set; }
-        public double? PrimarySecondary { get; set; }
+        public string PrimarySecondary { get; set; }
     }
 }
