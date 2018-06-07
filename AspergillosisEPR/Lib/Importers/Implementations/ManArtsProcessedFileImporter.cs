@@ -11,6 +11,8 @@ using AspergillosisEPR.Models;
 using AspergillosisEPR.Extensions;
 using Microsoft.EntityFrameworkCore;
 using AspergillosisEPR.Lib.Importers.ManARTS;
+using AspergillosisEPR.Helpers;
+using System.Reflection;
 
 namespace AspergillosisEPR.Lib.Importers.Implementations
 {
@@ -41,20 +43,8 @@ namespace AspergillosisEPR.Lib.Importers.Implementations
         {
             var headerRow = currentSheet.GetRow(0);
             GetSpreadsheetHeaders(headerRow);
-            GetDbDiagnosesTypesFromSpreadsheet();
-            NewDiagnosesFromSpreadsheet();
             Action<Patient, IRow, int> sheetProcessingAction = (patient, row, cellCount) =>
-            {
-                if (patient.ID > 0)
-                {
-                    _context.Entry(patient).Collection(p => p.PatientDiagnoses).Load();
-                    patient.PatientDiagnoses.ToList().ForEach(pd =>
-                    {
-                        _context.Entry(pd).Reference(d => d.DiagnosisType).Load();
-                    });
-                }             
-                _patientAliveStatus = _context.PatientStatuses.Where(s => s.Name == "Active").FirstOrDefault().ID;
-                _patientDeceasedStatus = _context.PatientStatuses.Where(s => s.Name == "Deceased").FirstOrDefault().ID;
+            {               
                 var patientFromExcel = ReadCellsForPatient(patient, row, cellCount);
             };
             InitializeSheetProcessingForRows(HeadersDictionary(), currentSheet, sheetProcessingAction);
@@ -76,84 +66,58 @@ namespace AspergillosisEPR.Lib.Importers.Implementations
         {
             string header = _headers.ElementAt(cellCursor);
             string newObjectFields = (string)_dictonary[header];
-            string propertyValue = row.GetCell(cellCursor, MissingCellPolicy.CREATE_NULL_AS_BLANK).ToString();
-            if (!string.IsNullOrEmpty(propertyValue) && newObjectFields != null)
+            string propertyValue = row.GetCell(cellCursor, MissingCellPolicy.CREATE_NULL_AS_BLANK).ToString();                        
+        }
+
+        private string GetPatientStatusId(string propertyValue)
+        {
+            if (propertyValue == "Y")
             {
-                string diagnosisName = header.Replace("Has", String.Empty);
-                if (GetSpreadsheetUnderlyingDiagnoses().Contains(diagnosisName))
-                {
-                    var diagnosisFromExcel = BuildManARTSDiagnosis(diagnosisName, row);
-                    var manartsDiagnosisResolver = new ManARTSPatientDiagnosisResolver(patient, diagnosisName, _context, diagnosisFromExcel);
-                    manartsDiagnosisResolver.Resolve();
-                }
+                propertyValue = _patientDeceasedStatus.ToString();
             }
-        }
-
-        private ManARTSDiagnosis BuildManARTSDiagnosis(string diagnosisName, IRow row)
-        {
-            var notesHeader = _headers.Where(h => h == diagnosisName + "Notes")
-                                      .FirstOrDefault();
-
-            var yearHeader = _headers.Where(h => h == diagnosisName + "Year")
-                                     .FirstOrDefault();
-
-            var primarySecondaryHeader = _headers.Where(h => h == diagnosisName + "PrimarySecondary")
-                                                 .FirstOrDefault();
-
-            int notesHeaderIndex = _headers.IndexOf(notesHeader);
-            int yearsHeaderIndex = _headers.IndexOf(yearHeader);
-            int primarySecondaryHeaderIndex = _headers.IndexOf(primarySecondaryHeader);
-            int cpaTypeHeaderIndex = _headers.IndexOf("CPAType");
-
-            var manartsDiagnosis = new ManARTSDiagnosis();
-            manartsDiagnosis.Name = diagnosisName;
-            manartsDiagnosis.Notes = (notesHeaderIndex != -1) ? row.GetCell(notesHeaderIndex, MissingCellPolicy.RETURN_BLANK_AS_NULL)?.StringCellValue : null;
-            manartsDiagnosis.Year = (notesHeaderIndex != -1) ? row.GetCell(yearsHeaderIndex, MissingCellPolicy.RETURN_BLANK_AS_NULL)?.NumericCellValue.ToString() : null;
-            manartsDiagnosis.PrimarySecondary = (primarySecondaryHeaderIndex != -1) ? row.GetCell(primarySecondaryHeaderIndex, MissingCellPolicy.RETURN_BLANK_AS_NULL)?.StringCellValue : null;            
-            if (diagnosisName == "CPA")
+            else if (propertyValue == "N")
             {
-                string cpaType = row.GetCell(cpaTypeHeaderIndex)?.StringCellValue;
-                if (!string.IsNullOrEmpty(manartsDiagnosis.Notes))
-                {
-                    manartsDiagnosis.Notes = manartsDiagnosis.Notes + " " + cpaType;
-                } else
-                {
-                    manartsDiagnosis.Notes = cpaType;
-                }               
+                propertyValue = _patientAliveStatus.ToString();
             }
-            return manartsDiagnosis;
+            return propertyValue;
         }
 
-        private List<string> NewDiagnosesFromSpreadsheet()
+        private static string GetValueForGender(string propertyValue)
         {
-            var dbDiagnosesNames = _dbDiagnoses
-                                            .Select(dx => {
-                                                if (string.IsNullOrEmpty(dx.ShortName)) return dx.Name;
-                                                else return dx.ShortName;
-                                            })
-                                            .ToList();
+            if (propertyValue == "F")
+            {
+                propertyValue = "Female";
+            }
+            else if (propertyValue == "M")
+            {
+                propertyValue = "Male";
+            }
 
-            return _newDiagnoses = GetSpreadsheetUnderlyingDiagnoses()
-                                                            .Except(dbDiagnosesNames)
-                                                            .ToList();
+            return propertyValue;
         }
 
-        private List<string> GetSpreadsheetUnderlyingDiagnoses()
+
+        private void SetPatientProperty(Patient patient, string property, IRow row,
+                                       int cellIndex, string propertyValue)
         {
-            return _headers.Where(h => h.Contains("Has"))
-                           .Select(h => h.Replace("Has", String.Empty)
-                                         .SplitCamelCase())
-                           .ToList();
-        }
-
-        private void GetDbDiagnosesTypesFromSpreadsheet()
-        {
-            _dbDiagnoses = _context.DiagnosisTypes
-                                    .Where(dt => GetSpreadsheetUnderlyingDiagnoses().Contains(dt.Name)
-                                                || GetSpreadsheetUnderlyingDiagnoses().Contains(dt.ShortName))
-                                    .ToList();
-        }
-
+            Type type = patient.GetType();
+            PropertyInfo propertyInfo = type.GetProperty(property);
+            if (propertyInfo.PropertyType == typeof(int?) || propertyInfo.PropertyType == typeof(int))
+            {
+                int propertyIntValue = Int32.Parse(propertyValue);
+                propertyInfo.SetValue(patient, propertyIntValue);
+            }
+            else if (propertyInfo.PropertyType == typeof(DateTime) || propertyInfo.PropertyType == typeof(DateTime?))
+            {
+                propertyInfo.
+                     SetValue(patient, Convert.ChangeType(propertyValue, typeof(DateTime)), null);
+            }
+            else
+            {
+                propertyInfo.
+                    SetValue(patient, Convert.ChangeType(propertyValue.Replace("RM2", String.Empty), propertyInfo.PropertyType), null);
+            }
+        }      
 
         private Patient FindPatientInDatabase(Patient importedPatient)
         {
