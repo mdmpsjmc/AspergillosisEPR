@@ -40,6 +40,7 @@ namespace AspergillosisEPR.Models
         [DisplayFormat(DataFormatString = "{dd-MM-yyyy}")]
         public DateTime? DateOfDeath { get; set; }
         public string NhsNumber { get; set; }
+        public string GenericNote { get; set; }
 
         public ICollection<PatientDiagnosis> PatientDiagnoses { get; set; }
         public ICollection<PatientDrug> PatientDrugs { get; set; }
