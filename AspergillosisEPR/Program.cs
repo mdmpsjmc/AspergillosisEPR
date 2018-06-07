@@ -34,6 +34,7 @@ namespace AspergillosisEPR
                     IntraDrugLevelExcelTypeSeed.Seed(context);
                     UnitOfMeasureMgLSeed.Seed(context);
                     ManArtsProcessedFileSeed.Seed(context);
+                    ManArtsImportSeed.Seed(context);
                 }
                 catch (Exception ex)
                 {

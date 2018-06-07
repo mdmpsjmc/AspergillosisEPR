@@ -73,6 +73,10 @@ namespace AspergillosisEPR.Data
         public DbSet<TemporaryNewPatient> TemporaryNewPatient { get; set; }
 
         public DbSet<PulmonaryFunctionTest> PulmonaryFunctionTests { get; set; }
+        public DbSet<SmokingStatus> SmokingStatuses { get; set; }
+        public DbSet<Surgery> Surgeries { get; set; }
+        public DbSet<PatientPulmonaryFunctionTest> PatientPulmonaryFunctionTests { get; set; }
+        public DbSet<PatientSurgery> PatientSurgeries { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -128,7 +132,11 @@ namespace AspergillosisEPR.Data
             modelBuilder.Entity<PatientDrugLevel>().ToTable("PatientDrugLevel");
             modelBuilder.Entity<UnitOfMeasurement>().ToTable("UnitOfMeasurements");
             modelBuilder.Entity<TemporaryNewPatient>().ToTable("TemporaryNewPatients");
-        }
+            modelBuilder.Entity<SmokingStatus>().ToTable("SmokingStatuses");
+            modelBuilder.Entity<Surgery>().ToTable("Surgeries");
+            modelBuilder.Entity<PatientPulmonaryFunctionTest>().ToTable("PatientPulmonaryFunctionTests");
+            modelBuilder.Entity<PatientSurgery>().ToTable("PatientSurgeries");
+    }
 
     }
 

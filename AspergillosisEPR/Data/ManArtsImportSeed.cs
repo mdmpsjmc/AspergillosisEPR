@@ -6,9 +6,57 @@ using System.Threading.Tasks;
 
 namespace AspergillosisEPR.Data
 {
-    public class PulmonaryFunctionTestsSeed
+    public class ManArtsImportSeed
     {
         public static void Seed(AspergillosisContext context)
+        {
+            BuildPulmonaryFunctionTests(context);
+            BuildSurgeries(context);
+            BuildSmokingStatuses(context);
+            context.SaveChanges();
+        }
+
+        private static void BuildSmokingStatuses(AspergillosisContext context)
+        {
+            if (context.SmokingStatuses.Any())
+            {
+                return;
+            }
+
+            var sts = new SmokingStatus[]
+            {
+                new SmokingStatus { Name = "Current" },
+                new SmokingStatus { Name = "Ex-Smoker" },
+                new SmokingStatus { Name = "Don't know" },
+                new SmokingStatus { Name = "Never" }
+            };
+            foreach (var s in sts)
+            {
+                context.Add(s);
+            }
+        }
+
+        private static void BuildSurgeries(AspergillosisContext context)
+        {
+            if (context.Surgeries.Any())
+            {
+                return;
+            }
+
+            var sgurgeries = new Surgery[]
+            {
+                new Surgery { Name = "Pneumonectomy" },
+                new Surgery { Name = "Lobectomy" },
+                new Surgery { Name = "Thoracotomy" },
+                new Surgery { Name = "Wedge resection" }
+            };
+            foreach (var s in sgurgeries)
+            {
+                context.Add(s);
+            }
+        }
+
+        private static void BuildPulmonaryFunctionTests(AspergillosisContext context)
         {
             if (context.PulmonaryFunctionTests.Any())
             {

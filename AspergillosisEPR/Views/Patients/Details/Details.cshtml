@@ -50,9 +50,18 @@
                         </li>
 
                     }
+
+              
                 </ul>
                 <br>                
-            </div>            
+            </div>           
+            <div class="col col-sm-12 col-md-12 col-lg-12">
+                @if (!string.IsNullOrEmpty(Model.Patient.GenericNote))
+                {
+                            <pre>@(Model.Patient.GenericNote)</pre>
+
+                }
+            </div>
         </div>
     </div>
 </div>

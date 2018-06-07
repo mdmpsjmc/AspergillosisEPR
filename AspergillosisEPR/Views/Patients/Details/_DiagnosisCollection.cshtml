@@ -1,17 +1,19 @@
 ﻿@using AspergillosisEPR.Models.Patients
 @model List<PatientDiagnosis>
 <table class="table table-bordered table-striped">
-    @foreach (var diagnosis in Model)
-    {
-     <thead><th>@(diagnosis.DiagnosisCategory.CategoryName)</th></thead>
-     <tbody>
-       <tr>
-         <td>@(diagnosis.DiagnosisType.Name)</td>
-       </tr>
-        @if (!string.IsNullOrEmpty(diagnosis.Description))
-         {
-           <tr><td>@(diagnosis.Description)</td></tr>
-         }
-      </tbody>
-     }
+    <thead>
+        <th>@(Model[0].DiagnosisCategory.CategoryName)</th>
+    </thead>
+    <tbody>
+        @foreach (var diagnosis in Model)
+        {
+            <tr>
+                <td>@(diagnosis.DiagnosisType.DisplayName())</td>
+            </tr>
+            @if (!string.IsNullOrEmpty(diagnosis.Description))
+            {
+                <tr><td><pre>@(diagnosis.Description)</pre></td></tr>
+            }
+        }
+    </tbody>
 </table>

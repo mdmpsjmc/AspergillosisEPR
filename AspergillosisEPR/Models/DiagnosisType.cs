@@ -19,5 +19,16 @@ namespace AspergillosisEPR.Models
         public ICollection<PatientDiagnosis> PatientDiagnoses { get; set; }
 
         public string KlassName => typeof(DiagnosisType).Name;
+
+        public string DisplayName()
+        {
+            if (string.IsNullOrEmpty(ShortName))
+            {
+                return Name;
+            } else
+            {
+                return ShortName + " (" + Name + ")";
+            }
+        }
     }
 }
