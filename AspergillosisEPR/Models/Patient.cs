@@ -51,6 +51,7 @@ namespace AspergillosisEPR.Models
         public ICollection<CaseReportFormResult> CaseReportFormResults { get; set; }
         public ICollection<PatientMedicalTrial> MedicalTrials { get; set; }
         public ICollection<PatientDrugLevel> DrugLevels { get; set; }
+        public ICollection<PatientSurgery> PatientSurgeries { get; set; }
         public PatientStatus PatientStatus { get; set; }
        
 

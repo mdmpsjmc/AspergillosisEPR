@@ -23,31 +23,7 @@ namespace AspergillosisEPR.Migrations.Aspergillosis
                 oldClrType: typeof(string),
                 oldNullable: true);
 
-            migrationBuilder.CreateTable(
-                name: "CaseReportFormFieldOptions",
-                columns: table => new
-                {
-                    ID = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    CaseReportFormFieldId = table.Column<int>(nullable: false),
-                    CaseReportFormOptionChoiceId = table.Column<int>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_CaseReportFormFieldOptions", x => x.ID);
-                    table.ForeignKey(
-                        name: "FK_CaseReportFormFieldOptions_CaseReportFormFields_CaseReportFormFieldId",
-                        column: x => x.CaseReportFormFieldId,
-                        principalTable: "CaseReportFormFields",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_CaseReportFormFieldOptions_CaseReportFormOptionChoices_CaseReportFormOptionChoiceId",
-                        column: x => x.CaseReportFormOptionChoiceId,
-                        principalTable: "CaseReportFormOptionChoices",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Cascade);
-                });
+            
 
             migrationBuilder.CreateIndex(
                 name: "IX_PatientMeasurements_PatientId",

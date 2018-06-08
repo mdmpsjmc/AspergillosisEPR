@@ -767,7 +767,7 @@ namespace AspergillosisEPR.Migrations.Aspergillosis
 
                     b.Property<int>("PatientId");
 
-                    b.Property<DateTime?>("SurgeryDate");
+                    b.Property<int?>("SurgeryDate");
 
                     b.Property<int>("SurgeryId");
 

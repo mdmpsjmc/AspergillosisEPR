@@ -59,6 +59,8 @@ namespace AspergillosisEPR.Lib
                                 .Include(p => p.MedicalTrials)
                                     .ThenInclude(mt => mt.PatientMedicalTrialStatus)                              
                                 .Include(p => p.PatientMeasurements)
+                                .Include(p => p.PatientSurgeries)
+                                    .ThenInclude(ps => ps.Surgery)
                                 .SingleOrDefaultAsync(m => m.ID == id);
         }
 

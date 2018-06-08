@@ -12,5 +12,7 @@ namespace AspergillosisEPR.Models.Patients
         public int PatientId { get; set; }
         public int? SurgeryDate { get; set; }
         public string Note { get; set; }
+
+        public Surgery Surgery { get; set; }
     }
 }

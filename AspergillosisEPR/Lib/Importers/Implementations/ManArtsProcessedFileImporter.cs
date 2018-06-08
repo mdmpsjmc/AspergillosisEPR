@@ -78,6 +78,7 @@ namespace AspergillosisEPR.Lib.Importers.Implementations
                     {
                         surgery.PatientId = patient.ID;
                         _context.PatientSurgeries.Add(surgery);
+                        Imported.Add(surgery);
                         _context.SaveChanges();
                     }
                 break;
