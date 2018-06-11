@@ -4,14 +4,14 @@
         <div class="row">
             <section class="col col-6">
                 <label asp-for="@(Model.MedicalTrialId)" class="select">
-                    @Html.DropDownList("PatientMedicalTrial[" + (string)ViewBag.Index + "].MedicalTrialId", (SelectList)ViewBag.MedicalTrialsIds, "Select Medical Model")
+                    @Html.DropDownList("PatientMedicalTrial[" + (string)ViewBag.Index + "].MedicalTrialId", (SelectList)ViewBag.MedicalTrialsIds, "Select Medical Trial")
                     <i></i>
                     <span asp-validation-for="@(Model.MedicalTrialId)" class="text-danger"></span>
                 </label>
             </section>
             <section class="col col-6">
                 <label asp-for="@(Model.PatientMedicalTrialStatusId)" class="select">
-                    @Html.DropDownList("PatientMedicalTrial[" + (string)ViewBag.Index + "].PatientMedicalTrialStatusId", (SelectList)ViewBag.PatientMedicalTrialStatusesIds, "Select Model Status")
+                    @Html.DropDownList("PatientMedicalTrial[" + (string)ViewBag.Index + "].PatientMedicalTrialStatusId", (SelectList)ViewBag.PatientMedicalTrialStatusesIds, "Select Patient Status")
                     <i></i>
                     <span asp-validation-for="@(Model.PatientMedicalTrialStatusId)" class="text-danger"></span>
                 </label>
