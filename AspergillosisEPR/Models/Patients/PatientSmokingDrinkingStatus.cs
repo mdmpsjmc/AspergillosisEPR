@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace AspergillosisEPR.Lib.Importers.ManARTS
+namespace AspergillosisEPR.Models.Patients
 {
     public class PatientSmokingDrinkingStatus
     {

@@ -11,7 +11,7 @@ namespace AspergillosisEPR.Lib.Importers.ManARTS
         public static Hashtable Dictionary()
         {
             return new Hashtable(){
-                  { "Smoking", "PatientSmokingDrinkingStatus.SmokingStatusId" },
+                  { "Smoker", "PatientSmokingDrinkingStatus.SmokingStatusId" },
                   { "SmokingStartAge", "PatientSmokingDrinkingStatus.StartAge"},
                   { "SmokingStopAge", "PatientSmokingDrinkingStatus.StopAge"},
                   { "CigsPD", "PatientSmokingDrinkingStatus.CigarettesPerDay"},

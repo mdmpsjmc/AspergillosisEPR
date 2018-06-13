@@ -13,7 +13,8 @@ using AspergillosisEPR.Models.Patients;
 namespace AspergillosisEPR.Lib.Importers.Implementations
 {
     public class ManArtsSmokingStatusImporter : SpreadsheetImporter
-    {
+    {    
+
         public ManArtsSmokingStatusImporter(FileStream stream, IFormFile file,
                                             string fileExtension, AspergillosisContext context) : base(stream, file, fileExtension, context)
         {
@@ -53,6 +54,7 @@ namespace AspergillosisEPR.Lib.Importers.Implementations
             return patient;
         }
 
+
         private void ReadCell(Patient patient, IRow row, int cellCursor)
         {
             string header = _headers.ElementAt(cellCursor);
@@ -64,14 +66,14 @@ namespace AspergillosisEPR.Lib.Importers.Implementations
             {
                 capturedKeys.Add(key as String);
             }
-            if (capturedKeys.Contains(header))
+            if (header == "Smoker")
             {
                 var smokingStatusResolver = new SmokingStatusResolver(_context, propertyValue, row, _headers);
-                PatientSurgery smokingStatus = smokingStatusResolver.Resolve();
+                var smokingStatus = smokingStatusResolver.Resolve();
                 if (smokingStatus != null)
                 {
                     smokingStatus.PatientId = patient.ID;
-                    _context.PatientSurgeries.Add(smokingStatus);
+                    // TODO ADD TO _context
                     Imported.Add(smokingStatus);
                     _context.SaveChanges();
                 }

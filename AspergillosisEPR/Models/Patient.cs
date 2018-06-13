@@ -1,4 +1,5 @@
-﻿using AspergillosisEPR.Lib.Search;
+﻿using AspergillosisEPR.Lib.Importers.ManARTS;
+using AspergillosisEPR.Lib.Search;
 using AspergillosisEPR.Models.CaseReportForms;
 using AspergillosisEPR.Models.Patients;
 using Microsoft.AspNetCore.Mvc;
@@ -52,6 +53,7 @@ namespace AspergillosisEPR.Models
         public ICollection<PatientMedicalTrial> MedicalTrials { get; set; }
         public ICollection<PatientDrugLevel> DrugLevels { get; set; }
         public ICollection<PatientSurgery> PatientSurgeries { get; set; }
+        public PatientSmokingDrinkingStatus PatientSmokingDrinkingStatus { get; set; }
         public PatientStatus PatientStatus { get; set; }
        
 

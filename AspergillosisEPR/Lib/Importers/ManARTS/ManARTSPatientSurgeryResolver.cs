@@ -88,8 +88,8 @@ namespace AspergillosisEPR.Lib.Importers.ManARTS
         private Surgery FindSurgeryByName(string name)
         {
             return _context.Surgeries
-                        .Where(s => s.Name.ToLower() == name.ToString().ToLower())
-                        .FirstOrDefault();
+                           .Where(s => s.Name.ToLower() == name.ToString().ToLower())
+                           .FirstOrDefault();
         }
 
         private int notesHeaderIndex()
