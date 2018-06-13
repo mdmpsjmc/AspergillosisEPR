@@ -34,8 +34,9 @@ namespace AspergillosisEPR
                     MedicalTiralsDataInitializer.AddMedicalTrialsModels(context);
                     IntraDrugLevelExcelTypeSeed.Seed(context);
                     UnitOfMeasureMgLSeed.Seed(context);
-                    ManArtsProcessedFileSeed.Seed(context);
                     ManArtsImportSeed.Seed(context);
+                    ManArtsProcessedFileSeed.Seed(context);
+                    ManArtsProcessedFileSeed.SeedSmokingStatuses(context);
                 }
                 catch (Exception ex)
                 {

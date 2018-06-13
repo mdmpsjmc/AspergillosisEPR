@@ -15,6 +15,5 @@ namespace AspergillosisEPR.Lib.Importers.ManARTS
         public int? CigarettesPerDay { get; set; }
         public int? PacksPerYear { get; set; }
         public int? AlcolholUnits { get; set; }
-        public bool AlcoholAbuse { get; set; }
     }
 }
