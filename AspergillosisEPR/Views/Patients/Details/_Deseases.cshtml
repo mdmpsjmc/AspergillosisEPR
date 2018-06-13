@@ -1,0 +1,36 @@
+﻿@model AspergillosisEPR.Models.PatientViewModels.PatientDetailsViewModel
+
+@if (Model.Patient.PatientDiagnoses.Any())
+{
+    <div class="col-sm-12">
+        <div class="table-responsive">            
+              @if (Model.HasPrimaryDiagnoses())
+              {
+                @Html.Partial("/Views/Patients/Details/_DiagnosisCollection.cshtml", Model.PrimaryDiagnoses);
+              }                         
+              @if (Model.HasUnderlyingDeases())
+              {
+                @Html.Partial("/Views/Patients/Details/_DiagnosisCollection.cshtml", Model.UnderlyingDiseases);
+              }            
+              @if (Model.HasOtherDiagnoses())
+              {
+                @Html.Partial("/Views/Patients/Details/_DiagnosisCollection.cshtml", Model.OtherDiagnoses);
+              }
+              @if (Model.HasPastDeseases())
+              {
+                @Html.Partial("/Views/Patients/Details/_DiagnosisCollection.cshtml", Model.PastDiagnoses);
+              }
+            <br />
+        </div>     
+    </div>
+}
+else
+{
+    <div class="col-sm-12">
+        <div class="alert alert-info alert-block">
+            <h4 class="alert-heading">Info!</h4>
+            <i class="fa fa-info-circle"></i>
+            This patient does not currently have any diagnosed diseases
+        </div>
+    </div>
+}

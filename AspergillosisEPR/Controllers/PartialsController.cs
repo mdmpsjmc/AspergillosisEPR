@@ -181,6 +181,12 @@ namespace AspergillosisEPR.Controllers
                     var radiologyCollection = klass.Replace("Id", String.Empty);
                     ViewBag.SearchSelect = _listResolver.PopulateRadiologyDropdownList(radiologyCollection);
                     break;
+                case "MedicalTrialId":
+                    ViewBag.SearchSelect = _listResolver.PouplateMedicalTrialsDropdownList();
+                    break;
+                case "PatientMedicalTrialStatusId":
+                    ViewBag.SearchSelect = _listResolver.PopulatePatientMedicalTrialsStatusesDropdownList();
+                    break;
             }
             return PartialView();
         }

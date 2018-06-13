@@ -136,6 +136,14 @@ namespace AspergillosisEPR.Models.PatientViewModels
                                                     Contains(m.ID.ToString())
                                             );
                     break;
+                case "PatientMedicalTrial":
+
+                    Predicate = Predicate.Or(m => m.MedicalTrials.
+                                                    Where(pd => pd.GetType().GetProperty(searchField).GetValue(pd, null).ToString() == SearchValue).
+                                                    Select(p => p.PatientId.ToString()).
+                                                    Contains(m.ID.ToString())
+                                            );
+                    break;
             }
             
             return Predicate;
@@ -216,6 +224,14 @@ namespace AspergillosisEPR.Models.PatientViewModels
                 case "PatientRadiologyFinding":
 
                     Predicate = Predicate.And(m => m.PatientRadiologyFindings.
+                                                    Where(pd => pd.GetType().GetProperty(searchField).GetValue(pd, null).ToString() == SearchValue).
+                                                    Select(p => p.PatientId.ToString()).
+                                                    Contains(m.ID.ToString())
+                                            );
+                    break;
+                case "PatientMedicalTrial":
+
+                    Predicate = Predicate.And(m => m.MedicalTrials.
                                                     Where(pd => pd.GetType().GetProperty(searchField).GetValue(pd, null).ToString() == SearchValue).
                                                     Select(p => p.PatientId.ToString()).
                                                     Contains(m.ID.ToString())

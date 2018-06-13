@@ -26,7 +26,6 @@ namespace AspergillosisEPR
 {
     public class Startup
     {
-
         public IHostingEnvironment HostingEnvironment { get; }
         public Startup(IConfiguration configuration, IHostingEnvironment env)
         {

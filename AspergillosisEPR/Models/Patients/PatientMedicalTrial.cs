@@ -1,4 +1,5 @@
 ﻿using AspergillosisEPR.Lib.Exporters;
+using AspergillosisEPR.Lib.Search;
 using AspergillosisEPR.Models.MedicalTrials;
 using System;
 using System.Collections.Generic;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace AspergillosisEPR.Models.Patients
 {
-    public class PatientMedicalTrial : Exportable
+    public class PatientMedicalTrial : Exportable, ISearchable
     {
         public int ID { get; set; }
         public int PatientId { get; set; }
@@ -33,6 +34,15 @@ namespace AspergillosisEPR.Models.Patients
             return new List<string>()
             {
                 "PatientId", "Patient", "PatientMedicalTrialStatus", "MedicalTrial"
+            };
+        }
+
+        public Dictionary<string, string> SearchableFields()
+        {
+            return new Dictionary<string, string>()
+            {
+                { "Medical Trial", "PatientMedicalTrial.MedicalTrialId.Select"},
+                { "Medical Trial Status", "PatientMedicalTrial.PatientMedicalTrialStatusId.Select"}            
             };
         }
     }

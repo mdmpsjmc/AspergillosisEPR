@@ -1,0 +1,37 @@
+﻿@model AspergillosisEPR.Models.PatientViewModels.PatientDetailsViewModel
+
+
+@if (Model.PatientSurgeries.Any())
+{
+    <div class="col-sm-12">
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <th>Surgery Name</th>
+                    <th>Date</th>
+                    <th>Notes</th>
+                </thead>
+                <tbody>
+                    @foreach(var surgery in Model.PatientSurgeries)
+                    {
+                        <tr>
+                            <td>@surgery.Surgery.Name</td>
+                            <td>@surgery.SurgeryDate</td>
+                            <td>@surgery.Note</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+}
+else
+{
+    <div class="col-sm-12">
+        <div class="alert alert-info alert-block">
+            <h4 class="alert-heading">Info!</h4>
+            <i class="fa fa-info-circle"></i>
+            This patient does not currently have any recorded surgeries
+        </div>
+    </div>
+}
