@@ -15,5 +15,7 @@ namespace AspergillosisEPR.Models.Patients
         public double? CigarettesPerDay { get; set; }
         public double? PacksPerYear { get; set; }
         public double? AlcolholUnits { get; set; }
+
+        public SmokingStatus SmokingStatus { get; set; }
     }
 }

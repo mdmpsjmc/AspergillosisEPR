@@ -11,19 +11,19 @@
                     <hr class="simple">
                     <ul id="details-tab" class="nav nav-tabs bordered">
                         <li class="active">
-                            <a href="#details" data-toggle="tab"><i class="fa fa-fw fa-lg fa-info-circle"></i> Details </a>
+                            <a href="#details" data-toggle="tab" class="exportable"><i class="fa fa-fw fa-lg fa-info-circle"></i> Details </a>
                         </li>
                         <li>
-                            <a href="#diagnosis" data-toggle="tab"><i class="fa fa-fw fa-lg fa-heartbeat"></i> Diagnoses</a>
+                            <a href="#diagnosis" data-toggle="tab" class="exportable"><i class="fa fa-fw fa-lg fa-heartbeat"></i> Diagnoses</a>
                         </li>
                         <li>
-                            <a href="#drugs" data-toggle="tab"><i class="fa fa-fw fa-lg fa-medkit"></i> Drugs</a>
+                            <a href="#drugs" data-toggle="tab" class="exportable"><i class="fa fa-fw fa-lg fa-medkit"></i> Drugs</a>
                         </li>
                         <li>
-                            <a href="#stg" data-toggle="tab"><i class="fa fa-fw fa-lg fa-file-text"></i> SGRQ</a>
+                            <a href="#stg" data-toggle="tab" class="exportable"><i class="fa fa-fw fa-lg fa-file-text"></i> SGRQ</a>
                         </li>
                         <li>
-                            <a href="#ig" data-toggle="tab">
+                            <a href="#ig" data-toggle="tab" class="exportable">
                                 <span class="mi-blood-transfusion-3870 tab-styled-custom">
                                     <span class="path2"></span>
                                     <span class="fa-fw fa-lg path3"></span>
@@ -31,21 +31,26 @@
                             </a>
                         </li>
                         <li>
-                            <a href="#radiology" data-toggle="tab"><i class="fa fa-fw fa-lg fa-stethoscope"></i> Radiology</a>
+                            <a href="#radiology" data-toggle="tab" class="exportable"><i class="fa fa-fw fa-lg fa-stethoscope"></i> Radiology</a>
                         </li>
                         <li>
-                            <a href="#measurements" data-toggle="tab"><i class="fa fa-fw fa-lg fa-dashboard"></i> Weight</a>
+                            <a href="#measurements" data-toggle="tab" class="exportable"><i class="fa fa-fw fa-lg fa-dashboard"></i> Weight</a>
                         </li>
                         <li>
-                            <a href="#medical-trials" data-toggle="tab">
+                            <a href="#medical-trials" data-toggle="tab" class="exportable">
                                 <span class="mi-patient-chart-3879 tab-styled-custom2">
                                     <span class="path2"></span>
                                 </span> Trials
                             </a>
                         </li>
                         <li>
-                            <a href="#case-report-forms" data-toggle="tab"><i class="fa fa-fw fa-lg fa-th-list"></i> Case Report Forms</a>
+                            <a href="/patients/@(Model.Patient.ID)/SmokingDrinking" data-toggle="tabajax" data-target="#smoking-status">
+                                <i class="fa fa-fw fa-lg fa-fire"></i> Smoking Status
+                            </a>
                         </li>
+                        <li>
+                            <a href="#case-report-forms" class="exportable" data-toggle="tab"><i class="fa fa-fw fa-lg fa-th-list"></i> Case Report Forms</a>
+                        </li>                        
                     </ul>
 
                     <div id="details-tab-content" class="tab-content padding-10">
@@ -75,6 +80,8 @@
                         </div>
                         <div class="tab-pane fade" id="medical-trials">
                             @{ await Html.RenderPartialAsync("/Views/Patients/Details/_MedicalTrials.cshtml"); }
+                        </div>
+                        <div class="tab-pane fade case-report-forms" id="smoking-status">
                         </div>
                         <div class="tab-pane fade case-report-forms" id="case-report-forms">
                             @Html.Partial("/Views/Patients/CaseReportForms/Forms.cshtml")

@@ -13,6 +13,7 @@
             });
         });
     }
+
     return {
         init: function () {
             onLogoutLinkClick();

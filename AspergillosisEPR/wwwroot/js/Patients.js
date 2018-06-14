@@ -223,6 +223,7 @@
                     $("div#ig-charts").html(""); //clears hidden charts div. 
                     Charts.igChartsFromResponse(response, true);
                 });
+                UI.initAjaxTab();
                 $("select[multiple='multiple']").multiSelect();
             });
         });
@@ -457,7 +458,7 @@
             e.preventDefault();
             var exportToFile = $(this).data("file");
             $("button.download-details").attr("id", exportToFile);
-            var tabs = $(this).parents("div.modal-content").find("ul#details-tab li a");
+            var tabs = $(this).parents("div.modal-content").find("ul#details-tab li a.exportable");
             var container = $("div.inline-group.labels");
             container.html("");            
             $.each(tabs, function (index, element) {
