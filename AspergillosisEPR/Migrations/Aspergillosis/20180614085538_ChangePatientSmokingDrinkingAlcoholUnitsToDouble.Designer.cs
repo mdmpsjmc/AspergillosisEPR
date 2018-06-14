@@ -12,9 +12,10 @@ using System;
 namespace AspergillosisEPR.Migrations.Aspergillosis
 {
     [DbContext(typeof(AspergillosisContext))]
-    partial class AspergillosisContextModelSnapshot : ModelSnapshot
+    [Migration("20180614085538_ChangePatientSmokingDrinkingAlcoholUnitsToDouble")]
+    partial class ChangePatientSmokingDrinkingAlcoholUnitsToDouble
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -723,9 +724,9 @@ namespace AspergillosisEPR.Migrations.Aspergillosis
 
                     b.Property<double?>("AlcolholUnits");
 
-                    b.Property<double?>("CigarettesPerDay");
+                    b.Property<int?>("CigarettesPerDay");
 
-                    b.Property<double?>("PacksPerYear");
+                    b.Property<int?>("PacksPerYear");
 
                     b.Property<int>("PatientId");
 

@@ -77,6 +77,7 @@ namespace AspergillosisEPR.Data
         public DbSet<Surgery> Surgeries { get; set; }
         public DbSet<PatientPulmonaryFunctionTest> PatientPulmonaryFunctionTests { get; set; }
         public DbSet<PatientSurgery> PatientSurgeries { get; set; }
+        public DbSet<PatientSmokingDrinkingStatus> PatientSmokingDrinkingStatus { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -136,7 +137,8 @@ namespace AspergillosisEPR.Data
             modelBuilder.Entity<Surgery>().ToTable("Surgeries");
             modelBuilder.Entity<PatientPulmonaryFunctionTest>().ToTable("PatientPulmonaryFunctionTests");
             modelBuilder.Entity<PatientSurgery>().ToTable("PatientSurgeries");
-    }
+            modelBuilder.Entity<PatientSmokingDrinkingStatus>().ToTable("PatientSmokingDrinkingStatuses");
+        }
 
     }
 

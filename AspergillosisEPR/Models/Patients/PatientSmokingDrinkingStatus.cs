@@ -12,8 +12,8 @@ namespace AspergillosisEPR.Models.Patients
         public int SmokingStatusId { get; set; }
         public int? StartAge { get; set; }
         public int? StopAge { get; set; }
-        public int? CigarettesPerDay { get; set; }
-        public int? PacksPerYear { get; set; }
-        public int? AlcolholUnits { get; set; }
+        public double? CigarettesPerDay { get; set; }
+        public double? PacksPerYear { get; set; }
+        public double? AlcolholUnits { get; set; }
     }
 }

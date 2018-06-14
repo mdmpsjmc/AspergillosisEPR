@@ -28,7 +28,7 @@ namespace AspergillosisEPR.Lib.Importers.Implementations
 
         protected override List<string> IdentiferHeaders()
         {
-            return new List<string> { "RM2" };
+            return new List<string> { "HospNumber" };
         }
 
         protected override void ProcessSheet(ISheet currentSheet)
@@ -36,7 +36,8 @@ namespace AspergillosisEPR.Lib.Importers.Implementations
             var headerRow = currentSheet.GetRow(0);
             GetSpreadsheetHeaders(headerRow);
             Action<Patient, IRow, int> sheetProcessingAction = (patient, row, cellCount) =>
-            {               
+            {
+                if (patient.ID <= 0) return;
                 var patientFromExcel = ReadCellsForPatient(patient, row, cellCount);
             };
             InitializeSheetProcessingForRows(HeadersDictionary(), currentSheet, sheetProcessingAction);
@@ -73,9 +74,9 @@ namespace AspergillosisEPR.Lib.Importers.Implementations
                 if (smokingStatus != null)
                 {
                     smokingStatus.PatientId = patient.ID;
-                    // TODO ADD TO _context
+                    patient.PatientSmokingDrinkingStatus = smokingStatus;
+                    _context.PatientSmokingDrinkingStatus.Add(smokingStatus);
                     Imported.Add(smokingStatus);
-                    _context.SaveChanges();
                 }
             }                
         }

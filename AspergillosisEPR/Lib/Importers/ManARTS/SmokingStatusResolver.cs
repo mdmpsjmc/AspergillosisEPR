@@ -19,6 +19,7 @@ namespace AspergillosisEPR.Lib.Importers.ManARTS
         private string _cigarettesPerDayHeader = "CigsPD";
         private string _alcoholUnitsHeader = "AlcoholUnits";
         private string _packsPerYearHeader = "PackYrs";
+        private PatientSmokingDrinkingStatus _smokingDrinkingStatus; 
 
         public SmokingStatusResolver(AspergillosisContext context, 
                                      string smokingStatus, IRow row, List<string> headers)
@@ -27,20 +28,40 @@ namespace AspergillosisEPR.Lib.Importers.ManARTS
             _smokingStatus = smokingStatus;
             _row = row;
             _headers = headers;
+            _smokingDrinkingStatus = new PatientSmokingDrinkingStatus();
         }
 
         internal PatientSmokingDrinkingStatus Resolve()
         {
-            var smokingDrinkingStatus = new PatientSmokingDrinkingStatus();
-            SetDbSmokingStatusId(smokingDrinkingStatus);
-            SetSmokingStartAge(smokingDrinkingStatus);
-            SetSmokingStopAge(smokingDrinkingStatus);
-            SetCigarettesPerDay(smokingDrinkingStatus);
-            SetAlcoholUnits(smokingDrinkingStatus);
-            return smokingDrinkingStatus;
+            SetDbSmokingStatusId();
+            SetSmokingStartAge();
+            SetSmokingStopAge();
+            SetCigarettesPerDay();
+            SetAlcoholUnits();
+            SetPackPerYears();
+            return _smokingDrinkingStatus;
         }
 
-        private void SetDbSmokingStatusId(PatientSmokingDrinkingStatus smokingDrinkingStatus)
+        private void SetSmokingProperty(string propertyName, string stringCellValue)
+        {
+            var propertyInfo = _smokingDrinkingStatus.GetType().GetProperty(propertyName);
+            if (propertyInfo.PropertyType == typeof(int?) || propertyInfo.PropertyType == typeof(int))
+            {
+                int propertyIntValue = Int32.Parse(stringCellValue);
+                propertyInfo.SetValue(_smokingDrinkingStatus, propertyIntValue);
+            }
+            else if ((propertyInfo.PropertyType == typeof(double?) || propertyInfo.PropertyType == typeof(double)))
+            {
+                double propertyDoubleValue = Double.Parse(stringCellValue);
+                propertyInfo.SetValue(_smokingDrinkingStatus, propertyDoubleValue);
+            }
+            else
+            {
+                propertyInfo.SetValue(_smokingDrinkingStatus, stringCellValue);
+            }
+        }
+
+        private void SetDbSmokingStatusId()
         {
             var smokingStatusString = GetSmokingStatusName();
             if (!string.IsNullOrEmpty(smokingStatusString))
@@ -50,53 +71,27 @@ namespace AspergillosisEPR.Lib.Importers.ManARTS
                                               .FirstOrDefault();
                 if (dbSmokingStatus != null)
                 {
-                    smokingDrinkingStatus.SmokingStatusId = dbSmokingStatus.ID;
+                    _smokingDrinkingStatus.SmokingStatusId = dbSmokingStatus.ID;
                 }
             }
         }
 
-        private void SetSmokingStartAge(PatientSmokingDrinkingStatus smokingDrinkingStatus)
+        private void SetSmokingDrinkingValue(int index, string propertyName)
         {
-            var index = _headers.IndexOf(_smokingStartAgeHeader);
             var cell = _row.GetCell(index, MissingCellPolicy.RETURN_BLANK_AS_NULL);
-            if (cell != null)
+            double cellValue;
+            string stringCellValue;
+            if (cell == null) return;
+            if (cell.CellType == CellType.Numeric)
             {
-                string cellValue = cell.StringCellValue;
-                if (!string.IsNullOrEmpty(cellValue)) smokingDrinkingStatus.StartAge = Int32.Parse(cellValue);
+                cellValue = cell.NumericCellValue;
+                stringCellValue = cellValue.ToString();
             }
-        }
-
-        private void SetSmokingStopAge(PatientSmokingDrinkingStatus smokingDrinkingStatus)
-        {
-            var index = _headers.IndexOf(_smokingStopAgeHeader);
-            var cell = _row.GetCell(index, MissingCellPolicy.RETURN_BLANK_AS_NULL);
-            if (cell != null)
+            else
             {
-                string cellValue = cell.StringCellValue;
-                if (!string.IsNullOrEmpty(cellValue)) smokingDrinkingStatus.StopAge = Int32.Parse(cellValue);
+                stringCellValue = cell.StringCellValue;
             }
-        }
-
-        private void SetCigarettesPerDay(PatientSmokingDrinkingStatus smokingDrinkingStatus)
-        {
-            var index = _headers.IndexOf(_cigarettesPerDayHeader);
-            var cell = _row.GetCell(index, MissingCellPolicy.RETURN_BLANK_AS_NULL);
-            if (cell != null)
-            {
-                string cellValue = cell.StringCellValue;
-                if (!string.IsNullOrEmpty(cellValue)) smokingDrinkingStatus.CigarettesPerDay = Int32.Parse(cellValue);
-            }
-        }
-
-        private void SetAlcoholUnits(PatientSmokingDrinkingStatus smokingDrinkingStatus)
-        {
-            var index = _headers.IndexOf(_alcoholUnitsHeader);
-            var cell = _row.GetCell(index, MissingCellPolicy.RETURN_BLANK_AS_NULL);
-            if (cell != null)
-            {
-                string cellValue = cell.StringCellValue;
-                if (!string.IsNullOrEmpty(cellValue)) smokingDrinkingStatus.AlcolholUnits = Int32.Parse(cellValue);
-            }
+            if (!string.IsNullOrEmpty(stringCellValue)) SetSmokingProperty(propertyName, stringCellValue);
         }
 
         private string GetSmokingStatusName()
@@ -114,6 +109,36 @@ namespace AspergillosisEPR.Lib.Importers.ManARTS
                 default:
                     return null;
             }
+        }
+
+        private void SetSmokingStartAge()
+        {
+            var index = _headers.IndexOf(_smokingStartAgeHeader);
+            SetSmokingDrinkingValue(index, "StartAge");
+        }
+
+        private void SetSmokingStopAge()
+        {
+            var index = _headers.IndexOf(_smokingStopAgeHeader);
+            SetSmokingDrinkingValue(index, "StopAge");
+        }
+
+        private void SetCigarettesPerDay()
+        {
+            var index = _headers.IndexOf(_cigarettesPerDayHeader);
+            SetSmokingDrinkingValue(index, "CigarettesPerDay");
+        }
+
+        private void SetAlcoholUnits()
+        {
+            var index = _headers.IndexOf(_alcoholUnitsHeader);
+            SetSmokingDrinkingValue(index, "AlcolholUnits");
+        }
+
+        private void SetPackPerYears()
+        {
+            var index = _headers.IndexOf(_packsPerYearHeader);
+            SetSmokingDrinkingValue(index, "PacksPerYear");
         }
 
     }
