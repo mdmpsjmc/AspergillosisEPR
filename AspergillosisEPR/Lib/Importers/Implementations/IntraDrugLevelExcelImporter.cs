@@ -11,7 +11,6 @@ using AspergillosisEPR.Models;
 using System.Reflection;
 using Microsoft.EntityFrameworkCore;
 using AspergillosisEPR.Extensions;
-
 namespace AspergillosisEPR.Lib.Importers.Implementations
 {
     public class IntraDrugLevelExcelImporter : SpreadsheetImporter
@@ -22,6 +21,7 @@ namespace AspergillosisEPR.Lib.Importers.Implementations
         private UnitOfMeasurement _uom;
         private int _patientAliveStatus;
         private int _patientDeceasedStatus;
+
 
         public IntraDrugLevelExcelImporter(FileStream stream, 
                                            IFormFile file, 

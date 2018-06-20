@@ -4,7 +4,7 @@
         $('#btn-import-data').on('click', function (e) {
             e.preventDefault();
             $('#upload-response').html("");
-            var fileExtension = ['xls', 'xlsx', 'csv', 'pdf'];
+            var fileExtension = ['xls', 'xlsx', 'csv', 'pdf', 'docx', 'doc'];
             var filename = $('#fileToImport').val();
             if (filename.length === 0) {
                 alert("Please select a valid file.");
@@ -13,7 +13,7 @@
             else {
                 var extension = filename.replace(/^.*\./, '');
                 if ($.inArray(extension, fileExtension) === -1) {
-                    alert("Please select only excel files.");
+                    alert("Please select only excel, word or pdf files.");
                     return false;
                 }
             }

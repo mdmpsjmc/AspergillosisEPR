@@ -64,6 +64,20 @@ namespace AspergillosisEPR.Lib
                                 .SingleOrDefaultAsync(m => m.ID == id);
         }
 
+        internal Patient FindPatientByRM2Number(string rm2Number, bool loadDiagnoses = false)
+        {
+            Patient patient =  _context.Patients.FirstOrDefault(p => p.RM2Number.ToString().Equals(rm2Number));
+            if (patient != null && loadDiagnoses)
+            {
+                _context.Entry(patient).Collection(p => p.PatientDiagnoses).Load();
+                foreach(var diagnosis in patient.PatientDiagnoses)
+                {
+                    _context.Entry(diagnosis).Reference(p => p.DiagnosisType).Load();
+                }
+            }
+            return patient;
+        }
+
         public async Task<Patient> FindPatientWithFirstLevelRelationsByIdAsync(int? id)
         {
             return await _context.Patients

@@ -23,6 +23,7 @@
     <PackageReference Include="BeginCollectionItemCore" Version="1.0.8" />
     <PackageReference Include="CsvHelper" Version="6.1.0" />
     <PackageReference Include="DinkToPdf" Version="1.0.8" />
+    <PackageReference Include="DocumentFormat.OpenXml" Version="2.8.1" />
     <PackageReference Include="DotNetCore.NPOI" Version="1.0.2" />
     <PackageReference Include="EPPlus.Core" Version="1.5.4" />
     <PackageReference Include="FluentScheduler" Version="5.3.0" />
@@ -34,6 +35,7 @@
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="2.0.1" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="2.0.0" />
     <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="2.0.1" />
+    <PackageReference Include="Microsoft.Office.Interop.Word" Version="15.0.4797.1003" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.0.1" />
     <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
     <PackageReference Include="PeterKottas.DotNetCore.WindowsService" Version="2.0.6" />
@@ -61,7 +63,6 @@
 
   <ItemGroup>
     <None Include="F:\Version\update.sql" Link="update.sql" />
-    <None Include="web.config" />
   </ItemGroup>
 
   <ItemGroup>

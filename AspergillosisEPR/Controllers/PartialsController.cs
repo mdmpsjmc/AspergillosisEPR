@@ -207,7 +207,6 @@ namespace AspergillosisEPR.Controllers
             return PartialView();
         }
 
-
         [Authorize(Roles = "Update Role, Admin Role")]
         public IActionResult EditPatientMedicalTrialForm()
         {

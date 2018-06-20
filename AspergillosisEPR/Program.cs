@@ -19,24 +19,10 @@ namespace AspergillosisEPR
                 var services = scope.ServiceProvider;
                 try
                 {
-                    var context = services.GetRequiredService<AspergillosisContext>();
-                    DbInitializer.Initialize(context);
-                    DbInitializer.AddDefaultPatientStatuses(context);
-                    DbInitializer.CreateDbImportTypes(context);                
-                    DbInitializer.AddIgTypes(context);
-                    RadiologyDataInitializer.AddRadiologyModels(context);
-                    CaseReportFormsDataInitializer.AddCaseReportFormsModels(context);
-                    QoLExcelImportType.Seed(context);
-                    IGgEPRImportTypeSeed.Seed(context);
+                    var context = services.GetRequiredService<AspergillosisContext>();                  
                     var context2 = services.GetRequiredService<ApplicationDbContext>();
-                    AppDbInitializer.Initialize(context2);
-                    CaseReportFormsDataInitializer.AddSelectFieldTypes(context);
-                    MedicalTiralsDataInitializer.AddMedicalTrialsModels(context);
-                    IntraDrugLevelExcelTypeSeed.Seed(context);
-                    UnitOfMeasureMgLSeed.Seed(context);
-                    ManArtsImportSeed.Seed(context);
-                    ManArtsProcessedFileSeed.Seed(context);
-                    ManArtsProcessedFileSeed.SeedSmokingStatuses(context);
+                    AspergillosisDatabaseSeeder.SeedDatabase(context);
+                    AppDbInitializer.Initialize(context2);                   
                 }
                 catch (Exception ex)
                 {

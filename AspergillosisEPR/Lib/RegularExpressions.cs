@@ -17,5 +17,20 @@ namespace AspergillosisEPR.Lib
         {
             return new Regex(@"\d{4}");
         }
+
+        public static Regex RM2Number()
+        {
+            return new Regex(@"RM2\s{0,}-{0,}\s{0,}\d{1,}");
+        }
+
+        public static Regex JustDigits()
+        {
+            return new Regex(@"\d{1,}");
+        }
+
+        public static Regex TextBetweenParentheses()
+        {
+            return new Regex(@"\(([^)]*)\)");
+        }
     }
 }
