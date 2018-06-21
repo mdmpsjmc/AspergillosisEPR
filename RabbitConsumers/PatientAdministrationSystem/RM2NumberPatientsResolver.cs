@@ -14,7 +14,7 @@ namespace RabbitConsumers.PatientAdministrationSystem
     class RM2NumberPatientsResolver
     {
         private List<string> _newRM2Numbers;
-        private PASDbContext _pasContext;
+        private Data.PASDbContext _pasContext;
         private AspergillosisContext _context;
         private int _patientAliveStatus;
         private int _patientDeceasedStatus;

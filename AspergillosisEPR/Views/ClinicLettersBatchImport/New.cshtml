@@ -1,0 +1,23 @@
+﻿<section id="widget-grid" class="">
+    <div class="row">
+        <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="min-height: 300px">
+            <div class="jarviswidget" id="wid-id-0" data-widget-editbutton="false">
+                <header>
+                    <span class="widget-icon"> <i class="fa fa-download"></i> </span>
+                    <h2>Import clinic letters in batches</h2>
+                </header>
+                <div>
+                    <div class="widget-body">
+                        @Html.Partial("~/Views/Shared/_InfoBox.cshtml", "Click below to import most recent diagnoses from clinic letters")                        
+                        <form asp-for="@Url.Action("Create", "ClinicLettersBatchImport")" method="POST">
+                            <button class="btn btn-lg btn-success">
+                                <i class="fa fa-download"></i>&nbsp; Import clinic letters data
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </article>
+    </div>
+</section>
+

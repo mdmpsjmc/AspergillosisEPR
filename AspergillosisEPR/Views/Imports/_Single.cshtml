@@ -1,0 +1,32 @@
+﻿<form asp-route-returnUrl="@ViewData["ReturnUrl"]" method="post" id="import-data-form" class="client-form smart-form" enctype="multipart/form-data">
+    <header>
+        <i class="fa fa-download fa-2x"></i>&nbsp;Import new data into database
+    </header>
+    <fieldset>
+        <section class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            Please select import type
+
+            <label class="select">
+                @Html.DropDownList("DbImportTypeId", (SelectList)ViewBag.ImportTypes)
+                <i></i>
+            </label>
+        </section>
+    </fieldset>
+    <fieldset>
+        @Html.Partial("/Views/Home/_Spinner.cshtml")
+        <section>
+            <div class="input input-file">
+                <span class="button">
+                    <input id="file" type="file" name="file" onchange="$('input#fileToImport').val(this.value)"> Browse
+                </span>
+                <input type="text" name="fileTextField" id="fileToImport" placeholder="Please select file to import" readonly="readonly">
+            </div>
+        </section>
+    </fieldset>
+    <footer>
+        <button type="submit" class="btn btn-primary pull-left disable-default" id="btn-import-data">
+            Import
+        </button>
+        <a href="@Url.Action("Index", "imports")" class="btn btn-success pull-left">Go back to imports list</a>
+    </footer>
+</form>

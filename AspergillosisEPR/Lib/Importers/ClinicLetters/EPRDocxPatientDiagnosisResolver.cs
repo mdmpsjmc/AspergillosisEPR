@@ -1,6 +1,7 @@
 ﻿using AspergillosisEPR.Data;
 using AspergillosisEPR.Models;
 using AspergillosisEPR.Models.Patients;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -39,7 +40,13 @@ namespace AspergillosisEPR.Lib.Importers.ClinicLetters
             {
                 patientDiagnosis.Description = ExtractDiagnosisNote(matchingDiagnosis);
                 patientDiagnosis.DiagnosisCategory = ResolveDiagnosisCategory();
-                _context.PatientDiagnoses.Update(patientDiagnosis);
+                if (_context.Entry(patientDiagnosis).State == EntityState.Modified)
+                {
+                    _context.PatientDiagnoses.Update(patientDiagnosis);
+                } else
+                {
+                    _context.PatientDiagnoses.Add(patientDiagnosis);
+                }                
                 diagnosis = patientDiagnosis;
             }
             AddSmokingStatusIfExists();
@@ -48,6 +55,8 @@ namespace AspergillosisEPR.Lib.Importers.ClinicLetters
 
         private void AddSmokingStatusIfExists()
         {
+            _context.Entry(_patient).Reference(p => p.PatientSmokingDrinkingStatus).Load();
+            if (_patient.PatientSmokingDrinkingStatus != null) return;
             if(new Regex(@"smoker", RegexOptions.IgnoreCase).IsMatch(_potentialDiagnosis))
             {
                 var smokingStatus = new PatientSmokingDrinkingStatus();

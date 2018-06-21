@@ -10,7 +10,7 @@ using System;
 
 namespace AspergillosisEPR.Migrations
 {
-    [DbContext(typeof(ApplicationDbContext))]
+    [DbContext(typeof(PASDbContext))]
     [Migration("20171128144933_AddLoginNameToApplicationUser")]
     partial class AddLoginNameToApplicationUser
     {

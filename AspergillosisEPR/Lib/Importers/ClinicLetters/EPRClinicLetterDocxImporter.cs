@@ -1,4 +1,7 @@
 ﻿using AspergillosisEPR.Data;
+using AspergillosisEPR.Models;
+using AspergillosisEPR.Models.Patients;
+using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Packaging;
 using Microsoft.AspNetCore.Http;
 using System;
@@ -6,14 +9,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.IO.Packaging;
 using System.Linq;
-using System.Text;
-using NPOI.XWPF.Extractor;
-using DocumentFormat.OpenXml;
-using AspergillosisEPR.Lib.Importers.ClinicLetters;
-using AspergillosisEPR.Models;
-using AspergillosisEPR.Models.Patients;
+using System.Threading.Tasks;
 
-namespace AspergillosisEPR.Lib.Importers.Implementations
+namespace AspergillosisEPR.Lib.Importers.ClinicLetters
 {
     public class EPRClinicLetterDocxImporter : Importer
     {
@@ -21,44 +19,44 @@ namespace AspergillosisEPR.Lib.Importers.Implementations
         private static string ALTERNATE_DIAGNOSES_IDENTIFIER = "Diagnosis:";
         WordprocessingDocument _wordDocument;
         private PASDbContext _pasContext;
-        PatientManager _patientManager;   
+        PatientManager _patientManager;
         private List<PatientDiagnosis> _diagnoses;
         private List<PatientSurgery> _surgeries;
         private Package _wordPackage;
         private MsWordFormatConverter _wordConverter;
         private bool _skipStreamReset = false;
 
-        public EPRClinicLetterDocxImporter(FileStream stream, IFormFile file,
-                                           string fileExtension, AspergillosisContext context)
+        public EPRClinicLetterDocxImporter(FileStream stream, string fileExtension, 
+                                           AspergillosisContext context, PASDbContext pasContext)
         {
             _stream = stream;
-            _file = file;     
             _fileExtension = fileExtension;
-            Imported = new List<dynamic>();
+            _pasContext = pasContext;
             _context = context;
             _patientManager = new PatientManager(context);
-            ReadDOCXFile();            
         }
 
         public void ReadDOCXFile()
         {
-            ResetStream();
             ConvertToDocxIfDoc();
             InitializeRequiredProperties();
             using (_wordDocument = WordprocessingDocument.Open(_wordPackage))
             {
                 var diagnosisElement = GetDiagnosisElement();
+                if (diagnosisElement == null) return;
                 var rm2Number = FindRM2InDocumentName();
                 var potentialDiagnoses = FindDiagnosesFromWord();
                 List<string> discoveredDiagnosesList = CopyToNewList(potentialDiagnoses);
                 Patient patient = _patientManager.FindPatientByRM2Number(rm2Number, true);
-                if (patient == null) return;                
+
+                if (patient == null) patient = DownloadPatientFromPAS(rm2Number);
+                if (patient == null) return;
+
                 foreach (var potentialDiagnosis in potentialDiagnoses)
                 {
                     var diagnosis = GetPatientDiagnosesFromWord(patient, potentialDiagnosis);
                     if (diagnosis != null)
                     {
-                        Imported.Add(diagnosis);
                         discoveredDiagnosesList.Remove(potentialDiagnosis);
                     }
                     GetPatientSurgeriesFromWord(patient, potentialDiagnosis);
@@ -79,14 +77,20 @@ namespace AspergillosisEPR.Lib.Importers.Implementations
 
         private void BuildPatientGenericNotes(Patient patient, List<string> discoveredDiagnosesList)
         {
-            string listAsString = string.Join(", ", discoveredDiagnosesList);
-            if (string.IsNullOrEmpty(patient.GenericNote))
+            foreach(var note in discoveredDiagnosesList)
             {
-                patient.GenericNote = listAsString;
-            } else
-            {
-                patient.GenericNote = patient.GenericNote + ", " + listAsString;
-            }
+                if (string.IsNullOrEmpty(patient.GenericNote))
+                {
+                    patient.GenericNote = note;
+                }
+                else
+                {
+                    if (!patient.GenericNote.Contains(note))
+                    {
+                        patient.GenericNote = patient.GenericNote + ", " + note;
+                    }                   
+                }
+            }            
         }
 
         private static List<string> CopyToNewList(List<string> potentialDiagnoses)
@@ -107,38 +111,41 @@ namespace AspergillosisEPR.Lib.Importers.Implementations
 
         private string FindRM2InDocumentName()
         {
-            var rm2 = RegularExpressions.JustDigits().Match(_file.Name);
+            string fileName = Path.GetFileName(_stream.Name);
+            var rm2 = RegularExpressions.JustDigits().Match(fileName);
             return rm2.ToString();
         }
 
         private List<string> FindDiagnosesFromWord()
         {
-           var diagnosesFromWord = new List<string>();
-           var elementsSublist = MainDocumentParagraphs()
-                                          .Where(z => MainDocumentParagraphs().IndexOf(z) >= GetDiagnosisElementIndex());                                    
-                                       
+            var diagnosesFromWord = new List<string>();
+            var elementsSublist = MainDocumentParagraphs()
+                                           .Where(z => MainDocumentParagraphs().IndexOf(z) >= GetDiagnosisElementIndex());
+
             foreach (var element in elementsSublist)
             {
                 if (string.IsNullOrEmpty(element.InnerText))
                 {
                     break;
-                } else
+                }
+                else
                 {
                     diagnosesFromWord.Add(element.InnerText.Replace(DIAGNOSES_IDENTIFIER, String.Empty).Trim());
-                }              
+                }
             }
-            return diagnosesFromWord; 
+            return diagnosesFromWord;
         }
 
         private OpenXmlElement GetDiagnosisElement()
         {
             OpenXmlElement diagnosisElement = MainDocumentParagraphs()
-                                             .First(e => e.InnerText.Contains(DIAGNOSES_IDENTIFIER)); 
+                                             .FirstOrDefault(e => e.InnerText.Contains(DIAGNOSES_IDENTIFIER));
             if (diagnosisElement == null)
             {
                 return MainDocumentParagraphs()
-                                   .First(e => e.InnerText.Contains(ALTERNATE_DIAGNOSES_IDENTIFIER));
-            } else
+                                   .FirstOrDefault(e => e.InnerText.Contains(ALTERNATE_DIAGNOSES_IDENTIFIER));
+            }
+            else
             {
                 return diagnosisElement;
             }
@@ -156,12 +163,6 @@ namespace AspergillosisEPR.Lib.Importers.Implementations
                                 .Body
                                 .ChildElements
                                 .ToList();
-        }
-        private void ResetStream()
-        {
-            if (_skipStreamReset) return;
-            _file.CopyTo(_stream);
-            _stream.Position = 0;
         }
 
         private void InitializeRequiredProperties()
@@ -181,6 +182,15 @@ namespace AspergillosisEPR.Lib.Importers.Implementations
                 string filePath = _wordConverter.ConvertDocToDocx();
                 _stream = File.Open(filePath, FileMode.Open);
             }
+        }
+        private Patient DownloadPatientFromPAS(string rm2Number)
+        {
+            Patient patient;
+            PatientPASDownloader downloader = new PatientPASDownloader(new List<string>() { rm2Number }, _context, _pasContext);
+            var patients = downloader.AddMissingPatients();
+            if (patients.Count == 0) return null;
+            patient = patients[0];
+            return patient;
         }
     }
 }

@@ -21,6 +21,7 @@ using System.Reflection;
 using static AspergillosisEPR.Services.ViewToString;
 using AspNetCore.RouteAnalyzer;
 using FluentScheduler;
+using Microsoft.Extensions.FileProviders;
 
 namespace AspergillosisEPR
 {
@@ -38,10 +39,17 @@ namespace AspergillosisEPR
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            var physicalProvider = HostingEnvironment.ContentRootFileProvider;
+            var embeddedProvider = new EmbeddedFileProvider(Assembly.GetEntryAssembly());
+            var compositeProvider = new CompositeFileProvider(physicalProvider, embeddedProvider);
+            services.AddSingleton<IFileProvider>(compositeProvider);
+            services.AddSingleton<IConfiguration>(Configuration);
             services.AddDbContext<AspergillosisContext>(options =>
                         options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"), b => b.UseRowNumberForPaging()));
             services.AddDbContext<ApplicationDbContext>(options =>
-                       options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"), b => b.UseRowNumberForPaging())
+                       options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"), b => b.UseRowNumberForPaging()));
+            services.AddDbContext<PASDbContext>(options =>
+                       options.UseSqlServer(Configuration.GetConnectionString("PASConnection"), b => b.UseRowNumberForPaging())
            );
             services.AddIdentity<ApplicationUser, ApplicationRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()

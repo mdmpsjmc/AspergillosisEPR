@@ -1,7 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using RabbitConsumers.PatientAdministrationSystem.Data;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
-using RabbitConsumers.PatientAdministrationSystem.Data;
 using System;
 using System.Collections.Generic;
 using System.Text;

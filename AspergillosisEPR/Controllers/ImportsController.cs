@@ -20,6 +20,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using AspergillosisEPR.Lib.Importers;
 using Microsoft.EntityFrameworkCore;
 using AspergillosisEPR.Models.Patients;
+using Microsoft.Extensions.Configuration;
+using AspergillosisEPR.Models.AspergillosisViewModels;
 
 namespace AspergillosisEPR.Controllers
 {
@@ -28,13 +30,20 @@ namespace AspergillosisEPR.Controllers
     {
         private readonly IHostingEnvironment _hostingEnvironment;
         private readonly AspergillosisContext _context;
+        private readonly IConfiguration _configuration;
         private Importer _importer;
         private ImporterResolver _importerResolver;
+        private readonly PASDbContext _pasContext;
 
-        public ImportsController(IHostingEnvironment hostingEnvironment, AspergillosisContext context)
+        public ImportsController(IHostingEnvironment hostingEnvironment, 
+                                 AspergillosisContext context,
+                                 PASDbContext pasContext, 
+                                 IConfiguration configuration)
         {
             _hostingEnvironment = hostingEnvironment;
             _context = context;
+            _pasContext = pasContext;
+            _configuration = configuration;
             _importerResolver = new ImporterResolver(_context);
         }
 
@@ -45,8 +54,11 @@ namespace AspergillosisEPR.Controllers
 
         public IActionResult New()
         {
+            string batchClinicalLettersDir = _hostingEnvironment.ContentRootPath + _configuration.GetSection("clinicLettersDirectory").Value.ToString();
+            var batchUploadVM = new BatchUploadViewModel();
+            batchUploadVM.ClinicLettersBatchDirectory = batchClinicalLettersDir;
             PopulateDbImportTypesDropdownList();
-            return View();
+            return View(batchUploadVM);
         }
 
         public async Task<IActionResult> Create()
@@ -56,9 +68,8 @@ namespace AspergillosisEPR.Controllers
             string webRootPath = _hostingEnvironment.WebRootPath;
             int importerId = Int32.Parse(Request.Form["DbImportTypeId"]);
             var dbImporterType = _importerResolver.GetDbImporterTypeById(importerId);
-            
             Action<FileStream, IFormFile, string> readFileAction = (stream, formFile, extension) => {
-                _importer = _importerResolver.Resolve(dbImporterType.ImporterClass, new object[] { stream, file, extension, _context });
+                _importer = _importerResolver.Resolve(dbImporterType.ImporterClass, new object[] { stream, file, extension, _context });               
             };
             FileImporter.Import(file, webRootPath, readFileAction);
 

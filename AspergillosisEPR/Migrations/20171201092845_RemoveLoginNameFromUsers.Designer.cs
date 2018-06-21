@@ -10,7 +10,7 @@ using System;
 
 namespace AspergillosisEPR.Migrations
 {
-    [DbContext(typeof(ApplicationDbContext))]
+    [DbContext(typeof(PASDbContext))]
     [Migration("20171201092845_RemoveLoginNameFromUsers")]
     partial class RemoveLoginNameFromUsers
     {
