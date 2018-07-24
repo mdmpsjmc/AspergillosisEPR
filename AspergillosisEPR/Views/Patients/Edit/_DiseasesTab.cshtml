@@ -20,7 +20,7 @@
                 <div class="row">
                     <label class="select">
                         <label asp-for="@(diagnosis.DiagnosisTypeId)" class="select">
-                            @Html.DropDownList("Diagnoses[" + i.ToString()+"].DiagnosisTypeId", (SelectList)ViewBag.DiagnosisTypes[i], "Select Diagnosis")
+                            @Html.DropDownList("Diagnoses[" + i.ToString()+"].DiagnosisTypeId", (SelectList)ViewBag.DiagnosisTypes[i], "Select Diagnosis", new { @class="select2-search", @style="width: 100% !important"})
                             <i></i>
                             <span asp-validation-for="@(diagnosis.DiagnosisTypeId)" class="text-danger"></span>
                         </label>

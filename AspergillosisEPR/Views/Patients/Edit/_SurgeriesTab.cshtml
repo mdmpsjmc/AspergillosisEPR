@@ -1,0 +1,47 @@
+﻿@model AspergillosisEPR.Models.Patient
+@using AspergillosisEPR.Models.Patients;
+
+<div class="col-12 row surgery-form" style="margin: 0px !important">
+    @for (int i = 0; i < Model.PatientSurgeries.OrderByDescending(q => q.SurgeryDate).ToList().Count; i++)
+    {
+        PatientSurgery patientSurgery = Model.PatientSurgeries.OrderByDescending(q => q.SurgeryDate).ToList()[i];
+        <div class="patient-surgery">
+            @Html.Hidden("Surgeries[" + i.ToString() + "].ID", patientSurgery.ID)
+            <fieldset>
+                <div class="row">
+                    <label class="select col-6 col-md-6 col-xs-6">
+                        <label asp-for="@patientSurgery.SurgeryId" class="select">
+                            @Html.DropDownList("Surgeries[" + i + "].SurgeryId", (SelectList)ViewBag.SurgeryId[i], "Select Surgery")
+                            <i></i>
+                        </label>
+                    </label>
+                    <label class="input col-6 col-md-6 col-xs-6">
+                        <i class="icon-append fa fa-calendar"></i>
+                        <input asp-for="@patientSurgery.SurgeryDate" placeholder="Surgery Date" type="text" name="Surgeries[@(i)].SurgeryDate" id="Surgeries_@(i)__SurgeryDate">
+                    </label>
+                </div>
+                <div class="row">
+
+                    <label class="textarea">
+                        <i class="icon-append fa fa-comment"></i>
+                        @Html.TextArea("Surgeries[" + i + "].Note", @patientSurgery.Note, new { @class = "comment", @rows = 5, @placeholder = "Surgery Note" })
+                    </label>
+                    </div>
+                    <div class="row">
+                        <a href="@Url.Action("Delete", "PatientSurgeries" , new { patientId=patientSurgery.PatientId, id=patientSurgery.ID})" class="btn btn-danger remove-existing-item pull-right" data-id="@patientSurgery.ID" data-what="Patient Drug Level" data-toggle="tooltip" data-title="Remove Drug Level" style="padding: 5px">
+                            <i class="fa fa-trash"></i>
+                        </a>
+                    </div>
+</fieldset>
+        </div>
+    }
+</div>
+@if (User.IsInRole("Update Role") || User.IsInRole("Admin Role"))
+{
+    <a href="@Url.Action("EditPatientSurgeryForm", "Partials")" class="btn btn-success edit-surgery edit-patient-partial" data-visible-row="div.patient-surgery:visible" data-insert-into-class="div.surgery-form" style="padding: 5px">
+        <i class="fa fa-plus"></i>
+        <span>
+            <strong>Add patient surgery</strong>
+        </span>
+    </a>
+}

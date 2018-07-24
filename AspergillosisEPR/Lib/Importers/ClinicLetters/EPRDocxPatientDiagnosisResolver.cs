@@ -16,6 +16,8 @@ namespace AspergillosisEPR.Lib.Importers.ClinicLetters
         private Patient _patient;
         private AspergillosisContext _context;
         private SmokingStatus _currentSmoker;
+        private SmokingStatus _exSmoker;
+
 
         public EPRDocxPatientDiagnosisResolver(string potentialDiagnosis, 
                                           Patient patient, 
@@ -25,28 +27,30 @@ namespace AspergillosisEPR.Lib.Importers.ClinicLetters
             _patient = patient;
             _context = context;
             _currentSmoker = _context.SmokingStatuses.Where(ss => ss.Name.Equals("Current")).FirstOrDefault();
+            _exSmoker = _context.SmokingStatuses.Where(ss => ss.Name.Equals("Ex-Smoker")).FirstOrDefault();
         }
 
         internal PatientDiagnosis ResolveDiagnosis()
         {
+            if (_patient.PatientDiagnoses == null)
+            {
+                _patient.PatientDiagnoses = new List<PatientDiagnosis>();
+            }
             PatientDiagnosis diagnosis = null;
             var matchingDiagnosis = FindMatchingDiagnosisInDatabase();
             PatientDiagnosis patientDiagnosis = CheckIfMatchingDiagnosisAlreadyExists(matchingDiagnosis);
             if (patientDiagnosis == null && matchingDiagnosis != null)
             {
+                
                 diagnosis = BuildDiagnosisForPatient(matchingDiagnosis);
+                _patient.PatientDiagnoses.Add(diagnosis);
                 _context.PatientDiagnoses.Add(diagnosis);
             } else if (patientDiagnosis != null && matchingDiagnosis != null)
             {
                 patientDiagnosis.Description = ExtractDiagnosisNote(matchingDiagnosis);
                 patientDiagnosis.DiagnosisCategory = ResolveDiagnosisCategory();
                 if (_context.Entry(patientDiagnosis).State == EntityState.Modified)
-                {
-                    _context.PatientDiagnoses.Update(patientDiagnosis);
-                } else
-                {
-                    _context.PatientDiagnoses.Add(patientDiagnosis);
-                }                
+                _context.PatientDiagnoses.Update(patientDiagnosis);                          
                 diagnosis = patientDiagnosis;
             }
             AddSmokingStatusIfExists();
@@ -57,7 +61,15 @@ namespace AspergillosisEPR.Lib.Importers.ClinicLetters
         {
             _context.Entry(_patient).Reference(p => p.PatientSmokingDrinkingStatus).Load();
             if (_patient.PatientSmokingDrinkingStatus != null) return;
-            if(new Regex(@"smoker", RegexOptions.IgnoreCase).IsMatch(_potentialDiagnosis))
+            if (new Regex(@"ex-smoker", RegexOptions.IgnoreCase).IsMatch(_potentialDiagnosis))
+            {
+                var smokingStatus = new PatientSmokingDrinkingStatus();
+                smokingStatus.SmokingStatus = _exSmoker;
+                smokingStatus.PatientId = _patient.ID;
+                _context.PatientSmokingDrinkingStatus.Add(smokingStatus);
+                return;
+            }
+            if (new Regex(@"smoker", RegexOptions.IgnoreCase).IsMatch(_potentialDiagnosis))
             {
                 var smokingStatus = new PatientSmokingDrinkingStatus();
                 smokingStatus.SmokingStatus = _currentSmoker;

@@ -71,6 +71,7 @@ namespace AspergillosisEPR.Controllers
                                                  PatientRadiologyFinding[] patientRadiologyFinding,
                                                  PatientMedicalTrial[] patientMedicalTrial,
                                                  PatientDrugLevel[] drugLevels,
+                                                 PatientSurgery[] surgeries,
                                                  CaseReportFormResult[] caseReportFormResult)
         {
             var existingPatient = _context.Patients.FirstOrDefault(x => x.RM2Number == patient.RM2Number);
@@ -93,6 +94,7 @@ namespace AspergillosisEPR.Controllers
                                                              ref patientRadiologyFinding);
             _patientManager.AddMedicalTrials(patient, patientMedicalTrial);
             _patientManager.AddDrugLevels(patient, drugLevels);
+            _patientManager.AddPatientSurgeries(patient, surgeries);
             try
             {
                 if (ModelState.IsValid)
@@ -174,6 +176,8 @@ namespace AspergillosisEPR.Controllers
             _listResolver.BindSelects(patient);
             _listResolver.BindMedicalTrialsSelects(ViewBag, patient);
             _listResolver.BindDrugLevelSelects(ViewBag, patient);
+            _listResolver.BindSurgeriesSelects(ViewBag, patient);
+            
 
             ViewBag.CaseReportForms = (List <IGrouping<string, CaseReportFormResult>>)  _caseReportFormManager
                                       .GetGroupedCaseReportFormsForPatient(patient.ID);
@@ -190,6 +194,7 @@ namespace AspergillosisEPR.Controllers
                                                               [Bind("ID, DateTaken, FindingId, RadiologyTypeId, ChestLocationId, ChestDistributionId, GradeId, TreatmentResponseId, Note")] PatientRadiologyFinding[] radiololgyFindings,
                                                               [Bind("ID, PatientId, MedicalTrialId, PatientMedicalTrialStatusId, IdentifiedDate, ConsentedDate, RecruitedDate, Consented")] PatientMedicalTrial[] patientMedicalTrial,
                                                               [Bind("ID, PatientId, DrugId, UnitOfMeasurementId, DateTaken, DateReceived, ResultValue, ComparisionCharacter")] PatientDrugLevel[] drugLevels,
+                                                              [Bind("ID, SurgeryId, PatientId, SurgeryDate, Note")] PatientSurgery[] surgeries,
                                                               CaseReportFormResult[] caseReportFormResult)
         {
             if (id == null)
@@ -205,7 +210,9 @@ namespace AspergillosisEPR.Controllers
             _patientManager.UpdateImmunoglobines(patientImmunoglobulines, patientToUpdate);
             _patientManager.UpdatePatientRadiology(radiololgyFindings, patientToUpdate);
             _patientManager.UpdatePatientMedicalTrials(patientMedicalTrial, patientToUpdate);
-            _patientManager.UpdatePatientDrugLevels(drugLevels, patientToUpdate); 
+            _patientManager.UpdatePatientDrugLevels(drugLevels, patientToUpdate);
+            _patientManager.UpdatePatientSurgeries(surgeries, patientToUpdate);
+
 
             _caseReportFormManager.UpdateCaseReportFormsForPatient(caseReportFormResult, patientToUpdate);
 

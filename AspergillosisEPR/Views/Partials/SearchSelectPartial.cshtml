@@ -1,4 +1,12 @@
 ﻿<label class="select">
-    @Html.DropDownList("PatientSearchViewModel[" + (string)ViewBag.Index.ToString() + "].SearchValue", (SelectList)ViewBag.SearchSelect)
+    @{ 
+        string selectKlass = "";
+        var selectList = (SelectList)ViewBag.SearchSelect;
+        if (selectList.Count() > (int)ViewBag.TurnIntoSearchableSelect)
+        {
+            selectKlass = "selectize";
+        }
+    }
+    @Html.DropDownList("PatientSearchViewModel[" + (string)ViewBag.Index.ToString() + "].SearchValue", (SelectList)ViewBag.SearchSelect, new { @class = selectKlass })
     <i></i>
 </label>

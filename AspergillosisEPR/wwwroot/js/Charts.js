@@ -297,9 +297,17 @@
                     var imageUrl = stackedLine.toBase64Image(); 
                     $("img#sgrq-chart-image").attr("src", imageUrl);
                     $("a.export-trigger").removeAttr("disabled");
-                }
+                },               
             },
-
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        min: 0,
+                        max: 100,
+                        stepSize: 5
+                    }
+                }]
+            }                
         };
         var stackedLine = new Chart(context, {
             type: 'line',
@@ -310,6 +318,17 @@
         var uiStackedLine = new Chart(uiContext, {
             type: 'line',
             data: chartData,
+            options: {
+                scales: {
+                    yAxes: [{
+                         ticks: {
+                            min: 0,
+                            max: 100,
+                            stepSize: 5
+                         }
+                     }]
+                }
+            }
         });
     }
 

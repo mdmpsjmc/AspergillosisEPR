@@ -8,6 +8,7 @@
             "serverSide": true,
             "filter": true,
             "orderMulti": false,
+            "pageLength": 100,
             "order": [[1, "asc"]],
             "initComplete": function (settings, json) {
                 Users.loadDataTableWithForCurrentUserRoles();

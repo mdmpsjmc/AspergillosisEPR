@@ -84,6 +84,13 @@ namespace AspergillosisEPR.Lib
             return selectList;
         }
 
+        internal dynamic PopulateSurgeryDropdownList(object selectedItem = null)
+        {
+            var surgeries = _context.Surgeries.ToList().OrderBy(s => s.Name);
+            return new SelectList(surgeries, "ID", "Name", selectedItem);
+
+        }
+
         public SelectList PopulateMedicalTrialTypesDropdownList(object selectedItem = null)
         {
             var trialTypes = _context.MedicalTrialTypes.ToList();
@@ -240,6 +247,19 @@ namespace AspergillosisEPR.Lib
             _viewBag.TreatmentResponseId = treatmentResponses;
        
             PopulatePatientStatusesDropdownList(patient.PatientStatusId);
+        }
+
+        internal void BindSurgeriesSelects(dynamic viewBag, Patient patient)
+        {
+            List<SelectList> surgeries = new List<SelectList>();
+
+            for (int i = 0; i < patient.PatientSurgeries.OrderByDescending(t => t.SurgeryDate).Count(); i++)
+            {
+                var item = patient.PatientSurgeries.OrderByDescending(t => t.SurgeryDate).ToList()[i];
+                surgeries.Add(PopulateSurgeryDropdownList(item.SurgeryId));
+            }
+
+            viewBag.SurgeryId = surgeries;           
         }
 
         public void BindDrugLevelSelects(dynamic viewBag, Patient patient)

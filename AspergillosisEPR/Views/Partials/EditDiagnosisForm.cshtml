@@ -15,7 +15,7 @@
             <div class="row">
                 <label class="select">
                     <label asp-for="DiagnosisTypeId" class="select">
-                        @Html.DropDownList("Diagnoses[" + (string)ViewBag.Index + "].DiagnosisTypeId", (SelectList)ViewBag.DiagnosisTypeId, "Select Diagnosis")
+                        @Html.DropDownList("Diagnoses[" + (string)ViewBag.Index + "].DiagnosisTypeId", (SelectList)ViewBag.DiagnosisTypeId, "Select Diagnosis", new { @class="select2-search", @style="width:100% !important"})
                         <i></i>
                         <span asp-validation-for="DiagnosisCategoryId" class="text-danger"></span>
                     </label>
@@ -28,4 +28,9 @@
                 </label>
             </div>
         </fieldset>
+         <div class="row">
+            <a href="javascript:void(0)" class="btn btn-danger remove-new-diagnosis pull-right btn-lg" data-what="diagnosis" data-toggle="tooltip" data-title="Remove diagnosis" style="padding: 5px">
+                <i class="fa fa-trash"></i>
+         </a>
+        </div>
 </div>

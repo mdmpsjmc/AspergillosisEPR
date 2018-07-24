@@ -18,7 +18,12 @@ else
 @if (Model.ShowDiagnoses)
 {
     <h2>Diagnosis</h2>
-    @Html.Partial("/Views/Patients/Details/Diagnosis.cshtml")
+        @Html.Partial("/Views/Patients/Details/_Deseases.cshtml")
+    @if (Model.PatientSurgeries.Any())
+    {
+        <h2>Surgeries</h2>
+        @Html.Partial("/Views/Patients/Details/_Surgeries.cshtml")
+    }
 }
 @if (Model.ShowDrugs)
 {

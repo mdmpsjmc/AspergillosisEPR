@@ -89,6 +89,7 @@ namespace AspergillosisEPR.Lib
                                 .Include(p => p.PatientImmunoglobulines)
                                 .Include(p => p.PatientRadiologyFindings)
                                 .Include(p => p.DrugLevels)
+                                .Include(p => p.PatientSurgeries)
                                 .AsNoTracking()
                                 .SingleOrDefaultAsync(m => m.ID == id);
         }
@@ -110,6 +111,22 @@ namespace AspergillosisEPR.Lib
                     patientImmunoglobinToUpdate.Value = patientImmunoglobin.Value;
                     _context.Update(patientImmunoglobinToUpdate);
                 }
+            }
+        }
+
+        internal void AddPatientSurgeries(Patient patient, PatientSurgery[] patientSurgery)
+        {
+
+            if (patientSurgery.Length == 1 && patientSurgery[0] == null)
+            {
+                return;
+            }
+            patient.PatientSurgeries = new List<PatientSurgery>();
+            foreach (var surgery in patientSurgery)
+            {
+                surgery.PatientId = patient.ID;
+                _context.PatientSurgeries.Add(surgery);
+                patient.PatientSurgeries.Add(surgery);
             }
         }
 
@@ -239,6 +256,26 @@ namespace AspergillosisEPR.Lib
                     drugToUpdate.EndDate = drug.EndDate;
                     drugToUpdate.DrugId = drug.DrugId;
                     _context.Update(drugToUpdate);
+                }
+            }
+        }
+
+        internal void UpdatePatientSurgeries(PatientSurgery[] surgeries, Patient patientToUpdate)
+        {
+            foreach (var surgery in surgeries)
+            {
+                if (surgery.ID == 0)
+                {
+                    surgery.PatientId = patientToUpdate.ID;
+                    _context.Update(surgery);
+                }
+                else
+                {
+                    var surgeryToUpdate = patientToUpdate.PatientSurgeries.SingleOrDefault(s => s.ID == surgery.ID);
+                    surgeryToUpdate.SurgeryId = surgery.SurgeryId;
+                    surgeryToUpdate.Note = surgery.Note;
+                    surgeryToUpdate.SurgeryDate = surgery.SurgeryDate;         
+                    _context.Update(surgeryToUpdate);
                 }
             }
         }

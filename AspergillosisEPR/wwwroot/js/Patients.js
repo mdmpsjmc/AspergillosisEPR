@@ -197,9 +197,10 @@
                 $("select.select2").select2({
                     minimumResultsForSearch: -1,
                     placeholder: function () {
-                        $(this).data('placeholder');
+                        return $(this).data('placeholder');
                     }
                 });
+                $("select.select2-search").selectize();
             }).always(function () {
                 LoadingIndicator.hide();
             });
@@ -247,6 +248,7 @@
                         $(this).data('placeholder');
                     }
                 });
+                $("select.select2-search").selectize();
                 $("select[multiple='multiple']").multiSelect();
                 CaseReportForms.onPatientCaseReportFormSelectChange();
                 CaseReportForms.deletePartialFromPopup();

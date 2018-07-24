@@ -1,6 +1,7 @@
 {
   "name": "asp.net",
   "private": true,
+  "registry": "https://registry.bower.io",
   "dependencies": {
     "bootstrap": "3.3.7",
     "jquery": "2.2.0",
@@ -12,11 +13,8 @@
     "bootstrap-datepicker": "bootstrap-3-datepicker#v1.7.1",
     "eonasdan-bootstrap-datetimepicker": "bootstrap3-datetimepicker#v4.17.45",
     "chart.js": "Chart.js#v2.7.1",
-    "datatables.net-plugins": "datatables-plugins#1.10.16",
-    "datatables-responsive": "2.2.1",
-    "datatables-colvis": "RELEASE_1_0_8",
-    "DataTables": "datatable#RELEASE_1_9_4",
-    "multiselect": "0.9.12"
+    "multiselect": "0.9.12",
+    "selectize": "v0.12.5"
   },
   "resolutions": {
     "jquery": ">=1.6"

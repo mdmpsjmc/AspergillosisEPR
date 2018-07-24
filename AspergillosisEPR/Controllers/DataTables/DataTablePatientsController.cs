@@ -92,9 +92,23 @@ namespace AspergillosisEPR.Controllers.DataTables
             {
                 var diagnosis = patientDiagnoses.Where(pd => pd.PatientId == patient.ID).
                                 FirstOrDefault();
-
-                patient.PrimaryDiagnosis = diagnosis == null ? "" : diagnosis.DiagnosisType.Name;
+                patient.PrimaryDiagnosis = GetDiagnosisName(diagnosis);
             }
+        }
+
+        private string GetDiagnosisName(PatientDiagnosis diagnosis)
+        {
+            if (diagnosis == null)
+                return "";
+            else
+            {
+                if (!string.IsNullOrEmpty(diagnosis.DiagnosisType.ShortName))
+                    return diagnosis.DiagnosisType.ShortName;
+                else
+                {
+                    return diagnosis.DiagnosisType.Name;
+                }
+            }                        
         }
 
         private IQueryable<PatientDataTableViewModel> QueryPatientData()

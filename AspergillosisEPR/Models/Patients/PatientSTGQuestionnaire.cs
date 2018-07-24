@@ -24,7 +24,7 @@ namespace AspergillosisEPR.Models.Patients
         {
             return new List<string>()
             {
-                "PatientId", "Patient"
+                "PatientId", "Patient", "OriginalImportedId"
             };
         }
 

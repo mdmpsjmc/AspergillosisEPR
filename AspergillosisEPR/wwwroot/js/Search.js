@@ -202,6 +202,7 @@
             $.get(selectFieldRequestUrl, function (htmlResponse) {
                 $(compareSection[index]).hide();
                 searchValueSection.html(htmlResponse);
+                $("select.selectize").selectize();
             });
         } else {
             searchValueSection.html(originalHtml);
@@ -225,6 +226,7 @@
     var setupSearchFormLayout = function () {
         $("a.remove-search-criteria:first").hide();
         $("a.remove-search-criteria:not(:last)").hide();
+        $("select.selectize").selectize();
     }
 
     var onSearchCriteriaRemove = function () {

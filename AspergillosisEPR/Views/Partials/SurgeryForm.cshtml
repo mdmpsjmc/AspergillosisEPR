@@ -1,0 +1,38 @@
+﻿@using HtmlHelpers.BeginCollectionItemCore;
+@model AspergillosisEPR.Models.Patients.PatientSurgery
+@using (Html.BeginCollectionItem("Surgeries"))
+{
+    <div class="diagnosis-row">
+        <fieldset>
+            <div class="row col-6 col-md-6 col-xs-6">
+                <label class="select">
+                    <label asp-for="SurgeryId" class="select">
+                        @Html.DropDownListFor(m => m.SurgeryId, (SelectList)ViewBag.SurgeryId, "Select Surgery")
+                        <i></i>
+                        <span asp-validation-for="SurgeryId" class="text-danger"></span>
+                    </label>
+                </label>
+            </div>
+            <div class="col col-6">
+                <label asp-for="SurgeryDate" class="input">
+                    <i class="icon-append fa fa-calendar"></i>
+                    <input asp-for="SurgeryDate" placeholder="Enter surgery year">
+                </label>
+            </div>
+            <br/>
+            <section>
+                <div class="row">
+                    <label class="textarea">
+                        <i class="icon-append fa fa-comment"></i>
+                        @Html.TextAreaFor(s => s.Note, new { @class = "comment", @rows = 3, @placeholder = "Note" })
+                    </label>
+                </div>
+            </section>
+            </fieldset>
+        <div class="row">
+            <a href="javascript:void(0)" class="btn btn-danger remove-new-diagnosis pull-right btn-lg" data-what="surgery" data-toggle="tooltip" data-title="Remove surgery" style="padding: 5px">
+                <i class="fa fa-trash"></i>
+            </a>
+        </div>
+    </div>
+}

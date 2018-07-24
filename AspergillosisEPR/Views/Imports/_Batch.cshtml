@@ -1,5 +1,5 @@
 ﻿@model AspergillosisEPR.Models.AspergillosisViewModels.BatchUploadViewModel;
-<form asp-for="@Url.Action("Create", "ClinicLettersBatchImport")" method="POST" class="client-form smart-form">
+<form asp-for="@Url.Action("Create", "ClinicLettersBatchImport")" method="POST" class="client-form smart-form" id="batch-import-form">
     <section id="widget-grid" class="">
         <div class="row">
             <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="min-height: 300px">
@@ -9,9 +9,10 @@
                     </header>
 
                     <div class="col-12" style="margin: 0 auto; padding-top: 50px; padding-left: 20px">
-                        <h3>Clinic letter directory path:</h3>
+                        <h3>Clinic letters directory path:</h3>
+                        <div id="batch-upload-response"></div>
                         <pre style="padding: 10px; margin: 15px">@Model.ClinicLettersBatchDirectory</pre>
-                        <button class="btn btn-lg btn-success">
+                        <button class="btn btn-lg btn-success" id="batch-import-form-submit">
                             <i class="fa fa-download"></i>&nbsp; Import clinic letters data
                         </button>
                     </div>                   

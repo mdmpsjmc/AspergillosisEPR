@@ -8,12 +8,15 @@
         @foreach (var diagnosis in Model)
         {
             <tr>
-                <td>@(diagnosis.DiagnosisType.DisplayName())</td>
+                <td>
+                    @(diagnosis.DiagnosisType.DisplayName()) 
+                    @if (!string.IsNullOrEmpty(diagnosis.Description))
+                    {
+                     <span style="font-style: italic">- @(diagnosis.Description)</span>
+                    }
+                </td>
+
             </tr>
-            @if (!string.IsNullOrEmpty(diagnosis.Description))
-            {
-                <tr><td><pre style="background-color: transparent !important; border: none !important">@(diagnosis.Description)</pre></td></tr>
-            }
         }
     </tbody>
 </table>

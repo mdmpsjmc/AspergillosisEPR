@@ -24,7 +24,6 @@ namespace AspergillosisEPR.Lib.Importers.ClinicLetters
         private List<PatientSurgery> _surgeries;
         private Package _wordPackage;
         private MsWordFormatConverter _wordConverter;
-        private bool _skipStreamReset = false;
 
         public EPRClinicLetterDocxImporter(FileStream stream, string fileExtension, 
                                            AspergillosisContext context, PASDbContext pasContext)

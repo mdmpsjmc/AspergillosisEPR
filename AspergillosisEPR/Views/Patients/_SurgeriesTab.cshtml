@@ -1,0 +1,13 @@
+﻿@model AspergillosisEPR.Models.Patients.PatientSurgery
+@using AspergillosisEPR.Models.Patients;
+<div class="col-12 row surgery-form" style="margin: 0px !important">
+</div>
+@if (User.IsInRole("Create Role") || User.IsInRole("Admin Role"))
+{
+    <a href="@Url.Action("SurgeryForm", "Partials")" class="btn btn-success add-surgery add-new-patient-partial disable-default" data-visible-row="div.surgery-row:visible" data-insert-into-class="div.surgery-form" style="padding: 5px">
+        <i class="fa fa-plus"></i>
+        <span>
+            <strong>Add patient surgery</strong>
+        </span>
+    </a>
+}

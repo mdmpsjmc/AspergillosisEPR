@@ -14,6 +14,7 @@ using AspergillosisEPR.Models.PatientViewModels;
 using AspergillosisEPR.Lib.Search;
 using AspergillosisEPR.Lib;
 using AspergillosisEPR.Lib.CaseReportForms;
+using Microsoft.Extensions.Configuration;
 
 namespace AspergillosisEPR.Controllers
 {
@@ -23,11 +24,13 @@ namespace AspergillosisEPR.Controllers
         private readonly AspergillosisContext _context;
         private readonly DropdownListsResolver _listResolver;
         private readonly CaseReportFormsDropdownResolver _caseReportFormListResolver;
+        private readonly IConfiguration _configuration;
 
-        public PartialsController(AspergillosisContext context)
+        public PartialsController(AspergillosisContext context, IConfiguration configuration)
         {
             _listResolver = new DropdownListsResolver(context, ViewBag);
             _caseReportFormListResolver = new CaseReportFormsDropdownResolver(context);
+            _configuration = configuration;
             _context = context;
         }
         [Authorize(Roles ="Create Role, Admin Role")]
@@ -72,6 +75,23 @@ namespace AspergillosisEPR.Controllers
             return PartialView();
         }
 
+
+        [Authorize(Roles = "Create Role, Admin Role")]
+        public IActionResult SurgeryForm()
+        {
+            ViewBag.SurgeryId = _listResolver.PopulateSurgeryDropdownList();
+            return PartialView();
+        }
+
+        [Authorize(Roles = "Update Role, Admin Role")]
+        public IActionResult EditPatientSurgeryForm()
+        {
+            ViewBag.SurgeryId = _listResolver.PopulateSurgeryDropdownList();            
+            ViewBag.Index = (string)Request.Query["index"];
+            return PartialView();
+        }
+
+
         [Authorize(Roles = "Update Role, Admin Role")]
         public IActionResult EditDiagnosisForm()
         {
@@ -80,6 +100,7 @@ namespace AspergillosisEPR.Controllers
             ViewBag.Index = (string)Request.Query["index"];
             return PartialView();
         }
+
 
         [Authorize(Roles = "Update Role, Admin Role")]
         public IActionResult EditDrugForm()
@@ -155,6 +176,8 @@ namespace AspergillosisEPR.Controllers
 
         public IActionResult SearchSelectPartial()
         {
+            string searchIfGreaterThan  = _configuration.GetSection("turnNativeDropdownSelectIntoSearchableWhenMoreThanItems").Value ;
+            ViewBag.TurnIntoSearchableSelect = Int32.Parse(searchIfGreaterThan);
             string klass = Request.Query["klass"];
             ViewBag.Index = (string)Request.Query["index"];
             string field = Request.Query["field"];
@@ -251,6 +274,4 @@ namespace AspergillosisEPR.Controllers
         }
 
     }
-
-
 }
