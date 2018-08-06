@@ -7,7 +7,7 @@
             <div class="row">
                 <label class="select">
                     <label asp-for="DrugId" class="select">
-                        @Html.DropDownListFor(m => m.DrugId, (SelectList)ViewBag.DrugId, "Select Drug")
+                        @Html.DropDownListFor(m => m.DrugId, (SelectList)ViewBag.DrugId, "Select Drug", new { @class = "selectize" })
                         <i></i>
                         <span asp-validation-for="DrugId" class="text-danger"></span>
                     </label>

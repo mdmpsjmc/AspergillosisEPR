@@ -1,0 +1,48 @@
+﻿@model AspergillosisEPR.Models.PatientViewModels.PatientDetailsViewModel
+
+@if (Model.PatientAllergicIntoleranceItems.Any())
+{
+    <div class="col-sm-12">
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped">
+                <tbody>
+                    @foreach (var item in Model.PatientAllergicIntoleranceItems)
+                    {
+                        string klass = "";
+                        if (item.Severity == "Anaphylaxis") { klass = "danger"; }
+                        <tr class="@klass">
+                            <td>
+                                <h5>@item.Descriptive()</h5>
+                                @if (item.SideEffects.Any())
+                                {
+                                    <p>
+                                        <strong>Side effects:&nbsp;</strong>@(string.Join(", ", item.SideEffects.Select(se => se.SideEffect.Name)))
+                                    </p>
+
+                                }
+                                @if (!string.IsNullOrEmpty(item.Note))
+                                {
+                                    <p style="font-style: italic;">@item.Note</p>                                   
+                                }
+                                </td>
+                               
+                               
+                            </tr>
+
+                    }
+                </tbody>
+
+            </table>
+        </div>
+    </div>
+}
+else
+{
+    <div class="col-sm-12">
+        <div class="alert alert-info alert-block">
+            <h4 class="alert-heading">Info!</h4>
+            <i class="fa fa-info-circle"></i>
+            This patient does not currently have any recorded allergies or intolerances
+        </div>
+    </div>
+}

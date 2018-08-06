@@ -78,6 +78,11 @@ namespace AspergillosisEPR.Data
         public DbSet<PatientPulmonaryFunctionTest> PatientPulmonaryFunctionTests { get; set; }
         public DbSet<PatientSurgery> PatientSurgeries { get; set; }
         public DbSet<PatientSmokingDrinkingStatus> PatientSmokingDrinkingStatus { get; set; }
+        public DbSet<Food> Foods { get; set; }
+        public DbSet<PatientAllergicIntoleranceItem> PatientAllergicIntoleranceItems { get; set; }
+        public DbSet<PatientAllergicIntoleranceItemSideEffect> PatientAllergicIntoleranceItemSideEffects { get; set; }
+        public DbSet<OtherAllergicItem> OtherAllergicItems { get; set; }
+        public DbSet<Fungi> Fungis { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -138,6 +143,9 @@ namespace AspergillosisEPR.Data
             modelBuilder.Entity<PatientPulmonaryFunctionTest>().ToTable("PatientPulmonaryFunctionTests");
             modelBuilder.Entity<PatientSurgery>().ToTable("PatientSurgeries");
             modelBuilder.Entity<PatientSmokingDrinkingStatus>().ToTable("PatientSmokingDrinkingStatuses");
+            modelBuilder.Entity<Food>().ToTable("Foods");
+            modelBuilder.Entity<OtherAllergicItem>().ToTable("OtherAllergicItems");
+            modelBuilder.Entity<Fungi>().ToTable("Fungis");
         }
 
     }

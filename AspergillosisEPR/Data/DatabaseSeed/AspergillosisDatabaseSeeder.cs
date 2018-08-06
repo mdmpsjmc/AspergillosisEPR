@@ -26,6 +26,9 @@ namespace AspergillosisEPR.Data.DatabaseSeed
             ManArtsProcessedFileSeed.Seed(context);
             ManArtsProcessedFileSeed.SeedSmokingStatuses(context);
             EPRClinicLetterDbImportTypeSeed.Seed(context);
+            FoodDatabaseSeed.SeedDefaultFoods(context);
+            OtherAllergicItemDatabaseSeed.SeedDefaultItems(context);
+            FungiAllergicItemDatabaseSeed.SeedDefaultItems(context);
         }
     }
 }

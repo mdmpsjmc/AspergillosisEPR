@@ -1,12 +1,26 @@
 ﻿<label class="select">
-    @{ 
+
+    @if ((bool)ViewBag.renderGroupedSelect == false)
+    {
         string selectKlass = "";
         var selectList = (SelectList)ViewBag.SearchSelect;
         if (selectList.Count() > (int)ViewBag.TurnIntoSearchableSelect)
         {
             selectKlass = "selectize";
         }
+        @Html.DropDownList("PatientSearchViewModel[" + (string)ViewBag.Index.ToString() + "].SearchValue", (SelectList)ViewBag.SearchSelect, new { @class = selectKlass })
+        <i></i>        
     }
-    @Html.DropDownList("PatientSearchViewModel[" + (string)ViewBag.Index.ToString() + "].SearchValue", (SelectList)ViewBag.SearchSelect, new { @class = selectKlass })
-    <i></i>
+    @if ((bool)ViewBag.renderGroupedSelect)
+    {
+        string selectKlass = "";
+        var selectList = (List<SelectListItem>)ViewBag.SearchSelect;
+        if (selectList.Count() > (int)ViewBag.TurnIntoSearchableSelect)
+        {
+            selectKlass = "selectize";
+        }
+       @Html.DropDownList("PatientSearchViewModel[" + (string)ViewBag.Index.ToString() + "].SearchValue", (List<SelectListItem>)ViewBag.SearchSelect, new { @class = selectKlass })
+        <i></i>
+    }
+    
 </label>

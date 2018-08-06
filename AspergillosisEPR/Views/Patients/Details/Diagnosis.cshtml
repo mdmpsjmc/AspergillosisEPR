@@ -6,6 +6,9 @@
         <li class="">
             <a href="#surgeries" data-toggle="tab">Surgeries</a>
         </li>
+        <li class="">
+            <a href="#allergies" data-toggle="tab">Allergies & Intolerance</a>
+        </li>
     </ul>
     <div class="tab-content padding-10">
         <div class="tab-pane active in" id="deseases">
@@ -13,6 +16,9 @@
         </div>
         <div class="tab-pane fade" id="surgeries">
             @Html.Partial("/Views/Patients/Details/_Surgeries.cshtml")
+        </div>
+        <div class="tab-pane fade" id="allergies">
+            @Html.Partial("/Views/Patients/Details/_AllergyIntoleranceItems.cshtml")
         </div>
     </div>
 </div>

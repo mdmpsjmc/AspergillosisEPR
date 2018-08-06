@@ -47,8 +47,8 @@ namespace AspergillosisEPR.Controllers.DataTables
             if (!string.IsNullOrEmpty(_searchValue))
             {
                 _list = _list
-                        .Where(u => (u.ShortName == null ? "".Contains(_searchValue) : u.ShortName.Contains(_searchValue))
-                                       || u.Name.ToString().Contains(_searchValue))
+                        .Where(u => (u.ShortName == null ? "".Contains(_searchValue.ToLower()) : u.ShortName.ToLower().Contains(_searchValue.ToLower()))
+                                       || u.Name.ToLower().ToString().Contains(_searchValue.ToLower()))
                         .ToList();
             }
         }

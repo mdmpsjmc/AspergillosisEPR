@@ -14,7 +14,8 @@
     "eonasdan-bootstrap-datetimepicker": "bootstrap3-datetimepicker#v4.17.45",
     "chart.js": "Chart.js#v2.7.1",
     "multiselect": "0.9.12",
-    "selectize": "v0.12.5"
+    "selectize": "v0.12.5",
+    "patternfly-bootstrap-treeview": "v2.1.5"
   },
   "resolutions": {
     "jquery": ">=1.6"

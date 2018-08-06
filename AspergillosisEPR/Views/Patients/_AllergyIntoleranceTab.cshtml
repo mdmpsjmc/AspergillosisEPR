@@ -1,0 +1,13 @@
+﻿@model AspergillosisEPR.Models.Patients.PatientAllergicIntoleranceItem
+@using AspergillosisEPR.Models.Patients;
+<div class="col-12 row allery-form" style="margin: 0px !important">
+</div>
+@if (User.IsInRole("Create Role") || User.IsInRole("Admin Role"))
+{
+    <a href="@Url.Action("PatientAllergyIntoleranceForm", "Partials")" class="btn btn-success add-allergy add-new-patient-partial disable-default" data-visible-row="div.patient-allergy:visible" data-insert-into-class="div.allery-form" style="padding: 5px">
+        <i class="fa fa-plus"></i>
+        <span>
+            <strong>Add patient allergy / intolerance</strong>
+        </span>
+    </a>
+}

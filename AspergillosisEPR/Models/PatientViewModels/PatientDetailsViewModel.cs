@@ -26,7 +26,7 @@ namespace AspergillosisEPR.Models.PatientViewModels
         public List<PatientIgChart> IgCharts { get; set; }
         public ICollection<PatientDrugLevel> DrugLevels { get; set; }
         public ICollection<PatientSurgery> PatientSurgeries { get; set; }
-
+        public ICollection<PatientAllergicIntoleranceItem> PatientAllergicIntoleranceItems { get; private set; }
         public bool ShowDiagnoses { get; set; }
         public bool ShowDrugs { get; set; }
         public bool ShowSGRQ { get; set; }
@@ -104,10 +104,13 @@ namespace AspergillosisEPR.Models.PatientViewModels
             patientDetailsViewModel.PatientMeasurements = patient.PatientMeasurements.OrderByDescending(q => q.DateTaken).ToList();
             patientDetailsViewModel.DrugLevels = patient.DrugLevels.OrderByDescending(q => q.DateTaken).ToList();
             patientDetailsViewModel.PatientSurgeries = patient.PatientSurgeries.OrderByDescending(q => q.SurgeryDate).ToList();
+            patientDetailsViewModel.PatientAllergicIntoleranceItems = patient.PatientAllergicIntoleranceItems.OrderByDescending(q => q.ID).ToList();
+
             if (caseReportFormManager != null)
             {
                 patientDetailsViewModel.CaseReportForms = caseReportFormManager.GetGroupedCaseReportFormsForPatient(patient.ID);
             }
+            GetAllergicItemNames(context, patientDetailsViewModel);
             return patientDetailsViewModel;
         }
 
@@ -150,6 +153,40 @@ namespace AspergillosisEPR.Models.PatientViewModels
             {
                 context.Entry(patientDrugLevel).Reference<Drug>(t => t.Drug).Load();
                 context.Entry(patientDrugLevel).Reference<UnitOfMeasurement>(t => t.UnitOfMeasurement).Load();
+            }
+        }
+
+        private static void GetAllergicItemNames(AspergillosisContext context, PatientDetailsViewModel viewModel)
+        {
+            foreach (var item in viewModel.PatientAllergicIntoleranceItems)
+            {
+                switch (item.AllergyIntoleranceItemType)
+                {
+                    case "Food":
+                        var allergyFoodItem = context.Foods
+                                                 .Where(i => i.ID == item.AllergyIntoleranceItemId)
+                                                 .FirstOrDefault();
+                        if (allergyFoodItem != null) item.AllergicItemName = allergyFoodItem.Name;
+                        break;
+                    case "Drug":
+                        var allergyDrugItem = context.Drugs
+                                                .Where(i => i.ID == item.AllergyIntoleranceItemId)
+                                                .FirstOrDefault();
+                        if (allergyDrugItem != null) item.AllergicItemName = allergyDrugItem.Name;
+                        break;
+                    case "Fungi":
+                        var fungiAllergicItem = context.Fungis
+                                                .Where(i => i.ID == item.AllergyIntoleranceItemId)
+                                                .FirstOrDefault();
+                        if (fungiAllergicItem != null) item.AllergicItemName = fungiAllergicItem.Name;
+                        break;
+                    case "Other":
+                        var otherAllergicItem = context.OtherAllergicItems
+                                                .Where(i => i.ID == item.AllergyIntoleranceItemId)
+                                                .FirstOrDefault();
+                        if (otherAllergicItem != null) item.AllergicItemName = otherAllergicItem.Name;
+                        break;
+                }
             }
         }
 

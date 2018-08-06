@@ -11,7 +11,7 @@ namespace AspergillosisEPR.Models
     {
         public string AsDetailedString()
         {
-            string detailedString = "Date: " + PatientRadiologyFiniding.DateTaken.ToString("dd-MM-yyyy");
+            string detailedString = "Date: " + PatientRadiologyFiniding.DateTaken.Value.ToString("dd-MM-yyyy");
             detailedString = detailedString + PatientRadiologyFiniding.Appearance;
             return detailedString;
         }

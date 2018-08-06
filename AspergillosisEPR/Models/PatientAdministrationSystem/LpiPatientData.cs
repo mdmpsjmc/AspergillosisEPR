@@ -72,5 +72,11 @@ namespace AspergillosisEPR.Models.PatientAdministrationSystem
         {
             return DateTime.ParseExact(DOB, "yyyyMMdd", CultureInfo.InvariantCulture);
         }
+
+        public DateTime? DateOfDeath()
+        {
+            if (string.IsNullOrEmpty(DEATH_TIME)) return null;
+            return DateTime.ParseExact(DEATH_TIME.Substring(0,8), "yyyyMMdd", CultureInfo.InvariantCulture);
+        }
     }
 }

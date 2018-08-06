@@ -134,6 +134,7 @@
                 || field.match("Finding")
                 || field.match("patientMedicalTrial")
                 || field.match("drugLevels")
+                || field.match("allergies")
                 || field.match("caseReportFormResult")) {
                 var fieldName = fieldCapitalized;
                 field = fieldCapitalized.replace(new RegExp("\\[", "g"), "_").replace(new RegExp("].","g"), "__");            
@@ -200,7 +201,8 @@
                         return $(this).data('placeholder');
                     }
                 });
-                $("select.select2-search").selectize();
+                $("select.selectize, select.select2-search").selectize();
+                AllergyIntolerance.init();
             }).always(function () {
                 LoadingIndicator.hide();
             });
@@ -226,6 +228,7 @@
                 });
                 UI.initAjaxTab();
                 $("select[multiple='multiple']").multiSelect();
+                $("select.selectize, select.select2-search").selectize();
             });
         });
     }
@@ -254,6 +257,8 @@
                 CaseReportForms.deletePartialFromPopup();
                 deletePartialFromPopup();
                 onPatientStatusChange();
+                AllergyIntolerance.init();
+                $("select.selectize, select.select2-search").selectize();
             });
         });
     }

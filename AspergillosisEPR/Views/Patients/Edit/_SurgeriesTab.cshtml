@@ -11,7 +11,7 @@
                 <div class="row">
                     <label class="select col-6 col-md-6 col-xs-6">
                         <label asp-for="@patientSurgery.SurgeryId" class="select">
-                            @Html.DropDownList("Surgeries[" + i + "].SurgeryId", (SelectList)ViewBag.SurgeryId[i], "Select Surgery")
+                            @Html.DropDownList("Surgeries[" + i + "].SurgeryId", (SelectList)ViewBag.SurgeryId[i], "Select Surgery", new { @class = "selectize" })
                             <i></i>
                         </label>
                     </label>
@@ -28,7 +28,7 @@
                     </label>
                     </div>
                     <div class="row">
-                        <a href="@Url.Action("Delete", "PatientSurgeries" , new { patientId=patientSurgery.PatientId, id=patientSurgery.ID})" class="btn btn-danger remove-existing-item pull-right" data-id="@patientSurgery.ID" data-what="Patient Drug Level" data-toggle="tooltip" data-title="Remove Drug Level" style="padding: 5px">
+                        <a href="@Url.Action("Delete", "PatientSurgeries" , new { patientId=patientSurgery.PatientId, id=patientSurgery.ID})" class="btn btn-danger remove-existing-item pull-right" data-id="@patientSurgery.ID" data-what="Patient Surgery" data-toggle="tooltip" data-title="Remove Surgery" style="padding: 5px">
                             <i class="fa fa-trash"></i>
                         </a>
                     </div>

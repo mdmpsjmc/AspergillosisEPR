@@ -6,6 +6,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.DependencyInjection;
 using FluentScheduler;
 using AspergillosisEPR.Data;
+using AspergillosisEPR.BackgroundTasks.Logging;
 
 namespace AspergillosisEPR
 {
@@ -40,6 +41,7 @@ namespace AspergillosisEPR
                 .UseIISIntegration()
                 .UseUrls("http://0*:5000/")
                 .UseKestrel()
+                .ConfigureLogging(builder => builder.AddFile())
                 .UseStartup<Startup>()
                 .Build();
 

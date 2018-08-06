@@ -19,13 +19,13 @@ namespace AspergillosisEPR.Models.Patients
         public int PatientId { get; set; }
         [Display(Name = "Date Taken")]
         [DisplayFormat(DataFormatString = "{yyyy-MM-dd}")]
-        public DateTime DateTaken { get; set; }
+        public DateTime? DateTaken { get; set; }
         public int RadiologyTypeId { get; set; }
         public int FindingId { get; set; }
-        public int ChestLocationId { get; set; }
-        public int ChestDistributionId { get; set; }
-        public int GradeId { get; set; }
-        public int TreatmentResponseId { get; set; }
+        public int? ChestLocationId { get; set; }
+        public int? ChestDistributionId { get; set; }
+        public int? GradeId { get; set; }
+        public int? TreatmentResponseId { get; set; }
         [Column(TypeName = "ntext")]
         public string Note { get; set; }
 
@@ -40,16 +40,13 @@ namespace AspergillosisEPR.Models.Patients
         {
             get
             {
-                if (Grade == null || Finding == null || ChestLocation == null || ChestDistribution == null || TreatmentResponse == null)
-                {
-                    return "";
-                } else
-                {
-                    string text = "";
-                    text = Grade.Name + " " + Finding.Name + " location:" + ChestLocation.Name + ", " + ChestDistribution.Name;
-                    text = text + ". Treatment Response: " + TreatmentResponse.Name;
-                    return text;
-                }         
+                string text = "";
+                if (Grade != null) { text = Grade?.Name + " "; }
+                if (Finding != null) text = text + Finding.Name;
+                if (ChestLocation != null) text = text + " location:" + ChestLocation?.Name + ", ";
+                if (ChestDistribution != null) text = text + ChestDistribution.Name;
+                if (TreatmentResponse != null) text = text + ". Treatment Response: " + TreatmentResponse?.Name;
+                return text;
             }
         }
 

@@ -54,9 +54,9 @@ namespace AspergillosisEPR.Models
         public ICollection<PatientDrugLevel> DrugLevels { get; set; }
         public ICollection<PatientSurgery> PatientSurgeries { get; set; }
         public PatientSmokingDrinkingStatus PatientSmokingDrinkingStatus { get; set; }
+        public ICollection<PatientAllergicIntoleranceItem> PatientAllergicIntoleranceItems { get; set; }
         public PatientStatus PatientStatus { get; set; }
-       
-
+           
         [Display(Name = "Full Name")]
         public string FullName
         {

@@ -1,0 +1,52 @@
+﻿@using HtmlHelpers.BeginCollectionItemCore;
+@using AspergillosisEPR.Models.Patients;
+@model AspergillosisEPR.Models.Patients.PatientAllergicIntoleranceItem
+<div class="patient-allergy">
+    <fieldset>
+        <div class="row">
+            <label class="select  col-6 col-md-6 col-xs-6">
+                <label asp-for="AllergyIntoleranceItemType" class="select">
+                    @Html.DropDownList("Allergies[" + (string)ViewBag.Index + "].AllergyIntoleranceItemType", new SelectList(PatientAllergicIntoleranceItem.AllergyIntoleranceItemTypes(), "Drug"), new {@class="intolerance-type-select", @data_index= ViewBag.Index })
+                    <i></i>
+                </label>
+            </label>
+            <label class="col-6 col-md-6 col-xs-6" id="allergy-intolerance-item-id" data-index="@ViewBag.Index">
+                <label asp-for="AllergyIntoleranceItemId" class="select">
+                    @Html.DropDownList("Allergies[" + (string)ViewBag.Index + "].AllergyIntoleranceItemId", (SelectList) ViewBag.DrugId, "Select Drug", new { @class = "selectize" })
+                    <i></i>
+                </label>
+            </label>
+        </div>
+        <div class="row">
+            <label class="col-6 col-md-6 col-xs-6">
+                <label asp-for="IntoleranceType" class="select">
+                    @Html.DropDownList("Allergies[" + (string)ViewBag.Index + "].IntoleranceType", new SelectList(PatientAllergicIntoleranceItem.IntoleranceTypes()), "Select Intolerance Type")
+                    <i></i>
+                </label>
+            </label>
+            <label class="select col-6 col-md-6 col-xs-6">
+                <label asp-for="Severity" class="select">
+                    @Html.DropDownList("Allergies[" + (string)ViewBag.Index + "].Severity", new SelectList(PatientAllergicIntoleranceItem.Severities()), "Select Severity")
+                    <i></i>
+                </label>
+            </label>
+        </div>
+        <div class="row">
+                <label class="select side-effects">
+                    <label asp-for="SideEffects" class="select">
+                        <p>Please select side effects from the list (if applicable)</p>
+                        @Html.DropDownListFor(m => m.SideEffects, (MultiSelectList)ViewBag.SideEffects, new { multiple = "multiple", @class = "select2", @data_placeholder = "Type side effect name to start search" })
+                        <span asp-validation-for="SideEffects" class="text-danger"></span>
+                    </label>
+                </label>
+            </div>
+        <section>
+            <div class="row">
+                <label class="textarea">
+                    <i class="icon-append fa fa-comment"></i>
+                    @Html.TextArea("Allergies[" + (string)ViewBag.Index + "].Note", "", new { @class = "comment", @rows = 4, @placeholder = "Allergy/Intolerance Note" })
+                </label>
+            </div>
+            </section>
+        </fieldset>
+</div>

@@ -70,6 +70,8 @@ namespace AspergillosisEPR.Controllers
                                     .ThenInclude(se => se.SideEffect)
                                 .Include(p => p.PatientStatus)
                                 .Include(p => p.STGQuestionnaires)
+                                .Include(p => p.PatientSurgeries)
+                                .Include(p => p.PatientAllergicIntoleranceItems)
                                 .Where(PatientSearchViewModel.BuildPredicate(patientSearchViewModel))
                                 .ToListAsync();            
             return Json(patients);

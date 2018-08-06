@@ -1,0 +1,5 @@
+﻿@model int
+<label for="AllergyIntoleranceItemId" class="select">
+    @Html.DropDownList("Allergies[" + Model + "].AllergyIntoleranceItemId", (SelectList)ViewBag.ItemId[Model], "Select Drug", new { @class = "selectize"})
+    <i></i>
+</label>

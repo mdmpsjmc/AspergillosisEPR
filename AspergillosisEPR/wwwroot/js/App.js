@@ -30,6 +30,7 @@
             CaseReportForms.init();
             AnonPatients.init();
             MedicalTrials.init();
+            AllergyIntolerance.init();
         }
     }
 

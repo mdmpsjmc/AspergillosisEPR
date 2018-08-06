@@ -7,14 +7,14 @@
     <framework targetVersion="4.6.1" profile="Full" supportedRuntime="4.0.30319" />
   </compatibleFrameworks>
   <dependency>
-    <dependentAssembly dependencyType="install" codebase="RabbitProducersStandard.exe.manifest" size="35425">
+    <dependentAssembly dependencyType="install" codebase="RabbitProducersStandard.exe.manifest" size="37531">
       <assemblyIdentity name="RabbitProducersStandard.exe" version="1.0.0.1" publicKeyToken="0000000000000000" language="neutral" processorArchitecture="msil" type="win32" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>vx2Auy/sR8qyNW0/eDkgmUlODkx+eTNry91jJwwcLHo=</dsig:DigestValue>
+        <dsig:DigestValue>qXjVhdOJhZJWSXLN8SLwys38+Wda85gK1m6TyF71xEU=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>

@@ -148,10 +148,15 @@ C:\Users\user\source\repos\AspergillosisEPR.old\RabbitProducersStandard\bin\Rele
 C:\Users\user\source\repos\AspergillosisEPR.old\RabbitProducersStandard\bin\Release\System.Memory.xml
 C:\Users\user\source\repos\AspergillosisEPR.old\RabbitProducersStandard\bin\Release\System.Numerics.Vectors.xml
 C:\Users\user\source\repos\AspergillosisEPR.old\RabbitProducersStandard\bin\Release\System.Runtime.CompilerServices.Unsafe.xml
-C:\Users\user\source\repos\AspergillosisEPR.old\RabbitProducersStandard\obj\Release\RabbitProducersStandard.csprojResolveAssemblyReference.cache
 C:\Users\user\source\repos\AspergillosisEPR.old\RabbitProducersStandard\obj\Release\RabbitProducersStandard.csproj.RabbitProducersStandard.exe.config
 C:\Users\user\source\repos\AspergillosisEPR.old\RabbitProducersStandard\obj\Release\RabbitProducersStandard.csproj.CoreCompileInputs.cache
 C:\Users\user\source\repos\AspergillosisEPR.old\RabbitProducersStandard\obj\Release\RabbitProducersStandard.exe.manifest
 C:\Users\user\source\repos\AspergillosisEPR.old\RabbitProducersStandard\obj\Release\RabbitProducersStandard.application
 C:\Users\user\source\repos\AspergillosisEPR.old\RabbitProducersStandard\obj\Release\RabbitProducersStandard.exe
 C:\Users\user\source\repos\AspergillosisEPR.old\RabbitProducersStandard\obj\Release\RabbitProducersStandard.pdb
+C:\Users\user\source\repos\AspergillosisEPR.old\RabbitProducersStandard\bin\Release\Microsoft.Extensions.Hosting.Abstractions.dll
+C:\Users\user\source\repos\AspergillosisEPR.old\RabbitProducersStandard\bin\Release\Microsoft.Extensions.Logging.Abstractions.dll
+C:\Users\user\source\repos\AspergillosisEPR.old\RabbitProducersStandard\bin\Release\NCrontab.dll
+C:\Users\user\source\repos\AspergillosisEPR.old\RabbitProducersStandard\bin\Release\Microsoft.Extensions.Hosting.Abstractions.xml
+C:\Users\user\source\repos\AspergillosisEPR.old\RabbitProducersStandard\bin\Release\Microsoft.Extensions.Logging.Abstractions.xml
+C:\Users\user\source\repos\AspergillosisEPR.old\RabbitProducersStandard\obj\Release\RabbitProducersStandard.csprojResolveAssemblyReference.cache

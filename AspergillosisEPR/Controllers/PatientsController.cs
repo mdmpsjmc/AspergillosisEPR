@@ -72,6 +72,7 @@ namespace AspergillosisEPR.Controllers
                                                  PatientMedicalTrial[] patientMedicalTrial,
                                                  PatientDrugLevel[] drugLevels,
                                                  PatientSurgery[] surgeries,
+                                                 PatientAllergicIntoleranceItem[] allergies, 
                                                  CaseReportFormResult[] caseReportFormResult)
         {
             var existingPatient = _context.Patients.FirstOrDefault(x => x.RM2Number == patient.RM2Number);
@@ -95,6 +96,7 @@ namespace AspergillosisEPR.Controllers
             _patientManager.AddMedicalTrials(patient, patientMedicalTrial);
             _patientManager.AddDrugLevels(patient, drugLevels);
             _patientManager.AddPatientSurgeries(patient, surgeries);
+            _patientManager.AddPatientAllergiesIntolerances(patient, allergies);
             try
             {
                 if (ModelState.IsValid)
@@ -169,6 +171,7 @@ namespace AspergillosisEPR.Controllers
             Patient patient = await _patientManager.FindPatientWithRelationsByIdAsync(id);
             LoadReleatedMedicalTrials(patient);
             LoadRelatedDrugLevels(patient);
+           
             if (patient == null)
             {
                 return NotFound();
@@ -195,6 +198,7 @@ namespace AspergillosisEPR.Controllers
                                                               [Bind("ID, PatientId, MedicalTrialId, PatientMedicalTrialStatusId, IdentifiedDate, ConsentedDate, RecruitedDate, Consented")] PatientMedicalTrial[] patientMedicalTrial,
                                                               [Bind("ID, PatientId, DrugId, UnitOfMeasurementId, DateTaken, DateReceived, ResultValue, ComparisionCharacter")] PatientDrugLevel[] drugLevels,
                                                               [Bind("ID, SurgeryId, PatientId, SurgeryDate, Note")] PatientSurgery[] surgeries,
+                                                              [Bind("ID, AllergyIntoleranceItemType, AllergyIntoleranceItemId, IntoleranceType, Severity, Note")] PatientAllergicIntoleranceItem[] allergies,
                                                               CaseReportFormResult[] caseReportFormResult)
         {
             if (id == null)
@@ -212,7 +216,7 @@ namespace AspergillosisEPR.Controllers
             _patientManager.UpdatePatientMedicalTrials(patientMedicalTrial, patientToUpdate);
             _patientManager.UpdatePatientDrugLevels(drugLevels, patientToUpdate);
             _patientManager.UpdatePatientSurgeries(surgeries, patientToUpdate);
-
+            _patientManager.UpdatePatientAllergiesIntolerances(allergies, patientToUpdate, Request);
 
             _caseReportFormManager.UpdateCaseReportFormsForPatient(caseReportFormResult, patientToUpdate);
 
@@ -241,7 +245,7 @@ namespace AspergillosisEPR.Controllers
             }
 
             return Json(new { result = "ok" });
-        }        
+        }
 
         [AllowAnonymous]
         public JsonResult HasRM2Number(string RM2Number, int? Id, string initialRM2Number)

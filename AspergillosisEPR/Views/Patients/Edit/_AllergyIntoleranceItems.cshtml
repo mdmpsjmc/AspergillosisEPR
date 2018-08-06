@@ -1,0 +1,68 @@
+﻿@model AspergillosisEPR.Models.Patient
+@using AspergillosisEPR.Models.Patients;
+
+<div class="col-12 row allergy-form" style="margin: 0px !important">
+    @for (int i = 0; i < Model.PatientAllergicIntoleranceItems.OrderByDescending(q => q.ID).ToList().Count; i++)
+    {
+        PatientAllergicIntoleranceItem patientAllergicIntolerance = Model.PatientAllergicIntoleranceItems.OrderByDescending(q => q.ID).ToList()[i];
+        <div class="patient-allergy">
+            @Html.Hidden("Allergies[" + i.ToString() + "].ID", patientAllergicIntolerance.ID)
+            <fieldset>
+                <div class="row">
+                    <label class="select col-6 col-md-6 col-xs-6">
+                        <label asp-for="@patientAllergicIntolerance.AllergyIntoleranceItemType" class="select">
+                            @Html.DropDownList("Allergies[" + i + "].AllergyIntoleranceItemType", new SelectList(PatientAllergicIntoleranceItem.AllergyIntoleranceItemTypes(), patientAllergicIntolerance.AllergyIntoleranceItemType), "Select Item Type", new { @class = "intolerance-type-select", @data_index= i })
+                            <i></i>
+                        </label>
+                    </label>
+                    <label class="select col-6 col-md-6 col-xs-6" id="allergy-intolerance-item-id" data-index="@(i)">   
+                        @{ 
+                            var selectList = (List<SelectList>) ViewBag.ItemId;
+                        }
+                        @Html.Partial("/Views/Patients/Edit/AllergyIntolerance/_" + patientAllergicIntolerance.AllergyIntoleranceItemType + ".cshtml", i);
+                    </label>
+                </div>
+                <div class="row">
+                    <label class="input col-6 col-md-6 col-xs-6">
+                        <label asp-for="@patientAllergicIntolerance.IntoleranceType" class="select">
+                            @Html.DropDownList("Allergies[" + i + "].IntoleranceType", new SelectList(PatientAllergicIntoleranceItem.IntoleranceTypes(), patientAllergicIntolerance.IntoleranceType), "Select Intolerance Type")
+                            <i></i>
+                        </label>
+                    </label>
+                    <label class="select col-6 col-md-6 col-xs-6">
+                        <label asp-for="@patientAllergicIntolerance.Severity" class="select">
+                            @Html.DropDownList("Allergies[" + i + "].Severity", new SelectList(PatientAllergicIntoleranceItem.Severities(), patientAllergicIntolerance.Severity), "Select Severity")
+                            <i></i>
+                        </label>
+                    </label>
+                </div>
+                <div class="row">
+                    <label class="select side-effects">
+                        <p>Please select side effects from the list (if applicable)</p>
+                        @(Html.DropDownList("Allergies[" + i + "].SideEffects", (MultiSelectList)ViewBag.allergySideEffects[i], new { multiple = "multiple", @class = "select2", @style = "width: 100%", @data_placeholder = "Type side effect name to start search" }))
+                    </label>
+                </div>
+                <div class="row">
+                    <label class="textarea">
+                        <i class="icon-append fa fa-comment"></i>
+                        @Html.TextArea("Allergies[" + i + "].Note", @patientAllergicIntolerance.Note, new { @class = "comment", @rows = 5, @placeholder = "Allergy/Intolerance Note" })
+                    </label>
+                </div>
+                <div class="row">
+                    <a href="@Url.Action("Delete", "PatientAllergicIntoleranceItems" , new { patientId=patientAllergicIntolerance.PatientId, id= patientAllergicIntolerance.ID})" class="btn btn-danger remove-existing-item pull-right" data-id="@patientAllergicIntolerance.ID" data-what="Patient Allergy Intolerance" data-toggle="tooltip" data-title="Remove Drug Level" style="padding: 5px">
+                        <i class="fa fa-trash"></i>
+                    </a>
+                </div>
+            </fieldset>
+        </div>
+    }
+</div>
+@if (User.IsInRole("Update Role") || User.IsInRole("Admin Role"))
+{
+    <a href="@Url.Action("EditPatientAllergyIntoleranceForm", "Partials")" class="btn btn-success edit-surgery edit-patient-partial" data-visible-row="div.patient-allergy:visible" data-insert-into-class="div.allergy-form" style="padding: 5px">
+        <i class="fa fa-plus"></i>
+        <span>
+            <strong>Add patient allergy/intolerance</strong>
+        </span>
+    </a>
+}

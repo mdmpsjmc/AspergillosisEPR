@@ -15,6 +15,8 @@ using AspergillosisEPR.Lib.Search;
 using AspergillosisEPR.Lib;
 using AspergillosisEPR.Lib.CaseReportForms;
 using Microsoft.Extensions.Configuration;
+using AspergillosisEPR.Extensions;
+using AspergillosisEPR.Models.Patients;
 
 namespace AspergillosisEPR.Controllers
 {
@@ -91,6 +93,47 @@ namespace AspergillosisEPR.Controllers
             return PartialView();
         }
 
+        [Authorize(Roles = "Update Role, Admin Role")]
+        public IActionResult EditPatientAllergyIntoleranceForm()
+        {
+            ViewBag.DrugId = _listResolver.DrugsDropDownList();
+            ViewBag.FoodId = _listResolver.FoodsDropdownList();
+            ViewBag.SideEffects = _listResolver.PopulateSideEffectsDropDownList(null);
+            ViewBag.Index = (string)Request.Query["index"];
+            return PartialView();
+        }
+
+
+        [Authorize(Roles = "Create Role, Admin Role")]
+        public IActionResult PatientAllergyIntoleranceForm()
+        {
+            ViewBag.DrugId = _listResolver.DrugsDropDownList();
+            ViewBag.SideEffects = _listResolver.PopulateSideEffectsDropDownList(null);
+            ViewBag.Index = (string)Request.Query["index"];
+            return PartialView();
+        }
+
+        [Authorize(Roles = "Update Role, Admin Role")]
+        public IActionResult ByName(string partialName)
+        {
+            ViewBag.Index = (string)Request.Query["index"];
+            switch (partialName)
+            {
+                case "Drug":
+                    ViewBag.ItemId = _listResolver.DrugsDropDownList();
+                    break;
+                case "Other":
+                    ViewBag.ItemId = _listResolver.OtherAllergicItemList();
+                    break;
+                case "Food":
+                    ViewBag.ItemId = _listResolver.FoodsDropdownList();
+                    break;
+                case "Fungi":
+                    ViewBag.ItemId = _listResolver.FungiDropdownList();
+                    break;
+            }
+            return PartialView(@"/Views/Partials/ByName/_"+partialName.FirstCharacterToUpper() + ".cshtml");
+        }
 
         [Authorize(Roles = "Update Role, Admin Role")]
         public IActionResult EditDiagnosisForm()
@@ -176,11 +219,14 @@ namespace AspergillosisEPR.Controllers
 
         public IActionResult SearchSelectPartial()
         {
+            ViewBag.renderGroupedSelect = false;
             string searchIfGreaterThan  = _configuration.GetSection("turnNativeDropdownSelectIntoSearchableWhenMoreThanItems").Value ;
             ViewBag.TurnIntoSearchableSelect = Int32.Parse(searchIfGreaterThan);
             string klass = Request.Query["klass"];
             ViewBag.Index = (string)Request.Query["index"];
             string field = Request.Query["field"];
+            var groupedSelects = new string[] { "AllergyIntoleranceItemId" };
+            if (groupedSelects.Contains(klass)) ViewBag.renderGroupedSelect = true;
             switch (klass)
             {
                 case "DrugId":
@@ -209,6 +255,18 @@ namespace AspergillosisEPR.Controllers
                     break;
                 case "PatientMedicalTrialStatusId":
                     ViewBag.SearchSelect = _listResolver.PopulatePatientMedicalTrialsStatusesDropdownList();
+                    break;
+                case "SurgeryId":
+                    ViewBag.SearchSelect = _listResolver.PopulateSurgeryDropdownList();
+                    break;
+                case "Severity":
+                    ViewBag.SearchSelect = new SelectList(PatientAllergicIntoleranceItem.Severities());
+                    break;
+                case "AllergyIntoleranceItemId":
+                    ViewBag.SearchSelect = _listResolver.GroupedSelectForIntolerances();
+                    break;
+                case "SmokingStatusId":
+                    ViewBag.SearchSelect = _listResolver.PopulateSmokingStatusesDropdownList();
                     break;
             }
             return PartialView();

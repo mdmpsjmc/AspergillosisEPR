@@ -23,7 +23,11 @@ else
     {
         <h2>Surgeries</h2>
         @Html.Partial("/Views/Patients/Details/_Surgeries.cshtml")
+       
     }
+
+    <h2>Allergies & Intolerances</h2>
+    @Html.Partial("/Views/Patients/Details/_AllergyIntoleranceItems.cshtml")
 }
 @if (Model.ShowDrugs)
 {

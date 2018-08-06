@@ -24,7 +24,7 @@
                             <td>@(drug.EndDate.Value.ToString("dd/MM/yyyy"))</td>
                             }
 
-                            <td>@(string.Join(",", drug.SideEffects.Select( se => se.SideEffect.Name )))</td>
+                            <td>@(string.Join(", ", drug.SideEffects.Select( se => se.SideEffect.Name )))</td>
                         </tr>
                      }   
             </tbody>

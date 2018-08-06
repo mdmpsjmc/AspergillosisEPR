@@ -6,10 +6,13 @@
         <table class="table table-bordered table-striped">
             <tbody>
     @foreach (var radiology in Model.PatientRadiologyFindings.OrderByDescending(ig => ig.DateTaken))
-                {
+    {
         <tr>
             <td>@(radiology.RadiologyType.Name)</td>
-            <td>@(radiology.DateTaken.ToString("dd/MM/yyyy"))</td>
+            @if (radiology.DateTaken != null)
+            {
+                <td>@(radiology?.DateTaken.Value.ToString("dd/MM/yyyy"))</td>
+            }
             <td>@(radiology.Appearance)</td>
         </tr>
                     @if (!string.IsNullOrEmpty(radiology.Note))

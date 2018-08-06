@@ -30,6 +30,14 @@ namespace AspergillosisEPR.Lib
             return new SelectList(statuses, "ID", "Name", selectedItem);
         }
 
+        public SelectList PopulateSmokingStatusesDropdownList(object selectedItem = null)
+        {
+            var statuses = _context.SmokingStatuses
+                                   .ToList();
+
+            return new SelectList(statuses, "ID", "Name", selectedItem);
+        }
+
         public SelectList PouplateMedicalTrialsDropdownList(object selectedItem = null)
         {
             var trails = _context.MedicalTrials
@@ -103,6 +111,19 @@ namespace AspergillosisEPR.Lib
             return new SelectList(statuses, "ID", "Name");
         }
 
+        internal SelectList FoodsDropdownList(object selectedItem = null)
+        {
+            var statuses = _context.Foods.ToList();
+            return new SelectList(statuses, "ID", "Name", selectedItem);
+        }
+
+
+        internal SelectList OtherAllergicItemList(object selectedItem = null)
+        {
+            var statuses = _context.OtherAllergicItems.ToList();
+            return new SelectList(statuses, "ID", "Name", selectedItem);
+        }
+
         public SelectList PopulateRadiologyDropdownList(string collectionName, object selectedItem = null)
         {
             _radiologyDbCollectionResolver = new RadiologyDbCollectionResolver(_context, collectionName);
@@ -122,6 +143,12 @@ namespace AspergillosisEPR.Lib
                                   orderby d.CategoryName
                                   select d;
             _viewBag.SearchSelect = _viewBag.DiagnosisCategoryId = new SelectList(categoriesQuery.AsNoTracking(), "ID", "CategoryName", selectedCategory);
+        }
+
+        internal dynamic FungiDropdownList(object selectedItem = null)
+        {
+            var statuses = _context.Fungis.ToList();
+            return new SelectList(statuses, "ID", "Name", selectedItem);
         }
 
         public void PopulateDiagnosisTypeDropDownList(object selectedCategory = null)
@@ -185,7 +212,8 @@ namespace AspergillosisEPR.Lib
             List<SelectList> chestLocations = new List<SelectList>();
             List<SelectList> grades = new List<SelectList>();
             List<SelectList> treatmentResponses = new List<SelectList>();
-       
+            List<SelectList> allergyItems = new List<SelectList>();
+            List<MultiSelectList> allergySideEffects = new List<MultiSelectList>();
 
             for (int i = 0; i < patient.PatientDiagnoses.Count; i++)
             {
@@ -223,6 +251,39 @@ namespace AspergillosisEPR.Lib
                                                              OrderByDescending(d => d.DateTaken).
                                                              ToList();
 
+            var allergyItemsList = patient.PatientAllergicIntoleranceItems.OrderByDescending(item => item.ID).ToList();
+
+            for (int i = 0; i < allergyItemsList.Count; i++)
+            {
+
+                var item = allergyItemsList[i];
+                if (item.SideEffects.Any())
+                {
+                    MultiSelectList list = PopulateSideEffectsDropDownList(item.SelectedEffectsIds);
+                    allergySideEffects.Add(list);
+                }
+                else
+                {
+                    MultiSelectList list = PopulateSideEffectsDropDownList(new List<int>());
+                    allergySideEffects.Add(list);
+                }
+                switch (item.AllergyIntoleranceItemType)
+                {
+                    case "Drug":
+                        allergyItems.Add(DrugsDropDownList(item.AllergyIntoleranceItemId));
+                        break;
+                    case "Food":
+                        allergyItems.Add(FoodsDropdownList(item.AllergyIntoleranceItemId));
+                        break;
+                    case "Fungi":
+                        allergyItems.Add(FungiDropdownList(item.AllergyIntoleranceItemId));
+                        break;
+                    case "Other":
+                        allergyItems.Add(OtherAllergicItemList(item.AllergyIntoleranceItemId));
+                        break;
+                }                
+            }
+
             for (int i = 0; i < radiologyListSortedChronologically.Count; i++)
             {
                 var item = radiologyListSortedChronologically[i];
@@ -234,6 +295,7 @@ namespace AspergillosisEPR.Lib
                 grades.Add(PopulateRadiologyDropdownList("Grade", item.GradeId));
                 treatmentResponses.Add(PopulateRadiologyDropdownList("TreatmentResponse", item.TreatmentResponseId));
             }
+
             _viewBag.DiagnosisTypes = diagnosesTypes;
             _viewBag.DiagnosisCategories = diagnosesCategories;
             _viewBag.Drugs = drugs;
@@ -245,8 +307,61 @@ namespace AspergillosisEPR.Lib
             _viewBag.ChestDistributionId = chestDistributions;
             _viewBag.GradeId = grades;
             _viewBag.TreatmentResponseId = treatmentResponses;
-       
+            _viewBag.ItemId = allergyItems;
+            _viewBag.allergySideEffects = allergySideEffects;
             PopulatePatientStatusesDropdownList(patient.PatientStatusId);
+        }
+
+        internal List<SelectListItem> GroupedSelectForIntolerances()
+        {
+            var drugs = _context.Drugs.OrderBy(d => d.Name).ToList();
+            var fungis = _context.Fungis.OrderBy(f => f.Name).ToList();
+            var other = _context.OtherAllergicItems.OrderBy(o => o.Name).ToList();
+            var foods = _context.Foods.OrderBy(f => f.Name).ToList();
+
+            var allItems = new List<SelectListItem>();
+
+            var drugsGroup = new SelectListGroup()  { Name = "Drugs" };
+            var fungisGroup = new SelectListGroup() { Name = "Fungis" };
+            var otherGroup = new SelectListGroup()  { Name = "Other" };
+            var foodGroup = new SelectListGroup()   { Name = "Foods" };
+
+            foreach(var drug in drugs)
+            {
+                var selectItem = new SelectListItem();
+                selectItem.Group = drugsGroup;
+                selectItem.Text = drug.Name;
+                selectItem.Value = drug.ID.ToString() + "_Drug";
+                allItems.Add(selectItem);
+            }
+
+            foreach (var fungi in fungis)
+            {
+                var selectItem = new SelectListItem();
+                selectItem.Group = fungisGroup;
+                selectItem.Text = fungi.Name;
+                selectItem.Value = fungi.ID.ToString() + "_Fungi";
+                allItems.Add(selectItem);
+            }
+
+            foreach (var otherItem in other)
+            {
+                var selectItem = new SelectListItem();
+                selectItem.Group = otherGroup;
+                selectItem.Text = otherItem.Name;
+                selectItem.Value = otherItem.ID.ToString() + "_Other";
+                allItems.Add(selectItem);
+            }
+
+            foreach (var food in foods)
+            {
+                var selectItem = new SelectListItem();
+                selectItem.Group = foodGroup;
+                selectItem.Text = food.Name;
+                selectItem.Value = food.ID.ToString() + "_Food";
+                allItems.Add(selectItem);
+            }
+            return allItems;
         }
 
         internal void BindSurgeriesSelects(dynamic viewBag, Patient patient)
