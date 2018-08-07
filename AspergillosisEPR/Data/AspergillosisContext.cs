@@ -9,6 +9,7 @@ using AspergillosisEPR.Models.CaseReportForms.ViewModels;
 using AspergillosisEPR.Models.Radiology;
 using AspergillosisEPR.Models.Patients;
 using AspergillosisEPR.Models.MedicalTrials;
+using AspergillosisEPR.Models.Reporting;
 
 namespace AspergillosisEPR.Data
 {
@@ -83,6 +84,9 @@ namespace AspergillosisEPR.Data
         public DbSet<PatientAllergicIntoleranceItemSideEffect> PatientAllergicIntoleranceItemSideEffects { get; set; }
         public DbSet<OtherAllergicItem> OtherAllergicItems { get; set; }
         public DbSet<Fungi> Fungis { get; set; }
+        public DbSet<ReportType> ReportTypes { get; set; }
+        public DbSet<Report> Reports { get; set; }
+        public DbSet<PatientReportItem> PatientReportItems { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -146,6 +150,9 @@ namespace AspergillosisEPR.Data
             modelBuilder.Entity<Food>().ToTable("Foods");
             modelBuilder.Entity<OtherAllergicItem>().ToTable("OtherAllergicItems");
             modelBuilder.Entity<Fungi>().ToTable("Fungis");
+            modelBuilder.Entity<ReportType>().ToTable("ReportTypes");
+            modelBuilder.Entity<Report>().ToTable("Reports");
+            modelBuilder.Entity<PatientReportItem>().ToTable("PatientReportItems");
         }
 
     }

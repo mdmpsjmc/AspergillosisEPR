@@ -452,3 +452,8 @@ h3.form-category {
     margin-top: 10px;
     margin-bottom: 10px;
 }
+
+.selectize-input {
+    border: none !important;
+    border-bottom: 1px dashed #E0E0E0 !important;
+}

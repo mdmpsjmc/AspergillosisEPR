@@ -29,6 +29,7 @@ namespace AspergillosisEPR.Data.DatabaseSeed
             FoodDatabaseSeed.SeedDefaultFoods(context);
             OtherAllergicItemDatabaseSeed.SeedDefaultItems(context);
             FungiAllergicItemDatabaseSeed.SeedDefaultItems(context);
+            ReportTypeSeed.Initialize(context);
         }
     }
 }

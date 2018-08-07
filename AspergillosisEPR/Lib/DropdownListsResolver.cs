@@ -30,6 +30,15 @@ namespace AspergillosisEPR.Lib
             return new SelectList(statuses, "ID", "Name", selectedItem);
         }
 
+        internal dynamic PopulateReportTypesDropdownList(object selectedItem = null)
+        {
+            var reportTypes = _context.ReportTypes
+                                      .OrderBy(rt => rt.Name)
+                                      .ToList();
+
+            return new SelectList(reportTypes, "Discriminator", "Name", selectedItem);
+        }
+
         public SelectList PopulateSmokingStatusesDropdownList(object selectedItem = null)
         {
             var statuses = _context.SmokingStatuses

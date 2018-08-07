@@ -31,6 +31,8 @@
             AnonPatients.init();
             MedicalTrials.init();
             AllergyIntolerance.init();
+            UI.init();
+            Reports.init();
         }
     }
 

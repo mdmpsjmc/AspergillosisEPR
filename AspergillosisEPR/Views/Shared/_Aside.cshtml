@@ -43,6 +43,15 @@
                 </a>
              </li>
             }
+            @if (User.IsInRole("Admin Role") || User.IsInRole("Reporting Role"))
+            {
+                <li is-active-route asp-controller="Reports" asp-action="Index">
+                    <a href="@Url.Action("Index", "Reports")" title="Reports">
+                        <i class="fa fa-area-chart"></i>
+                        <span class="menu-item-parent">Reports</span>
+                    </a>
+                </li>
+            }
         </ul>
     </nav>
     <span class="minifyme" data-action="minifyMenu">
