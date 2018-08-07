@@ -1,0 +1,30 @@
+﻿@model AspergillosisEPR.Models.Reporting.Report
+<br>
+<div class="col-sm-6">
+    <div class="form-group">
+        <div class="input-group">
+            <span class="input-group-addon"><i class="fa fa-calendar fa-lg fa-fw"></i></span>
+            <input class="form-control input-lg datepicker" placeholder="Start Date" type="text" asp-for="StartDate">
+        </div>
+    </div>
+</div>
+<div class="col-sm-6">
+    <div class="form-group">
+        <div class="input-group">
+            <span class="input-group-addon"><i class="fa fa-calendar fa-lg fa-fw"></i></span>
+            <input class="form-control input-lg datepicker" placeholder="End Date" type="text" asp-for="EndDate">
+        </div>
+    </div>
+</div>
+<br />
+@Html.HiddenFor(m => m.ID, null)
+<h3 style="margin-left: 20px">Please search below for patients</h3>
+<div class="col-sm-12">
+    <div class="form-group">
+        <div class="input-group" style="width: 100%">
+            <select class="select2-patient-search" id="Patients" multiple="true" style="width: 100%">
+                <option value="">Search Patient by RM2Number or Name</option>
+            </select>    
+        </div>
+    </div>
+</div>
