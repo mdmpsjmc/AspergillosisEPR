@@ -5,7 +5,7 @@
             onNext: function (tab, navigation, index) {
                 if ($("div#report-data").html().trim() === "") return false;
                 if (index === 2) {
-                    
+                    return postWizardData();
                 }
             },  
             onBack: function (tab, navigation, index) {
@@ -75,6 +75,20 @@
         return markup;
     }
 
+    var postWizardData = function () {
+        $.ajax({
+            url: '/Reports/Create',
+            type: 'POST',
+            async: false, 
+            data: $("form#wizard-form").serialize()
+        }).done(function (response) {
+            console.log(response);
+            return response.success;
+        }).fail(function () {
+            return false;
+        });
+    }
+ 
     return {
         init: function () {
             initializeWizard();

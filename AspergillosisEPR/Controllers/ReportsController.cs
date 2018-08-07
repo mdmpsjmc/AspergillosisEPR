@@ -42,6 +42,13 @@ namespace AspergillosisEPR.Controllers
         [Authorize(Roles = ("Admin Role, Reporting Role"))]
         public IActionResult Create(Report report)
         {
+            var reportType = _context.ReportTypes
+                                    .FirstOrDefault(rt => rt.Discriminator == Request.Form["ReportTypeID"]);
+            if (reportType == null)
+            {
+                return Json(new { success = false });
+            }
+            report.ReportTypeId = reportType.ID;
             if (ModelState.IsValid)
             {
                 _context.Reports.Update(report);
