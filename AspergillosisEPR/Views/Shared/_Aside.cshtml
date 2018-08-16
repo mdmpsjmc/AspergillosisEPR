@@ -46,7 +46,7 @@
             @if (User.IsInRole("Admin Role") || User.IsInRole("Reporting Role"))
             {
                 <li is-active-route asp-controller="Reports" asp-action="Index">
-                    <a href="@Url.Action("Index", "Reports")" title="Reports">
+                    <a href="@Url.Action("index", "reports")" title="Reports">
                         <i class="fa fa-area-chart"></i>
                         <span class="menu-item-parent">Reports</span>
                     </a>

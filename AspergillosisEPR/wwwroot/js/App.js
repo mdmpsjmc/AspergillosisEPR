@@ -18,7 +18,8 @@
         init: function () {
             onLogoutLinkClick();
             Patients.init();
-            Settings.init();
+            Settings.init()
+            Drugs.init();
             Users.init();
             Imports.init();
             DiagnosisTypes.init();

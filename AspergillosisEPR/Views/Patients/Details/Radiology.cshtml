@@ -3,10 +3,10 @@
 @if (Model.PatientRadiologyFindings != null && Model.PatientRadiologyFindings.Any())
 {
     <div class="col-sm-12">
-        <table class="table table-bordered table-striped">
-            <tbody>
-    @foreach (var radiology in Model.PatientRadiologyFindings.OrderByDescending(ig => ig.DateTaken))
-    {
+       <table class="table table-bordered table-striped">
+       <tbody>
+        @foreach (var radiology in Model.PatientRadiologyFindings.OrderByDescending(ig => ig.DateTaken))
+        {
         <tr>
             <td>@(radiology.RadiologyType.Name)</td>
             @if (radiology.DateTaken != null)
@@ -19,17 +19,13 @@
                     {
                         <tr>
                             <td></td>
-                            <td>Note:</td>
-                            <td>@(radiology.Note)</td>
+                            <td style="font-style: italic;">@(radiology.Note)</td>
                         </tr>
                     }
-    }
-            </tbody>
-        </table>
-
-
+        }
+       </tbody>
+       </table>
     </div>
-
 }
 else
 {

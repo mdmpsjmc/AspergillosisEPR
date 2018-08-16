@@ -1,4 +1,5 @@
 ﻿using AspergillosisEPR.Data;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
@@ -33,8 +34,8 @@ namespace AspergillosisEPR.BackgroundTasks
 
                 _patientAliveStatus = context.PatientStatuses.Where(s => s.Name == "Active").FirstOrDefault().ID;
                 _patientDeceasedStatus = context.PatientStatuses.Where(s => s.Name == "Deceased").FirstOrDefault().ID;
-
-                foreach (var row in context.Patients)
+                var patientsWithStatus = context.Patients.Include(p => p.PatientStatus);
+                foreach (var row in patientsWithStatus)
                 {
 
                     var pasPatient = pasContext.LpiPatientData.FirstOrDefault(p => p.RM2Number() == row.RM2Number);
@@ -46,11 +47,8 @@ namespace AspergillosisEPR.BackgroundTasks
                     {
                         _logger.LogInformation($"Running update for patient with ID: " + row.RM2Number);
                         int newStatusId = pasPatient.PatientStatusId(context, _patientDeceasedStatus, _patientAliveStatus);
-                        if (row.PatientStatusId.Value != newStatusId)
-                        {
-                            _logger.LogInformation($"Updating status for patient with ID: " + row.RM2Number);
-                            row.PatientStatusId = newStatusId;
-                        }
+                        _logger.LogInformation($"Updating status for patient with ID: " + row.RM2Number);
+                        row.PatientStatusId = newStatusId;
                         try
                         {
                             row.DateOfDeath = pasPatient.DateOfDeath();

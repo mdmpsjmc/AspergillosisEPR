@@ -1,23 +1,26 @@
-﻿<article class="col-sm-12 col-md-12 col-lg-6 sortable-grid ui-sortable">
-
-    <div class="jarviswidget jarviswidget-color-darken jarviswidget-sortable" id="wid-id-0" data-widget-editbutton="false" data-widget-deletebutton="false" role="widget">      
-        <header role="heading">          
-            <span class="widget-icon"> <i class="fa fa-area-chart"></i> </span>
-            <h2>Generate new report</h2>
-        </header>
-
-        <div role="content">
-            <div class="widget-body">
-                @Html.Partial("/Views/Reports/_Wizard.cshtml")
-            </div>
+﻿<section id="widget-grid" class="">
+    <p>
+        @if ((User.IsInRole("Reporting Role") || User.IsInRole("Admin Role")))
+        {
+            <a href="@Url.Action("new", "reports")" class="btn btn-success btn-lg new-patient-modal-show">
+                <i class="fa fa-plus"></i>&nbsp;Generate New Report
+            </a>
+        }
+   </p>
+        <div class="row">
+            <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <div class="jarviswidget" id="wid-id-0" data-widget-editbutton="false">
+                    <header>
+                        <span class="widget-icon"> <i class="fa fa-area-chart"></i> </span>
+                        <h2>Reports</h2>
+                    </header>
+                    <div>
+                        <div class="widget-body">
+                            @Html.Partial("/Views/Home/_Spinner.cshtml")
+                            @Html.Partial("/Views/Reports/_DataTable.cshtml")
+                        </div>
+                    </div>
+                </div>
+            </article>
         </div>
-    </div>
-</article>
-<script type="text/javascript">
-
-        $(document).ready(function () {
-            setTimeout(function () {
-                Reports.init();
-            }, 1000)
-        });
-</script>
+</section>
