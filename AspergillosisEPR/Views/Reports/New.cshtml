@@ -1,0 +1,23 @@
+﻿<article class="col-sm-12 col-md-12 col-lg-6 sortable-grid ui-sortable">
+
+    <div class="jarviswidget jarviswidget-color-darken jarviswidget-sortable" id="wid-id-0" data-widget-editbutton="false" data-widget-deletebutton="false" role="widget">
+        <header role="heading">
+            <span class="widget-icon"> <i class="fa fa-area-chart"></i> </span>
+            <h2>Generate new report</h2>
+        </header>
+
+        <div role="content">
+            <div class="widget-body">
+                @Html.Partial("/Views/Reports/_Wizard.cshtml")
+            </div>
+        </div>
+    </div>
+</article>
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        setTimeout(function () {
+            Reports.init();
+        }, 1000)
+    });
+</script>
