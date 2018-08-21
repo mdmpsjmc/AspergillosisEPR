@@ -38,6 +38,9 @@ namespace AspergillosisEPR.Models.PatientViewModels
         public bool ShowCaseReportForms { get; set; }
         public bool ShowTrials { get; set; }
         public bool ShowDrugLevels { get; set; }
+        public bool ShowSurgeries { get; set; }
+        public bool ShowAllergies { get; set; }
+        public bool ShowSmokingStatus { get; set; }
 
         public string SgrqImageChartFile { get; set; }
 
@@ -53,6 +56,9 @@ namespace AspergillosisEPR.Models.PatientViewModels
             ShowWeight = true;
             ShowCaseReportForms = true;
             ShowDrugLevels = true;
+            ShowSurgeries = true;
+            ShowAllergies = true;
+            ShowSmokingStatus = true;
         }
 
         public static PatientDetailsViewModel BuildPatientViewModel(AspergillosisContext context, 
@@ -110,6 +116,11 @@ namespace AspergillosisEPR.Models.PatientViewModels
             {
                 patientDetailsViewModel.CaseReportForms = caseReportFormManager.GetGroupedCaseReportFormsForPatient(patient.ID);
             }
+            if (patientDetailsViewModel.ShowSmokingStatus)
+            {
+                context.Entry(patient).Reference(c => c.PatientSmokingDrinkingStatus).Load();
+            }
+
             GetAllergicItemNames(context, patientDetailsViewModel);
             return patientDetailsViewModel;
         }

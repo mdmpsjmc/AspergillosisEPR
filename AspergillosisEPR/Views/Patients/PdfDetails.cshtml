@@ -18,16 +18,24 @@ else
 @if (Model.ShowDiagnoses)
 {
     <h2>Diagnosis</h2>
-        @Html.Partial("/Views/Patients/Details/_Deseases.cshtml")
+    @Html.Partial("/Views/Patients/Details/_Deseases.cshtml")
     @if (Model.PatientSurgeries.Any())
     {
         <h2>Surgeries</h2>
         @Html.Partial("/Views/Patients/Details/_Surgeries.cshtml")
-       
+
     }
 
     <h2>Allergies & Intolerances</h2>
     @Html.Partial("/Views/Patients/Details/_AllergyIntoleranceItems.cshtml")
+
+    @if (Model.ShowSmokingStatus)
+    {
+        <h2>Smoking Status</h2>
+        
+        @Html.Partial("~/Views/Patients/SmokingStatuses/_Details.cshtml", Model.Patient);
+    }
+
 }
 @if (Model.ShowDrugs)
 {
@@ -40,26 +48,26 @@ else
 @if (Model.ShowSGRQ)
 {
     <h2>SGRQ - Saint Georges Respiratory Questionnaire</h2>
-        <div style="width: 1000px; height: 600px; margin-bottom: 20px">
-             <img width="1000" height="600" src="/Files/Exported/PDF/@(Model.SgrqImageChartFile).png" />
-        </div>
-        @Html.Partial("/Views/Patients/Details/STGQuestionnaire.cshtml")
+    <div style="width: 1000px; height: 600px; margin-bottom: 20px">
+        <img width="1000" height="600" src="/Files/Exported/PDF/@(Model.SgrqImageChartFile).png" />
+    </div>
+    @Html.Partial("/Views/Patients/Details/STGQuestionnaire.cshtml")
 }
 @if (Model.ShowIg && Model.IgCharts != null)
-{       
-     <h2>Immunoglobuline Levels</h2>
-     <div id="ig-charts" style="width: 1000px; height: @(300*Model.IgCharts.Count)px; margin-bottom: 20px">
-         @foreach (var igChart in Model.IgCharts)
-         {
-            <img width="600" height="250" src="/Files/Exported/PDF/@(igChart.FileName).png" />            
-         }
-     </div>
-     @Html.Partial("/Views/Patients/Details/Ig.cshtml")
+{
+    <h2>Immunoglobuline Levels</h2>
+    <div id="ig-charts" style="width: 1000px; height: @(300*Model.IgCharts.Count)px; margin-bottom: 20px">
+        @foreach (var igChart in Model.IgCharts)
+        {
+            <img width="600" height="250" src="/Files/Exported/PDF/@(igChart.FileName).png" />
+        }
+    </div>
+    @Html.Partial("/Views/Patients/Details/Ig.cshtml")
 }
 @if (Model.ShowRadiology)
 {
-   <h2>Radiology Appearances</h2>
-   @Html.Partial("/Views/Patients/Details/Radiology.cshtml")
+    <h2>Radiology Appearances</h2>
+    @Html.Partial("/Views/Patients/Details/Radiology.cshtml")
 }
 
 @if (Model.ShowWeight)

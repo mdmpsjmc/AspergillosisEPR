@@ -5,7 +5,7 @@
         <div class="row">
             <label class="select">
                 <label asp-for="@Model.DrugId" class="select">
-                    @Html.DropDownList("Models[" + (string)ViewBag.Index + "].DrugId", (SelectList)ViewBag.DrugId, "Select Drug")
+                    @Html.DropDownList("DrugLevels[" + (string)ViewBag.Index + "].DrugId", (SelectList)ViewBag.DrugId, "Select Drug",new { @class = "selectize" })
                     <i></i>
                 </label>
             </label>
@@ -14,13 +14,13 @@
     <section class="col col-6">
         <label class="input">
             <i class="icon-append fa fa-calendar"></i>
-            <input asp-for="@Model.DateReceived" placeholder="Date Received" class="date-taken" type="text" name="Models[@((string)ViewBag.Index)].DateReceived" id="Models_@((string)ViewBag.Index)__DateReceived">
+            <input asp-for="@Model.DateReceived" placeholder="Date Received" class="date-taken" type="text" name="DrugLevels[@((string)ViewBag.Index)].DateReceived" id="DrugLevels_@((string)ViewBag.Index)__DateReceived">
         </label>
     </section>
     <section class="col col-6">
         <label class="input">
             <i class="icon-append fa fa-calendar"></i>
-            <input asp-for="@Model.DateTaken" placeholder="Date Taken" class="date-taken" type="text" name="Models[@((string)ViewBag.Index)].DateTaken" id="Models_@((string)ViewBag.Index)__DateTaken">
+            <input asp-for="@Model.DateTaken" placeholder="Date Taken" class="date-taken" type="text" name="DrugLevels[@((string)ViewBag.Index)].DateTaken" id="DrugLevels_@((string)ViewBag.Index)__DateTaken">
         </label>
     </section>
     <div class="row">
@@ -34,19 +34,19 @@
         <section class="col col-4">
             <label class="input">
                 <i class="icon-append fa fa-flask"></i>
-                <input asp-for="@Model.ResultValue" placeholder="Result" type="text" name="Models[@((string)ViewBag.Index))].ResultValue" id="Models_@((string)ViewBag.Index))__ResultValue">
+                <input asp-for="@Model.ResultValue" placeholder="Result" type="text" name="DrugLevels[@((string)ViewBag.Index))].ResultValue" id="DrugLevels_@((string)ViewBag.Index)__ResultValue">
             </label>
         </section>
         <section class="col col-2">
             <label class="select">
-                @Html.DropDownList("Models[" + ((string)ViewBag.Index) + "].UnitOfMeasurementId", (SelectList)ViewBag.UnitId, "none")
+                @Html.DropDownList("DrugLevels[" + ((string)ViewBag.Index) + "].UnitOfMeasurementId", (SelectList)ViewBag.UnitId, "none")
                 <i></i>
             </label>
         </section>
         <section class="col col-4">
             <label class="input">
                 <i class="icon-append fa fa-flask"></i>
-                <input asp-for="@Model.LabNumber" placeholder="Lab Number" type="text" name="Models[@((string)ViewBag.Index)].LabNumber" id="Models_@(((string)ViewBag.Index))__LabNumber">
+                <input asp-for="@Model.LabNumber" placeholder="Lab Number" type="text" name="DrugLevels[@((string)ViewBag.Index)].LabNumber" id="DrugLevels_@(((string)ViewBag.Index))__LabNumber">
             </label>
         </section>
     </div>

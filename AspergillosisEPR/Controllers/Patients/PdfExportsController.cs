@@ -45,6 +45,7 @@ namespace AspergillosisEPR.Controllers.Patients
             var user = await _userManager.GetUserAsync(HttpContext.User);
             var rolesCount = _userManager.GetRolesAsync(user).Result.Count;
             PatientDetailsViewModel patientDetailsViewModel = await GetExportViewModel(id);
+
             patientDetailsViewModel.ShowDetails = rolesCount > 1;
             if (igChartsLength > 0) AddIgChartsToPatientVM(patientDetailsViewModel, igChartsLength);
             var pdfBytes = _pdfConverter.GenerateDetailsPdf(id, sgrqChart, patientDetailsViewModel);

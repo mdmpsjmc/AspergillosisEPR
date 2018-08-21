@@ -41,7 +41,7 @@ namespace AspergillosisEPR.Models.Patients
         {
             return new List<string>()
             {
-                "PatientId", "Patient", "DiagnosisType", "DiagnosisCategory"
+                "PatientId", "Patient", "DiagnosisType", "DiagnosisCategory", "DiagnosisDate"
             };
         }
     }

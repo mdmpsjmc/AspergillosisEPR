@@ -1,4 +1,5 @@
-﻿using AspergillosisEPR.Lib.Search;
+﻿using AspergillosisEPR.Lib.Exporters;
+using AspergillosisEPR.Lib.Search;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace AspergillosisEPR.Models.Patients
 {
-    public class PatientAllergicIntoleranceItem : ISearchable
+    public class PatientAllergicIntoleranceItem : Exportable, ISearchable
     {
         public int ID { get; set; }
         public int PatientId { get; set; }
@@ -92,5 +93,15 @@ namespace AspergillosisEPR.Models.Patients
                 { "Intolerance / Alergy to", "PatientAllergicIntoleranceItem.AllergyIntoleranceItemId.Select" }
             };
         }
+
+        override public List<string> ExcludedProperties()
+        {
+            return new List<string>()
+            {
+                "PatientId", "Patient", "SideEffects", "SelectedEffectsIds",
+                  "AllergyIntoleranceItemType", "AllergyIntoleranceItemId"
+            };
+        }
+
     }
 }

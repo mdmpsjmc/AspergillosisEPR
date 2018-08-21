@@ -206,7 +206,7 @@ namespace AspergillosisEPR.Controllers
                 return NotFound();
             }
             Patient patientToUpdate = await _patientManager
-                                                    .FindPatientWithFirstLevelRelationsByIdAsync(id);
+                                                     .FindPatientWithFirstLevelRelationsByIdAsync(id);
 
             _patientManager.UpdateDiagnoses(diagnoses, patientToUpdate);
             _patientManager.UpdateDrugs(drugs, patientToUpdate, Request);

@@ -10,6 +10,7 @@ namespace AspergillosisEPR.Models.Patients
         public int ID { get; set; }
         public int PatientId { get; set; }
         public int PulmonaryFunctionTestId { get; set; }
-        public DateTime DateTaken { get; set; }
+        public DateTime? DateTaken { get; set; }
+        public decimal Result { get; set; }
     }
 }

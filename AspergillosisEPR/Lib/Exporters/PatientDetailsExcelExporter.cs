@@ -77,7 +77,11 @@ namespace AspergillosisEPR.Lib.Exporters
                 var propertyName = propertyInfo.Name.ToString().Replace("Show", "");
                 var displayKeyValue = _form[propertyInfo.Name];
 
-                if (displayKeyValue == "on" || (propertyName == "DrugLevels" && _form["ShowDrugs"] == "on"))
+                if ( displayKeyValue == "on" || 
+                    (propertyName == "DrugLevels" && _form["ShowDrugs"] == "on") || 
+                    (propertyName == "Surgeries" && _form["ShowDiagnoses"] == "on") ||
+                    (propertyName == "Allergies" && _form["ShowDiagnoses"] == "on")
+                    )
                 {
                     if (propertyName == "SGRQ") isSGRQChartIncluded = true;
                     if (propertyName == "Ig") isIgChartIncluded = true;
@@ -259,6 +263,8 @@ namespace AspergillosisEPR.Lib.Exporters
             dictionary.Add("Drugs", _patientDetailsVM.PatientDrugs.ToList<object>());
             dictionary.Add("DrugLevels", _patientDetailsVM.DrugLevels.ToList<object>());
             dictionary.Add("SGRQ", _patientDetailsVM.STGQuestionnaires.ToList<object>());
+            dictionary.Add("Surgeries", _patientDetailsVM.PatientSurgeries.OrderByDescending(q => q.SurgeryDate).ToList<object>());
+            dictionary.Add("Allergies", _patientDetailsVM.PatientAllergicIntoleranceItems.ToList<object>());
             dictionary.Add("Ig", _patientDetailsVM.PatientImmunoglobulines.OrderBy(pi => pi.DateTaken).ToList<object>());
             dictionary.Add("CaseReportForms", _patientDetailsVM.CaseReportForms.SelectMany(f => f).OrderBy(f => f.DateTaken).ToList<object>());
             dictionary.Add("Radiology", _patientDetailsVM.PatientRadiologyFindings.ToList<object>());

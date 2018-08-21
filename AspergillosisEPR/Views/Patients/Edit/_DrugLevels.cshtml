@@ -11,7 +11,7 @@
                 <div class="row">
                     <label class="select">
                         <label asp-for="@drugLevel.DrugId" class="select">
-                            @Html.DropDownList("DrugLevels["+i +"].DrugId", (SelectList)ViewBag.DrugId[i], "Select Drug")
+                            @Html.DropDownList("DrugLevels["+i +"].DrugId", (SelectList)ViewBag.DrugId[i], "Select Drug", new { @class="selectize" })
                             <i></i>
                         </label>
                     </label>

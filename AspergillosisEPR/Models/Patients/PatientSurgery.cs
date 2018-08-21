@@ -1,4 +1,5 @@
-﻿using AspergillosisEPR.Lib.Search;
+﻿using AspergillosisEPR.Lib.Exporters;
+using AspergillosisEPR.Lib.Search;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace AspergillosisEPR.Models.Patients
 {
-    public class PatientSurgery : ISearchable
+    public class PatientSurgery : Exportable, ISearchable
     {
         public int ID { get; set; }
         public int SurgeryId { get; set; }
@@ -23,5 +24,14 @@ namespace AspergillosisEPR.Models.Patients
                 { "Surgery Name", "PatientSurgery.SurgeryId.Select" }
             };
         }
+
+        override public List<string> ExcludedProperties()
+        {
+            return new List<string>()
+            {
+                "PatientId", "Patient", "Surgery"
+            };
+        }
+
     }
 }

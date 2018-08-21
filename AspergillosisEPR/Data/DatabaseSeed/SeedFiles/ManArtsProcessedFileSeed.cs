@@ -37,5 +37,20 @@ namespace AspergillosisEPR.Data.DatabaseSeed.SeedFiles
                 return;
             }
         }
+
+        public static void SeedDrugLevel(AspergillosisContext context)
+        {
+            var importer = context.DBImportTypes.Where(dbit => dbit.ImporterClass == "ManARTSDrugLevelsImporter").FirstOrDefault();
+            if (importer == null)
+            {
+                var dbImportType = new DbImportType { Name = "ManArts Import from processed and merged file (Drug Levels - Mike Porter)", ImporterClass = "ManARTSDrugLevelsImporter" };
+                context.DBImportTypes.Add(dbImportType);
+                context.SaveChanges();
+            }
+            else
+            {
+                return;
+            }
+        }
     }
 }
