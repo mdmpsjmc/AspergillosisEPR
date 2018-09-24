@@ -94,5 +94,29 @@ namespace AspergillosisEPR.Data.DatabaseSeed.SeedFiles
                 context.Add(test);
             }
         }
+
+        public static void AddOtherPFTs(AspergillosisContext context)
+        {
+
+            var fefTest = context.PulmonaryFunctionTests
+                                 .FirstOrDefault(pft => pft.ShortName == "FEFx");
+            if (fefTest == null) return;
+            context.Remove(fefTest);
+
+            var tests = new PulmonaryFunctionTest[]
+            {
+                new PulmonaryFunctionTest { Name = "Forced Expiratory Flow - 25%", ShortName = "FEF25", Description = "Related to some portion of the FVC curve; modifiers refer to amount of FVC already exhaled" },
+                new PulmonaryFunctionTest { Name = "Forced Expiratory Flow - 50%", ShortName = "FEF50", Description = "Related to some portion of the FVC curve; modifiers refer to amount of FVC already exhaled" },
+                new PulmonaryFunctionTest { Name = "Forced Expiratory Flow - 75%", ShortName = "FEF75", Description = "Related to some portion of the FVC curve; modifiers refer to amount of FVC already exhaled" },
+                new PulmonaryFunctionTest { Name = "The diffusing capacity for carbon monoxide ", ShortName = "DLCO", Description = "Extent to which oxygen passes from the air sacs of the lungs into the blood" },
+                new PulmonaryFunctionTest { Name = "The carbon monoxide transfer coefficient ", ShortName = "KCO", Description = "(KCO is approximately kCO/barometric pressure in mL/minute/ mmHg/L) is often written as DLCO/VA. It is an index of the efficiency of alveolar transfer of carbon monoxide" },
+                new PulmonaryFunctionTest { Name = "Slow Vital Capacity ", ShortName = "SVC", Description = "The full excursion of the maneuver gives a measure of the change in volume of gas in the lungs from complete inspiration to complete expiration or vice versa. " },
+            };
+            foreach (var test in tests)
+            {
+                context.Add(test);
+            }
+            context.SaveChanges();
+        }
     }
 }

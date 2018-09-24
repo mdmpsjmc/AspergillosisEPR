@@ -34,12 +34,17 @@
                             </a>
                         </li>
                         <li>
-                           <a href="#radiology" data-toggle="tab"><i class="fa fa-fw fa-lg fa-stethoscope"></i> Radiology</a>
+                            <a href="#radiology" data-toggle="tab"><i class="fa fa-fw fa-lg fa-stethoscope"></i> Radiology</a>
+                        </li>
+                        <li>
+                            <a href="#pfts" data-toggle="tab">
+                                <i class="fa fa-fw fa-lg fa-user-md"></i> PFTs
+                            </a>
                         </li>
                         <li>
                             <a href="#medical-trials" data-toggle="tab">
                                 <span class="mi-patient-chart-3879 tab-styled-custom2">
-                                  <span class="path2"></span>
+                                    <span class="path2"></span>
                                 </span> Trials
                             </a>
                         </li>
@@ -66,6 +71,9 @@
                             </div>
                             <div class="tab-pane fade" id="radiology">
                                 @{ await Html.RenderPartialAsync("/Views/Patients/_RadiologyTab.cshtml"); }
+                            </div>
+                            <div class="tab-pane fade" id="pfts">
+                                @{ await Html.RenderPartialAsync("/Views/Patients/_PulmonaryFunctionTests.cshtml"); }
                             </div>
                             <div class="tab-pane fade" id="medical-trials">
                                 @{ await Html.RenderPartialAsync("/Views/Patients/_MedicalTrials.cshtml"); }

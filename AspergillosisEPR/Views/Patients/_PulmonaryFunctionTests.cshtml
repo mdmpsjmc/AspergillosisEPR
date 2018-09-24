@@ -1,0 +1,12 @@
+﻿@model AspergillosisEPR.Models.Patients.PatientRadiologyFinding
+<div class="col-12 row pft-form" style="margin: 0px !important">
+</div>
+@if (User.IsInRole("Create Role") || User.IsInRole("Admin Role"))
+{
+    <a href="@Url.Action("PulmonaryFunctionTest", "Partials")" class="btn btn-success add-pft-entry add-new-patient-partial" data-insert-into-class="div.pft-form" style="padding: 5px">
+        <i class="fa fa-plus"></i>
+        <span>
+            <strong>Add Patients PFT Result</strong>
+        </span>
+    </a>
+}

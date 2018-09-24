@@ -1,4 +1,5 @@
 ﻿using AspergillosisEPR.Data.DatabaseSeed.SeedFiles;
+using Microsoft.AspNetCore.Hosting;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +9,8 @@ namespace AspergillosisEPR.Data.DatabaseSeed
 {
     public class AspergillosisDatabaseSeeder
     {
-        public static void SeedDatabase(AspergillosisContext context)
+        public static void SeedDatabase(IHostingEnvironment hostingEnvironment, 
+                                        AspergillosisContext context)
         {
             SampleDataInitializer.Initialize(context);
             SampleDataInitializer.AddDefaultPatientStatuses(context);
@@ -23,6 +25,7 @@ namespace AspergillosisEPR.Data.DatabaseSeed
             IntraDrugLevelExcelTypeSeed.Seed(context);
             UnitOfMeasureMgLSeed.Seed(context);
             ManArtsImportSeed.Seed(context);
+            ManArtsImportSeed.AddOtherPFTs(context);
             ManArtsProcessedFileSeed.Seed(context);
             ManArtsProcessedFileSeed.SeedSmokingStatuses(context);
             ManArtsProcessedFileSeed.SeedDrugLevel(context);
@@ -31,6 +34,7 @@ namespace AspergillosisEPR.Data.DatabaseSeed
             OtherAllergicItemDatabaseSeed.SeedDefaultItems(context);
             FungiAllergicItemDatabaseSeed.SeedDefaultItems(context);
             ReportTypeSeed.Initialize(context);
+            PostcodeSeed.ReadCsvIntoDatabase(hostingEnvironment, context);
         }
     }
 }

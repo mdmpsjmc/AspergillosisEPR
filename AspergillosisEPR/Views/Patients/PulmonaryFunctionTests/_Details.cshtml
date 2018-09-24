@@ -1,0 +1,43 @@
+﻿@model AspergillosisEPR.Models.Patient
+
+@if (Model.PatientPulmonaryFunctionTests != null && Model.PatientPulmonaryFunctionTests.Any())
+{
+    var groupedTests = Model.PatientPulmonaryFunctionTests.OrderByDescending(ig => ig.DateTaken).GroupBy(ig => ig.PulmonaryFunctionTest.AllName);
+    @foreach (var testGroup in groupedTests.ToList())
+    {
+        <h3>@(testGroup.Key)</h3>
+        <div class="col-sm-12">
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Date Taken</th>
+                        <th>Result</th>
+                        <th>Predicted</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var test in testGroup)
+                    {
+                        <tr>
+                            <td>@test.ID</td>
+                            <td>@(test?.DateTaken.Value.ToString("dd/MM/yyyy"))</td>
+                            <td>@(test.ResultValue)</td>
+                            <td>@(test.PredictedValue)</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>        
+    }
+}
+else
+{
+<div class="col-sm-12">
+    <div class="alert alert-info alert-block">
+        <h4 class="alert-heading">Info!</h4>
+        <i class="fa fa-info-circle"></i>
+        This patient does not have any recorded information about pulmonary function tests
+    </div>
+</div>
+}

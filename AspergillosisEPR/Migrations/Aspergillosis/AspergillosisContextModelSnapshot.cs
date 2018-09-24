@@ -459,6 +459,8 @@ namespace AspergillosisEPR.Migrations.Aspergillosis
 
                     b.Property<DateTime?>("DateOfDeath");
 
+                    b.Property<string>("DistanceFromWythenshawe");
+
                     b.Property<string>("FirstName")
                         .IsRequired();
 
@@ -472,6 +474,8 @@ namespace AspergillosisEPR.Migrations.Aspergillosis
                     b.Property<string>("NhsNumber");
 
                     b.Property<int?>("PatientStatusId");
+
+                    b.Property<string>("PostCode");
 
                     b.Property<string>("RM2Number")
                         .IsRequired()
@@ -739,13 +743,21 @@ namespace AspergillosisEPR.Migrations.Aspergillosis
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<DateTime>("DateTaken");
+                    b.Property<DateTime?>("DateTaken");
 
                     b.Property<int>("PatientId");
 
+                    b.Property<decimal>("PredictedValue");
+
                     b.Property<int>("PulmonaryFunctionTestId");
 
+                    b.Property<decimal>("ResultValue");
+
                     b.HasKey("ID");
+
+                    b.HasIndex("PatientId");
+
+                    b.HasIndex("PulmonaryFunctionTestId");
 
                     b.ToTable("PatientPulmonaryFunctionTests");
                 });
@@ -1105,6 +1117,22 @@ namespace AspergillosisEPR.Migrations.Aspergillosis
                     b.ToTable("TemporaryNewPatients");
                 });
 
+            modelBuilder.Entity("AspergillosisEPR.Models.UKOutwardCode", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Code");
+
+                    b.Property<decimal>("Latitude");
+
+                    b.Property<decimal>("Longitude");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("UKOutwardCodes");
+                });
+
             modelBuilder.Entity("AspergillosisEPR.Models.UnitOfMeasurement", b =>
                 {
                     b.Property<int>("ID")
@@ -1446,6 +1474,19 @@ namespace AspergillosisEPR.Migrations.Aspergillosis
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
+            modelBuilder.Entity("AspergillosisEPR.Models.Patients.PatientPulmonaryFunctionTest", b =>
+                {
+                    b.HasOne("AspergillosisEPR.Models.Patient")
+                        .WithMany("PatientPulmonaryFunctionTests")
+                        .HasForeignKey("PatientId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("AspergillosisEPR.Models.PulmonaryFunctionTest", "PulmonaryFunctionTest")
+                        .WithMany()
+                        .HasForeignKey("PulmonaryFunctionTestId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
             modelBuilder.Entity("AspergillosisEPR.Models.Patients.PatientRadiologyFinding", b =>
                 {
                     b.HasOne("AspergillosisEPR.Models.Radiology.ChestDistribution", "ChestDistribution")
@@ -1530,7 +1571,7 @@ namespace AspergillosisEPR.Migrations.Aspergillosis
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("AspergillosisEPR.Models.Reporting.Report", "Report")
-                        .WithMany()
+                        .WithMany("PatientReportItems")
                         .HasForeignKey("ReportId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });

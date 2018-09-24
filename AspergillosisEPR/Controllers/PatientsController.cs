@@ -73,6 +73,7 @@ namespace AspergillosisEPR.Controllers
                                                  PatientDrugLevel[] drugLevels,
                                                  PatientSurgery[] surgeries,
                                                  PatientAllergicIntoleranceItem[] allergies, 
+                                                 PatientPulmonaryFunctionTest[] patientPulmonaryFunctionTest,
                                                  CaseReportFormResult[] caseReportFormResult)
         {
             var existingPatient = _context.Patients.FirstOrDefault(x => x.RM2Number == patient.RM2Number);
@@ -97,6 +98,7 @@ namespace AspergillosisEPR.Controllers
             _patientManager.AddDrugLevels(patient, drugLevels);
             _patientManager.AddPatientSurgeries(patient, surgeries);
             _patientManager.AddPatientAllergiesIntolerances(patient, allergies);
+            _patientManager.AddPatientPFTs(patient, patientPulmonaryFunctionTest);
             try
             {
                 if (ModelState.IsValid)

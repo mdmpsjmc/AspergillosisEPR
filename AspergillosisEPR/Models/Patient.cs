@@ -42,6 +42,8 @@ namespace AspergillosisEPR.Models
         public DateTime? DateOfDeath { get; set; }
         public string NhsNumber { get; set; }
         public string GenericNote { get; set; }
+        public string PostCode { get; set; }
+        public string DistanceFromWythenshawe { get; set; }
 
         public ICollection<PatientDiagnosis> PatientDiagnoses { get; set; }
         public ICollection<PatientDrug> PatientDrugs { get; set; }
@@ -55,6 +57,7 @@ namespace AspergillosisEPR.Models
         public ICollection<PatientSurgery> PatientSurgeries { get; set; }
         public PatientSmokingDrinkingStatus PatientSmokingDrinkingStatus { get; set; }
         public ICollection<PatientAllergicIntoleranceItem> PatientAllergicIntoleranceItems { get; set; }
+        public ICollection<PatientPulmonaryFunctionTest> PatientPulmonaryFunctionTests { get; set; }
         public PatientStatus PatientStatus { get; set; }
            
         [Display(Name = "Full Name")]

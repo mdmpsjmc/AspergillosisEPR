@@ -120,6 +120,21 @@ namespace AspergillosisEPR.Lib
             }
         }
 
+        internal void AddPatientPFTs(Patient patient, PatientPulmonaryFunctionTest[] patientPulmonaryFunctionTest)
+        {
+            if (patientPulmonaryFunctionTest.Length == 1 && patientPulmonaryFunctionTest[0] == null)
+            {
+                return;
+            }
+            patient.PatientPulmonaryFunctionTests = new List<PatientPulmonaryFunctionTest>();
+            foreach (var pft in patientPulmonaryFunctionTest)
+            {
+                pft.PatientId = patient.ID;
+                _context.PatientPulmonaryFunctionTests.Add(pft);
+                patient.PatientPulmonaryFunctionTests.Add(pft);
+            }
+        }
+
         internal void AddPatientAllergiesIntolerances(Patient patient, PatientAllergicIntoleranceItem[] allergies)
         {
             if (allergies.Length == 1 && allergies[0] == null)

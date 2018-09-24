@@ -1,0 +1,42 @@
+﻿@model AspergillosisEPR.Models.Patients.PatientPulmonaryFunctionTest
+@using HtmlHelpers.BeginCollectionItemCore;
+@using (Html.BeginCollectionItem("PatientPulmonaryFunctionTest"))
+{
+    <div class="patient-pft">
+        <fieldset>
+            <div class="row">
+                <section class="col col-4">
+                    <label asp-for="PulmonaryFunctionTestId" class="select">
+                        <select asp-for="PulmonaryFunctionTestId" asp-items="(SelectList)ViewBag.PulmonaryFunctionTestIds" class="selectize">
+                            <option value="">Select PFT</option>
+                        </select>
+                        <i class="icon-append fa fa-user"></i>
+                    </label>
+                </section>
+                <section class="col col-4">
+                    <label asp-for="DateTaken" class="input">
+                        <i class="icon-append fa fa-calendar"></i>
+                        <input asp-for="DateTaken" placeholder="Date taken" class="datepicker" type="text">
+                    </label>
+                </section>
+                <section class="col col-2">
+                    <label asp-for="ResultValue" class="input">
+                        <i class="icon-append fa fa-flask"></i>
+                        <input asp-for="ResultValue" placeholder="Value" type="text">
+                    </label>
+                </section>
+                <section class="col col-2">
+                    <label asp-for="PredictedValue" class="input">
+                        <i class="icon-append fa fa-flask"></i>
+                        <input asp-for="PredictedValue" placeholder="Predicted Value" type="text">
+                    </label>
+                </section>
+            </div>
+        </fieldset>      
+        <div class="row">
+            <a href="javascript:void(0)" class="btn btn-danger remove-partial pull-right btn-lg" data-what="Patient PFT" data-toggle="tooltip" data-title="Remove Patient PFT" style="padding: 5px">
+                <i class="fa fa-trash"></i>
+            </a>
+        </div>
+    </div>
+}

@@ -443,5 +443,13 @@ namespace AspergillosisEPR.Lib
                            select se;
             _viewBag.SearchSelect = new SelectList(statuses, "ID", "Name");
         }
+
+        public SelectList PopulatePFTsDropDownList()
+        {
+            var pfts = from se in _context.PulmonaryFunctionTests
+                           orderby se.Name
+                           select se;
+           return new SelectList(pfts, "ID", "AllName");
+        }
     }
 }

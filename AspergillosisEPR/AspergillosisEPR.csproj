@@ -84,6 +84,9 @@
     <Content Update="Views\Partials\EditPatientSurgeryForm.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
+    <Content Update="Views\Partials\EditPulmonaryFunctionTest.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
     <Content Update="Views\Patients\Edit\AllergyIntolerance\_Drug.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>

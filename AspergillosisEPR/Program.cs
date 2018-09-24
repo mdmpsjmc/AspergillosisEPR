@@ -22,7 +22,8 @@ namespace AspergillosisEPR
                 {
                     var context = services.GetRequiredService<AspergillosisContext>();                  
                     var context2 = services.GetRequiredService<ApplicationDbContext>();
-                    AspergillosisDatabaseSeeder.SeedDatabase(context);
+                    var hostingEnvironment = services.GetRequiredService<IHostingEnvironment>();
+                    AspergillosisDatabaseSeeder.SeedDatabase(hostingEnvironment, context);
                     AppDbInitializer.Initialize(context2);                   
                 }
                 catch (Exception ex)

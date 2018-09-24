@@ -65,6 +65,21 @@ namespace AspergillosisEPR.Controllers
         }
 
         [Authorize(Roles = "Create Role, Admin Role")]
+        public IActionResult PulmonaryFunctionTest()
+        {
+            ViewBag.PulmonaryFunctionTestIds = _listResolver.PopulatePFTsDropDownList();
+            return PartialView();
+        }
+
+        [Authorize(Roles = "Update Role, Admin Role")]
+        public IActionResult EditPulmonaryFunctionTest()
+        {
+            ViewBag.PFTIds = _listResolver.PopulatePFTsDropDownList();
+            ViewBag.Index = (string)Request.Query["index"];
+            return PartialView();
+        }
+
+        [Authorize(Roles = "Create Role, Admin Role")]
         public IActionResult RadiologyForm()
         {
 

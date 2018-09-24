@@ -259,6 +259,7 @@
                 onPatientStatusChange();
                 AllergyIntolerance.init();
                 $("select.selectize, select.select2-search").selectize();
+                UI.initAjaxTab();
             });
         });
     }

@@ -37,6 +37,16 @@
                             <a href="#measurements" data-toggle="tab" class="exportable"><i class="fa fa-fw fa-lg fa-dashboard"></i> Weight</a>
                         </li>
                         <li>
+                            <a href="/patients/@(Model.Patient.ID)/SmokingDrinking" data-toggle="tabajax" data-target="#smoking-status">
+                                <i class="fa fa-fw fa-lg fa-fire"></i> Smoking Status
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/patients/@(Model.Patient.ID)/PFTs/Details" data-toggle="tabajax" data-target="#pfts">
+                                <i class="fa fa-fw fa-lg fa-user-md"></i> PFTs
+                            </a>
+                        </li>
+                        <li>
                             <a href="#medical-trials" data-toggle="tab" class="exportable">
                                 <span class="mi-patient-chart-3879 tab-styled-custom2">
                                     <span class="path2"></span>
@@ -44,13 +54,8 @@
                             </a>
                         </li>
                         <li>
-                            <a href="/patients/@(Model.Patient.ID)/SmokingDrinking" data-toggle="tabajax" data-target="#smoking-status">
-                                <i class="fa fa-fw fa-lg fa-fire"></i> Smoking Status
-                            </a>
-                        </li>
-                        <li>
                             <a href="#case-report-forms" class="exportable" data-toggle="tab"><i class="fa fa-fw fa-lg fa-th-list"></i> Case Report Forms</a>
-                        </li>                        
+                        </li>
                     </ul>
 
                     <div id="details-tab-content" class="tab-content padding-10">
@@ -58,16 +63,16 @@
                             @Html.Partial("/Views/Patients/Details/Measurements.cshtml")
                         </div>
                         <div class="tab-pane fade in active details" id="details">
-                           @Html.Partial("/Views/Patients/Details/Details.cshtml")
+                            @Html.Partial("/Views/Patients/Details/Details.cshtml")
                         </div>
                         <div class="tab-pane fade diagnosis" id="diagnosis">
-                           @Html.Partial("/Views/Patients/Details/Diagnosis.cshtml")
+                            @Html.Partial("/Views/Patients/Details/Diagnosis.cshtml")
                         </div>
                         <div class="tab-pane fade drugs" id="drugs">
-                           @Html.Partial("/Views/Patients/Details/Drugs.cshtml")
+                            @Html.Partial("/Views/Patients/Details/Drugs.cshtml")
                         </div>
-                        <div class="tab-pane fade stg" id="stg">     
-                           @Html.Partial("/Views/Patients/Details/STGQuestionnaire.cshtml")
+                        <div class="tab-pane fade stg" id="stg">
+                            @Html.Partial("/Views/Patients/Details/STGQuestionnaire.cshtml")
                         </div>
                         <div class="tab-pane fade ig" id="ig">
                             @Html.Partial("/Views/Patients/Details/Ig.cshtml")
@@ -77,6 +82,8 @@
                         </div>
                         <div class="tab-pane fade measurements" id="measurements">
                             @Html.Partial("/Views/Patients/Details/Measurements.cshtml")
+                        </div>
+                        <div class="tab-pane fade case-report-forms" id="pfts">
                         </div>
                         <div class="tab-pane fade" id="medical-trials">
                             @{ await Html.RenderPartialAsync("/Views/Patients/Details/_MedicalTrials.cshtml"); }

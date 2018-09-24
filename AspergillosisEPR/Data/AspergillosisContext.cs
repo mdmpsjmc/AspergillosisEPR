@@ -87,6 +87,7 @@ namespace AspergillosisEPR.Data
         public DbSet<ReportType> ReportTypes { get; set; }
         public DbSet<Report> Reports { get; set; }
         public DbSet<PatientReportItem> PatientReportItems { get; set; }
+        public DbSet<UKOutwardCode> UKOutwardCodes { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
