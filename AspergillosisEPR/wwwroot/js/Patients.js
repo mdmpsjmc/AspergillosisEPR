@@ -516,6 +516,17 @@
         });
     }
 
+    var distanceUpdate = function () {
+        $(document).off("click.distance").on("click.distance", "button#distance-update", function (e) {
+            e.preventDefault();
+            LoadingIndicator.show();
+            $.post("/postcodes/update", function (response) {
+
+                LoadingIndicator.hide();
+            });
+        });
+    };
+
 
     return {
 
@@ -578,6 +589,7 @@
             initPatientsDataTable();
             submitNewPatient();
             enableAntiForgeryProtectionWithAjax();
+            distanceUpdate();
         }
     }
 }();

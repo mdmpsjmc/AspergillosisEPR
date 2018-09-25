@@ -52,5 +52,20 @@ namespace AspergillosisEPR.Data.DatabaseSeed.SeedFiles
                 return;
             }
         }
+
+        public static void SeedPFTandHaematology(AspergillosisContext context)
+        {
+            var importer = context.DBImportTypes.Where(dbit => dbit.ImporterClass == "ManARTSPFTAndHeamatologyImporter").FirstOrDefault();
+            if (importer == null)
+            {
+                var dbImportType = new DbImportType { Name = "ManArts Import from processed and merged file (PFTs and Haemo Levels - Mike Porter)", ImporterClass = "ManARTSPFTAndHeamatologyImporter" };
+                context.DBImportTypes.Add(dbImportType);
+                context.SaveChanges();
+            }
+            else
+            {
+                return;
+            }
+        }
     }
 }

@@ -1,25 +1,34 @@
 ﻿<section class="col-xs-12 col-sm-12 col-md-6 col-lg-6" style="background-color: white; padding: 10px">
     <div id="upload-response"></div>
-        <ul id="imports" class="nav nav-tabs bordered">
-            <li class="active">
-                <a href="#single" data-toggle="tab" aria-expanded="true">
-                    <i class="fa fa-file-o"></i>&nbsp;
-                    Single File Import
-                </a>
-            </li>
-            <li>
-                <a href="#batch" data-toggle="tab">
-                    <i class="fa fa-files-o"></i>&nbsp;
-                    Clinic Letter Batch Import
-                </a>
-            </li>
-        </ul>
+    <ul id="imports" class="nav nav-tabs bordered">
+        <li class="active">
+            <a href="#single" data-toggle="tab" aria-expanded="true">
+                <i class="fa fa-file-o"></i>&nbsp;
+                Single File Import
+            </a>
+        </li>
+        <li>
+            <a href="#batch" data-toggle="tab">
+                <i class="fa fa-files-o"></i>&nbsp;
+                Clinic Letter Batch Import
+            </a>
+        </li>
+        <li>
+            <a href="#distance" data-toggle="tab">
+                <i class="fa fa-road"></i>&nbsp;
+                Patient post codes
+            </a>
+        </li>
+    </ul>
         <div id="imports-content" class="tab-content padding-10">
             <div class="tab-pane fade in active" id="single">
                 @Html.Partial("/Views/Imports/_Single.cshtml")
             </div>
             <div class="tab-pane fade" id="batch">
-               @Html.Partial("/Views/Imports/_Batch.cshtml") 
-            </div>       
+                @Html.Partial("/Views/Imports/_Batch.cshtml")
+            </div>
+            <div class="tab-pane fade" id="distance">
+                @Html.Partial("/Views/Imports/_Distance.cshtml")
+            </div>
         </div>
 </section>

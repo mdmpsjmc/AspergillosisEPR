@@ -19,6 +19,7 @@ namespace AspergillosisEPR.Models.PatientAdministrationSystem
         public string NHS_NUMBER { get; set; }
         public string DEATH_TIME { get; set; }
         public string DEATH_INDICATOR { get; set; }      
+        public string POSTCODE { get; set; }
         public string DOB { get; set; }
         [Key]
         public Guid ROWID { get; set; }

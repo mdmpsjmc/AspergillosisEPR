@@ -297,6 +297,27 @@ namespace AspergillosisEPR.Lib
             }
         }
 
+        internal void UpdatePatientsPFTs(PatientPulmonaryFunctionTest[] patientPulmonaryFunctionTest, Patient patientToUpdate)
+        {
+            foreach (var pft in patientPulmonaryFunctionTest)
+            {
+                if (pft.ID == 0)
+                {
+                    pft.PatientId = patientToUpdate.ID;
+                    _context.Update(pft);
+                }
+                else
+                {
+                    var dbPFT = patientToUpdate.PatientPulmonaryFunctionTests.SingleOrDefault(s => s.ID == pft.ID);
+                    dbPFT.ResultValue = pft.ResultValue;
+                    dbPFT.PredictedValue = pft.PredictedValue;
+                    dbPFT.DateTaken = pft.DateTaken;
+                    dbPFT.PulmonaryFunctionTestId = pft.PulmonaryFunctionTestId;
+                    _context.Update(dbPFT);
+                }
+            }
+        }
+
         internal void UpdatePatientAllergiesIntolerances(PatientAllergicIntoleranceItem[] allergies, 
                                                          Patient patientToUpdate,
                                                          HttpRequest request)

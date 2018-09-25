@@ -1,4 +1,6 @@
-﻿using AspergillosisEPR.Lib.Importers.ManARTS;
+﻿using AspergillosisEPR.Data;
+using AspergillosisEPR.Lib;
+using AspergillosisEPR.Lib.Importers.ManARTS;
 using AspergillosisEPR.Lib.Search;
 using AspergillosisEPR.Models.CaseReportForms;
 using AspergillosisEPR.Models.Patients;
@@ -43,7 +45,7 @@ namespace AspergillosisEPR.Models
         public string NhsNumber { get; set; }
         public string GenericNote { get; set; }
         public string PostCode { get; set; }
-        public string DistanceFromWythenshawe { get; set; }
+        public double DistanceFromWythenshawe { get; set; }
 
         public ICollection<PatientDiagnosis> PatientDiagnoses { get; set; }
         public ICollection<PatientDrug> PatientDrugs { get; set; }
@@ -59,6 +61,7 @@ namespace AspergillosisEPR.Models
         public ICollection<PatientAllergicIntoleranceItem> PatientAllergicIntoleranceItems { get; set; }
         public ICollection<PatientPulmonaryFunctionTest> PatientPulmonaryFunctionTests { get; set; }
         public PatientStatus PatientStatus { get; set; }
+        public ICollection<PatientHaematology> PatientHaematologies { get; set;}
            
         [Display(Name = "Full Name")]
         public string FullName
@@ -122,6 +125,23 @@ namespace AspergillosisEPR.Models
         public string Initials()
         {
             return FirstName.Substring(0, 1) + LastName.Substring(0, 1);
+        }
+
+        public Position PatientPosition(AspergillosisContext context)
+        {
+            var postcode = context.UKPostCodes.FirstOrDefault(pc => pc.Code.Equals(PostCode));
+            var position = new Position();
+            position.Latitude = postcode.Latitude;
+            position.Longitude = postcode.Longitude;
+            return position;
+        }
+
+        public void SetDistanceFromWythenshawe(AspergillosisContext context)
+        {
+       
+            var wythenshawePosition = UKOutwardCode.WythenshawePosition(context);
+
+            DistanceFromWythenshawe = new Haversine().Distance(wythenshawePosition, PatientPosition(context), DistanceType.Miles);             
         }
     }
 }

@@ -201,6 +201,7 @@ namespace AspergillosisEPR.Controllers
                                                               [Bind("ID, PatientId, DrugId, UnitOfMeasurementId, DateTaken, DateReceived, ResultValue, ComparisionCharacter")] PatientDrugLevel[] drugLevels,
                                                               [Bind("ID, SurgeryId, PatientId, SurgeryDate, Note")] PatientSurgery[] surgeries,
                                                               [Bind("ID, AllergyIntoleranceItemType, AllergyIntoleranceItemId, IntoleranceType, Severity, Note")] PatientAllergicIntoleranceItem[] allergies,
+                                                              [Bind("ID, PulmonaryFunctionTestId, Value, ResultValue, PatientId")]PatientPulmonaryFunctionTest[] pulmonaryFunctionTest,
                                                               CaseReportFormResult[] caseReportFormResult)
         {
             if (id == null)
@@ -219,7 +220,7 @@ namespace AspergillosisEPR.Controllers
             _patientManager.UpdatePatientDrugLevels(drugLevels, patientToUpdate);
             _patientManager.UpdatePatientSurgeries(surgeries, patientToUpdate);
             _patientManager.UpdatePatientAllergiesIntolerances(allergies, patientToUpdate, Request);
-
+            _patientManager.UpdatePatientsPFTs(pulmonaryFunctionTest, patientToUpdate);
             _caseReportFormManager.UpdateCaseReportFormsForPatient(caseReportFormResult, patientToUpdate);
 
             _context.Entry(patientToUpdate).State = EntityState.Modified;

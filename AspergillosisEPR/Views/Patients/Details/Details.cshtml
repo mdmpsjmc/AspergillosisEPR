@@ -21,12 +21,12 @@
                 </h1>
                 <ul class="list-unstyled">
                     <li>
-                    @if (!string.IsNullOrEmpty(Model.Patient.Gender))
-                    {
-                        <p class="text-muted">
-                            <i class="fa fa-venus-mars"></i>&nbsp;&nbsp;<span class="txt-color-darken">@(Model.Patient.Gender.ToUpper())</span>
-                        </p>
-                    }
+                        @if (!string.IsNullOrEmpty(Model.Patient.Gender))
+                        {
+                            <p class="text-muted">
+                                <i class="fa fa-venus-mars"></i>&nbsp;&nbsp;<span class="txt-color-darken">@(Model.Patient.Gender.ToUpper())</span>
+                            </p>
+                        }
                     </li>
                     <li>
                         <p class="text-muted">
@@ -48,10 +48,16 @@
                                 <i class="fa fa-bolt"></i>&nbsp;&nbsp;<span class="txt-color-darken">Death:&nbsp;@(Model.Patient.DateOfDeath.Value.ToString("dd/MMM/yyy"))</span>
                             </p>
                         </li>
-
                     }
-
-              
+                    @if (Model.Patient.DistanceFromWythenshawe != 0)
+                    {
+                        <li>
+                            <p class="text-muted">
+                                <i class="fa fa-road"></i>&nbsp;&nbsp;<span class="txt-color-darken">Distance from hospital:&nbsp;
+                                @(Math.Round(Model.Patient.DistanceFromWythenshawe, 2))</span>
+                            </p>
+                        </li>
+                    }
                 </ul>
                 <br>                
             </div>     

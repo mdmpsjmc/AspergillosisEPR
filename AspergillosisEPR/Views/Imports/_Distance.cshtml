@@ -1,0 +1,20 @@
+﻿@model AspergillosisEPR.Models.AspergillosisViewModels.BatchUploadViewModel;
+<form asp-for="@Url.Action("Update", "Postcodes")" method="POST" class="client-form smart-form" id="postcode-form">
+    <section id="widget-grid" class="">
+        <div class="row">
+            <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="min-height: 300px">
+                <div class="widget-body">
+                    <header>
+                        <i class="fa fa-road fa-2x"></i>&nbsp;Update 
+                    </header>
+
+                    <div class="col-12" style="margin: 0 auto; padding-top: 50px; padding-left: 20px">
+                        <button class="btn btn-lg btn-success" id="distance-update">
+                            <i class="fa fa-road"></i>&nbsp; Update post codes for patients
+                        </button>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </section>
+</form>

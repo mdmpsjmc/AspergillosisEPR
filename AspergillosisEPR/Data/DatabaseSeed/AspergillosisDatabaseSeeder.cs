@@ -29,12 +29,13 @@ namespace AspergillosisEPR.Data.DatabaseSeed
             ManArtsProcessedFileSeed.Seed(context);
             ManArtsProcessedFileSeed.SeedSmokingStatuses(context);
             ManArtsProcessedFileSeed.SeedDrugLevel(context);
+            ManArtsProcessedFileSeed.SeedPFTandHaematology(context);
             EPRClinicLetterDbImportTypeSeed.Seed(context);
             FoodDatabaseSeed.SeedDefaultFoods(context);
             OtherAllergicItemDatabaseSeed.SeedDefaultItems(context);
             FungiAllergicItemDatabaseSeed.SeedDefaultItems(context);
             ReportTypeSeed.Initialize(context);
-            PostcodeSeed.ReadCsvIntoDatabase(hostingEnvironment, context);
+            //PostcodeSeed.ReadCsvIntoDatabase(hostingEnvironment, context);
         }
     }
 }

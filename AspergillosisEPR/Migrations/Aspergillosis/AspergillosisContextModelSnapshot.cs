@@ -459,7 +459,7 @@ namespace AspergillosisEPR.Migrations.Aspergillosis
 
                     b.Property<DateTime?>("DateOfDeath");
 
-                    b.Property<string>("DistanceFromWythenshawe");
+                    b.Property<double>("DistanceFromWythenshawe");
 
                     b.Property<string>("FirstName")
                         .IsRequired();
@@ -664,6 +664,28 @@ namespace AspergillosisEPR.Migrations.Aspergillosis
                     b.ToTable("PatientExaminations");
 
                     b.HasDiscriminator<string>("Discriminator").HasValue("PatientExamination");
+                });
+
+            modelBuilder.Entity("AspergillosisEPR.Models.Patients.PatientHaematology", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<double>("Albumin");
+
+                    b.Property<DateTime>("DateTaken");
+
+                    b.Property<double>("Hb");
+
+                    b.Property<int>("PatientId");
+
+                    b.Property<double>("WBC");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("PatientId");
+
+                    b.ToTable("PatientHaematologies");
                 });
 
             modelBuilder.Entity("AspergillosisEPR.Models.Patients.PatientImmunoglobulin", b =>
@@ -1124,13 +1146,33 @@ namespace AspergillosisEPR.Migrations.Aspergillosis
 
                     b.Property<string>("Code");
 
-                    b.Property<decimal>("Latitude");
+                    b.Property<decimal>("Latitude")
+                        .HasColumnType("decimal(9,4)");
 
-                    b.Property<decimal>("Longitude");
+                    b.Property<decimal>("Longitude")
+                        .HasColumnType("decimal(9,4)");
 
                     b.HasKey("ID");
 
                     b.ToTable("UKOutwardCodes");
+                });
+
+            modelBuilder.Entity("AspergillosisEPR.Models.UKPostCode", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Code");
+
+                    b.Property<decimal>("Latitude")
+                        .HasColumnType("decimal(9,4)");
+
+                    b.Property<decimal>("Longitude")
+                        .HasColumnType("decimal(9,4)");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("UKPostCodes");
                 });
 
             modelBuilder.Entity("AspergillosisEPR.Models.UnitOfMeasurement", b =>
@@ -1432,6 +1474,14 @@ namespace AspergillosisEPR.Migrations.Aspergillosis
                     b.HasOne("AspergillosisEPR.Models.Patients.PatientVisit", "PatientVisit")
                         .WithMany()
                         .HasForeignKey("PatientVisitId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("AspergillosisEPR.Models.Patients.PatientHaematology", b =>
+                {
+                    b.HasOne("AspergillosisEPR.Models.Patient")
+                        .WithMany("PatientHaematologies")
+                        .HasForeignKey("PatientId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
