@@ -7,6 +7,7 @@ using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Configuration;
 using AspergillosisEPR.Lib.Importers.ClinicLetters;
 using AspergillosisEPR.Data;
+using Microsoft.AspNetCore.Hosting;
 
 namespace AspergillosisEPR.Controllers
 {
@@ -18,17 +19,20 @@ namespace AspergillosisEPR.Controllers
         private readonly string _dataDirectory;
         private readonly AspergillosisContext _context;
         private readonly PASDbContext _pasContext;
+        private readonly IHostingEnvironment _environment;
         private BatchClinicLettersImporter _importer;
 
         public ClinicLettersBatchImportController(IFileProvider fileProvider, 
                                                   AspergillosisContext context, 
                                                   PASDbContext pasContext,
+                                                  IHostingEnvironment hostingEnvironment,
                                                   IConfiguration configuration)
         {
-            _fileProvider = fileProvider;
+            _fileProvider = fileProvider;            
             _configuration = configuration;
             _context = context;
             _pasContext = pasContext;
+            _environment = hostingEnvironment;
             _dataDirectory = _configuration.GetSection("clinicLettersDirectory").Value.ToString();
         }
 
@@ -45,6 +49,14 @@ namespace AspergillosisEPR.Controllers
             _importer = new BatchClinicLettersImporter(files, _context, _pasContext);
             _importer.Import();
             return View(files);
+        }
+
+        [HttpPost, ActionName("Update")]
+        public IActionResult Update()
+        {
+            var importer = new PdfContentImporter(_configuration, _context, _environment, false);
+            importer.Run();
+            return Json(new { result = importer.Imported });
         }
     }
 }

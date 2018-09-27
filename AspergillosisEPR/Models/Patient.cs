@@ -61,6 +61,7 @@ namespace AspergillosisEPR.Models
         public ICollection<PatientAllergicIntoleranceItem> PatientAllergicIntoleranceItems { get; set; }
         public ICollection<PatientPulmonaryFunctionTest> PatientPulmonaryFunctionTests { get; set; }
         public PatientStatus PatientStatus { get; set; }
+        public PatientNACDates PatientNACDates { get; set; }
         public ICollection<PatientHaematology> PatientHaematologies { get; set;}
            
         [Display(Name = "Full Name")]
@@ -129,7 +130,10 @@ namespace AspergillosisEPR.Models
 
         public Position PatientPosition(AspergillosisContext context)
         {
-            var postcode = context.UKPostCodes.FirstOrDefault(pc => pc.Code.Equals(PostCode));
+            if (PostCode == null) return new Position();
+            var outcode = PostCode.Split(" ")[0];           
+            var postcode = context.UKOutwardCodes.FirstOrDefault(pc => pc.Code.Equals(outcode));
+            if (postcode == null) return new Position();
             var position = new Position();
             position.Latitude = postcode.Latitude;
             position.Longitude = postcode.Longitude;
@@ -138,10 +142,12 @@ namespace AspergillosisEPR.Models
 
         public void SetDistanceFromWythenshawe(AspergillosisContext context)
         {
-       
+             
             var wythenshawePosition = UKOutwardCode.WythenshawePosition(context);
+            var patientPosition = PatientPosition(context);
+            if (patientPosition.Latitude == 0 || patientPosition.Longitude == 0) return;
 
-            DistanceFromWythenshawe = new Haversine().Distance(wythenshawePosition, PatientPosition(context), DistanceType.Miles);             
+            DistanceFromWythenshawe = new Haversine().Distance(wythenshawePosition, patientPosition, DistanceType.Miles);             
         }
     }
 }

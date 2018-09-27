@@ -124,7 +124,16 @@ namespace AspergillosisEPR.Lib.Importers.Implementations
                         var dateIndex = _headers.FindIndex(h => h.Contains("DateOfTest"));
                         var dateValue = row.GetCell(dateIndex).DateCellValue;
                         meas.DateTaken = dateValue;
-                        meas.Height = Decimal.Parse(propertyValue);
+
+                        var heightIdx = _headers.FindIndex(h => h.Contains("Height"));
+                        var heightValue = row.GetCell(heightIdx)?.NumericCellValue;
+
+                        var weightIdx = _headers.FindIndex(h => h.Contains("Weight"));
+                        var weightValue = row.GetCell(weightIdx)?.NumericCellValue;
+
+                        if (heightValue != null) meas.Height = Convert.ToDecimal(heightValue);
+                        if (weightValue != null) meas.Weight = Convert.ToDecimal(weightValue);
+
                         if (patient.PatientMeasurements == null) patient.PatientMeasurements = new List<PatientMeasurement>();
                         patient.PatientMeasurements.Add(meas);
                         break;

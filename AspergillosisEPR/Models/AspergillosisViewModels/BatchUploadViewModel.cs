@@ -8,5 +8,6 @@ namespace AspergillosisEPR.Models.AspergillosisViewModels
     public class BatchUploadViewModel
     {
         public string ClinicLettersBatchDirectory { get; set; }
+        public string ClinicLettersPdfDirectory { get; set; }
     }
 }

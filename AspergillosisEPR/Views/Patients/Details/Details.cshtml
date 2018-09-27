@@ -53,8 +53,22 @@
                     {
                         <li>
                             <p class="text-muted">
-                                <i class="fa fa-road"></i>&nbsp;&nbsp;<span class="txt-color-darken">Distance from hospital:&nbsp;
-                                @(Math.Round(Model.Patient.DistanceFromWythenshawe, 2))</span>
+                                <i class="fa fa-road"></i>&nbsp;&nbsp;<span class="txt-color-darken">
+                                    Distance from hospital:&nbsp;
+                                    @(Math.Round(Model.Patient.DistanceFromWythenshawe, 2))
+                                </span>
+                            </p>
+                        </li>
+                    }
+
+                    @if (Model.Patient.PatientNACDates != null)
+                    {
+                        <li>
+                            <p class="text-muted">
+                                <i class="fa fa-user-md"></i>&nbsp;&nbsp;<span class="txt-color-darken">
+                                    First seen at NAC:&nbsp;
+                                    @(Model.Patient.PatientNACDates.FirstSeenAtNAC.ToString("dd/MM/yyyy"))
+                                </span>
                             </p>
                         </li>
                     }

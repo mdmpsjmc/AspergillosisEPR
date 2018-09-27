@@ -41,13 +41,13 @@ namespace AspergillosisEPR.BackgroundTasks
                     var pasPatient = pasContext.LpiPatientData.FirstOrDefault(p => p.RM2Number() == row.RM2Number);
                     if (pasPatient == null)
                     {
-                        _logger.LogInformation($"No database entry in PAS for patient with ID: " + row.RM2Number);
+                        _logger.LogWarning($"No database entry in PAS for patient with ID: " + row.RM2Number);
                         continue;    
                     } else
                     {
-                        _logger.LogInformation($"Running update for patient with ID: " + row.RM2Number);
+                        _logger.LogWarning($"Running update for patient with ID: " + row.RM2Number);
                         int newStatusId = pasPatient.PatientStatusId(context, _patientDeceasedStatus, _patientAliveStatus);
-                        _logger.LogInformation($"Updating status for patient with ID: " + row.RM2Number);
+                        _logger.LogWarning($"Updating status for patient with ID: " + row.RM2Number);
                         row.PatientStatusId = newStatusId;
                         try
                         {

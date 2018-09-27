@@ -32,6 +32,7 @@ namespace AspergillosisEPR.Controllers
                 patientWithoutPostCode.SetDistanceFromWythenshawe(_context);
                 _context.Update(patientWithoutPostCode);
             }
+            _context.SaveChanges();
             return RedirectToAction("New", "Imports");
         }
     }

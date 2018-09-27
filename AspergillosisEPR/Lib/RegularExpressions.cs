@@ -23,6 +23,11 @@ namespace AspergillosisEPR.Lib
             return new Regex(@"RM2\s{0,}-{0,}\s{0,}\d{1,}");
         }
 
+        public static Regex ClinicLetterRM2Number()
+        {
+            return new Regex(@"RM2\d{1,}|RM2-\d{1,}");
+        }
+
         public static Regex JustDigits()
         {
             return new Regex(@"\d{1,}");
@@ -31,6 +36,11 @@ namespace AspergillosisEPR.Lib
         public static Regex TextBetweenParentheses()
         {
             return new Regex(@"\(([^)]*)\)");
+        }
+
+        public static Regex ClinicLetterDate()
+        {
+            return new Regex(@"\bClinic date.*|Date of clinic.*", RegexOptions.IgnoreCase);
         }
     }
 }

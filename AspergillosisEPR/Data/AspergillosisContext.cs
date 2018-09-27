@@ -90,6 +90,7 @@ namespace AspergillosisEPR.Data
         public DbSet<UKOutwardCode> UKOutwardCodes { get; set; }
         public DbSet<UKPostCode> UKPostCodes { get; set; }
         public DbSet<PatientHaematology> PatientHaematologies {get; set;}
+        public DbSet<PatientNACDates> PatientNACDates { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -155,6 +156,7 @@ namespace AspergillosisEPR.Data
             modelBuilder.Entity<ReportType>().ToTable("ReportTypes");
             modelBuilder.Entity<Report>().ToTable("Reports");
             modelBuilder.Entity<PatientReportItem>().ToTable("PatientReportItems");
+            modelBuilder.Entity<PatientNACDates>().ToTable("PatientNACDates");
             modelBuilder.Entity<UKOutwardCode>()
                 .Property(p => p.Longitude)
                 .HasPrecision(9, 4);

@@ -57,6 +57,7 @@ namespace AspergillosisEPR.Controllers
             string batchClinicalLettersDir = _hostingEnvironment.ContentRootPath + _configuration.GetSection("clinicLettersDirectory").Value.ToString();
             var batchUploadVM = new BatchUploadViewModel();
             batchUploadVM.ClinicLettersBatchDirectory = batchClinicalLettersDir;
+            batchUploadVM.ClinicLettersPdfDirectory = _configuration.GetSection("DataDirectory").Value;
             PopulateDbImportTypesDropdownList();
             return View(batchUploadVM);
         }

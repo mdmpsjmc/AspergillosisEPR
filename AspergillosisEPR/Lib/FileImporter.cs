@@ -27,5 +27,14 @@ namespace AspergillosisEPR.Lib
                 }
             }
         }
+
+        public static void Import(string fullPath, Action<FileStream, string> action)
+        {
+            using (var stream = new FileStream(fullPath, FileMode.Open))
+            {
+                action(stream, fullPath);
+            }
+
+        }
     }
 }

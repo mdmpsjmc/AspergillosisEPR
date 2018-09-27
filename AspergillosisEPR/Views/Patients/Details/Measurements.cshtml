@@ -16,16 +16,18 @@
                     <th>ID</th>
                     <th>Date Taken</th>
                     <th>Weight</th>
+                    <th>Height</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach (var measurement in Model.PatientMeasurements)
                 {
-                    <tr>
-                        <td>@(measurement.ID)</td>
-                        <td>@(measurement.DateTaken.ToString("dd/MM/yyyy"))</td>
-                        <td>@(measurement.Weight != 0 ? measurement.Weight.ToString() : "not measured")</td>
-                    </tr>
+                <tr>
+                    <td>@(measurement.ID)</td>
+                    <td>@(measurement.DateTaken.ToString("dd/MM/yyyy"))</td>
+                    <td>@(measurement.Weight != 0 ? measurement.Weight.ToString() : "not measured")</td>
+                    <td>@(measurement.Height != 0 ? measurement.Height.ToString() : "not measured")</td>
+                </tr>
                 }
             </tbody>
         </table>

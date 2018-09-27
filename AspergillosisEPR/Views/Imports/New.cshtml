@@ -14,19 +14,28 @@
             </a>
         </li>
         <li>
+            <a href="#observation" data-toggle="tab">
+                <i class="fa fa-files-o"></i>&nbsp;
+                Clinic Letter Observation Points
+            </a>
+        </li>
+        <li>
             <a href="#distance" data-toggle="tab">
                 <i class="fa fa-road"></i>&nbsp;
                 Patient post codes
             </a>
         </li>
     </ul>
-        <div id="imports-content" class="tab-content padding-10">
-            <div class="tab-pane fade in active" id="single">
-                @Html.Partial("/Views/Imports/_Single.cshtml")
-            </div>
-            <div class="tab-pane fade" id="batch">
-                @Html.Partial("/Views/Imports/_Batch.cshtml")
-            </div>
+    <div id="imports-content" class="tab-content padding-10">
+        <div class="tab-pane fade in active" id="single">
+            @Html.Partial("/Views/Imports/_Single.cshtml")
+        </div>
+        <div class="tab-pane fade" id="batch">
+            @Html.Partial("/Views/Imports/_Batch.cshtml")
+        </div>
+        <div class="tab-pane fade" id="observation">
+            @Html.Partial("/Views/Imports/_Batch.cshtml")
+        </div>
             <div class="tab-pane fade" id="distance">
                 @Html.Partial("/Views/Imports/_Distance.cshtml")
             </div>
