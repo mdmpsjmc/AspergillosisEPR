@@ -10,7 +10,7 @@
 }
 @if (Model.PatientImmunoglobulines != null && Model.PatientImmunoglobulines.Any())
 {
-    @foreach (var igGroup in Model.PatientImmunoglobulines.OrderByDescending(ig => ig.DateTaken).GroupBy(ig => ig.ImmunoglobulinTypeId))
+    @foreach (var igGroup in Model.PatientImmunoglobulines.OrderByDescending(ig => ig.DateTaken).GroupBy(ig => ig.ImmunoglobulinType.Name))
     {
         <div class="col-sm-12">
             <table class="table table-bordered table-striped">
@@ -18,8 +18,11 @@
                     <tr>
                         <th>Ig Type</th>
                         <th>Date</th>
-                        <th>Sample Id</th>
-                        <th>Range</th>
+                        @if (igGroup.Equals("Total IgE"))
+                        {
+                            <th>Sample Id</th>
+                            <th>Range</th>
+                        }
                         <th>Value</th>
                     </tr>
                 </thead>
@@ -29,8 +32,11 @@
                     <tr>
                         <td>@(ig.ImmunoglobulinType.Name)</td>
                         <td>@(ig.DateTaken.ToString("dd/MM/yyyy"))</td>
-                        <td>@(ig.SampleId)</td>
-                        <td>@(ig.Range)</td>
+                        @if (ig.ImmunoglobulinType.Name.Equals("Total IgE"))
+                        {
+                            <td>@(ig.SampleId)</td>
+                            <td>@(ig.Range)</td>
+                        }
                         <td>@(ig.Value.ToString())</td>
                     </tr>
                     }
