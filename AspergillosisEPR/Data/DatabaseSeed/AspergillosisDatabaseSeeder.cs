@@ -36,6 +36,7 @@ namespace AspergillosisEPR.Data.DatabaseSeed
             FungiAllergicItemDatabaseSeed.SeedDefaultItems(context);
             ReportTypeSeed.Initialize(context);
             DLNACDatesImportTypeSeed.Seed(context);
+            EPRTotalIgEImportTypeSeed.Seed(context);
             //PostcodeSeed.ReadCsvIntoDatabase(hostingEnvironment, context);
         }
     }

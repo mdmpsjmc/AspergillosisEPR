@@ -71,6 +71,18 @@
                                 </span>
                             </p>
                         </li>
+                        @if (Model.Patient.PatientNACDates?.LastObservationPoint != null)
+                        {
+                            <li>
+                                <p class="text-muted">
+                                    <i class="fa fa-user-md"></i>&nbsp;&nbsp;<span class="txt-color-darken">
+                                        Last observation point:&nbsp;
+                                        @(Model.Patient.PatientNACDates?.LastObservationPoint.Value.ToString("dd/MM/yyyy"))
+                                    </span>
+                                </p>
+                            </li>
+                        }
+
                     }
                 </ul>
                 <br>                

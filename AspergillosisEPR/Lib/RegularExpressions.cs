@@ -40,7 +40,7 @@ namespace AspergillosisEPR.Lib
 
         public static Regex ClinicLetterDate()
         {
-            return new Regex(@"\bClinic date.*|Date of clinic.*", RegexOptions.IgnoreCase);
+            return new Regex(@"\bClinic date.*|Date of clinic.*|Date of Dictation.*", RegexOptions.IgnoreCase);
         }
     }
 }

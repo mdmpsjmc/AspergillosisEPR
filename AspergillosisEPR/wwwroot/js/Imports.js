@@ -109,7 +109,7 @@
     };
 
     var initializePdfBatchAjaxImport = function () {
-        $('#batch-observation-points-form-submit').on('click', function (e) {
+        $('button#batch-observation-points-form-submit').on('click', function (e) {
             e.preventDefault();
             $.ajax({
                 type: "POST",

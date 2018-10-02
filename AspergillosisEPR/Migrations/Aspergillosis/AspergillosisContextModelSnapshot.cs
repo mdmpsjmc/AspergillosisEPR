@@ -699,6 +699,10 @@ namespace AspergillosisEPR.Migrations.Aspergillosis
 
                     b.Property<int>("PatientId");
 
+                    b.Property<string>("Range");
+
+                    b.Property<string>("SampleId");
+
                     b.Property<decimal>("Value");
 
                     b.HasKey("ID");
@@ -772,6 +776,8 @@ namespace AspergillosisEPR.Migrations.Aspergillosis
                     b.Property<DateTime?>("DefiniteStartOfDisease");
 
                     b.Property<DateTime>("FirstSeenAtNAC");
+
+                    b.Property<DateTime?>("LastObservationPoint");
 
                     b.Property<int>("PatientId");
 

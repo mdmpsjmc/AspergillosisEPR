@@ -18,6 +18,8 @@
                     <tr>
                         <th>Ig Type</th>
                         <th>Date</th>
+                        <th>Sample Id</th>
+                        <th>Range</th>
                         <th>Value</th>
                     </tr>
                 </thead>
@@ -27,6 +29,8 @@
                     <tr>
                         <td>@(ig.ImmunoglobulinType.Name)</td>
                         <td>@(ig.DateTaken.ToString("dd/MM/yyyy"))</td>
+                        <td>@(ig.SampleId)</td>
+                        <td>@(ig.Range)</td>
                         <td>@(ig.Value.ToString())</td>
                     </tr>
                     }

@@ -25,10 +25,40 @@ namespace AspergillosisEPR.Lib.Importers.ClinicLetters
                 matches.Add(result);
                 result = result.NextMatch();
             }
-            var dates = matches.Select(m => m.ToString().Trim().Split(":").Last().TrimStart())
-                               .Select(m => DateTime.Parse(m))
+            var stringDates = matches.Select(m => m.ToString()
+                                             .Trim()
+                                             .Split(":")
+                                             .Last()
+                                             .TrimStart()
+                                             .ToString()
+                                             .Replace("Clinic date", "")
+                                             .Replace("clinic date", "")
+                                             .Replace("Date of Clinic", "")
+                                             .Replace("Date of clinic", "")
+                                             .Replace("---", "")
+                                             .Replace("tth", "")
+                                             .Replace("nd", "")
+                                             .Replace("st", "")
+                                             .Replace("rd", "")
+                                             .Replace("Augu", "Aug")
+                                             .Replace("th", "")
+                                             .Trim())
+                               .Where(e => !string.IsNullOrEmpty(e));
+           var dates = stringDates.Where(date =>
+                               {
+                                   try
+                                   {
+                                       DateTime dt; 
+                                       DateTime.TryParse(date, out dt);
+                                       return dt.Year != 1;
+                                   }
+                                   catch (Exception e)
+                                   {
+                                       return false;
+                                   }                                   
+                               })
                                .ToList();
-            return dates;
+            return dates.Select(m => DateTime.Parse(m)).ToList();
         }
 
         public string ForRM2Number()

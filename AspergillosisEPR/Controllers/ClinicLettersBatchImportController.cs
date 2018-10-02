@@ -54,7 +54,7 @@ namespace AspergillosisEPR.Controllers
         [HttpPost, ActionName("Update")]
         public IActionResult Update()
         {
-            var importer = new PdfContentImporter(_configuration, _context, _environment, false);
+            var importer = new PdfContentImporter(_configuration, _context, _environment, true);
             importer.Run();
             return Json(new { result = importer.Imported });
         }

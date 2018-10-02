@@ -54,7 +54,7 @@ namespace AspergillosisEPR.Lib.Importers.Implementations
                                        .ToList();
 
             var igType = _context.ImmunoglobulinTypes
-                                 .Where(it => it.Name == "IgG")                                 
+                                 .Where(it => it.Name == "Aspergillus F IgG")                                 
                                  .FirstOrDefault();
 
            foreach (string line in matched)
