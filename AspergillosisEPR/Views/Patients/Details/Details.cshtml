@@ -21,6 +21,11 @@
                 </h1>
                 <ul class="list-unstyled">
                     <li>
+                        <p class="text-muted">
+                            <i class="fa fa-info-circle"></i>&nbsp;&nbsp;<span class="txt-color-darken">System ID:@(Model.Patient.ID)</span>
+                        </p>
+                    </li>
+                    <li>
                         @if (!string.IsNullOrEmpty(Model.Patient.Gender))
                         {
                             <p class="text-muted">
@@ -61,23 +66,23 @@
                         </li>
                     }
 
-                    @if (Model.Patient.PatientNACDates != null)
+                    @if (Model.Patient.PatientNACDates.Count() > 0)
                     {
                         <li>
                             <p class="text-muted">
                                 <i class="fa fa-user-md"></i>&nbsp;&nbsp;<span class="txt-color-darken">
                                     First seen at NAC:&nbsp;
-                                    @(Model.Patient.PatientNACDates.FirstSeenAtNAC.ToString("dd/MM/yyyy"))
+                                    @(Model.Patient.PatientNACDates.FirstOrDefault()?.FirstSeenAtNAC.ToString("dd/MM/yyyy"))
                                 </span>
                             </p>
                         </li>
-                        @if (Model.Patient.PatientNACDates?.LastObservationPoint != null)
+                        @if (Model.Patient.PatientNACDates?.FirstOrDefault()?.LastObservationPoint != null)
                         {
                             <li>
                                 <p class="text-muted">
                                     <i class="fa fa-user-md"></i>&nbsp;&nbsp;<span class="txt-color-darken">
                                         Last observation point:&nbsp;
-                                        @(Model.Patient.PatientNACDates?.LastObservationPoint.Value.ToString("dd/MM/yyyy"))
+                                        @(Model.Patient.PatientNACDates?.FirstOrDefault()?.LastObservationPoint.Value.ToString("dd/MM/yyyy"))
                                     </span>
                                 </p>
                             </li>

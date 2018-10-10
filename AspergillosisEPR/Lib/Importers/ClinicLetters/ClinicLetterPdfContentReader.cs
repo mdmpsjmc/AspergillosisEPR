@@ -51,11 +51,15 @@ namespace AspergillosisEPR.Lib.Importers.ClinicLetters
                                           .Where(p => p.RM2Number == rm2Number)
                                           .FirstOrDefault();
                     if (patient == null) return;
-                    if (patient.PatientNACDates == null) patient.PatientNACDates = new PatientNACDates() { PatientId = patient.ID };
-                    if (patient.PatientNACDates.FirstSeenAtNAC.Year == 1) patient.PatientNACDates.FirstSeenAtNAC = dateExtractor.EarliestDate();
-                    patient.PatientNACDates.LastObservationPoint = dateExtractor.LatestDate();
+                    if (patient.PatientNACDates.Count == 0)
+                    {
+                        var nacdate = new PatientNACDates() { PatientId = patient.ID };
+                        patient.PatientNACDates = new List<PatientNACDates>() { nacdate };
+                    }
+                    if (patient.PatientNACDates.FirstOrDefault().FirstSeenAtNAC.Year == 1) patient.PatientNACDates.FirstOrDefault().FirstSeenAtNAC = dateExtractor.EarliestDate();
+                    patient.PatientNACDates.FirstOrDefault().LastObservationPoint = dateExtractor.LatestDate();
                     _context.Update(patient);
-                    _context.PatientNACDates.Update(patient.PatientNACDates);
+                    _context.PatientNACDates.UpdateRange(patient.PatientNACDates);
                     _context.SaveChanges();
                     Imported++;
                 };

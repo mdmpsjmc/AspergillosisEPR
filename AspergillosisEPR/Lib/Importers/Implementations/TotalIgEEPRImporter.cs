@@ -62,12 +62,20 @@ namespace AspergillosisEPR.Lib.Importers.Implementations
            foreach (string line in matched)
             {
                 var dataArray = line.Split(" ");
+                string range = "";
                 string dateString = dataArray.Take(3).ToList().Join(" ");
                 string igeValue = dataArray[5].Replace("*", String.Empty)
                                               .Replace("<",String.Empty)
                                               .Replace(">", String.Empty);
                 string sampleId = dataArray[4];
-                string range = dataArray[6] + dataArray[7] + dataArray[8];
+                if (dataArray.Length > 6)
+                {
+                    range = dataArray[6] + dataArray[7] + dataArray[8];
+                } else
+                {
+                    range = "("+ Regex.Match(_lines[11], @"\(([^)]*)\)").Groups[1].Value + ")";
+                    Console.WriteLine(dataArray);
+                }
                 DateTime parsedDate;
                 DateTime.TryParseExact(dateString,"dd MMM yyyy", null, System.Globalization.DateTimeStyles.None, out parsedDate);
                 if (existingDates.FindAll(d => d.Date == parsedDate.Date).ToList().Count == 0)

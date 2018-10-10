@@ -91,6 +91,8 @@ namespace AspergillosisEPR.Data
         public DbSet<UKPostCode> UKPostCodes { get; set; }
         public DbSet<PatientHaematology> PatientHaematologies {get; set;}
         public DbSet<PatientNACDates> PatientNACDates { get; set; }
+        public DbSet<TestType> TestTypes { get; set; }
+        public DbSet<PatientTestResult> PatientTestResult { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

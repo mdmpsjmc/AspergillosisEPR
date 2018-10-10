@@ -162,6 +162,16 @@ namespace AspergillosisEPR.Models.PatientViewModels
                                                     Contains(m.ID.ToString())
                                             );
                     break;
+                case "PatientNACDates":
+                    if (Field.Contains("Date"))
+                    {
+                        string dateField = Field.Split(".")[1];
+                        switch (SearchCriteria)
+                        {
+                           
+                        }
+                    }
+                    break;
             }
             
             return Predicate;
@@ -274,6 +284,38 @@ namespace AspergillosisEPR.Models.PatientViewModels
                                                     Select(p => p.PatientId.ToString()).
                                                     Contains(m.ID.ToString())
                                             );
+                    break;
+                case "PatientNACDates":
+                    if (Field.Contains("Date"))
+                    {
+                        string dateField = Field.Split(".")[1];
+                        switch (SearchCriteria)
+                        {
+                            case "GreaterThan":
+
+                                Predicate = Predicate.And(m => m.PatientNACDates.
+                                                          Where(pd => (Convert.ToDateTime(pd.GetType().GetProperty(dateField).GetValue(pd, null)).Date > Convert.ToDateTime(SearchValue).Date)).
+                                                          Select(p => p.PatientId.ToString()).
+                                                          Contains(m.ID.ToString()));
+                                break;
+                            case "SmallerThan":
+
+                                Predicate = Predicate.And(m => m.PatientNACDates.
+                                                          Where(pd => (Convert.ToDateTime(pd.GetType().GetProperty(dateField).GetValue(pd, null)).Date < Convert.ToDateTime(SearchValue).Date)).
+                                                          Select(p => p.PatientId.ToString()).
+                                                          Contains(m.ID.ToString()));
+
+
+                                break;
+                            case "Exact":
+
+                                Predicate = Predicate.And(m => m.PatientNACDates.
+                                                          Where(pd => (Convert.ToDateTime(pd.GetType().GetProperty(dateField).GetValue(pd, null)).Date == Convert.ToDateTime(SearchValue).Date)).
+                                                          Select(p => p.PatientId.ToString()).
+                                                          Contains(m.ID.ToString()));
+                                break;
+                        }
+                    }
                     break;
 
             }

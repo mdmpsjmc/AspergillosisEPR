@@ -10,6 +10,7 @@ namespace AspergillosisEPR.Migrations.Aspergillosis
                 name: "DistanceFromWythenshawe",
                 table: "Patients",
                 nullable: false,
+                defaultValue: 0,
                 oldClrType: typeof(string),
                 oldNullable: true);
         }

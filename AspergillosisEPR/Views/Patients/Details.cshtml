@@ -31,6 +31,9 @@
                             </a>
                         </li>
                         <li>
+                            <a href="/patients/@(Model.Patient.ID)/LabTests" data-toggle="tabajax" data-target="#lab"><i class="fa fa-fw fa-lg fa-flask"></i> Lab Tests</a>
+                        </li>
+                        <li>
                             <a href="#radiology" data-toggle="tab" class="exportable"><i class="fa fa-fw fa-lg fa-stethoscope"></i> Radiology</a>
                         </li>
                         <li>
@@ -82,6 +85,8 @@
                         </div>
                         <div class="tab-pane fade measurements" id="measurements">
                             @Html.Partial("/Views/Patients/Details/Measurements.cshtml")
+                        </div>
+                        <div class="tab-pane fade" id="lab">
                         </div>
                         <div class="tab-pane fade case-report-forms" id="pfts">
                         </div>

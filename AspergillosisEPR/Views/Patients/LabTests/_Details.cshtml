@@ -1,0 +1,35 @@
+﻿@model AspergillosisEPR.Models.Patient
+
+
+@if (Model.PatientTestResults.Any())
+{
+    <div class="col-sm-12">
+        <div class="table-responsive">
+           
+
+            <table class="table table-bordered table-striped">
+                <tbody>
+                    @{
+                        foreach (var group in Model.PatientTestResults.GroupBy(pt => pt.TestType.Name))
+                        {
+                            <tr><td><a href="javascript:void(0)" data-url="@Url.Action("Show", "LabTests", new { name = group.Key })" class="show-lab-test">@(group.Key)</a></td></tr>
+                        }
+                    }               
+                </tbody>
+            </table>
+        </div>
+        <div id="test-modal">
+
+        </div>
+    </div>
+}
+else
+{
+    <div class="col-sm-12">
+        <div class="alert alert-info alert-block">
+            <h4 class="alert-heading">Info!</h4>
+            <i class="fa fa-info-circle"></i>
+            This patient does not have any lab tests yet
+        </div>
+    </div>
+}

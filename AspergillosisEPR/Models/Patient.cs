@@ -61,8 +61,9 @@ namespace AspergillosisEPR.Models
         public ICollection<PatientAllergicIntoleranceItem> PatientAllergicIntoleranceItems { get; set; }
         public ICollection<PatientPulmonaryFunctionTest> PatientPulmonaryFunctionTests { get; set; }
         public PatientStatus PatientStatus { get; set; }
-        public PatientNACDates PatientNACDates { get; set; }
+        public ICollection<PatientNACDates> PatientNACDates { get; set; } = new List<PatientNACDates>();
         public ICollection<PatientHaematology> PatientHaematologies { get; set;}
+        public ICollection<PatientTestResult> PatientTestResults { get; set; }
            
         [Display(Name = "Full Name")]
         public string FullName

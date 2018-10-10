@@ -55,7 +55,7 @@ namespace AspergillosisEPR.Lib.Importers.Implementations
                     ReadCell(patient, row, nacDates, cellCursor);
                 }
             }
-            patient.PatientNACDates = nacDates;
+            patient.PatientNACDates.Add(nacDates);
             return patient;
         }
 

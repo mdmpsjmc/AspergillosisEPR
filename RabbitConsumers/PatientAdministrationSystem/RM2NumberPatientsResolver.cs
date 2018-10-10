@@ -55,7 +55,7 @@ namespace RabbitConsumers.PatientAdministrationSystem
                     if (!string.IsNullOrEmpty(lpiPatient.DEATH_TIME)) patient.DateOfDeath = DateTime.ParseExact(lpiPatient.DEATH_TIME, "yyyyMMdd", CultureInfo.InvariantCulture);
                     importedPatients.Add(patient);
                     UpdateTemporaryPatientAsImported(lpiPatient.RM2Number());
-                    if (patient.ID == 0) AddPatientDiagnosis(patient);
+                    //if (patient.ID == 0) AddPatientDiagnosis(patient);
                     _context.Patients.Update(patient);
                 }
                 _context.SaveChanges();

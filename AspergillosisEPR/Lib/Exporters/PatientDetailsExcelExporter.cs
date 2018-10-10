@@ -149,6 +149,7 @@ namespace AspergillosisEPR.Lib.Exporters
            
             var propertyName = property.Name;
             if (propertyName == "PatientId") return;
+            if (propertyName == "SampleId") return;
             if (propertyName.Contains("Id") && !propertyName.Contains("Ids") && !propertyName.StartsWith("Id"))
             {
                 var navigationPropertyName = propertyName.Replace("Id", "");

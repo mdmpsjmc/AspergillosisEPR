@@ -263,6 +263,7 @@ div#immunology-chart {
 
 div.sgrq-modal .modal-dialog,
 div.ig-chart-modal .modal-dialog,
+div#lab-test-modal .modal-dialog
 div.measurement-chart-modal .modal-dialog {
     width: 900px;
     height: 600px;
@@ -456,4 +457,8 @@ h3.form-category {
 .selectize-input {
     border: none !important;
     border-bottom: 1px dashed #E0E0E0 !important;
+}
+
+.swal2-popup {
+    font-size: 1.6rem !important;
 }

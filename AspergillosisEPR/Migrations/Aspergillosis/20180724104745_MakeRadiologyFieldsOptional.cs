@@ -8,7 +8,7 @@ namespace AspergillosisEPR.Migrations.Aspergillosis
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-          
+
             migrationBuilder.AlterColumn<int>(
                 name: "TreatmentResponseId",
                 table: "PatientRadiologyFindings",
@@ -38,52 +38,8 @@ namespace AspergillosisEPR.Migrations.Aspergillosis
                 table: "PatientRadiologyFindings",
                 nullable: true,
                 oldClrType: typeof(int));
-
-            migrationBuilder.CreateIndex(
-                name: "IX_PatientSmokingDrinkingStatuses_SmokingStatusId",
-                table: "PatientSmokingDrinkingStatuses",
-                column: "SmokingStatusId");
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_PatientRadiologyFindings_ChestDistributions_ChestDistributionId",
-                table: "PatientRadiologyFindings",
-                column: "ChestDistributionId",
-                principalTable: "ChestDistributions",
-                principalColumn: "ID",
-                onDelete: ReferentialAction.Restrict);
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_PatientRadiologyFindings_ChestLocations_ChestLocationId",
-                table: "PatientRadiologyFindings",
-                column: "ChestLocationId",
-                principalTable: "ChestLocations",
-                principalColumn: "ID",
-                onDelete: ReferentialAction.Restrict);
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_PatientRadiologyFindings_Grades_GradeId",
-                table: "PatientRadiologyFindings",
-                column: "GradeId",
-                principalTable: "Grades",
-                principalColumn: "ID",
-                onDelete: ReferentialAction.Restrict);
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_PatientRadiologyFindings_TreatmentResponses_TreatmentResponseId",
-                table: "PatientRadiologyFindings",
-                column: "TreatmentResponseId",
-                principalTable: "TreatmentResponses",
-                principalColumn: "ID",
-                onDelete: ReferentialAction.Restrict);
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_PatientSmokingDrinkingStatuses_SmokingStatuses_SmokingStatusId",
-                table: "PatientSmokingDrinkingStatuses",
-                column: "SmokingStatusId",
-                principalTable: "SmokingStatuses",
-                principalColumn: "ID",
-                onDelete: ReferentialAction.Cascade);
         }
+
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {

@@ -12,13 +12,14 @@
 {
     @foreach (var igGroup in Model.PatientImmunoglobulines.OrderByDescending(ig => ig.DateTaken).GroupBy(ig => ig.ImmunoglobulinType.Name))
     {
+        <h3>@(igGroup.Key)</h3>
         <div class="col-sm-12">
             <table class="table table-bordered table-striped">
                 <thead>
                     <tr>
                         <th>Ig Type</th>
                         <th>Date</th>
-                        @if (igGroup.Equals("Total IgE"))
+                        @if (igGroup.Key.Equals("Total IgE"))
                         {
                             <th>Sample Id</th>
                             <th>Range</th>

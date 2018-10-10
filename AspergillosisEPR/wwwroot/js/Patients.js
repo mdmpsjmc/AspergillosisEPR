@@ -229,6 +229,7 @@
                 UI.initAjaxTab();
                 $("select[multiple='multiple']").multiSelect();
                 $("select.selectize, select.select2-search").selectize();
+                showLabTests();
             });
         });
     }
@@ -527,6 +528,19 @@
         });
     };
 
+    var showLabTests = function () {
+        $(document).off("click.labtests").on("click.labtests", "a.show-lab-test", function (e) {
+            e.preventDefault();
+            LoadingIndicator.show();
+            var requestUrl = $(this).data("url");
+            $.post(requestUrl, function (responseHtml) {
+                LoadingIndicator.hide();
+                $("div#test-modal").html(responseHtml);
+                $("div#lab-test-modal").modal("show");
+            });
+        });
+    };
+
 
     return {
 
@@ -548,6 +562,7 @@
             onModalClose();
             initPatientsDateTimePickers();
             onExportOptionsShow();
+            showLabTests();
         },
 
         bindPatientsModals: function() {

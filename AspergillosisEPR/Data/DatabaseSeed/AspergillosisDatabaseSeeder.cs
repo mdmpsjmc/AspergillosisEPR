@@ -37,6 +37,9 @@ namespace AspergillosisEPR.Data.DatabaseSeed
             ReportTypeSeed.Initialize(context);
             DLNACDatesImportTypeSeed.Seed(context);
             EPRTotalIgEImportTypeSeed.Seed(context);
+            UnitOfMeasureMgLSeed.SeedOtherUnits(context);
+            TestTypeSeed.Seed(context);
+            PatientTestsResultsImportTypeSeed.CRPSeed(context);
             //PostcodeSeed.ReadCsvIntoDatabase(hostingEnvironment, context);
         }
     }

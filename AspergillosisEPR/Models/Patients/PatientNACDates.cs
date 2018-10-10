@@ -15,5 +15,15 @@ namespace AspergillosisEPR.Models.Patients
         public DateTime? LastObservationPoint { get; set; }
         public DateTime FirstSeenAtNAC { get; set; }
         public int? CPABand { get; set; }
+
+        public Dictionary<string, string> SearchableFields()
+        {
+            return new Dictionary<string, string>()
+            {//klass.Field.Select (if select present than its a dropdown)
+                { "First Seen Date", "PatientNACDates.FirstSeenAtNAC.Date" },
+                { "Last Observation Point Date", "PatientNACDates.LastObservationPoint.Date" }
+            };
+        }
+
     }
 }
