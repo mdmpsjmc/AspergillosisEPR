@@ -764,6 +764,24 @@ namespace AspergillosisEPR.Migrations.Aspergillosis
                     b.ToTable("PatientMedicalTrials");
                 });
 
+            modelBuilder.Entity("AspergillosisEPR.Models.Patients.PatientMRCScore", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<DateTime>("DateTaken");
+
+                    b.Property<int>("PatientId");
+
+                    b.Property<string>("Score");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("PatientId");
+
+                    b.ToTable("PatientMRCScores");
+                });
+
             modelBuilder.Entity("AspergillosisEPR.Models.Patients.PatientNACDates", b =>
                 {
                     b.Property<int>("ID")
@@ -1596,6 +1614,14 @@ namespace AspergillosisEPR.Migrations.Aspergillosis
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
+            modelBuilder.Entity("AspergillosisEPR.Models.Patients.PatientMRCScore", b =>
+                {
+                    b.HasOne("AspergillosisEPR.Models.Patient")
+                        .WithMany("PatientMRCScores")
+                        .HasForeignKey("PatientId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
             modelBuilder.Entity("AspergillosisEPR.Models.Patients.PatientNACDates", b =>
                 {
                     b.HasOne("AspergillosisEPR.Models.Patient")
@@ -1688,7 +1714,7 @@ namespace AspergillosisEPR.Migrations.Aspergillosis
             modelBuilder.Entity("AspergillosisEPR.Models.Patients.PatientTestResult", b =>
                 {
                     b.HasOne("AspergillosisEPR.Models.Patient", "Patient")
-                        .WithMany()
+                        .WithMany("PatientTestResults")
                         .HasForeignKey("PatientId")
                         .OnDelete(DeleteBehavior.Cascade);
 

@@ -117,7 +117,7 @@ namespace AspergillosisEPR.Lib.Importers.Implementations
             var matched = new List<string>();
             foreach (string line in _lines)
             {
-                if (firstCharacterIsNumber.IsMatch(line))
+                if (firstCharacterIsNumber.IsMatch(line) && line.Split(" ").Count() > 4)
                 {
                     matched.Add(line);
                 }

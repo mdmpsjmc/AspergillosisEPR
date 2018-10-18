@@ -47,15 +47,17 @@ namespace AspergillosisEPR.Lib.Importers.Implementations
         {
             var patient = _context.Patients.Where(p => p.RM2Number.Contains(_id))
                                            .Include(p => p.PatientImmunoglobulines) 
+                                           .ThenInclude(p => p.ImmunoglobulinType)
                                            .FirstOrDefault();
 
-            var existingDates = patient.PatientImmunoglobulines
-                                       .Select(pi => pi.DateTaken.Date)
-                                       .ToList();
-
             var igType = _context.ImmunoglobulinTypes
-                                 .Where(it => it.Name == "Aspergillus F IgG")                                 
+                                 .Where(it => it.Name == "Aspergillus F IgG")
                                  .FirstOrDefault();
+
+            var existingDates = patient.PatientImmunoglobulines
+                                       .Where(pi => pi.ImmunoglobulinTypeId == igType.ID)
+                                       .Select(pi => pi.DateTaken.Date)                                       
+                                       .ToList();
 
            foreach (string line in matched)
             {

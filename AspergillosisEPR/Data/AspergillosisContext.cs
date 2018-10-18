@@ -93,6 +93,7 @@ namespace AspergillosisEPR.Data
         public DbSet<PatientNACDates> PatientNACDates { get; set; }
         public DbSet<TestType> TestTypes { get; set; }
         public DbSet<PatientTestResult> PatientTestResult { get; set; }
+        public DbSet<PatientMRCScore> PatientMRCScores { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

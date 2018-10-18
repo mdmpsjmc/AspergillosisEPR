@@ -64,6 +64,7 @@ namespace AspergillosisEPR.Models
         public ICollection<PatientNACDates> PatientNACDates { get; set; } = new List<PatientNACDates>();
         public ICollection<PatientHaematology> PatientHaematologies { get; set;}
         public ICollection<PatientTestResult> PatientTestResults { get; set; }
+        public ICollection<PatientMRCScore> PatientMRCScores { get; set; } = new List<PatientMRCScore>();
            
         [Display(Name = "Full Name")]
         public string FullName

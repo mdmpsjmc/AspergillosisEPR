@@ -41,6 +41,7 @@ namespace AspergillosisEPR.Controllers.Patients
             var tests = _context.PatientTestResult
                                 .Where(p => p.PatientId == patientId && p.TestTypeId == testType.ID)
                                 .Include(p => p.TestType)
+                                .Include(p => p.UnitOfMeasurement)
                                 .ToList();
 
             var viewModel = new PatientWithTestResult();

@@ -22,5 +22,20 @@ namespace AspergillosisEPR.Data.DatabaseSeed.SeedFiles
             }      
         }
 
+        public static void SeedMRC(AspergillosisContext context)
+        {
+            var importer = context.DBImportTypes.Where(dbit => dbit.ImporterClass == "GAQoLMRCImporter").FirstOrDefault();
+            if (importer == null)
+            {
+                var dbImportType = new DbImportType { Name = "MRC Scores from QOL (and new weight)", ImporterClass = "GAQoLMRCImporter" };
+                context.DBImportTypes.Add(dbImportType);
+                context.SaveChanges();
+            }
+            else
+            {
+                return;
+            }
+        }
+
     }
 }

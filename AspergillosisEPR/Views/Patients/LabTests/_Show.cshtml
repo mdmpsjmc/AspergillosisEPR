@@ -24,7 +24,7 @@
                                 <tr>
                                     <td>@(testResult.DateTaken.ToString("dd/MM/yyyy"))</td>
                                     <td>@(testResult.SampleId)</td>                                   
-                                    <td>@(testResult.Value.ToString())</td>
+                                    <td>@(testResult.ResultWithUnit())</td>
                                     <td>@(testResult.Range)</td>
                                 </tr>
                             }

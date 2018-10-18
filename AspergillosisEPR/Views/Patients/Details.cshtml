@@ -34,6 +34,10 @@
                             <a href="/patients/@(Model.Patient.ID)/LabTests" data-toggle="tabajax" data-target="#lab"><i class="fa fa-fw fa-lg fa-flask"></i> Lab Tests</a>
                         </li>
                         <li>
+                            <a href="/patients/@(Model.Patient.ID)/MRCScores" data-toggle="tabajax" data-target="#mrc"><i class="fa fa-fw fa-lg fa-ambulance"></i> MRC</a>
+                        </li>
+
+                        <li>
                             <a href="#radiology" data-toggle="tab" class="exportable"><i class="fa fa-fw fa-lg fa-stethoscope"></i> Radiology</a>
                         </li>
                         <li>
@@ -88,6 +92,8 @@
                         </div>
                         <div class="tab-pane fade" id="lab">
                         </div>
+                        <div class="tab-pane fade" id="mrc">
+                        </div>
                         <div class="tab-pane fade case-report-forms" id="pfts">
                         </div>
                         <div class="tab-pane fade" id="medical-trials">
@@ -105,12 +111,12 @@
             <div class="modal-footer">
                 @if (Model.ShowButtons)
                 {
-                <a href="@Url.Action("Details", "PdfExports", new { id = Model.Patient.ID })" disabled="disabled" class="btn btn-danger export-trigger" data-file="pdf" data-id="@Model.Patient.ID" >
-                    <i class="fa fa-file-pdf-o"></i>&nbsp; PDF
-                </a>
-                <a href="@Url.Action("Details", "ExcelExports", new { id = Model.Patient.ID })" disabled="disabled" data-file="excel" class="btn btn-success export-trigger" data-id="@Model.Patient.ID">
-                    <i class="fa fa-file-excel-o"></i>&nbsp; Excel
-                </a>
+                    <a href="@Url.Action("Details", "PdfExports", new { id = Model.Patient.ID })" disabled="disabled" class="btn btn-danger export-trigger" data-file="pdf" data-id="@Model.Patient.ID">
+                        <i class="fa fa-file-pdf-o"></i>&nbsp; PDF
+                    </a>
+                    <a href="@Url.Action("Details", "ExcelExports", new { id = Model.Patient.ID })" disabled="disabled" data-file="excel" class="btn btn-success export-trigger" data-id="@Model.Patient.ID">
+                        <i class="fa fa-file-excel-o"></i>&nbsp; Excel
+                    </a>
                 }
                 <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="$('div.modal-backdrop.in').remove()">Close Window</button>
             </div>
@@ -120,6 +126,7 @@
 <img src="" class="chart-image hide" id="sgrq-chart-image" />
 <canvas id="sgrq-chart-content" width="800" height="400" class="hide"></canvas>
 <div id="ig-charts"></div>
+<div id="test-modal"></div>
 <div id="measurement-content-popup"></div>
 @Html.Partial("/Views/Patients/Charts/_SGRQ.cshtml")
 @Html.Partial("/Views/Patients/Charts/_Ig.cshtml")

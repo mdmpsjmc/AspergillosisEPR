@@ -40,6 +40,11 @@ namespace AspergillosisEPR.Data.DatabaseSeed
             UnitOfMeasureMgLSeed.SeedOtherUnits(context);
             TestTypeSeed.Seed(context);
             PatientTestsResultsImportTypeSeed.CRPSeed(context);
+            PatientTestsResultsImportTypeSeed.AlbuminSeed(context);
+            PatientTestsResultsImportTypeSeed.HbSeed(context);
+            PatientTestsResultsImportTypeSeed.WBCSeed(context);
+            PatientTestsResultsImportTypeSeed.LymphocytesSeed(context);
+            QoLExcelImportType.SeedMRC(context);
             //PostcodeSeed.ReadCsvIntoDatabase(hostingEnvironment, context);
         }
     }

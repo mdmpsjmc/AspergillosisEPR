@@ -44,6 +44,8 @@ namespace RabbitConsumers.SGRQ
                     {
                        var questionnaire = BuildPatientSTGQuestionnaire(patient, sgrq);
                        if (questionnaire == null) continue;
+                        var mrc = BuildPatientMRC(patient, sgrq);
+                        if (mrc != null) _context.PatientMRCScores.Add(mrc);
                        _context.PatientSTGQuestionnaires.Add(questionnaire);
                     }                       
                 }  
@@ -88,8 +90,26 @@ namespace RabbitConsumers.SGRQ
             catch (Exception ex)
             {
                 return null;
+            }          
+        }
+
+        private PatientMRCScore BuildPatientMRC(Patient patient, Sgrq sgrq)
+        {
+            try
+            {
+                var mrc = new PatientMRCScore()
+                {
+                    PatientId = patient.ID,
+                    Score = sgrq.mrc,
+                    DateTaken = DateTime.ParseExact(sgrq.Date, "yyyy-MM-dd", CultureInfo.InvariantCulture)
+                };
+                return mrc;
             }
-          
-        }          
+            catch (Exception ex)
+            {
+                return null;
+            }
+
+        }
     }
 }

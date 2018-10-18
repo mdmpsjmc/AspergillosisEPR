@@ -19,5 +19,10 @@ namespace AspergillosisEPR.Models.Patients
         public TestType TestType { get; set; }
         public Patient Patient { get; set; }
         public UnitOfMeasurement UnitOfMeasurement { get; set; }
+
+        public string ResultWithUnit()
+        {
+            return Value + " " + UnitOfMeasurement.Name;
+        }
     }
 }
