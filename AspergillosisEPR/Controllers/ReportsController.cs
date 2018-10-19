@@ -73,12 +73,20 @@ namespace AspergillosisEPR.Controllers
                 string webRootPath = _hostingEnvironment.WebRootPath;
                 Action<FileStream, IFormFile, string> readFileAction = (stream, formFile, extension) => {
                     var reportBuilder = new CPAMortalityAuditReportBuilder(_context, stream, formFile);
-                    reportBuilder.Build();
-                    Console.WriteLine(formFile.FileName);
-
+                    string newPath = Path.Combine(webRootPath, "Upload");
+                    string fileExtension = Path.GetExtension(file.FileName).ToLower();
+                    string fullPath = Path.Combine(newPath, file.FileName);
+                    report.InputFilePath = fullPath;
+                    reportBuilder.Build();                   
                 };
                 FileImporter.Import(file, webRootPath, readFileAction);
-                return Json(new { success = true });
+                var reportType = _context.ReportTypes
+                                     .FirstOrDefault(rt => rt.Discriminator == "CPAMortalityAudit");
+                report.ReportTypeId = reportType.ID;
+             
+                _context.Reports.Update(report);
+                _context.SaveChanges();
+                return Json(new { success = true, id = report.ID });
             } else
             {
                 var reportType = _context.ReportTypes
@@ -131,11 +139,20 @@ namespace AspergillosisEPR.Controllers
         {
             var report = _context.Reports
                                  .Where(r => r.ID == id)
+                                 .Include(r => r.ReportType)
                                  .FirstOrDefault();
-
-            var reportBuilder = new SGRQReportBuilder(_context, report);
-            var byteData = reportBuilder.Build();
-            return GetFileContentResult(byteData, ".xlsx", EXCEL_2007_CONTENT_TYPE);
+            
+            if (report.ReportType.Discriminator == "SGRQReportType")
+            {
+                var reportBuilder = new SGRQReportBuilder(_context, report);
+                return GetFileContentResult(reportBuilder.Build(), ".xlsx", EXCEL_2007_CONTENT_TYPE);
+            } else if (report.ReportType.Discriminator == "CPAMortalityAudit")
+            {
+                var stream = System.IO.File.Open(report.InputFilePath, FileMode.Open);
+                var cPAMortalityAuditReportBuilder = new CPAMortalityAuditReportBuilder(_context, stream);
+                return GetFileContentResult(cPAMortalityAuditReportBuilder.Build(), ".xlsx", EXCEL_2007_CONTENT_TYPE);
+            }
+            return null;
         }
 
         [HttpPost, ActionName("Delete")]

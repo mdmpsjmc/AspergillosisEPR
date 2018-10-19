@@ -8,11 +8,7 @@ namespace AspergillosisEPR.Migrations.Aspergillosis
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AddColumn<bool>(
-                name: "IsLocked",
-                table: "CaseReportForms",
-                nullable: false,
-                defaultValue: false);          
+                     
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

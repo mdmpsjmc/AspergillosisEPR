@@ -20,7 +20,7 @@ namespace AspergillosisEPR.Lib.Reporting
         private IFormFile _file;
         private List<string> _outputSheetNames = new List<string>()
         {
-            "Demographics",
+            "Demographics and dates",
             "Diagnoses",
             "SGRQ",
             "MRC",
@@ -44,7 +44,15 @@ namespace AspergillosisEPR.Lib.Reporting
             _file = formFile;
         }
 
-        public void Build()
+        public CPAMortalityAuditReportBuilder(AspergillosisContext context,
+                                            FileStream inputFileStream)
+        {
+            _context = context;
+            _outputWorkbook = new XSSFWorkbook();
+            _stream = inputFileStream;
+        }
+
+        public byte[] Build()
         {
             var ids = GetPatientIdentifiers();
             var patients = _context.Patients
@@ -52,22 +60,74 @@ namespace AspergillosisEPR.Lib.Reporting
                                    .OrderByDescending(p => p.LastName)
                                    .ToList();
             BuildDemographicsTab(patients);
+            return SerializeWorkbook();
         }
 
         private void BuildDemographicsTab(List<Patient> patients)
         {
             ISheet currentSheet = _outputWorkbook.CreateSheet(_outputSheetNames[0]);
+            BuildDemographicsHeaders(currentSheet);
             for(int patientCursor = 0; patientCursor < patients.Count(); patientCursor++)
             {
+                var nextToHeaderRow = patientCursor + 1;
                 var currentPatient = patients.ToList()[patientCursor];
-                var currentRow = currentSheet.CreateRow(patientCursor);
-                _context.Entry(currentPatient).Collection(p => p.PatientNACDates).Load();                
+                var currentRow = currentSheet.CreateRow(nextToHeaderRow);
+                _context.Entry(currentPatient).Collection(p => p.PatientNACDates).Load();
+                currentRow.CreateCell(0).SetCellValue(currentPatient.RM2Number);
+                currentRow.CreateCell(1).SetCellValue(currentPatient.FirstName);
+                currentRow.CreateCell(2).SetCellValue(currentPatient.LastName);
+                currentRow.CreateCell(3).SetCellValue(currentPatient.Age());
+                currentRow.CreateCell(4).SetCellValue(currentPatient.Gender);
+                currentRow.CreateCell(5).SetCellValue(currentPatient.PostCode);
+                currentRow.CreateCell(6).SetCellValue(Math.Round(currentPatient.DistanceFromWythenshawe,2).ToString() + "m");
+                var date = currentPatient.PatientNACDates.FirstOrDefault();
+                if (date != null)
+                {
+                    currentRow.CreateCell(7).SetCellValue(date.FirstSeenAtNAC.ToString("dd/MM/yyyy"));
+                    if (date.LastObservationPoint != null) currentRow.CreateCell(8).SetCellValue(date.LastObservationPoint.Value.ToString("dd/MM/yyyy"));
+                    if (date.ProbableStartOfDisease != null) currentRow.CreateCell(9).SetCellValue(date.ProbableStartOfDisease.Value.ToString("dd/MM/yyyy"));
+                    if (date.DefiniteStartOfDisease != null) currentRow.CreateCell(10).SetCellValue(date.DefiniteStartOfDisease.Value.ToString("dd/MM/yyyy"));
+                    if (date.DateOfDiagnosis != null) currentRow.CreateCell(11).SetCellValue(date.DateOfDiagnosis.Value.ToString("dd/MM/yyyy"));
+                }
+                if (currentPatient.DateOfDeath != null)
+                {
+                    currentRow.CreateCell(12).SetCellValue(currentPatient.DateOfDeath.Value.ToString("dd/MM/yyyy"));
+                }
+            }
+        }
+
+        private void BuildDemographicsHeaders(ISheet currentSheet)
+        {            
+            var headersRow = currentSheet.CreateRow(0);
+            var headers = new List<string>()
+            {
+                "RM2",
+                "Forename",
+                "Surname",
+                "Age",
+                "Sex",
+                "Postcode",
+                "DistanceFromWythenshawe",
+                "FirstSeenAtNAC", 
+                "LastObservationPoint",
+                "ProbableStartOfDisease",
+                "DefiniteStartOfDisease",
+                "DateOfDiagnosis"
+            };
+            for (int cursor = 0; cursor < headers.Count; cursor++)
+            {
+                var currentRow = currentSheet.CreateRow(0);
+                var header = headers[cursor];
+                var headerCell = currentRow.CreateCell(cursor);
+                headerCell.SetCellType(CellType.String);
+                ApplyBoldCellStyle(headerCell);
+                headerCell.SetCellValue(header);
             }
         }
 
         private List<string> GetPatientIdentifiers()
         {
-            _file.CopyTo(_stream);
+            if (_file != null) _file.CopyTo(_stream);
             _stream.Position = 0;
             _inputWorkbook = new XSSFWorkbook(_stream);
             var identifiers = new List<string>();
@@ -79,6 +139,31 @@ namespace AspergillosisEPR.Lib.Reporting
                 identifiers.Add(rm2Number);
             }
             return identifiers;
+        }
+
+        private void ApplyBoldCellStyle(ICell cell)
+        {
+            ICellStyle boldFontCellStyle = _outputWorkbook.CreateCellStyle();
+            IFont boldFont = _outputWorkbook.CreateFont();
+            boldFont.IsBold = true;
+            boldFontCellStyle.SetFont(boldFont);
+            cell.CellStyle = boldFontCellStyle;
+        }
+
+        private byte[] SerializeWorkbook()
+        {
+            NpoiMemoryStream ms = new NpoiMemoryStream();
+            using (NpoiMemoryStream tempStream = new NpoiMemoryStream())
+            {
+                tempStream.AllowClose = false;
+                _outputWorkbook.Write(tempStream);
+                tempStream.Flush();
+                tempStream.Seek(0, SeekOrigin.Begin);
+                tempStream.AllowClose = true;
+                var byteArray = tempStream.ToArray();
+                ms.Write(byteArray, 0, byteArray.Length);
+                return ms.ToArray();
+            }
         }
 
     }

@@ -19,7 +19,7 @@ namespace AspergillosisEPR.Models.Reporting
         public DateTime EndDate { get; set; }
         public int ReportTypeId { get; set; }
         public ReportType ReportType { get; set; }
-
+        public string InputFilePath { get; set; }
         public ICollection<PatientReportItem> PatientReportItems { get; set; }
         [NotMapped]
         public string PatientIds { get; set; }
