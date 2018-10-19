@@ -45,6 +45,7 @@ namespace AspergillosisEPR.Data.DatabaseSeed
             PatientTestsResultsImportTypeSeed.WBCSeed(context);
             PatientTestsResultsImportTypeSeed.LymphocytesSeed(context);
             QoLExcelImportType.SeedMRC(context);
+            ReportTypeSeed.AddCPAMortalityAudit(context);
             //PostcodeSeed.ReadCsvIntoDatabase(hostingEnvironment, context);
         }
     }

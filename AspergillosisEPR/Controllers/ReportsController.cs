@@ -14,6 +14,8 @@ using AspergillosisEPR.Lib.Reporting;
 using AspergillosisEPR.Controllers.Patients;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Http;
+using System.IO;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -64,48 +66,64 @@ namespace AspergillosisEPR.Controllers
         [HttpPost]
         public IActionResult Create([Bind("ID, StartDate, EndDate, PatientIds")]Report report)
         {
-            var reportType = _context.ReportTypes
+            if (Request.Form.Files.Count > 0 )
+            {
+                IFormFile file = Request.Form.Files[0];
+
+                string webRootPath = _hostingEnvironment.WebRootPath;
+                Action<FileStream, IFormFile, string> readFileAction = (stream, formFile, extension) => {
+                    var reportBuilder = new CPAMortalityAuditReportBuilder(_context, stream, formFile);
+                    reportBuilder.Build();
+                    Console.WriteLine(formFile.FileName);
+
+                };
+                FileImporter.Import(file, webRootPath, readFileAction);
+                return Json(new { success = true });
+            } else
+            {
+                var reportType = _context.ReportTypes
                                      .FirstOrDefault(rt => rt.Discriminator == Request.Form["ReportTypeID"]);
-            StringValues patientIds;
-            if (reportType == null)
-            {
-                return Json(new { success = false });
-            }
-            var reportItems = new List<PatientReportItem>();
-            if (!string.IsNullOrEmpty(Request.Form["PatientIds"])) patientIds = Request.Form["PatientIds"];
-            if (patientIds.ToList()[0] == "null") ModelState.AddModelError("Base", "You need to add at least one patient to this report");
-            if (patientIds.ToList()[0] != "null" && !string.IsNullOrEmpty(patientIds))
-            {
-                var idsToFind = patientIds.ToString()
-                                          .Split(",")
-                                          .Select(id => Int32.Parse(id))
-                                          .ToList();
-               
-                var patients = _context.Patients.Where(p => idsToFind.Contains(p.ID));
-                foreach(var patient in patients)
+                StringValues patientIds;
+                if (reportType == null)
                 {
-                    var patientReportItem = new PatientReportItem()
-                    {
-                        PatientId = patient.ID
-                    };
-                    reportItems.Add(patientReportItem);
+                    return Json(new { success = false });
                 }
-            }
-            report.ReportTypeId = reportType.ID;
-            report.PatientReportItems = reportItems;
+                var reportItems = new List<PatientReportItem>();
+                if (!string.IsNullOrEmpty(Request.Form["PatientIds"])) patientIds = Request.Form["PatientIds"];
+                if (patientIds.ToList()[0] == "null") ModelState.AddModelError("Base", "You need to add at least one patient to this report");
+                if (patientIds.ToList()[0] != "null" && !string.IsNullOrEmpty(patientIds))
+                {
+                    var idsToFind = patientIds.ToString()
+                                              .Split(",")
+                                              .Select(id => Int32.Parse(id))
+                                              .ToList();
 
-            if (ModelState.IsValid)
-            {
-                _context.Reports.Update(report);
-                _context.SaveChanges();
-                return Json(new { success = true, id = report.ID });
+                    var patients = _context.Patients.Where(p => idsToFind.Contains(p.ID));
+                    foreach (var patient in patients)
+                    {
+                        var patientReportItem = new PatientReportItem()
+                        {
+                            PatientId = patient.ID
+                        };
+                        reportItems.Add(patientReportItem);
+                    }
+                }
+                report.ReportTypeId = reportType.ID;
+                report.PatientReportItems = reportItems;
 
-            }
-            else
-            {
-                Hashtable errors = ModelStateHelper.Errors(ModelState);
-                return Json(new { success = false, errors });
-            }
+                if (ModelState.IsValid)
+                {
+                    _context.Reports.Update(report);
+                    _context.SaveChanges();
+                    return Json(new { success = true, id = report.ID });
+
+                }
+                else
+                {
+                    Hashtable errors = ModelStateHelper.Errors(ModelState);
+                    return Json(new { success = false, errors });
+                }
+            }            
         }
 
         [Route("generate/{id:int}")]

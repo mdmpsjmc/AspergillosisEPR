@@ -1,0 +1,12 @@
+﻿<fieldset>
+    @Html.Partial("/Views/Home/_Spinner.cshtml")
+    <section>
+        <h2>Please select report input with patient identifiers:</h2>
+        <div class="input input-file">
+            <span class="button">
+                <input id="file" type="file" name="file" onchange="$('input#reportInput').val(this.value)"> Browse
+            </span>
+            <input type="text" name="reportInput" id="reportInput" placeholder="Please select report input file" readonly="readonly">
+        </div>
+    </section>
+</fieldset>

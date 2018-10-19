@@ -113,10 +113,26 @@
     var postWizardData = function (tab, navigation, index) {
         $(".has-error").removeClass("has-error");
         $("span.help-block").html("");
+
+        var fdata = new FormData();
+        var fileUpload = $("input#file").get(0);
+        var files = fileUpload.files;
+        fdata.append(files[0].name, files[0]);
+
+        var getFormData = function () {
+            if ($("input#file").length > 0) {
+                return fdata;
+            } else {
+                return $("form#wizard-form").serialize() + "&PatientIds=" + $("select#PatientIds").val();
+            }
+        }();
+
         return $.ajax({
             url: '/Reports/Create',
             type: 'POST',
-            data: $("form#wizard-form").serialize() + "&PatientIds=" + $("select#PatientIds").val()
+            data: getFormData, 
+            contentType: false,
+            processData: false
         }).then(function (response) {
             if (response.success) {
                 $("a#show-report-link").data("report-id", response.id)

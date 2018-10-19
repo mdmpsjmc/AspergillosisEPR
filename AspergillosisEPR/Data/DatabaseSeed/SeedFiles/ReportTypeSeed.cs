@@ -37,5 +37,25 @@ namespace AspergillosisEPR.Data.DatabaseSeed.SeedFiles
             }
             context.SaveChanges();
         }
+
+
+        public static void AddCPAMortalityAudit(AspergillosisContext context)
+        {
+            var report = context.ReportTypes.Where(rt => rt.Code == "cpa-mortality-report").FirstOrDefault();
+            if (report == null)
+            {
+                var newReport = new ReportType {
+                        Name = "CPA Mortality Audit",
+                        Discriminator = "CPAMortalityAudit",
+                        Code = "cpa-mortality-report"
+                };
+                context.ReportTypes.Add(newReport);
+                context.SaveChanges();
+            }
+            else
+            {
+                return;
+            }
+        }
     }
 }
