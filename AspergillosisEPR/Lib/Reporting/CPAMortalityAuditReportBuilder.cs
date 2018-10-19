@@ -60,7 +60,47 @@ namespace AspergillosisEPR.Lib.Reporting
                                    .OrderByDescending(p => p.LastName)
                                    .ToList();
             BuildDemographicsTab(patients);
+            BuildDiagnosesTab(patients);
             return SerializeWorkbook();
+        }
+
+        private void BuildDiagnosesTab(List<Patient> patients)
+        {
+            ISheet currentSheet = _outputWorkbook.CreateSheet(_outputSheetNames[1]);
+            BuildDiagnosisHeaders(currentSheet);
+        }
+
+        private void BuildDiagnosisHeaders(ISheet currentSheet)
+        {
+            var headersRow = currentSheet.CreateRow(0);
+            var headers = new List<string>()
+            {
+                "RM2",
+                "Forename",
+                "Surname",
+                "DiagnosisName",
+                "DiagnosisNote", 
+                "IsCCPA",
+                "IsCFPA",
+                "IsAspergilloma",
+                "IsBillateral",
+                "IsRheumathoidArthritis",
+                "IsHIV",
+                "IsRenalFailure",
+                "IsDiabetes",
+                "IsScleroderma",
+                "IsGPA",
+                "IsChurgStrauss",
+                "IsSLE"
+            };
+            for (int cursor = 0; cursor < headers.Count; cursor++)
+            {
+                var header = headers[cursor];
+                var headerCell = headersRow.CreateCell(cursor);
+                headerCell.SetCellType(CellType.String);
+                ApplyBoldCellStyle(headerCell);
+                headerCell.SetCellValue(header);
+            }
         }
 
         private void BuildDemographicsTab(List<Patient> patients)
@@ -112,13 +152,13 @@ namespace AspergillosisEPR.Lib.Reporting
                 "LastObservationPoint",
                 "ProbableStartOfDisease",
                 "DefiniteStartOfDisease",
-                "DateOfDiagnosis"
+                "DateOfDiagnosis",
+                "DateOfDeath"
             };
             for (int cursor = 0; cursor < headers.Count; cursor++)
-            {
-                var currentRow = currentSheet.CreateRow(0);
+            {  
                 var header = headers[cursor];
-                var headerCell = currentRow.CreateCell(cursor);
+                var headerCell = headersRow.CreateCell(cursor);
                 headerCell.SetCellType(CellType.String);
                 ApplyBoldCellStyle(headerCell);
                 headerCell.SetCellValue(header);
