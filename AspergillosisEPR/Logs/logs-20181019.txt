@@ -15194,3 +15194,784 @@ SELECT [role].[Name]
 FROM [AspNetUserRoles] AS [userRole]
 INNER JOIN [AspNetRoles] AS [role] ON [userRole].[RoleId] = [role].[Id]
 WHERE [userRole].[UserId] = @__userId_0
+2018-10-19 13:39:21.378 +01:00 [Information] Microsoft.AspNetCore.Mvc.Formatters.Json.Internal.JsonResultExecutor: Executing JsonResult, writing value { user = ae3d1997-40b2-4607-847a-a8bc356adba0, roles = System.Collections.Generic.List`1[System.String] }.
+2018-10-19 13:39:21.378 +01:00 [Information] Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker: Executed action AspergillosisEPR.Controllers.AccountController.GetCurrentUserRolesAsync (AspergillosisEPR) in 14.3231ms
+2018-10-19 13:39:21.378 +01:00 [Information] Microsoft.AspNetCore.Hosting.Internal.WebHost: Request finished in 20.0164ms 200 application/json; charset=utf-8
+2018-10-19 13:39:21.388 +01:00 [Information] Microsoft.AspNetCore.Hosting.Internal.WebHost: Request starting HTTP/1.1 GET http://localhost:5000/Account/GetCurrentUserRolesAsync  
+2018-10-19 13:39:21.390 +01:00 [Information] Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationHandler: AuthenticationScheme: Identity.Application was successfully authenticated.
+2018-10-19 13:39:21.392 +01:00 [Information] Microsoft.AspNetCore.Authorization.DefaultAuthorizationService: Authorization was successful for user: sadmin.
+2018-10-19 13:39:21.394 +01:00 [Information] Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker: Executing action method AspergillosisEPR.Controllers.AccountController.GetCurrentUserRolesAsync (AspergillosisEPR) with arguments ((null)) - ModelState is Valid
+2018-10-19 13:39:21.396 +01:00 [Information] Microsoft.EntityFrameworkCore.Infrastructure: Entity Framework Core 2.1.0-rtm-30799 initialized 'ApplicationDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer' with options: RowNumberPaging 
+2018-10-19 13:39:21.396 +01:00 [Information] Microsoft.EntityFrameworkCore.Database.Command: Executed DbCommand (1ms) [Parameters=[@__get_Item_0='?' (Size = 450)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [e].[Id], [e].[AccessFailedCount], [e].[ConcurrencyStamp], [e].[Email], [e].[EmailConfirmed], [e].[FirstName], [e].[LastName], [e].[LockoutEnabled], [e].[LockoutEnd], [e].[NormalizedEmail], [e].[NormalizedUserName], [e].[PasswordHash], [e].[PhoneNumber], [e].[PhoneNumberConfirmed], [e].[SecurityStamp], [e].[TwoFactorEnabled], [e].[UserName]
+FROM [AspNetUsers] AS [e]
+WHERE [e].[Id] = @__get_Item_0
+2018-10-19 13:39:21.396 +01:00 [Information] Microsoft.EntityFrameworkCore.Database.Command: Executed DbCommand (0ms) [Parameters=[@__userId_0='?' (Size = 450)], CommandType='Text', CommandTimeout='30']
+SELECT [role].[Name]
+FROM [AspNetUserRoles] AS [userRole]
+INNER JOIN [AspNetRoles] AS [role] ON [userRole].[RoleId] = [role].[Id]
+WHERE [userRole].[UserId] = @__userId_0
+2018-10-19 13:39:21.396 +01:00 [Information] Microsoft.AspNetCore.Mvc.Formatters.Json.Internal.JsonResultExecutor: Executing JsonResult, writing value { user = ae3d1997-40b2-4607-847a-a8bc356adba0, roles = System.Collections.Generic.List`1[System.String] }.
+2018-10-19 13:39:21.406 +01:00 [Information] Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker: Executed action AspergillosisEPR.Controllers.AccountController.GetCurrentUserRolesAsync (AspergillosisEPR) in 13.9702ms
+2018-10-19 13:39:21.406 +01:00 [Information] Microsoft.AspNetCore.Hosting.Internal.WebHost: Request finished in 20.5372ms 200 application/json; charset=utf-8
+2018-10-19 13:39:21.406 +01:00 [Information] Microsoft.AspNetCore.Hosting.Internal.WebHost: Request starting HTTP/1.1 GET http://localhost:5000/Account/GetCurrentUserRolesAsync  
+2018-10-19 13:39:21.416 +01:00 [Information] Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationHandler: AuthenticationScheme: Identity.Application was successfully authenticated.
+2018-10-19 13:39:21.416 +01:00 [Information] Microsoft.AspNetCore.Authorization.DefaultAuthorizationService: Authorization was successful for user: sadmin.
+2018-10-19 13:39:21.416 +01:00 [Information] Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker: Executing action method AspergillosisEPR.Controllers.AccountController.GetCurrentUserRolesAsync (AspergillosisEPR) with arguments ((null)) - ModelState is Valid
+2018-10-19 13:39:21.416 +01:00 [Information] Microsoft.EntityFrameworkCore.Infrastructure: Entity Framework Core 2.1.0-rtm-30799 initialized 'ApplicationDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer' with options: RowNumberPaging 
+2018-10-19 13:39:21.416 +01:00 [Information] Microsoft.EntityFrameworkCore.Database.Command: Executed DbCommand (1ms) [Parameters=[@__get_Item_0='?' (Size = 450)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [e].[Id], [e].[AccessFailedCount], [e].[ConcurrencyStamp], [e].[Email], [e].[EmailConfirmed], [e].[FirstName], [e].[LastName], [e].[LockoutEnabled], [e].[LockoutEnd], [e].[NormalizedEmail], [e].[NormalizedUserName], [e].[PasswordHash], [e].[PhoneNumber], [e].[PhoneNumberConfirmed], [e].[SecurityStamp], [e].[TwoFactorEnabled], [e].[UserName]
+FROM [AspNetUsers] AS [e]
+WHERE [e].[Id] = @__get_Item_0
+2018-10-19 13:39:21.426 +01:00 [Information] Microsoft.EntityFrameworkCore.Database.Command: Executed DbCommand (0ms) [Parameters=[@__userId_0='?' (Size = 450)], CommandType='Text', CommandTimeout='30']
+SELECT [role].[Name]
+FROM [AspNetUserRoles] AS [userRole]
+INNER JOIN [AspNetRoles] AS [role] ON [userRole].[RoleId] = [role].[Id]
+WHERE [userRole].[UserId] = @__userId_0
+2018-10-19 13:39:21.426 +01:00 [Information] Microsoft.AspNetCore.Mvc.Formatters.Json.Internal.JsonResultExecutor: Executing JsonResult, writing value { user = ae3d1997-40b2-4607-847a-a8bc356adba0, roles = System.Collections.Generic.List`1[System.String] }.
+2018-10-19 13:39:21.426 +01:00 [Information] Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker: Executed action AspergillosisEPR.Controllers.AccountController.GetCurrentUserRolesAsync (AspergillosisEPR) in 13.8553ms
+2018-10-19 13:39:21.426 +01:00 [Information] Microsoft.AspNetCore.Hosting.Internal.WebHost: Request finished in 20.1091ms 200 application/json; charset=utf-8
+2018-10-19 13:39:21.436 +01:00 [Information] Microsoft.AspNetCore.Hosting.Internal.WebHost: Request starting HTTP/1.1 GET http://localhost:5000/Account/GetCurrentUserRolesAsync  
+2018-10-19 13:39:21.436 +01:00 [Information] Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationHandler: AuthenticationScheme: Identity.Application was successfully authenticated.
+2018-10-19 13:39:21.446 +01:00 [Information] Microsoft.AspNetCore.Authorization.DefaultAuthorizationService: Authorization was successful for user: sadmin.
+2018-10-19 13:39:21.446 +01:00 [Information] Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker: Executing action method AspergillosisEPR.Controllers.AccountController.GetCurrentUserRolesAsync (AspergillosisEPR) with arguments ((null)) - ModelState is Valid
+2018-10-19 13:39:21.446 +01:00 [Information] Microsoft.EntityFrameworkCore.Infrastructure: Entity Framework Core 2.1.0-rtm-30799 initialized 'ApplicationDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer' with options: RowNumberPaging 
+2018-10-19 13:39:21.446 +01:00 [Information] Microsoft.EntityFrameworkCore.Database.Command: Executed DbCommand (1ms) [Parameters=[@__get_Item_0='?' (Size = 450)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [e].[Id], [e].[AccessFailedCount], [e].[ConcurrencyStamp], [e].[Email], [e].[EmailConfirmed], [e].[FirstName], [e].[LastName], [e].[LockoutEnabled], [e].[LockoutEnd], [e].[NormalizedEmail], [e].[NormalizedUserName], [e].[PasswordHash], [e].[PhoneNumber], [e].[PhoneNumberConfirmed], [e].[SecurityStamp], [e].[TwoFactorEnabled], [e].[UserName]
+FROM [AspNetUsers] AS [e]
+WHERE [e].[Id] = @__get_Item_0
+2018-10-19 13:39:21.456 +01:00 [Information] Microsoft.EntityFrameworkCore.Database.Command: Executed DbCommand (0ms) [Parameters=[@__userId_0='?' (Size = 450)], CommandType='Text', CommandTimeout='30']
+SELECT [role].[Name]
+FROM [AspNetUserRoles] AS [userRole]
+INNER JOIN [AspNetRoles] AS [role] ON [userRole].[RoleId] = [role].[Id]
+WHERE [userRole].[UserId] = @__userId_0
+2018-10-19 13:39:21.456 +01:00 [Information] Microsoft.AspNetCore.Mvc.Formatters.Json.Internal.JsonResultExecutor: Executing JsonResult, writing value { user = ae3d1997-40b2-4607-847a-a8bc356adba0, roles = System.Collections.Generic.List`1[System.String] }.
+2018-10-19 13:39:21.456 +01:00 [Information] Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker: Executed action AspergillosisEPR.Controllers.AccountController.GetCurrentUserRolesAsync (AspergillosisEPR) in 14.6449ms
+2018-10-19 13:39:21.456 +01:00 [Information] Microsoft.AspNetCore.Hosting.Internal.WebHost: Request finished in 22.2915ms 200 application/json; charset=utf-8
+2018-10-19 13:39:21.466 +01:00 [Information] Microsoft.AspNetCore.Hosting.Internal.WebHost: Request starting HTTP/1.1 GET http://localhost:5000/Account/GetCurrentUserRolesAsync  
+2018-10-19 13:39:21.466 +01:00 [Information] Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationHandler: AuthenticationScheme: Identity.Application was successfully authenticated.
+2018-10-19 13:39:21.466 +01:00 [Information] Microsoft.AspNetCore.Authorization.DefaultAuthorizationService: Authorization was successful for user: sadmin.
+2018-10-19 13:39:21.476 +01:00 [Information] Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker: Executing action method AspergillosisEPR.Controllers.AccountController.GetCurrentUserRolesAsync (AspergillosisEPR) with arguments ((null)) - ModelState is Valid
+2018-10-19 13:39:21.476 +01:00 [Information] Microsoft.EntityFrameworkCore.Infrastructure: Entity Framework Core 2.1.0-rtm-30799 initialized 'ApplicationDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer' with options: RowNumberPaging 
+2018-10-19 13:39:21.476 +01:00 [Information] Microsoft.EntityFrameworkCore.Database.Command: Executed DbCommand (1ms) [Parameters=[@__get_Item_0='?' (Size = 450)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [e].[Id], [e].[AccessFailedCount], [e].[ConcurrencyStamp], [e].[Email], [e].[EmailConfirmed], [e].[FirstName], [e].[LastName], [e].[LockoutEnabled], [e].[LockoutEnd], [e].[NormalizedEmail], [e].[NormalizedUserName], [e].[PasswordHash], [e].[PhoneNumber], [e].[PhoneNumberConfirmed], [e].[SecurityStamp], [e].[TwoFactorEnabled], [e].[UserName]
+FROM [AspNetUsers] AS [e]
+WHERE [e].[Id] = @__get_Item_0
+2018-10-19 13:39:21.476 +01:00 [Information] Microsoft.EntityFrameworkCore.Database.Command: Executed DbCommand (0ms) [Parameters=[@__userId_0='?' (Size = 450)], CommandType='Text', CommandTimeout='30']
+SELECT [role].[Name]
+FROM [AspNetUserRoles] AS [userRole]
+INNER JOIN [AspNetRoles] AS [role] ON [userRole].[RoleId] = [role].[Id]
+WHERE [userRole].[UserId] = @__userId_0
+2018-10-19 13:39:21.486 +01:00 [Information] Microsoft.AspNetCore.Mvc.Formatters.Json.Internal.JsonResultExecutor: Executing JsonResult, writing value { user = ae3d1997-40b2-4607-847a-a8bc356adba0, roles = System.Collections.Generic.List`1[System.String] }.
+2018-10-19 13:39:21.486 +01:00 [Information] Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker: Executed action AspergillosisEPR.Controllers.AccountController.GetCurrentUserRolesAsync (AspergillosisEPR) in 13.5898ms
+2018-10-19 13:39:21.486 +01:00 [Information] Microsoft.AspNetCore.Hosting.Internal.WebHost: Request finished in 20.2799ms 200 application/json; charset=utf-8
+2018-10-19 13:39:21.496 +01:00 [Information] Microsoft.AspNetCore.Hosting.Internal.WebHost: Request starting HTTP/1.1 GET http://localhost:5000/Account/GetCurrentUserRolesAsync  
+2018-10-19 13:39:21.496 +01:00 [Information] Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationHandler: AuthenticationScheme: Identity.Application was successfully authenticated.
+2018-10-19 13:39:21.506 +01:00 [Information] Microsoft.AspNetCore.Authorization.DefaultAuthorizationService: Authorization was successful for user: sadmin.
+2018-10-19 13:39:21.506 +01:00 [Information] Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker: Executing action method AspergillosisEPR.Controllers.AccountController.GetCurrentUserRolesAsync (AspergillosisEPR) with arguments ((null)) - ModelState is Valid
+2018-10-19 13:39:21.506 +01:00 [Information] Microsoft.EntityFrameworkCore.Infrastructure: Entity Framework Core 2.1.0-rtm-30799 initialized 'ApplicationDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer' with options: RowNumberPaging 
+2018-10-19 13:39:21.506 +01:00 [Information] Microsoft.EntityFrameworkCore.Database.Command: Executed DbCommand (1ms) [Parameters=[@__get_Item_0='?' (Size = 450)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [e].[Id], [e].[AccessFailedCount], [e].[ConcurrencyStamp], [e].[Email], [e].[EmailConfirmed], [e].[FirstName], [e].[LastName], [e].[LockoutEnabled], [e].[LockoutEnd], [e].[NormalizedEmail], [e].[NormalizedUserName], [e].[PasswordHash], [e].[PhoneNumber], [e].[PhoneNumberConfirmed], [e].[SecurityStamp], [e].[TwoFactorEnabled], [e].[UserName]
+FROM [AspNetUsers] AS [e]
+WHERE [e].[Id] = @__get_Item_0
+2018-10-19 13:39:21.516 +01:00 [Information] Microsoft.EntityFrameworkCore.Database.Command: Executed DbCommand (2ms) [Parameters=[@__userId_0='?' (Size = 450)], CommandType='Text', CommandTimeout='30']
+SELECT [role].[Name]
+FROM [AspNetUserRoles] AS [userRole]
+INNER JOIN [AspNetRoles] AS [role] ON [userRole].[RoleId] = [role].[Id]
+WHERE [userRole].[UserId] = @__userId_0
+2018-10-19 13:39:21.526 +01:00 [Information] Microsoft.AspNetCore.Mvc.Formatters.Json.Internal.JsonResultExecutor: Executing JsonResult, writing value { user = ae3d1997-40b2-4607-847a-a8bc356adba0, roles = System.Collections.Generic.List`1[System.String] }.
+2018-10-19 13:39:21.526 +01:00 [Information] Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker: Executed action AspergillosisEPR.Controllers.AccountController.GetCurrentUserRolesAsync (AspergillosisEPR) in 29.2004ms
+2018-10-19 13:39:21.556 +01:00 [Information] Microsoft.AspNetCore.Hosting.Internal.WebHost: Request finished in 41.0863ms 200 application/json; charset=utf-8
+2018-10-19 13:39:21.556 +01:00 [Information] Microsoft.AspNetCore.Hosting.Internal.WebHost: Request starting HTTP/1.1 GET http://localhost:5000/Account/GetCurrentUserRolesAsync  
+2018-10-19 13:39:21.566 +01:00 [Information] Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationHandler: AuthenticationScheme: Identity.Application was successfully authenticated.
+2018-10-19 13:39:21.566 +01:00 [Information] Microsoft.AspNetCore.Authorization.DefaultAuthorizationService: Authorization was successful for user: sadmin.
+2018-10-19 13:39:21.576 +01:00 [Information] Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker: Executing action method AspergillosisEPR.Controllers.AccountController.GetCurrentUserRolesAsync (AspergillosisEPR) with arguments ((null)) - ModelState is Valid
+2018-10-19 13:39:21.576 +01:00 [Information] Microsoft.EntityFrameworkCore.Infrastructure: Entity Framework Core 2.1.0-rtm-30799 initialized 'ApplicationDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer' with options: RowNumberPaging 
+2018-10-19 13:39:21.586 +01:00 [Information] Microsoft.EntityFrameworkCore.Database.Command: Executed DbCommand (1ms) [Parameters=[@__get_Item_0='?' (Size = 450)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [e].[Id], [e].[AccessFailedCount], [e].[ConcurrencyStamp], [e].[Email], [e].[EmailConfirmed], [e].[FirstName], [e].[LastName], [e].[LockoutEnabled], [e].[LockoutEnd], [e].[NormalizedEmail], [e].[NormalizedUserName], [e].[PasswordHash], [e].[PhoneNumber], [e].[PhoneNumberConfirmed], [e].[SecurityStamp], [e].[TwoFactorEnabled], [e].[UserName]
+FROM [AspNetUsers] AS [e]
+WHERE [e].[Id] = @__get_Item_0
+2018-10-19 13:39:21.586 +01:00 [Information] Microsoft.EntityFrameworkCore.Database.Command: Executed DbCommand (1ms) [Parameters=[@__userId_0='?' (Size = 450)], CommandType='Text', CommandTimeout='30']
+SELECT [role].[Name]
+FROM [AspNetUserRoles] AS [userRole]
+INNER JOIN [AspNetRoles] AS [role] ON [userRole].[RoleId] = [role].[Id]
+WHERE [userRole].[UserId] = @__userId_0
+2018-10-19 13:39:21.596 +01:00 [Information] Microsoft.AspNetCore.Mvc.Formatters.Json.Internal.JsonResultExecutor: Executing JsonResult, writing value { user = ae3d1997-40b2-4607-847a-a8bc356adba0, roles = System.Collections.Generic.List`1[System.String] }.
+2018-10-19 13:39:21.596 +01:00 [Information] Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker: Executed action AspergillosisEPR.Controllers.AccountController.GetCurrentUserRolesAsync (AspergillosisEPR) in 27.4508ms
+2018-10-19 13:39:21.596 +01:00 [Information] Microsoft.AspNetCore.Hosting.Internal.WebHost: Request finished in 41.666ms 200 application/json; charset=utf-8
+2018-10-19 13:39:21.606 +01:00 [Information] Microsoft.AspNetCore.Hosting.Internal.WebHost: Request starting HTTP/1.1 GET http://localhost:5000/Account/GetCurrentUserRolesAsync  
+2018-10-19 13:39:21.606 +01:00 [Information] Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationHandler: AuthenticationScheme: Identity.Application was successfully authenticated.
+2018-10-19 13:39:21.616 +01:00 [Information] Microsoft.AspNetCore.Authorization.DefaultAuthorizationService: Authorization was successful for user: sadmin.
+2018-10-19 13:39:21.616 +01:00 [Information] Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker: Executing action method AspergillosisEPR.Controllers.AccountController.GetCurrentUserRolesAsync (AspergillosisEPR) with arguments ((null)) - ModelState is Valid
+2018-10-19 13:39:21.616 +01:00 [Information] Microsoft.EntityFrameworkCore.Infrastructure: Entity Framework Core 2.1.0-rtm-30799 initialized 'ApplicationDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer' with options: RowNumberPaging 
+2018-10-19 13:39:21.616 +01:00 [Information] Microsoft.EntityFrameworkCore.Database.Command: Executed DbCommand (1ms) [Parameters=[@__get_Item_0='?' (Size = 450)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [e].[Id], [e].[AccessFailedCount], [e].[ConcurrencyStamp], [e].[Email], [e].[EmailConfirmed], [e].[FirstName], [e].[LastName], [e].[LockoutEnabled], [e].[LockoutEnd], [e].[NormalizedEmail], [e].[NormalizedUserName], [e].[PasswordHash], [e].[PhoneNumber], [e].[PhoneNumberConfirmed], [e].[SecurityStamp], [e].[TwoFactorEnabled], [e].[UserName]
+FROM [AspNetUsers] AS [e]
+WHERE [e].[Id] = @__get_Item_0
+2018-10-19 13:39:21.626 +01:00 [Information] Microsoft.EntityFrameworkCore.Database.Command: Executed DbCommand (1ms) [Parameters=[@__userId_0='?' (Size = 450)], CommandType='Text', CommandTimeout='30']
+SELECT [role].[Name]
+FROM [AspNetUserRoles] AS [userRole]
+INNER JOIN [AspNetRoles] AS [role] ON [userRole].[RoleId] = [role].[Id]
+WHERE [userRole].[UserId] = @__userId_0
+2018-10-19 13:39:21.626 +01:00 [Information] Microsoft.AspNetCore.Mvc.Formatters.Json.Internal.JsonResultExecutor: Executing JsonResult, writing value { user = ae3d1997-40b2-4607-847a-a8bc356adba0, roles = System.Collections.Generic.List`1[System.String] }.
+2018-10-19 13:39:21.626 +01:00 [Information] Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker: Executed action AspergillosisEPR.Controllers.AccountController.GetCurrentUserRolesAsync (AspergillosisEPR) in 15.1349ms
+2018-10-19 13:39:21.626 +01:00 [Information] Microsoft.AspNetCore.Hosting.Internal.WebHost: Request finished in 26.1023ms 200 application/json; charset=utf-8
+2018-10-19 13:39:21.636 +01:00 [Information] Microsoft.AspNetCore.Hosting.Internal.WebHost: Request starting HTTP/1.1 GET http://localhost:5000/Account/GetCurrentUserRolesAsync  
+2018-10-19 13:39:21.636 +01:00 [Information] Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationHandler: AuthenticationScheme: Identity.Application was successfully authenticated.
+2018-10-19 13:39:21.646 +01:00 [Information] Microsoft.AspNetCore.Authorization.DefaultAuthorizationService: Authorization was successful for user: sadmin.
+2018-10-19 13:39:21.646 +01:00 [Information] Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker: Executing action method AspergillosisEPR.Controllers.AccountController.GetCurrentUserRolesAsync (AspergillosisEPR) with arguments ((null)) - ModelState is Valid
+2018-10-19 13:39:21.646 +01:00 [Information] Microsoft.EntityFrameworkCore.Infrastructure: Entity Framework Core 2.1.0-rtm-30799 initialized 'ApplicationDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer' with options: RowNumberPaging 
+2018-10-19 13:39:21.656 +01:00 [Information] Microsoft.EntityFrameworkCore.Database.Command: Executed DbCommand (1ms) [Parameters=[@__get_Item_0='?' (Size = 450)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [e].[Id], [e].[AccessFailedCount], [e].[ConcurrencyStamp], [e].[Email], [e].[EmailConfirmed], [e].[FirstName], [e].[LastName], [e].[LockoutEnabled], [e].[LockoutEnd], [e].[NormalizedEmail], [e].[NormalizedUserName], [e].[PasswordHash], [e].[PhoneNumber], [e].[PhoneNumberConfirmed], [e].[SecurityStamp], [e].[TwoFactorEnabled], [e].[UserName]
+FROM [AspNetUsers] AS [e]
+WHERE [e].[Id] = @__get_Item_0
+2018-10-19 13:39:21.656 +01:00 [Information] Microsoft.EntityFrameworkCore.Database.Command: Executed DbCommand (1ms) [Parameters=[@__userId_0='?' (Size = 450)], CommandType='Text', CommandTimeout='30']
+SELECT [role].[Name]
+FROM [AspNetUserRoles] AS [userRole]
+INNER JOIN [AspNetRoles] AS [role] ON [userRole].[RoleId] = [role].[Id]
+WHERE [userRole].[UserId] = @__userId_0
+2018-10-19 13:39:21.656 +01:00 [Information] Microsoft.AspNetCore.Mvc.Formatters.Json.Internal.JsonResultExecutor: Executing JsonResult, writing value { user = ae3d1997-40b2-4607-847a-a8bc356adba0, roles = System.Collections.Generic.List`1[System.String] }.
+2018-10-19 13:39:21.656 +01:00 [Information] Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker: Executed action AspergillosisEPR.Controllers.AccountController.GetCurrentUserRolesAsync (AspergillosisEPR) in 17.7175ms
+2018-10-19 13:39:21.667 +01:00 [Information] Microsoft.AspNetCore.Hosting.Internal.WebHost: Request finished in 28.0543ms 200 application/json; charset=utf-8
+2018-10-19 13:39:21.667 +01:00 [Information] Microsoft.AspNetCore.Hosting.Internal.WebHost: Request starting HTTP/1.1 GET http://localhost:5000/Account/GetCurrentUserRolesAsync  
+2018-10-19 13:39:21.677 +01:00 [Information] Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationHandler: AuthenticationScheme: Identity.Application was successfully authenticated.
+2018-10-19 13:39:21.677 +01:00 [Information] Microsoft.AspNetCore.Authorization.DefaultAuthorizationService: Authorization was successful for user: sadmin.
+2018-10-19 13:39:21.677 +01:00 [Information] Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker: Executing action method AspergillosisEPR.Controllers.AccountController.GetCurrentUserRolesAsync (AspergillosisEPR) with arguments ((null)) - ModelState is Valid
+2018-10-19 13:39:21.677 +01:00 [Information] Microsoft.EntityFrameworkCore.Infrastructure: Entity Framework Core 2.1.0-rtm-30799 initialized 'ApplicationDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer' with options: RowNumberPaging 
+2018-10-19 13:39:21.687 +01:00 [Information] Microsoft.EntityFrameworkCore.Database.Command: Executed DbCommand (1ms) [Parameters=[@__get_Item_0='?' (Size = 450)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [e].[Id], [e].[AccessFailedCount], [e].[ConcurrencyStamp], [e].[Email], [e].[EmailConfirmed], [e].[FirstName], [e].[LastName], [e].[LockoutEnabled], [e].[LockoutEnd], [e].[NormalizedEmail], [e].[NormalizedUserName], [e].[PasswordHash], [e].[PhoneNumber], [e].[PhoneNumberConfirmed], [e].[SecurityStamp], [e].[TwoFactorEnabled], [e].[UserName]
+FROM [AspNetUsers] AS [e]
+WHERE [e].[Id] = @__get_Item_0
+2018-10-19 13:39:21.687 +01:00 [Information] Microsoft.EntityFrameworkCore.Database.Command: Executed DbCommand (1ms) [Parameters=[@__userId_0='?' (Size = 450)], CommandType='Text', CommandTimeout='30']
+SELECT [role].[Name]
+FROM [AspNetUserRoles] AS [userRole]
+INNER JOIN [AspNetRoles] AS [role] ON [userRole].[RoleId] = [role].[Id]
+WHERE [userRole].[UserId] = @__userId_0
+2018-10-19 13:39:21.687 +01:00 [Information] Microsoft.AspNetCore.Mvc.Formatters.Json.Internal.JsonResultExecutor: Executing JsonResult, writing value { user = ae3d1997-40b2-4607-847a-a8bc356adba0, roles = System.Collections.Generic.List`1[System.String] }.
+2018-10-19 13:39:21.687 +01:00 [Information] Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker: Executed action AspergillosisEPR.Controllers.AccountController.GetCurrentUserRolesAsync (AspergillosisEPR) in 15.211ms
+2018-10-19 13:39:21.697 +01:00 [Information] Microsoft.AspNetCore.Hosting.Internal.WebHost: Request finished in 23.9256ms 200 application/json; charset=utf-8
+2018-10-19 13:39:21.697 +01:00 [Information] Microsoft.AspNetCore.Hosting.Internal.WebHost: Request starting HTTP/1.1 GET http://localhost:5000/Account/GetCurrentUserRolesAsync  
+2018-10-19 13:39:21.707 +01:00 [Information] Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationHandler: AuthenticationScheme: Identity.Application was successfully authenticated.
+2018-10-19 13:39:21.707 +01:00 [Information] Microsoft.AspNetCore.Authorization.DefaultAuthorizationService: Authorization was successful for user: sadmin.
+2018-10-19 13:39:21.707 +01:00 [Information] Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker: Executing action method AspergillosisEPR.Controllers.AccountController.GetCurrentUserRolesAsync (AspergillosisEPR) with arguments ((null)) - ModelState is Valid
+2018-10-19 13:39:21.717 +01:00 [Information] Microsoft.EntityFrameworkCore.Infrastructure: Entity Framework Core 2.1.0-rtm-30799 initialized 'ApplicationDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer' with options: RowNumberPaging 
+2018-10-19 13:39:21.717 +01:00 [Information] Microsoft.EntityFrameworkCore.Database.Command: Executed DbCommand (1ms) [Parameters=[@__get_Item_0='?' (Size = 450)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [e].[Id], [e].[AccessFailedCount], [e].[ConcurrencyStamp], [e].[Email], [e].[EmailConfirmed], [e].[FirstName], [e].[LastName], [e].[LockoutEnabled], [e].[LockoutEnd], [e].[NormalizedEmail], [e].[NormalizedUserName], [e].[PasswordHash], [e].[PhoneNumber], [e].[PhoneNumberConfirmed], [e].[SecurityStamp], [e].[TwoFactorEnabled], [e].[UserName]
+FROM [AspNetUsers] AS [e]
+WHERE [e].[Id] = @__get_Item_0
+2018-10-19 13:39:21.717 +01:00 [Information] Microsoft.EntityFrameworkCore.Database.Command: Executed DbCommand (1ms) [Parameters=[@__userId_0='?' (Size = 450)], CommandType='Text', CommandTimeout='30']
+SELECT [role].[Name]
+FROM [AspNetUserRoles] AS [userRole]
+INNER JOIN [AspNetRoles] AS [role] ON [userRole].[RoleId] = [role].[Id]
+WHERE [userRole].[UserId] = @__userId_0
+2018-10-19 13:39:21.727 +01:00 [Information] Microsoft.AspNetCore.Mvc.Formatters.Json.Internal.JsonResultExecutor: Executing JsonResult, writing value { user = ae3d1997-40b2-4607-847a-a8bc356adba0, roles = System.Collections.Generic.List`1[System.String] }.
+2018-10-19 13:39:21.727 +01:00 [Information] Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker: Executed action AspergillosisEPR.Controllers.AccountController.GetCurrentUserRolesAsync (AspergillosisEPR) in 17.1335ms
+2018-10-19 13:39:21.727 +01:00 [Information] Microsoft.AspNetCore.Hosting.Internal.WebHost: Request finished in 28.0046ms 200 application/json; charset=utf-8
+2018-10-19 13:39:21.737 +01:00 [Information] Microsoft.AspNetCore.Hosting.Internal.WebHost: Request starting HTTP/1.1 GET http://localhost:5000/Account/GetCurrentUserRolesAsync  
+2018-10-19 13:39:21.737 +01:00 [Information] Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationHandler: AuthenticationScheme: Identity.Application was successfully authenticated.
+2018-10-19 13:39:21.737 +01:00 [Information] Microsoft.AspNetCore.Authorization.DefaultAuthorizationService: Authorization was successful for user: sadmin.
+2018-10-19 13:39:21.748 +01:00 [Information] Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker: Executing action method AspergillosisEPR.Controllers.AccountController.GetCurrentUserRolesAsync (AspergillosisEPR) with arguments ((null)) - ModelState is Valid
+2018-10-19 13:39:21.749 +01:00 [Information] Microsoft.EntityFrameworkCore.Infrastructure: Entity Framework Core 2.1.0-rtm-30799 initialized 'ApplicationDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer' with options: RowNumberPaging 
+2018-10-19 13:39:21.749 +01:00 [Information] Microsoft.EntityFrameworkCore.Database.Command: Executed DbCommand (1ms) [Parameters=[@__get_Item_0='?' (Size = 450)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [e].[Id], [e].[AccessFailedCount], [e].[ConcurrencyStamp], [e].[Email], [e].[EmailConfirmed], [e].[FirstName], [e].[LastName], [e].[LockoutEnabled], [e].[LockoutEnd], [e].[NormalizedEmail], [e].[NormalizedUserName], [e].[PasswordHash], [e].[PhoneNumber], [e].[PhoneNumberConfirmed], [e].[SecurityStamp], [e].[TwoFactorEnabled], [e].[UserName]
+FROM [AspNetUsers] AS [e]
+WHERE [e].[Id] = @__get_Item_0
+2018-10-19 13:39:21.749 +01:00 [Information] Microsoft.EntityFrameworkCore.Database.Command: Executed DbCommand (1ms) [Parameters=[@__userId_0='?' (Size = 450)], CommandType='Text', CommandTimeout='30']
+SELECT [role].[Name]
+FROM [AspNetUserRoles] AS [userRole]
+INNER JOIN [AspNetRoles] AS [role] ON [userRole].[RoleId] = [role].[Id]
+WHERE [userRole].[UserId] = @__userId_0
+2018-10-19 13:39:21.759 +01:00 [Information] Microsoft.AspNetCore.Mvc.Formatters.Json.Internal.JsonResultExecutor: Executing JsonResult, writing value { user = ae3d1997-40b2-4607-847a-a8bc356adba0, roles = System.Collections.Generic.List`1[System.String] }.
+2018-10-19 13:39:21.759 +01:00 [Information] Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker: Executed action AspergillosisEPR.Controllers.AccountController.GetCurrentUserRolesAsync (AspergillosisEPR) in 16.0446ms
+2018-10-19 13:39:21.759 +01:00 [Information] Microsoft.AspNetCore.Hosting.Internal.WebHost: Request finished in 27.0025ms 200 application/json; charset=utf-8
+2018-10-19 13:39:21.769 +01:00 [Information] Microsoft.AspNetCore.Hosting.Internal.WebHost: Request starting HTTP/1.1 GET http://localhost:5000/Account/GetCurrentUserRolesAsync  
+2018-10-19 13:39:21.769 +01:00 [Information] Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationHandler: AuthenticationScheme: Identity.Application was successfully authenticated.
+2018-10-19 13:39:21.769 +01:00 [Information] Microsoft.AspNetCore.Authorization.DefaultAuthorizationService: Authorization was successful for user: sadmin.
+2018-10-19 13:39:21.769 +01:00 [Information] Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker: Executing action method AspergillosisEPR.Controllers.AccountController.GetCurrentUserRolesAsync (AspergillosisEPR) with arguments ((null)) - ModelState is Valid
+2018-10-19 13:39:21.769 +01:00 [Information] Microsoft.EntityFrameworkCore.Infrastructure: Entity Framework Core 2.1.0-rtm-30799 initialized 'ApplicationDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer' with options: RowNumberPaging 
+2018-10-19 13:39:21.779 +01:00 [Information] Microsoft.EntityFrameworkCore.Database.Command: Executed DbCommand (1ms) [Parameters=[@__get_Item_0='?' (Size = 450)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [e].[Id], [e].[AccessFailedCount], [e].[ConcurrencyStamp], [e].[Email], [e].[EmailConfirmed], [e].[FirstName], [e].[LastName], [e].[LockoutEnabled], [e].[LockoutEnd], [e].[NormalizedEmail], [e].[NormalizedUserName], [e].[PasswordHash], [e].[PhoneNumber], [e].[PhoneNumberConfirmed], [e].[SecurityStamp], [e].[TwoFactorEnabled], [e].[UserName]
+FROM [AspNetUsers] AS [e]
+WHERE [e].[Id] = @__get_Item_0
+2018-10-19 13:39:21.779 +01:00 [Information] Microsoft.EntityFrameworkCore.Database.Command: Executed DbCommand (0ms) [Parameters=[@__userId_0='?' (Size = 450)], CommandType='Text', CommandTimeout='30']
+SELECT [role].[Name]
+FROM [AspNetUserRoles] AS [userRole]
+INNER JOIN [AspNetRoles] AS [role] ON [userRole].[RoleId] = [role].[Id]
+WHERE [userRole].[UserId] = @__userId_0
+2018-10-19 13:39:21.779 +01:00 [Information] Microsoft.AspNetCore.Mvc.Formatters.Json.Internal.JsonResultExecutor: Executing JsonResult, writing value { user = ae3d1997-40b2-4607-847a-a8bc356adba0, roles = System.Collections.Generic.List`1[System.String] }.
+2018-10-19 13:39:21.779 +01:00 [Information] Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker: Executed action AspergillosisEPR.Controllers.AccountController.GetCurrentUserRolesAsync (AspergillosisEPR) in 14.2777ms
+2018-10-19 13:39:21.789 +01:00 [Information] Microsoft.AspNetCore.Hosting.Internal.WebHost: Request finished in 21.3595ms 200 application/json; charset=utf-8
+2018-10-19 13:39:21.789 +01:00 [Information] Microsoft.AspNetCore.Hosting.Internal.WebHost: Request starting HTTP/1.1 GET http://localhost:5000/Account/GetCurrentUserRolesAsync  
+2018-10-19 13:39:21.789 +01:00 [Information] Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationHandler: AuthenticationScheme: Identity.Application was successfully authenticated.
+2018-10-19 13:39:22.028 +01:00 [Information] Microsoft.AspNetCore.Authorization.DefaultAuthorizationService: Authorization was successful for user: sadmin.
+2018-10-19 13:39:22.069 +01:00 [Information] Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker: Executing action method AspergillosisEPR.Controllers.AccountController.GetCurrentUserRolesAsync (AspergillosisEPR) with arguments ((null)) - ModelState is Valid
+2018-10-19 13:39:22.074 +01:00 [Information] Microsoft.EntityFrameworkCore.Infrastructure: Entity Framework Core 2.1.0-rtm-30799 initialized 'ApplicationDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer' with options: RowNumberPaging 
+2018-10-19 13:39:22.086 +01:00 [Information] Microsoft.EntityFrameworkCore.Database.Command: Executed DbCommand (5ms) [Parameters=[@__get_Item_0='?' (Size = 450)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [e].[Id], [e].[AccessFailedCount], [e].[ConcurrencyStamp], [e].[Email], [e].[EmailConfirmed], [e].[FirstName], [e].[LastName], [e].[LockoutEnabled], [e].[LockoutEnd], [e].[NormalizedEmail], [e].[NormalizedUserName], [e].[PasswordHash], [e].[PhoneNumber], [e].[PhoneNumberConfirmed], [e].[SecurityStamp], [e].[TwoFactorEnabled], [e].[UserName]
+FROM [AspNetUsers] AS [e]
+WHERE [e].[Id] = @__get_Item_0
+2018-10-19 13:39:22.091 +01:00 [Information] Microsoft.EntityFrameworkCore.Database.Command: Executed DbCommand (1ms) [Parameters=[@__userId_0='?' (Size = 450)], CommandType='Text', CommandTimeout='30']
+SELECT [role].[Name]
+FROM [AspNetUserRoles] AS [userRole]
+INNER JOIN [AspNetRoles] AS [role] ON [userRole].[RoleId] = [role].[Id]
+WHERE [userRole].[UserId] = @__userId_0
+2018-10-19 13:39:22.093 +01:00 [Information] Microsoft.AspNetCore.Mvc.Formatters.Json.Internal.JsonResultExecutor: Executing JsonResult, writing value { user = ae3d1997-40b2-4607-847a-a8bc356adba0, roles = System.Collections.Generic.List`1[System.String] }.
+2018-10-19 13:39:22.095 +01:00 [Information] Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker: Executed action AspergillosisEPR.Controllers.AccountController.GetCurrentUserRolesAsync (AspergillosisEPR) in 295.9266ms
+2018-10-19 13:39:22.097 +01:00 [Information] Microsoft.AspNetCore.Hosting.Internal.WebHost: Request finished in 302.435ms 200 application/json; charset=utf-8
+2018-10-19 13:39:22.103 +01:00 [Information] Microsoft.AspNetCore.Hosting.Internal.WebHost: Request starting HTTP/1.1 GET http://localhost:5000/Account/GetCurrentUserRolesAsync  
+2018-10-19 13:39:22.105 +01:00 [Information] Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationHandler: AuthenticationScheme: Identity.Application was successfully authenticated.
+2018-10-19 13:39:22.106 +01:00 [Information] Microsoft.AspNetCore.Authorization.DefaultAuthorizationService: Authorization was successful for user: sadmin.
+2018-10-19 13:39:22.108 +01:00 [Information] Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker: Executing action method AspergillosisEPR.Controllers.AccountController.GetCurrentUserRolesAsync (AspergillosisEPR) with arguments ((null)) - ModelState is Valid
+2018-10-19 13:39:22.109 +01:00 [Information] Microsoft.EntityFrameworkCore.Infrastructure: Entity Framework Core 2.1.0-rtm-30799 initialized 'ApplicationDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer' with options: RowNumberPaging 
+2018-10-19 13:39:22.109 +01:00 [Information] Microsoft.EntityFrameworkCore.Database.Command: Executed DbCommand (1ms) [Parameters=[@__get_Item_0='?' (Size = 450)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [e].[Id], [e].[AccessFailedCount], [e].[ConcurrencyStamp], [e].[Email], [e].[EmailConfirmed], [e].[FirstName], [e].[LastName], [e].[LockoutEnabled], [e].[LockoutEnd], [e].[NormalizedEmail], [e].[NormalizedUserName], [e].[PasswordHash], [e].[PhoneNumber], [e].[PhoneNumberConfirmed], [e].[SecurityStamp], [e].[TwoFactorEnabled], [e].[UserName]
+FROM [AspNetUsers] AS [e]
+WHERE [e].[Id] = @__get_Item_0
+2018-10-19 13:39:22.109 +01:00 [Information] Microsoft.EntityFrameworkCore.Database.Command: Executed DbCommand (0ms) [Parameters=[@__userId_0='?' (Size = 450)], CommandType='Text', CommandTimeout='30']
+SELECT [role].[Name]
+FROM [AspNetUserRoles] AS [userRole]
+INNER JOIN [AspNetRoles] AS [role] ON [userRole].[RoleId] = [role].[Id]
+WHERE [userRole].[UserId] = @__userId_0
+2018-10-19 13:39:22.109 +01:00 [Information] Microsoft.AspNetCore.Mvc.Formatters.Json.Internal.JsonResultExecutor: Executing JsonResult, writing value { user = ae3d1997-40b2-4607-847a-a8bc356adba0, roles = System.Collections.Generic.List`1[System.String] }.
+2018-10-19 13:39:22.119 +01:00 [Information] Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker: Executed action AspergillosisEPR.Controllers.AccountController.GetCurrentUserRolesAsync (AspergillosisEPR) in 13.3759ms
+2018-10-19 13:39:22.119 +01:00 [Information] Microsoft.AspNetCore.Hosting.Internal.WebHost: Request finished in 19.1897ms 200 application/json; charset=utf-8
+2018-10-19 13:39:41.246 +01:00 [Information] Microsoft.AspNetCore.Hosting.Internal.WebHost: Request starting HTTP/1.1 POST http://localhost:5000/DataTableDiagnosisTypes/Load application/x-www-form-urlencoded; charset=UTF-8 978
+2018-10-19 13:39:41.250 +01:00 [Information] Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationHandler: AuthenticationScheme: Identity.Application was successfully authenticated.
+2018-10-19 13:39:41.253 +01:00 [Information] Microsoft.AspNetCore.Authorization.DefaultAuthorizationService: Authorization was successful for user: sadmin.
+2018-10-19 13:39:41.258 +01:00 [Information] Microsoft.AspNetCore.Authorization.DefaultAuthorizationService: Authorization was successful for user: sadmin.
+2018-10-19 13:39:41.263 +01:00 [Information] Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker: Executing action method AspergillosisEPR.Controllers.DataTables.DataTableDiagnosisTypesController.Load (AspergillosisEPR) with arguments ((null)) - ModelState is Valid
+2018-10-19 13:39:41.266 +01:00 [Information] Microsoft.EntityFrameworkCore.Infrastructure: Entity Framework Core 2.1.0-rtm-30799 initialized 'AspergillosisContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer' with options: RowNumberPaging 
+2018-10-19 13:39:41.275 +01:00 [Information] Microsoft.EntityFrameworkCore.Database.Command: Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT [dt].[ID], [dt].[Name], [dt].[ShortName]
+FROM [DiagnosisTypes] AS [dt]
+ORDER BY [dt].[ID]
+2018-10-19 13:39:41.299 +01:00 [Information] Microsoft.AspNetCore.Mvc.Formatters.Json.Internal.JsonResultExecutor: Executing JsonResult, writing value { draw = 2, recordsFiltered = 330, recordsTotal = 330, data = System.Collections.Generic.List`1[System.Object] }.
+2018-10-19 13:39:41.299 +01:00 [Information] Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker: Executed action AspergillosisEPR.Controllers.DataTables.DataTableDiagnosisTypesController.Load (AspergillosisEPR) in 55.2578ms
+2018-10-19 13:39:41.309 +01:00 [Information] Microsoft.AspNetCore.Hosting.Internal.WebHost: Request finished in 66.7076ms 200 application/json; charset=utf-8
+2018-10-19 13:39:41.388 +01:00 [Information] Microsoft.AspNetCore.Hosting.Internal.WebHost: Request starting HTTP/1.1 GET http://localhost:5000/Account/GetCurrentUserRolesAsync  
+2018-10-19 13:39:41.421 +01:00 [Information] Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationHandler: AuthenticationScheme: Identity.Application was successfully authenticated.
+2018-10-19 13:39:41.433 +01:00 [Information] Microsoft.AspNetCore.Authorization.DefaultAuthorizationService: Authorization was successful for user: sadmin.
+2018-10-19 13:39:41.435 +01:00 [Information] Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker: Executing action method AspergillosisEPR.Controllers.AccountController.GetCurrentUserRolesAsync (AspergillosisEPR) with arguments ((null)) - ModelState is Valid
+2018-10-19 13:39:41.439 +01:00 [Information] Microsoft.EntityFrameworkCore.Infrastructure: Entity Framework Core 2.1.0-rtm-30799 initialized 'ApplicationDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer' with options: RowNumberPaging 
+2018-10-19 13:39:41.439 +01:00 [Information] Microsoft.EntityFrameworkCore.Database.Command: Executed DbCommand (1ms) [Parameters=[@__get_Item_0='?' (Size = 450)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [e].[Id], [e].[AccessFailedCount], [e].[ConcurrencyStamp], [e].[Email], [e].[EmailConfirmed], [e].[FirstName], [e].[LastName], [e].[LockoutEnabled], [e].[LockoutEnd], [e].[NormalizedEmail], [e].[NormalizedUserName], [e].[PasswordHash], [e].[PhoneNumber], [e].[PhoneNumberConfirmed], [e].[SecurityStamp], [e].[TwoFactorEnabled], [e].[UserName]
+FROM [AspNetUsers] AS [e]
+WHERE [e].[Id] = @__get_Item_0
+2018-10-19 13:39:41.439 +01:00 [Information] Microsoft.EntityFrameworkCore.Database.Command: Executed DbCommand (1ms) [Parameters=[@__userId_0='?' (Size = 450)], CommandType='Text', CommandTimeout='30']
+SELECT [role].[Name]
+FROM [AspNetUserRoles] AS [userRole]
+INNER JOIN [AspNetRoles] AS [role] ON [userRole].[RoleId] = [role].[Id]
+WHERE [userRole].[UserId] = @__userId_0
+2018-10-19 13:39:41.449 +01:00 [Information] Microsoft.AspNetCore.Mvc.Formatters.Json.Internal.JsonResultExecutor: Executing JsonResult, writing value { user = ae3d1997-40b2-4607-847a-a8bc356adba0, roles = System.Collections.Generic.List`1[System.String] }.
+2018-10-19 13:39:41.449 +01:00 [Information] Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker: Executed action AspergillosisEPR.Controllers.AccountController.GetCurrentUserRolesAsync (AspergillosisEPR) in 31.3967ms
+2018-10-19 13:39:41.469 +01:00 [Information] Microsoft.AspNetCore.Hosting.Internal.WebHost: Request finished in 108.0314ms 200 application/json; charset=utf-8
+2018-10-19 13:39:41.688 +01:00 [Information] Microsoft.AspNetCore.Hosting.Internal.WebHost: Request starting HTTP/1.1 POST http://localhost:5000/DataTableDiagnosisTypes/Load application/x-www-form-urlencoded; charset=UTF-8 979
+2018-10-19 13:39:41.688 +01:00 [Information] Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationHandler: AuthenticationScheme: Identity.Application was successfully authenticated.
+2018-10-19 13:39:41.688 +01:00 [Information] Microsoft.AspNetCore.Authorization.DefaultAuthorizationService: Authorization was successful for user: sadmin.
+2018-10-19 13:39:41.699 +01:00 [Information] Microsoft.AspNetCore.Authorization.DefaultAuthorizationService: Authorization was successful for user: sadmin.
+2018-10-19 13:39:41.702 +01:00 [Information] Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker: Executing action method AspergillosisEPR.Controllers.DataTables.DataTableDiagnosisTypesController.Load (AspergillosisEPR) with arguments ((null)) - ModelState is Valid
+2018-10-19 13:39:41.705 +01:00 [Information] Microsoft.EntityFrameworkCore.Infrastructure: Entity Framework Core 2.1.0-rtm-30799 initialized 'AspergillosisContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer' with options: RowNumberPaging 
+2018-10-19 13:39:41.706 +01:00 [Information] Microsoft.EntityFrameworkCore.Database.Command: Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT [dt].[ID], [dt].[Name], [dt].[ShortName]
+FROM [DiagnosisTypes] AS [dt]
+ORDER BY [dt].[ID]
+2018-10-19 13:39:41.706 +01:00 [Information] Microsoft.AspNetCore.Mvc.Formatters.Json.Internal.JsonResultExecutor: Executing JsonResult, writing value { draw = 3, recordsFiltered = 48, recordsTotal = 48, data = System.Collections.Generic.List`1[System.Object] }.
+2018-10-19 13:39:41.716 +01:00 [Information] Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker: Executed action AspergillosisEPR.Controllers.DataTables.DataTableDiagnosisTypesController.Load (AspergillosisEPR) in 20.6107ms
+2018-10-19 13:39:41.726 +01:00 [Information] Microsoft.AspNetCore.Hosting.Internal.WebHost: Request finished in 31.3927ms 200 application/json; charset=utf-8
+2018-10-19 13:39:41.800 +01:00 [Information] Microsoft.AspNetCore.Hosting.Internal.WebHost: Request starting HTTP/1.1 GET http://localhost:5000/Account/GetCurrentUserRolesAsync  
+2018-10-19 13:39:41.805 +01:00 [Information] Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationHandler: AuthenticationScheme: Identity.Application was successfully authenticated.
+2018-10-19 13:39:41.808 +01:00 [Information] Microsoft.AspNetCore.Authorization.DefaultAuthorizationService: Authorization was successful for user: sadmin.
+2018-10-19 13:39:41.812 +01:00 [Information] Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker: Executing action method AspergillosisEPR.Controllers.AccountController.GetCurrentUserRolesAsync (AspergillosisEPR) with arguments ((null)) - ModelState is Valid
+2018-10-19 13:39:41.818 +01:00 [Information] Microsoft.EntityFrameworkCore.Infrastructure: Entity Framework Core 2.1.0-rtm-30799 initialized 'ApplicationDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer' with options: RowNumberPaging 
+2018-10-19 13:39:41.824 +01:00 [Information] Microsoft.EntityFrameworkCore.Database.Command: Executed DbCommand (2ms) [Parameters=[@__get_Item_0='?' (Size = 450)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [e].[Id], [e].[AccessFailedCount], [e].[ConcurrencyStamp], [e].[Email], [e].[EmailConfirmed], [e].[FirstName], [e].[LastName], [e].[LockoutEnabled], [e].[LockoutEnd], [e].[NormalizedEmail], [e].[NormalizedUserName], [e].[PasswordHash], [e].[PhoneNumber], [e].[PhoneNumberConfirmed], [e].[SecurityStamp], [e].[TwoFactorEnabled], [e].[UserName]
+FROM [AspNetUsers] AS [e]
+WHERE [e].[Id] = @__get_Item_0
+2018-10-19 13:39:41.826 +01:00 [Information] Microsoft.EntityFrameworkCore.Database.Command: Executed DbCommand (0ms) [Parameters=[@__userId_0='?' (Size = 450)], CommandType='Text', CommandTimeout='30']
+SELECT [role].[Name]
+FROM [AspNetUserRoles] AS [userRole]
+INNER JOIN [AspNetRoles] AS [role] ON [userRole].[RoleId] = [role].[Id]
+WHERE [userRole].[UserId] = @__userId_0
+2018-10-19 13:39:41.829 +01:00 [Information] Microsoft.AspNetCore.Mvc.Formatters.Json.Internal.JsonResultExecutor: Executing JsonResult, writing value { user = ae3d1997-40b2-4607-847a-a8bc356adba0, roles = System.Collections.Generic.List`1[System.String] }.
+2018-10-19 13:39:41.831 +01:00 [Information] Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker: Executed action AspergillosisEPR.Controllers.AccountController.GetCurrentUserRolesAsync (AspergillosisEPR) in 24.0514ms
+2018-10-19 13:39:41.835 +01:00 [Information] Microsoft.AspNetCore.Hosting.Internal.WebHost: Request finished in 83.9117ms 200 application/json; charset=utf-8
+2018-10-19 13:39:42.097 +01:00 [Information] Microsoft.AspNetCore.Hosting.Internal.WebHost: Request starting HTTP/1.1 POST http://localhost:5000/DataTableDiagnosisTypes/Load application/x-www-form-urlencoded; charset=UTF-8 981
+2018-10-19 13:39:42.107 +01:00 [Information] Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationHandler: AuthenticationScheme: Identity.Application was successfully authenticated.
+2018-10-19 13:39:42.107 +01:00 [Information] Microsoft.AspNetCore.Authorization.DefaultAuthorizationService: Authorization was successful for user: sadmin.
+2018-10-19 13:39:42.107 +01:00 [Information] Microsoft.AspNetCore.Authorization.DefaultAuthorizationService: Authorization was successful for user: sadmin.
+2018-10-19 13:39:42.107 +01:00 [Information] Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker: Executing action method AspergillosisEPR.Controllers.DataTables.DataTableDiagnosisTypesController.Load (AspergillosisEPR) with arguments ((null)) - ModelState is Valid
+2018-10-19 13:39:42.107 +01:00 [Information] Microsoft.EntityFrameworkCore.Infrastructure: Entity Framework Core 2.1.0-rtm-30799 initialized 'AspergillosisContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer' with options: RowNumberPaging 
+2018-10-19 13:39:42.118 +01:00 [Information] Microsoft.EntityFrameworkCore.Database.Command: Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT [dt].[ID], [dt].[Name], [dt].[ShortName]
+FROM [DiagnosisTypes] AS [dt]
+ORDER BY [dt].[ID]
+2018-10-19 13:39:42.124 +01:00 [Information] Microsoft.AspNetCore.Mvc.Formatters.Json.Internal.JsonResultExecutor: Executing JsonResult, writing value { draw = 4, recordsFiltered = 11, recordsTotal = 11, data = System.Collections.Generic.List`1[System.Object] }.
+2018-10-19 13:39:42.126 +01:00 [Information] Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker: Executed action AspergillosisEPR.Controllers.DataTables.DataTableDiagnosisTypesController.Load (AspergillosisEPR) in 16.8557ms
+2018-10-19 13:39:42.128 +01:00 [Information] Microsoft.AspNetCore.Hosting.Internal.WebHost: Request finished in 24.0355ms 200 application/json; charset=utf-8
+2018-10-19 13:39:42.143 +01:00 [Information] Microsoft.AspNetCore.Hosting.Internal.WebHost: Request starting HTTP/1.1 GET http://localhost:5000/Account/GetCurrentUserRolesAsync  
+2018-10-19 13:39:42.145 +01:00 [Information] Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationHandler: AuthenticationScheme: Identity.Application was successfully authenticated.
+2018-10-19 13:39:42.149 +01:00 [Information] Microsoft.AspNetCore.Authorization.DefaultAuthorizationService: Authorization was successful for user: sadmin.
+2018-10-19 13:39:42.154 +01:00 [Information] Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker: Executing action method AspergillosisEPR.Controllers.AccountController.GetCurrentUserRolesAsync (AspergillosisEPR) with arguments ((null)) - ModelState is Valid
+2018-10-19 13:39:42.158 +01:00 [Information] Microsoft.EntityFrameworkCore.Infrastructure: Entity Framework Core 2.1.0-rtm-30799 initialized 'ApplicationDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer' with options: RowNumberPaging 
+2018-10-19 13:39:42.161 +01:00 [Information] Microsoft.EntityFrameworkCore.Database.Command: Executed DbCommand (1ms) [Parameters=[@__get_Item_0='?' (Size = 450)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [e].[Id], [e].[AccessFailedCount], [e].[ConcurrencyStamp], [e].[Email], [e].[EmailConfirmed], [e].[FirstName], [e].[LastName], [e].[LockoutEnabled], [e].[LockoutEnd], [e].[NormalizedEmail], [e].[NormalizedUserName], [e].[PasswordHash], [e].[PhoneNumber], [e].[PhoneNumberConfirmed], [e].[SecurityStamp], [e].[TwoFactorEnabled], [e].[UserName]
+FROM [AspNetUsers] AS [e]
+WHERE [e].[Id] = @__get_Item_0
+2018-10-19 13:39:42.164 +01:00 [Information] Microsoft.EntityFrameworkCore.Database.Command: Executed DbCommand (1ms) [Parameters=[@__userId_0='?' (Size = 450)], CommandType='Text', CommandTimeout='30']
+SELECT [role].[Name]
+FROM [AspNetUserRoles] AS [userRole]
+INNER JOIN [AspNetRoles] AS [role] ON [userRole].[RoleId] = [role].[Id]
+WHERE [userRole].[UserId] = @__userId_0
+2018-10-19 13:39:42.166 +01:00 [Information] Microsoft.AspNetCore.Mvc.Formatters.Json.Internal.JsonResultExecutor: Executing JsonResult, writing value { user = ae3d1997-40b2-4607-847a-a8bc356adba0, roles = System.Collections.Generic.List`1[System.String] }.
+2018-10-19 13:39:42.168 +01:00 [Information] Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker: Executed action AspergillosisEPR.Controllers.AccountController.GetCurrentUserRolesAsync (AspergillosisEPR) in 20.662ms
+2018-10-19 13:39:42.171 +01:00 [Information] Microsoft.AspNetCore.Hosting.Internal.WebHost: Request finished in 27.8702ms 200 application/json; charset=utf-8
+2018-10-19 13:39:44.387 +01:00 [Information] Microsoft.AspNetCore.Hosting.Internal.WebHost: Request starting HTTP/1.1 POST http://localhost:5000/DataTableDiagnosisTypes/Load application/x-www-form-urlencoded; charset=UTF-8 982
+2018-10-19 13:39:44.390 +01:00 [Information] Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationHandler: AuthenticationScheme: Identity.Application was successfully authenticated.
+2018-10-19 13:39:44.392 +01:00 [Information] Microsoft.AspNetCore.Authorization.DefaultAuthorizationService: Authorization was successful for user: sadmin.
+2018-10-19 13:39:44.394 +01:00 [Information] Microsoft.AspNetCore.Authorization.DefaultAuthorizationService: Authorization was successful for user: sadmin.
+2018-10-19 13:39:44.396 +01:00 [Information] Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker: Executing action method AspergillosisEPR.Controllers.DataTables.DataTableDiagnosisTypesController.Load (AspergillosisEPR) with arguments ((null)) - ModelState is Valid
+2018-10-19 13:39:44.398 +01:00 [Information] Microsoft.EntityFrameworkCore.Infrastructure: Entity Framework Core 2.1.0-rtm-30799 initialized 'AspergillosisContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer' with options: RowNumberPaging 
+2018-10-19 13:39:44.400 +01:00 [Information] Microsoft.EntityFrameworkCore.Database.Command: Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT [dt].[ID], [dt].[Name], [dt].[ShortName]
+FROM [DiagnosisTypes] AS [dt]
+ORDER BY [dt].[ID]
+2018-10-19 13:39:44.405 +01:00 [Information] Microsoft.AspNetCore.Mvc.Formatters.Json.Internal.JsonResultExecutor: Executing JsonResult, writing value { draw = 5, recordsFiltered = 0, recordsTotal = 0, data = System.Collections.Generic.List`1[System.Object] }.
+2018-10-19 13:39:44.407 +01:00 [Information] Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker: Executed action AspergillosisEPR.Controllers.DataTables.DataTableDiagnosisTypesController.Load (AspergillosisEPR) in 15.3378ms
+2018-10-19 13:39:44.409 +01:00 [Information] Microsoft.AspNetCore.Hosting.Internal.WebHost: Request finished in 25.8282ms 200 application/json; charset=utf-8
+2018-10-19 13:39:44.413 +01:00 [Information] Microsoft.AspNetCore.Hosting.Internal.WebHost: Request starting HTTP/1.1 GET http://localhost:5000/Account/GetCurrentUserRolesAsync  
+2018-10-19 13:39:44.413 +01:00 [Information] Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationHandler: AuthenticationScheme: Identity.Application was successfully authenticated.
+2018-10-19 13:39:44.423 +01:00 [Information] Microsoft.AspNetCore.Authorization.DefaultAuthorizationService: Authorization was successful for user: sadmin.
+2018-10-19 13:39:44.423 +01:00 [Information] Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker: Executing action method AspergillosisEPR.Controllers.AccountController.GetCurrentUserRolesAsync (AspergillosisEPR) with arguments ((null)) - ModelState is Valid
+2018-10-19 13:39:44.423 +01:00 [Information] Microsoft.EntityFrameworkCore.Infrastructure: Entity Framework Core 2.1.0-rtm-30799 initialized 'ApplicationDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer' with options: RowNumberPaging 
+2018-10-19 13:39:44.435 +01:00 [Information] Microsoft.EntityFrameworkCore.Database.Command: Executed DbCommand (1ms) [Parameters=[@__get_Item_0='?' (Size = 450)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [e].[Id], [e].[AccessFailedCount], [e].[ConcurrencyStamp], [e].[Email], [e].[EmailConfirmed], [e].[FirstName], [e].[LastName], [e].[LockoutEnabled], [e].[LockoutEnd], [e].[NormalizedEmail], [e].[NormalizedUserName], [e].[PasswordHash], [e].[PhoneNumber], [e].[PhoneNumberConfirmed], [e].[SecurityStamp], [e].[TwoFactorEnabled], [e].[UserName]
+FROM [AspNetUsers] AS [e]
+WHERE [e].[Id] = @__get_Item_0
+2018-10-19 13:39:44.438 +01:00 [Information] Microsoft.EntityFrameworkCore.Database.Command: Executed DbCommand (0ms) [Parameters=[@__userId_0='?' (Size = 450)], CommandType='Text', CommandTimeout='30']
+SELECT [role].[Name]
+FROM [AspNetUserRoles] AS [userRole]
+INNER JOIN [AspNetRoles] AS [role] ON [userRole].[RoleId] = [role].[Id]
+WHERE [userRole].[UserId] = @__userId_0
+2018-10-19 13:39:44.440 +01:00 [Information] Microsoft.AspNetCore.Mvc.Formatters.Json.Internal.JsonResultExecutor: Executing JsonResult, writing value { user = ae3d1997-40b2-4607-847a-a8bc356adba0, roles = System.Collections.Generic.List`1[System.String] }.
+2018-10-19 13:39:44.441 +01:00 [Information] Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker: Executed action AspergillosisEPR.Controllers.AccountController.GetCurrentUserRolesAsync (AspergillosisEPR) in 17.1431ms
+2018-10-19 13:39:44.444 +01:00 [Information] Microsoft.AspNetCore.Hosting.Internal.WebHost: Request finished in 23.5508ms 200 application/json; charset=utf-8
+2018-10-19 13:39:45.092 +01:00 [Information] Microsoft.AspNetCore.Hosting.Internal.WebHost: Request starting HTTP/1.1 POST http://localhost:5000/DataTableDiagnosisTypes/Load application/x-www-form-urlencoded; charset=UTF-8 981
+2018-10-19 13:39:45.095 +01:00 [Information] Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationHandler: AuthenticationScheme: Identity.Application was successfully authenticated.
+2018-10-19 13:39:45.097 +01:00 [Information] Microsoft.AspNetCore.Authorization.DefaultAuthorizationService: Authorization was successful for user: sadmin.
+2018-10-19 13:39:45.099 +01:00 [Information] Microsoft.AspNetCore.Authorization.DefaultAuthorizationService: Authorization was successful for user: sadmin.
+2018-10-19 13:39:45.101 +01:00 [Information] Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker: Executing action method AspergillosisEPR.Controllers.DataTables.DataTableDiagnosisTypesController.Load (AspergillosisEPR) with arguments ((null)) - ModelState is Valid
+2018-10-19 13:39:45.104 +01:00 [Information] Microsoft.EntityFrameworkCore.Infrastructure: Entity Framework Core 2.1.0-rtm-30799 initialized 'AspergillosisContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer' with options: RowNumberPaging 
+2018-10-19 13:39:45.107 +01:00 [Information] Microsoft.EntityFrameworkCore.Database.Command: Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT [dt].[ID], [dt].[Name], [dt].[ShortName]
+FROM [DiagnosisTypes] AS [dt]
+ORDER BY [dt].[ID]
+2018-10-19 13:39:45.115 +01:00 [Information] Microsoft.AspNetCore.Mvc.Formatters.Json.Internal.JsonResultExecutor: Executing JsonResult, writing value { draw = 6, recordsFiltered = 11, recordsTotal = 11, data = System.Collections.Generic.List`1[System.Object] }.
+2018-10-19 13:39:45.118 +01:00 [Information] Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker: Executed action AspergillosisEPR.Controllers.DataTables.DataTableDiagnosisTypesController.Load (AspergillosisEPR) in 21.098ms
+2018-10-19 13:39:45.121 +01:00 [Information] Microsoft.AspNetCore.Hosting.Internal.WebHost: Request finished in 28.5714ms 200 application/json; charset=utf-8
+2018-10-19 13:39:45.215 +01:00 [Information] Microsoft.AspNetCore.Hosting.Internal.WebHost: Request starting HTTP/1.1 GET http://localhost:5000/Account/GetCurrentUserRolesAsync  
+2018-10-19 13:39:45.217 +01:00 [Information] Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationHandler: AuthenticationScheme: Identity.Application was successfully authenticated.
+2018-10-19 13:39:45.219 +01:00 [Information] Microsoft.AspNetCore.Authorization.DefaultAuthorizationService: Authorization was successful for user: sadmin.
+2018-10-19 13:39:45.224 +01:00 [Information] Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker: Executing action method AspergillosisEPR.Controllers.AccountController.GetCurrentUserRolesAsync (AspergillosisEPR) with arguments ((null)) - ModelState is Valid
+2018-10-19 13:39:45.235 +01:00 [Information] Microsoft.EntityFrameworkCore.Infrastructure: Entity Framework Core 2.1.0-rtm-30799 initialized 'ApplicationDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer' with options: RowNumberPaging 
+2018-10-19 13:39:45.239 +01:00 [Information] Microsoft.EntityFrameworkCore.Database.Command: Executed DbCommand (1ms) [Parameters=[@__get_Item_0='?' (Size = 450)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [e].[Id], [e].[AccessFailedCount], [e].[ConcurrencyStamp], [e].[Email], [e].[EmailConfirmed], [e].[FirstName], [e].[LastName], [e].[LockoutEnabled], [e].[LockoutEnd], [e].[NormalizedEmail], [e].[NormalizedUserName], [e].[PasswordHash], [e].[PhoneNumber], [e].[PhoneNumberConfirmed], [e].[SecurityStamp], [e].[TwoFactorEnabled], [e].[UserName]
+FROM [AspNetUsers] AS [e]
+WHERE [e].[Id] = @__get_Item_0
+2018-10-19 13:39:45.242 +01:00 [Information] Microsoft.EntityFrameworkCore.Database.Command: Executed DbCommand (1ms) [Parameters=[@__userId_0='?' (Size = 450)], CommandType='Text', CommandTimeout='30']
+SELECT [role].[Name]
+FROM [AspNetUserRoles] AS [userRole]
+INNER JOIN [AspNetRoles] AS [role] ON [userRole].[RoleId] = [role].[Id]
+WHERE [userRole].[UserId] = @__userId_0
+2018-10-19 13:39:45.244 +01:00 [Information] Microsoft.AspNetCore.Mvc.Formatters.Json.Internal.JsonResultExecutor: Executing JsonResult, writing value { user = ae3d1997-40b2-4607-847a-a8bc356adba0, roles = System.Collections.Generic.List`1[System.String] }.
+2018-10-19 13:39:45.247 +01:00 [Information] Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker: Executed action AspergillosisEPR.Controllers.AccountController.GetCurrentUserRolesAsync (AspergillosisEPR) in 27.3601ms
+2018-10-19 13:39:45.251 +01:00 [Information] Microsoft.AspNetCore.Hosting.Internal.WebHost: Request finished in 35.0066ms 200 application/json; charset=utf-8
+2018-10-19 13:39:54.240 +01:00 [Information] Microsoft.AspNetCore.Hosting.Internal.WebHost: Request starting HTTP/1.1 POST http://localhost:5000/DataTableDiagnosisTypes/Load application/x-www-form-urlencoded; charset=UTF-8 982
+2018-10-19 13:39:54.242 +01:00 [Information] Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationHandler: AuthenticationScheme: Identity.Application was successfully authenticated.
+2018-10-19 13:39:54.245 +01:00 [Information] Microsoft.AspNetCore.Authorization.DefaultAuthorizationService: Authorization was successful for user: sadmin.
+2018-10-19 13:39:54.247 +01:00 [Information] Microsoft.AspNetCore.Authorization.DefaultAuthorizationService: Authorization was successful for user: sadmin.
+2018-10-19 13:39:54.250 +01:00 [Information] Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker: Executing action method AspergillosisEPR.Controllers.DataTables.DataTableDiagnosisTypesController.Load (AspergillosisEPR) with arguments ((null)) - ModelState is Valid
+2018-10-19 13:39:54.252 +01:00 [Information] Microsoft.EntityFrameworkCore.Infrastructure: Entity Framework Core 2.1.0-rtm-30799 initialized 'AspergillosisContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer' with options: RowNumberPaging 
+2018-10-19 13:39:54.255 +01:00 [Information] Microsoft.EntityFrameworkCore.Database.Command: Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT [dt].[ID], [dt].[Name], [dt].[ShortName]
+FROM [DiagnosisTypes] AS [dt]
+ORDER BY [dt].[ID]
+2018-10-19 13:39:54.261 +01:00 [Information] Microsoft.AspNetCore.Mvc.Formatters.Json.Internal.JsonResultExecutor: Executing JsonResult, writing value { draw = 7, recordsFiltered = 3, recordsTotal = 3, data = System.Collections.Generic.List`1[System.Object] }.
+2018-10-19 13:39:54.263 +01:00 [Information] Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker: Executed action AspergillosisEPR.Controllers.DataTables.DataTableDiagnosisTypesController.Load (AspergillosisEPR) in 18.2568ms
+2018-10-19 13:39:54.265 +01:00 [Information] Microsoft.AspNetCore.Hosting.Internal.WebHost: Request finished in 29.1849ms 200 application/json; charset=utf-8
+2018-10-19 13:39:54.278 +01:00 [Information] Microsoft.AspNetCore.Hosting.Internal.WebHost: Request starting HTTP/1.1 GET http://localhost:5000/Account/GetCurrentUserRolesAsync  
+2018-10-19 13:39:54.290 +01:00 [Information] Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationHandler: AuthenticationScheme: Identity.Application was successfully authenticated.
+2018-10-19 13:39:54.292 +01:00 [Information] Microsoft.AspNetCore.Authorization.DefaultAuthorizationService: Authorization was successful for user: sadmin.
+2018-10-19 13:39:54.294 +01:00 [Information] Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker: Executing action method AspergillosisEPR.Controllers.AccountController.GetCurrentUserRolesAsync (AspergillosisEPR) with arguments ((null)) - ModelState is Valid
+2018-10-19 13:39:54.296 +01:00 [Information] Microsoft.EntityFrameworkCore.Infrastructure: Entity Framework Core 2.1.0-rtm-30799 initialized 'ApplicationDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer' with options: RowNumberPaging 
+2018-10-19 13:39:54.301 +01:00 [Information] Microsoft.EntityFrameworkCore.Database.Command: Executed DbCommand (1ms) [Parameters=[@__get_Item_0='?' (Size = 450)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [e].[Id], [e].[AccessFailedCount], [e].[ConcurrencyStamp], [e].[Email], [e].[EmailConfirmed], [e].[FirstName], [e].[LastName], [e].[LockoutEnabled], [e].[LockoutEnd], [e].[NormalizedEmail], [e].[NormalizedUserName], [e].[PasswordHash], [e].[PhoneNumber], [e].[PhoneNumberConfirmed], [e].[SecurityStamp], [e].[TwoFactorEnabled], [e].[UserName]
+FROM [AspNetUsers] AS [e]
+WHERE [e].[Id] = @__get_Item_0
+2018-10-19 13:39:54.304 +01:00 [Information] Microsoft.EntityFrameworkCore.Database.Command: Executed DbCommand (0ms) [Parameters=[@__userId_0='?' (Size = 450)], CommandType='Text', CommandTimeout='30']
+SELECT [role].[Name]
+FROM [AspNetUserRoles] AS [userRole]
+INNER JOIN [AspNetRoles] AS [role] ON [userRole].[RoleId] = [role].[Id]
+WHERE [userRole].[UserId] = @__userId_0
+2018-10-19 13:39:54.305 +01:00 [Information] Microsoft.AspNetCore.Mvc.Formatters.Json.Internal.JsonResultExecutor: Executing JsonResult, writing value { user = ae3d1997-40b2-4607-847a-a8bc356adba0, roles = System.Collections.Generic.List`1[System.String] }.
+2018-10-19 13:39:54.308 +01:00 [Information] Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker: Executed action AspergillosisEPR.Controllers.AccountController.GetCurrentUserRolesAsync (AspergillosisEPR) in 15.2706ms
+2018-10-19 13:39:54.311 +01:00 [Information] Microsoft.AspNetCore.Hosting.Internal.WebHost: Request finished in 32.5045ms 200 application/json; charset=utf-8
+2018-10-19 13:40:34.479 +01:00 [Information] Microsoft.AspNetCore.DataProtection.KeyManagement.XmlKeyManager: User profile is available. Using 'C:\Users\user\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2018-10-19 13:40:35.821 +01:00 [Information] Microsoft.EntityFrameworkCore.Infrastructure: Entity Framework Core 2.1.0-rtm-30799 initialized 'ApplicationDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer' with options: RowNumberPaging 
+2018-10-19 13:40:36.646 +01:00 [Information] Microsoft.EntityFrameworkCore.Database.Command: Executed DbCommand (116ms) [Parameters=[@__normalizedName_0='?' (Size = 256)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [r].[Id], [r].[ConcurrencyStamp], [r].[CreatedAt], [r].[Description], [r].[IPAddress], [r].[Name], [r].[NormalizedName]
+FROM [AspNetRoles] AS [r]
+WHERE [r].[NormalizedName] = @__normalizedName_0
+2018-10-19 13:40:36.812 +01:00 [Information] Microsoft.EntityFrameworkCore.Database.Command: Executed DbCommand (10ms) [Parameters=[@__normalizedName_0='?' (Size = 256)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [r].[Id], [r].[ConcurrencyStamp], [r].[CreatedAt], [r].[Description], [r].[IPAddress], [r].[Name], [r].[NormalizedName]
+FROM [AspNetRoles] AS [r]
+WHERE [r].[NormalizedName] = @__normalizedName_0
+2018-10-19 13:40:36.818 +01:00 [Information] Microsoft.EntityFrameworkCore.Database.Command: Executed DbCommand (1ms) [Parameters=[@__normalizedName_0='?' (Size = 256)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [r].[Id], [r].[ConcurrencyStamp], [r].[CreatedAt], [r].[Description], [r].[IPAddress], [r].[Name], [r].[NormalizedName]
+FROM [AspNetRoles] AS [r]
+WHERE [r].[NormalizedName] = @__normalizedName_0
+2018-10-19 13:40:36.818 +01:00 [Information] Microsoft.EntityFrameworkCore.Database.Command: Executed DbCommand (0ms) [Parameters=[@__normalizedName_0='?' (Size = 256)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [r].[Id], [r].[ConcurrencyStamp], [r].[CreatedAt], [r].[Description], [r].[IPAddress], [r].[Name], [r].[NormalizedName]
+FROM [AspNetRoles] AS [r]
+WHERE [r].[NormalizedName] = @__normalizedName_0
+2018-10-19 13:40:36.828 +01:00 [Information] Microsoft.EntityFrameworkCore.Database.Command: Executed DbCommand (3ms) [Parameters=[@__normalizedName_0='?' (Size = 256)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [r].[Id], [r].[ConcurrencyStamp], [r].[CreatedAt], [r].[Description], [r].[IPAddress], [r].[Name], [r].[NormalizedName]
+FROM [AspNetRoles] AS [r]
+WHERE [r].[NormalizedName] = @__normalizedName_0
+2018-10-19 13:40:36.848 +01:00 [Information] Microsoft.EntityFrameworkCore.Database.Command: Executed DbCommand (0ms) [Parameters=[@__normalizedEmail_0='?' (Size = 256)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [u].[Id], [u].[AccessFailedCount], [u].[ConcurrencyStamp], [u].[Email], [u].[EmailConfirmed], [u].[FirstName], [u].[LastName], [u].[LockoutEnabled], [u].[LockoutEnd], [u].[NormalizedEmail], [u].[NormalizedUserName], [u].[PasswordHash], [u].[PhoneNumber], [u].[PhoneNumberConfirmed], [u].[SecurityStamp], [u].[TwoFactorEnabled], [u].[UserName]
+FROM [AspNetUsers] AS [u]
+WHERE [u].[NormalizedEmail] = @__normalizedEmail_0
+2018-10-19 13:40:36.868 +01:00 [Information] Microsoft.EntityFrameworkCore.Infrastructure: Entity Framework Core 2.1.0-rtm-30799 initialized 'AspergillosisContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer' with options: RowNumberPaging 
+2018-10-19 13:40:36.878 +01:00 [Information] Microsoft.EntityFrameworkCore.Infrastructure: Entity Framework Core 2.1.0-rtm-30799 initialized 'ApplicationDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer' with options: RowNumberPaging 
+2018-10-19 13:40:36.888 +01:00 [Information] Microsoft.EntityFrameworkCore.Database.Command: Executed DbCommand (1ms) [Parameters=[@__normalizedName_0='?' (Size = 256)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [r].[Id], [r].[ConcurrencyStamp], [r].[CreatedAt], [r].[Description], [r].[IPAddress], [r].[Name], [r].[NormalizedName]
+FROM [AspNetRoles] AS [r]
+WHERE [r].[NormalizedName] = @__normalizedName_0
+2018-10-19 13:40:36.908 +01:00 [Information] Microsoft.EntityFrameworkCore.Infrastructure: Entity Framework Core 2.1.0-rtm-30799 initialized 'ApplicationDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer' with options: RowNumberPaging 
+2018-10-19 13:40:36.908 +01:00 [Information] Microsoft.EntityFrameworkCore.Database.Command: Executed DbCommand (0ms) [Parameters=[@__normalizedName_0='?' (Size = 256)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [r].[Id], [r].[ConcurrencyStamp], [r].[CreatedAt], [r].[Description], [r].[IPAddress], [r].[Name], [r].[NormalizedName]
+FROM [AspNetRoles] AS [r]
+WHERE [r].[NormalizedName] = @__normalizedName_0
+2018-10-19 13:40:36.918 +01:00 [Information] Microsoft.EntityFrameworkCore.Database.Command: Executed DbCommand (8ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE') SELECT 1 ELSE SELECT 0
+2018-10-19 13:40:36.968 +01:00 [Information] Microsoft.EntityFrameworkCore.Database.Command: Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT CASE
+    WHEN EXISTS (
+        SELECT 1
+        FROM [DiagnosisCategories] AS [d])
+    THEN CAST(1 AS BIT) ELSE CAST(0 AS BIT)
+END
+2018-10-19 13:40:36.978 +01:00 [Information] Microsoft.EntityFrameworkCore.Database.Command: Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT CASE
+    WHEN EXISTS (
+        SELECT 1
+        FROM [PatientStatuses] AS [p])
+    THEN CAST(1 AS BIT) ELSE CAST(0 AS BIT)
+END
+2018-10-19 13:40:36.978 +01:00 [Information] Microsoft.EntityFrameworkCore.Database.Command: Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT CASE
+    WHEN EXISTS (
+        SELECT 1
+        FROM [DbImportTypes] AS [d])
+    THEN CAST(1 AS BIT) ELSE CAST(0 AS BIT)
+END
+2018-10-19 13:40:36.988 +01:00 [Information] Microsoft.EntityFrameworkCore.Database.Command: Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT CASE
+    WHEN EXISTS (
+        SELECT 1
+        FROM [ImmunoglobulinTypes] AS [i])
+    THEN CAST(1 AS BIT) ELSE CAST(0 AS BIT)
+END
+2018-10-19 13:40:36.998 +01:00 [Information] Microsoft.EntityFrameworkCore.Database.Command: Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT CASE
+    WHEN EXISTS (
+        SELECT 1
+        FROM [Findings] AS [f])
+    THEN CAST(1 AS BIT) ELSE CAST(0 AS BIT)
+END
+2018-10-19 13:40:36.998 +01:00 [Information] Microsoft.EntityFrameworkCore.Database.Command: Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT CASE
+    WHEN EXISTS (
+        SELECT 1
+        FROM [CaseReportFormFieldTypes] AS [c])
+    THEN CAST(1 AS BIT) ELSE CAST(0 AS BIT)
+END
+2018-10-19 13:40:37.018 +01:00 [Information] Microsoft.EntityFrameworkCore.Database.Command: Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [dbit].[ID], [dbit].[ImporterClass], [dbit].[Name]
+FROM [DbImportTypes] AS [dbit]
+WHERE [dbit].[ImporterClass] = N'QoLSpreadsheetImporter'
+2018-10-19 13:40:37.068 +01:00 [Information] Microsoft.EntityFrameworkCore.Database.Command: Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [dbit].[ID], [dbit].[ImporterClass], [dbit].[Name]
+FROM [DbImportTypes] AS [dbit]
+WHERE [dbit].[ImporterClass] = N'IGgLevelEPRImporter'
+2018-10-19 13:40:37.100 +01:00 [Information] Microsoft.EntityFrameworkCore.Database.Command: Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT CASE
+    WHEN EXISTS (
+        SELECT 1
+        FROM [CaseReportFormFieldTypes] AS [ft]
+        WHERE CHARINDEX(N'Select', [ft].[Name]) > 0)
+    THEN CAST(1 AS BIT) ELSE CAST(0 AS BIT)
+END
+2018-10-19 13:40:37.110 +01:00 [Information] Microsoft.EntityFrameworkCore.Database.Command: Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT CASE
+    WHEN EXISTS (
+        SELECT 1
+        FROM [MedicalTrialStatuses] AS [m])
+    THEN CAST(1 AS BIT) ELSE CAST(0 AS BIT)
+END
+2018-10-19 13:40:37.110 +01:00 [Information] Microsoft.EntityFrameworkCore.Database.Command: Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [dbit].[ID], [dbit].[ImporterClass], [dbit].[Name]
+FROM [DbImportTypes] AS [dbit]
+WHERE [dbit].[ImporterClass] = N'IntraDrugLevelExcelImporter'
+2018-10-19 13:40:37.120 +01:00 [Information] Microsoft.EntityFrameworkCore.Database.Command: Executed DbCommand (0ms) [Parameters=[@__UNIT_NAME_0='?' (Size = 4000)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [uom].[ID], [uom].[Name]
+FROM [UnitOfMeasurements] AS [uom]
+WHERE [uom].[Name] = @__UNIT_NAME_0
+2018-10-19 13:40:37.140 +01:00 [Information] Microsoft.EntityFrameworkCore.Database.Command: Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT CASE
+    WHEN EXISTS (
+        SELECT 1
+        FROM [PulmonaryFunctionTests] AS [p])
+    THEN CAST(1 AS BIT) ELSE CAST(0 AS BIT)
+END
+2018-10-19 13:40:37.140 +01:00 [Information] Microsoft.EntityFrameworkCore.Database.Command: Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT CASE
+    WHEN EXISTS (
+        SELECT 1
+        FROM [Surgeries] AS [s])
+    THEN CAST(1 AS BIT) ELSE CAST(0 AS BIT)
+END
+2018-10-19 13:40:37.150 +01:00 [Information] Microsoft.EntityFrameworkCore.Database.Command: Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT CASE
+    WHEN EXISTS (
+        SELECT 1
+        FROM [SmokingStatuses] AS [s])
+    THEN CAST(1 AS BIT) ELSE CAST(0 AS BIT)
+END
+2018-10-19 13:40:37.180 +01:00 [Information] Microsoft.EntityFrameworkCore.Database.Command: Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [pft].[ID], [pft].[Description], [pft].[Name], [pft].[ShortName]
+FROM [PulmonaryFunctionTests] AS [pft]
+WHERE [pft].[ShortName] = N'FEFx'
+2018-10-19 13:40:37.180 +01:00 [Information] Microsoft.EntityFrameworkCore.Database.Command: Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [dbit].[ID], [dbit].[ImporterClass], [dbit].[Name]
+FROM [DbImportTypes] AS [dbit]
+WHERE [dbit].[ImporterClass] = N'ManArtsSurgeriesAndNotesImporter'
+2018-10-19 13:40:37.190 +01:00 [Information] Microsoft.EntityFrameworkCore.Database.Command: Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [dbit].[ID], [dbit].[ImporterClass], [dbit].[Name]
+FROM [DbImportTypes] AS [dbit]
+WHERE [dbit].[ImporterClass] = N'ManArtsSmokingStatusImporter'
+2018-10-19 13:40:37.200 +01:00 [Information] Microsoft.EntityFrameworkCore.Database.Command: Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [dbit].[ID], [dbit].[ImporterClass], [dbit].[Name]
+FROM [DbImportTypes] AS [dbit]
+WHERE [dbit].[ImporterClass] = N'ManARTSDrugLevelsImporter'
+2018-10-19 13:40:37.200 +01:00 [Information] Microsoft.EntityFrameworkCore.Database.Command: Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [dbit].[ID], [dbit].[ImporterClass], [dbit].[Name]
+FROM [DbImportTypes] AS [dbit]
+WHERE [dbit].[ImporterClass] = N'ManARTSPFTAndHeamatologyImporter'
+2018-10-19 13:40:37.210 +01:00 [Information] Microsoft.EntityFrameworkCore.Database.Command: Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [dbit].[ID], [dbit].[ImporterClass], [dbit].[Name]
+FROM [DbImportTypes] AS [dbit]
+WHERE [dbit].[ImporterClass] = N'EPRClinicLetterDocxImporter'
+2018-10-19 13:40:37.220 +01:00 [Information] Microsoft.EntityFrameworkCore.Database.Command: Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT CASE
+    WHEN EXISTS (
+        SELECT 1
+        FROM [Foods] AS [f])
+    THEN CAST(1 AS BIT) ELSE CAST(0 AS BIT)
+END
+2018-10-19 13:40:37.220 +01:00 [Information] Microsoft.EntityFrameworkCore.Database.Command: Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT CASE
+    WHEN EXISTS (
+        SELECT 1
+        FROM [OtherAllergicItems] AS [o])
+    THEN CAST(1 AS BIT) ELSE CAST(0 AS BIT)
+END
+2018-10-19 13:40:37.230 +01:00 [Information] Microsoft.EntityFrameworkCore.Database.Command: Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT CASE
+    WHEN EXISTS (
+        SELECT 1
+        FROM [Fungis] AS [f])
+    THEN CAST(1 AS BIT) ELSE CAST(0 AS BIT)
+END
+2018-10-19 13:40:37.230 +01:00 [Information] Microsoft.EntityFrameworkCore.Database.Command: Executed DbCommand (4ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE') SELECT 1 ELSE SELECT 0
+2018-10-19 13:40:37.240 +01:00 [Information] Microsoft.EntityFrameworkCore.Database.Command: Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT CASE
+    WHEN EXISTS (
+        SELECT 1
+        FROM [ReportTypes] AS [r])
+    THEN CAST(1 AS BIT) ELSE CAST(0 AS BIT)
+END
+2018-10-19 13:40:37.250 +01:00 [Information] Microsoft.EntityFrameworkCore.Database.Command: Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [dbit].[ID], [dbit].[ImporterClass], [dbit].[Name]
+FROM [DbImportTypes] AS [dbit]
+WHERE [dbit].[ImporterClass] = N'DLDatesSpreadsheetImporter'
+2018-10-19 13:40:37.260 +01:00 [Information] Microsoft.EntityFrameworkCore.Database.Command: Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [dbit].[ID], [dbit].[ImporterClass], [dbit].[Name]
+FROM [DbImportTypes] AS [dbit]
+WHERE [dbit].[ImporterClass] = N'TotalIgEEPRImporter'
+2018-10-19 13:40:37.270 +01:00 [Information] Microsoft.EntityFrameworkCore.Database.Command: Executed DbCommand (0ms) [Parameters=[@__GL_L_0='?' (Size = 4000)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [uom].[ID], [uom].[Name]
+FROM [UnitOfMeasurements] AS [uom]
+WHERE [uom].[Name] = @__GL_L_0
+2018-10-19 13:40:37.270 +01:00 [Information] Microsoft.EntityFrameworkCore.Database.Command: Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT CASE
+    WHEN EXISTS (
+        SELECT 1
+        FROM [TestTypes] AS [t])
+    THEN CAST(1 AS BIT) ELSE CAST(0 AS BIT)
+END
+2018-10-19 13:40:37.280 +01:00 [Information] Microsoft.EntityFrameworkCore.Database.Command: Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [dbit].[ID], [dbit].[ImporterClass], [dbit].[Name]
+FROM [DbImportTypes] AS [dbit]
+WHERE [dbit].[ImporterClass] = N'EPRCReactiveProteinImporter'
+2018-10-19 13:40:37.280 +01:00 [Information] Microsoft.EntityFrameworkCore.Database.Command: Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [dbit].[ID], [dbit].[ImporterClass], [dbit].[Name]
+FROM [DbImportTypes] AS [dbit]
+WHERE [dbit].[ImporterClass] = N'EPRAlbuminImporter'
+2018-10-19 13:40:37.290 +01:00 [Information] Microsoft.EntityFrameworkCore.Database.Command: Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [dbit].[ID], [dbit].[ImporterClass], [dbit].[Name]
+FROM [DbImportTypes] AS [dbit]
+WHERE [dbit].[ImporterClass] = N'EPRHaemoglobinImporter'
+2018-10-19 13:40:37.300 +01:00 [Information] Microsoft.EntityFrameworkCore.Database.Command: Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [dbit].[ID], [dbit].[ImporterClass], [dbit].[Name]
+FROM [DbImportTypes] AS [dbit]
+WHERE [dbit].[ImporterClass] = N'EPRWBCImporter'
+2018-10-19 13:40:37.300 +01:00 [Information] Microsoft.EntityFrameworkCore.Database.Command: Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [dbit].[ID], [dbit].[ImporterClass], [dbit].[Name]
+FROM [DbImportTypes] AS [dbit]
+WHERE [dbit].[ImporterClass] = N'EPRLymphocytesImporter'
+2018-10-19 13:40:37.310 +01:00 [Information] Microsoft.EntityFrameworkCore.Database.Command: Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [dbit].[ID], [dbit].[ImporterClass], [dbit].[Name]
+FROM [DbImportTypes] AS [dbit]
+WHERE [dbit].[ImporterClass] = N'GAQoLMRCImporter'
+2018-10-19 13:40:37.320 +01:00 [Information] Microsoft.EntityFrameworkCore.Database.Command: Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [rt].[ID], [rt].[Code], [rt].[Discriminator], [rt].[Name]
+FROM [ReportTypes] AS [rt]
+WHERE [rt].[Code] = N'cpa-mortality-report'
+2018-10-19 13:40:37.320 +01:00 [Information] Microsoft.EntityFrameworkCore.Infrastructure: Entity Framework Core 2.1.0-rtm-30799 initialized 'ApplicationDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer' with options: RowNumberPaging 
+2018-10-19 13:40:37.330 +01:00 [Information] Microsoft.EntityFrameworkCore.Database.Command: Executed DbCommand (5ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE') SELECT 1 ELSE SELECT 0
+2018-10-19 13:41:11.099 +01:00 [Information] Microsoft.AspNetCore.Hosting.Internal.WebHost: Request starting HTTP/1.1 POST http://localhost:5000/DataTableDiagnosisTypes/Load application/x-www-form-urlencoded; charset=UTF-8 978
+2018-10-19 13:41:11.224 +01:00 [Information] Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationHandler: AuthenticationScheme: Identity.Application was successfully authenticated.
+2018-10-19 13:41:12.322 +01:00 [Information] Microsoft.AspNetCore.Authorization.DefaultAuthorizationService: Authorization was successful for user: sadmin.
+2018-10-19 13:41:12.322 +01:00 [Information] Microsoft.AspNetCore.Authorization.DefaultAuthorizationService: Authorization was successful for user: sadmin.
+2018-10-19 13:41:12.362 +01:00 [Information] Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker: Executing action method AspergillosisEPR.Controllers.DataTables.DataTableDiagnosisTypesController.Load (AspergillosisEPR) with arguments ((null)) - ModelState is Valid
+2018-10-19 13:41:12.422 +01:00 [Information] Microsoft.EntityFrameworkCore.Infrastructure: Entity Framework Core 2.1.0-rtm-30799 initialized 'AspergillosisContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer' with options: RowNumberPaging 
+2018-10-19 13:41:12.452 +01:00 [Warning] Microsoft.EntityFrameworkCore.Query: Query: '(from DiagnosisTypeDataTableViewModel <generated>_1 in [a] select [<generated>_1]).FirstOrDefault()' uses First/FirstOrDefault/Last/LastOrDefault operation without OrderBy and filter which may lead to unpredictable results.
+2018-10-19 13:41:12.492 +01:00 [Warning] Microsoft.EntityFrameworkCore.Query: The LINQ expression 'GroupBy([dt].ID, new DiagnosisTypeDataTableViewModel() {ID = [dt].ID, Name = [dt].Name, ShortName = [dt].ShortName})' could not be translated and will be evaluated locally.
+2018-10-19 13:41:12.502 +01:00 [Warning] Microsoft.EntityFrameworkCore.Query: The LINQ expression 'FirstOrDefault()' could not be translated and will be evaluated locally.
+2018-10-19 13:41:12.512 +01:00 [Information] Microsoft.EntityFrameworkCore.Database.Command: Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT [dt].[ID], [dt].[Name], [dt].[ShortName]
+FROM [DiagnosisTypes] AS [dt]
+ORDER BY [dt].[ID]
+2018-10-19 13:41:12.640 +01:00 [Information] Microsoft.AspNetCore.Mvc.Formatters.Json.Internal.JsonResultExecutor: Executing JsonResult, writing value { draw = 8, recordsFiltered = 380, recordsTotal = 380, data = System.Collections.Generic.List`1[System.Object] }.
+2018-10-19 13:41:12.842 +01:00 [Information] Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker: Executed action AspergillosisEPR.Controllers.DataTables.DataTableDiagnosisTypesController.Load (AspergillosisEPR) in 560.1095ms
+2018-10-19 13:41:12.862 +01:00 [Information] Microsoft.AspNetCore.Hosting.Internal.WebHost: Request finished in 1770.147ms 200 application/json; charset=utf-8
+2018-10-19 13:41:12.884 +01:00 [Information] Microsoft.AspNetCore.Hosting.Internal.WebHost: Request starting HTTP/1.1 GET http://localhost:5000/Account/GetCurrentUserRolesAsync  
+2018-10-19 13:41:12.897 +01:00 [Information] Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationHandler: AuthenticationScheme: Identity.Application was successfully authenticated.
+2018-10-19 13:41:12.917 +01:00 [Information] Microsoft.AspNetCore.Authorization.DefaultAuthorizationService: Authorization was successful for user: sadmin.
+2018-10-19 13:41:12.925 +01:00 [Information] Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker: Executing action method AspergillosisEPR.Controllers.AccountController.GetCurrentUserRolesAsync (AspergillosisEPR) with arguments ((null)) - ModelState is Valid
+2018-10-19 13:41:12.931 +01:00 [Information] Microsoft.EntityFrameworkCore.Infrastructure: Entity Framework Core 2.1.0-rtm-30799 initialized 'ApplicationDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer' with options: RowNumberPaging 
+2018-10-19 13:41:12.958 +01:00 [Information] Microsoft.EntityFrameworkCore.Database.Command: Executed DbCommand (1ms) [Parameters=[@__get_Item_0='?' (Size = 450)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [e].[Id], [e].[AccessFailedCount], [e].[ConcurrencyStamp], [e].[Email], [e].[EmailConfirmed], [e].[FirstName], [e].[LastName], [e].[LockoutEnabled], [e].[LockoutEnd], [e].[NormalizedEmail], [e].[NormalizedUserName], [e].[PasswordHash], [e].[PhoneNumber], [e].[PhoneNumberConfirmed], [e].[SecurityStamp], [e].[TwoFactorEnabled], [e].[UserName]
+FROM [AspNetUsers] AS [e]
+WHERE [e].[Id] = @__get_Item_0
+2018-10-19 13:41:13.050 +01:00 [Information] Microsoft.EntityFrameworkCore.Database.Command: Executed DbCommand (0ms) [Parameters=[@__userId_0='?' (Size = 450)], CommandType='Text', CommandTimeout='30']
+SELECT [role].[Name]
+FROM [AspNetUserRoles] AS [userRole]
+INNER JOIN [AspNetRoles] AS [role] ON [userRole].[RoleId] = [role].[Id]
+WHERE [userRole].[UserId] = @__userId_0
+2018-10-19 13:41:13.070 +01:00 [Information] Microsoft.AspNetCore.Mvc.Formatters.Json.Internal.JsonResultExecutor: Executing JsonResult, writing value { user = ae3d1997-40b2-4607-847a-a8bc356adba0, roles = System.Collections.Generic.List`1[System.String] }.
+2018-10-19 13:41:13.128 +01:00 [Information] Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker: Executed action AspergillosisEPR.Controllers.AccountController.GetCurrentUserRolesAsync (AspergillosisEPR) in 192.1143ms
+2018-10-19 13:41:13.140 +01:00 [Information] Microsoft.AspNetCore.Hosting.Internal.WebHost: Request finished in 247.6509ms 200 application/json; charset=utf-8
+2018-10-19 13:41:13.468 +01:00 [Information] Microsoft.AspNetCore.Hosting.Internal.WebHost: Request starting HTTP/1.1 POST http://localhost:5000/DataTableDiagnosisTypes/Load application/x-www-form-urlencoded; charset=UTF-8 979
+2018-10-19 13:41:13.481 +01:00 [Information] Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationHandler: AuthenticationScheme: Identity.Application was successfully authenticated.
+2018-10-19 13:41:13.485 +01:00 [Information] Microsoft.AspNetCore.Authorization.DefaultAuthorizationService: Authorization was successful for user: sadmin.
+2018-10-19 13:41:13.486 +01:00 [Information] Microsoft.AspNetCore.Authorization.DefaultAuthorizationService: Authorization was successful for user: sadmin.
+2018-10-19 13:41:13.488 +01:00 [Information] Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker: Executing action method AspergillosisEPR.Controllers.DataTables.DataTableDiagnosisTypesController.Load (AspergillosisEPR) with arguments ((null)) - ModelState is Valid
+2018-10-19 13:41:13.493 +01:00 [Information] Microsoft.EntityFrameworkCore.Infrastructure: Entity Framework Core 2.1.0-rtm-30799 initialized 'AspergillosisContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer' with options: RowNumberPaging 
+2018-10-19 13:41:13.500 +01:00 [Information] Microsoft.EntityFrameworkCore.Database.Command: Executed DbCommand (2ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT [dt].[ID], [dt].[Name], [dt].[ShortName]
+FROM [DiagnosisTypes] AS [dt]
+ORDER BY [dt].[ID]
+2018-10-19 13:41:13.500 +01:00 [Information] Microsoft.AspNetCore.Mvc.Formatters.Json.Internal.JsonResultExecutor: Executing JsonResult, writing value { draw = 9, recordsFiltered = 84, recordsTotal = 84, data = System.Collections.Generic.List`1[System.Object] }.
+2018-10-19 13:41:13.500 +01:00 [Information] Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker: Executed action AspergillosisEPR.Controllers.DataTables.DataTableDiagnosisTypesController.Load (AspergillosisEPR) in 24.3212ms
+2018-10-19 13:41:13.510 +01:00 [Information] Microsoft.AspNetCore.Hosting.Internal.WebHost: Request finished in 42.1699ms 200 application/json; charset=utf-8
+2018-10-19 13:41:13.690 +01:00 [Information] Microsoft.AspNetCore.Hosting.Internal.WebHost: Request starting HTTP/1.1 GET http://localhost:5000/Account/GetCurrentUserRolesAsync  
+2018-10-19 13:41:13.693 +01:00 [Information] Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationHandler: AuthenticationScheme: Identity.Application was successfully authenticated.
+2018-10-19 13:41:13.698 +01:00 [Information] Microsoft.AspNetCore.Authorization.DefaultAuthorizationService: Authorization was successful for user: sadmin.
+2018-10-19 13:41:13.722 +01:00 [Information] Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker: Executing action method AspergillosisEPR.Controllers.AccountController.GetCurrentUserRolesAsync (AspergillosisEPR) with arguments ((null)) - ModelState is Valid
+2018-10-19 13:41:13.742 +01:00 [Information] Microsoft.EntityFrameworkCore.Infrastructure: Entity Framework Core 2.1.0-rtm-30799 initialized 'ApplicationDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer' with options: RowNumberPaging 
+2018-10-19 13:41:13.747 +01:00 [Information] Microsoft.EntityFrameworkCore.Database.Command: Executed DbCommand (1ms) [Parameters=[@__get_Item_0='?' (Size = 450)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [e].[Id], [e].[AccessFailedCount], [e].[ConcurrencyStamp], [e].[Email], [e].[EmailConfirmed], [e].[FirstName], [e].[LastName], [e].[LockoutEnabled], [e].[LockoutEnd], [e].[NormalizedEmail], [e].[NormalizedUserName], [e].[PasswordHash], [e].[PhoneNumber], [e].[PhoneNumberConfirmed], [e].[SecurityStamp], [e].[TwoFactorEnabled], [e].[UserName]
+FROM [AspNetUsers] AS [e]
+WHERE [e].[Id] = @__get_Item_0
+2018-10-19 13:41:13.750 +01:00 [Information] Microsoft.EntityFrameworkCore.Database.Command: Executed DbCommand (1ms) [Parameters=[@__userId_0='?' (Size = 450)], CommandType='Text', CommandTimeout='30']
+SELECT [role].[Name]
+FROM [AspNetUserRoles] AS [userRole]
+INNER JOIN [AspNetRoles] AS [role] ON [userRole].[RoleId] = [role].[Id]
+WHERE [userRole].[UserId] = @__userId_0
+2018-10-19 13:41:13.752 +01:00 [Information] Microsoft.AspNetCore.Mvc.Formatters.Json.Internal.JsonResultExecutor: Executing JsonResult, writing value { user = ae3d1997-40b2-4607-847a-a8bc356adba0, roles = System.Collections.Generic.List`1[System.String] }.
+2018-10-19 13:41:13.754 +01:00 [Information] Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker: Executed action AspergillosisEPR.Controllers.AccountController.GetCurrentUserRolesAsync (AspergillosisEPR) in 58.338ms
+2018-10-19 13:41:13.757 +01:00 [Information] Microsoft.AspNetCore.Hosting.Internal.WebHost: Request finished in 66.0088ms 200 application/json; charset=utf-8
+2018-10-19 13:41:13.897 +01:00 [Information] Microsoft.AspNetCore.Hosting.Internal.WebHost: Request starting HTTP/1.1 POST http://localhost:5000/DataTableDiagnosisTypes/Load application/x-www-form-urlencoded; charset=UTF-8 981
+2018-10-19 13:41:13.899 +01:00 [Information] Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationHandler: AuthenticationScheme: Identity.Application was successfully authenticated.
+2018-10-19 13:41:13.901 +01:00 [Information] Microsoft.AspNetCore.Authorization.DefaultAuthorizationService: Authorization was successful for user: sadmin.
+2018-10-19 13:41:13.903 +01:00 [Information] Microsoft.AspNetCore.Authorization.DefaultAuthorizationService: Authorization was successful for user: sadmin.
+2018-10-19 13:41:13.905 +01:00 [Information] Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker: Executing action method AspergillosisEPR.Controllers.DataTables.DataTableDiagnosisTypesController.Load (AspergillosisEPR) with arguments ((null)) - ModelState is Valid
+2018-10-19 13:41:13.907 +01:00 [Information] Microsoft.EntityFrameworkCore.Infrastructure: Entity Framework Core 2.1.0-rtm-30799 initialized 'AspergillosisContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer' with options: RowNumberPaging 
+2018-10-19 13:41:13.910 +01:00 [Information] Microsoft.EntityFrameworkCore.Database.Command: Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT [dt].[ID], [dt].[Name], [dt].[ShortName]
+FROM [DiagnosisTypes] AS [dt]
+ORDER BY [dt].[ID]
+2018-10-19 13:41:13.927 +01:00 [Information] Microsoft.AspNetCore.Mvc.Formatters.Json.Internal.JsonResultExecutor: Executing JsonResult, writing value { draw = 10, recordsFiltered = 9, recordsTotal = 9, data = System.Collections.Generic.List`1[System.Object] }.
+2018-10-19 13:41:13.932 +01:00 [Information] Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker: Executed action AspergillosisEPR.Controllers.DataTables.DataTableDiagnosisTypesController.Load (AspergillosisEPR) in 27.6226ms
+2018-10-19 13:41:13.934 +01:00 [Information] Microsoft.AspNetCore.Hosting.Internal.WebHost: Request finished in 37.2529ms 200 application/json; charset=utf-8
+2018-10-19 13:41:13.950 +01:00 [Information] Microsoft.AspNetCore.Hosting.Internal.WebHost: Request starting HTTP/1.1 GET http://localhost:5000/Account/GetCurrentUserRolesAsync  
+2018-10-19 13:41:13.953 +01:00 [Information] Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationHandler: AuthenticationScheme: Identity.Application was successfully authenticated.
+2018-10-19 13:41:13.955 +01:00 [Information] Microsoft.AspNetCore.Authorization.DefaultAuthorizationService: Authorization was successful for user: sadmin.
+2018-10-19 13:41:13.957 +01:00 [Information] Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker: Executing action method AspergillosisEPR.Controllers.AccountController.GetCurrentUserRolesAsync (AspergillosisEPR) with arguments ((null)) - ModelState is Valid
+2018-10-19 13:41:13.960 +01:00 [Information] Microsoft.EntityFrameworkCore.Infrastructure: Entity Framework Core 2.1.0-rtm-30799 initialized 'ApplicationDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer' with options: RowNumberPaging 
+2018-10-19 13:41:13.964 +01:00 [Information] Microsoft.EntityFrameworkCore.Database.Command: Executed DbCommand (2ms) [Parameters=[@__get_Item_0='?' (Size = 450)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [e].[Id], [e].[AccessFailedCount], [e].[ConcurrencyStamp], [e].[Email], [e].[EmailConfirmed], [e].[FirstName], [e].[LastName], [e].[LockoutEnabled], [e].[LockoutEnd], [e].[NormalizedEmail], [e].[NormalizedUserName], [e].[PasswordHash], [e].[PhoneNumber], [e].[PhoneNumberConfirmed], [e].[SecurityStamp], [e].[TwoFactorEnabled], [e].[UserName]
+FROM [AspNetUsers] AS [e]
+WHERE [e].[Id] = @__get_Item_0
+2018-10-19 13:41:13.967 +01:00 [Information] Microsoft.EntityFrameworkCore.Database.Command: Executed DbCommand (0ms) [Parameters=[@__userId_0='?' (Size = 450)], CommandType='Text', CommandTimeout='30']
+SELECT [role].[Name]
+FROM [AspNetUserRoles] AS [userRole]
+INNER JOIN [AspNetRoles] AS [role] ON [userRole].[RoleId] = [role].[Id]
+WHERE [userRole].[UserId] = @__userId_0
+2018-10-19 13:41:13.969 +01:00 [Information] Microsoft.AspNetCore.Mvc.Formatters.Json.Internal.JsonResultExecutor: Executing JsonResult, writing value { user = ae3d1997-40b2-4607-847a-a8bc356adba0, roles = System.Collections.Generic.List`1[System.String] }.
+2018-10-19 13:41:13.970 +01:00 [Information] Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker: Executed action AspergillosisEPR.Controllers.AccountController.GetCurrentUserRolesAsync (AspergillosisEPR) in 15.654ms
+2018-10-19 13:41:13.973 +01:00 [Information] Microsoft.AspNetCore.Hosting.Internal.WebHost: Request finished in 22.4822ms 200 application/json; charset=utf-8
+2018-10-19 13:41:14.354 +01:00 [Information] Microsoft.AspNetCore.Hosting.Internal.WebHost: Request starting HTTP/1.1 POST http://localhost:5000/DataTableDiagnosisTypes/Load application/x-www-form-urlencoded; charset=UTF-8 982
+2018-10-19 13:41:14.357 +01:00 [Information] Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationHandler: AuthenticationScheme: Identity.Application was successfully authenticated.
+2018-10-19 13:41:14.359 +01:00 [Information] Microsoft.AspNetCore.Authorization.DefaultAuthorizationService: Authorization was successful for user: sadmin.
+2018-10-19 13:41:14.361 +01:00 [Information] Microsoft.AspNetCore.Authorization.DefaultAuthorizationService: Authorization was successful for user: sadmin.
+2018-10-19 13:41:14.363 +01:00 [Information] Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker: Executing action method AspergillosisEPR.Controllers.DataTables.DataTableDiagnosisTypesController.Load (AspergillosisEPR) with arguments ((null)) - ModelState is Valid
+2018-10-19 13:41:14.365 +01:00 [Information] Microsoft.EntityFrameworkCore.Infrastructure: Entity Framework Core 2.1.0-rtm-30799 initialized 'AspergillosisContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer' with options: RowNumberPaging 
+2018-10-19 13:41:14.368 +01:00 [Information] Microsoft.EntityFrameworkCore.Database.Command: Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT [dt].[ID], [dt].[Name], [dt].[ShortName]
+FROM [DiagnosisTypes] AS [dt]
+ORDER BY [dt].[ID]
+2018-10-19 13:41:14.368 +01:00 [Information] Microsoft.AspNetCore.Mvc.Formatters.Json.Internal.JsonResultExecutor: Executing JsonResult, writing value { draw = 11, recordsFiltered = 1, recordsTotal = 1, data = System.Collections.Generic.List`1[System.Object] }.
+2018-10-19 13:41:14.368 +01:00 [Information] Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker: Executed action AspergillosisEPR.Controllers.DataTables.DataTableDiagnosisTypesController.Load (AspergillosisEPR) in 16.3975ms
+2018-10-19 13:41:14.378 +01:00 [Information] Microsoft.AspNetCore.Hosting.Internal.WebHost: Request finished in 29.6298ms 200 application/json; charset=utf-8
+2018-10-19 13:41:14.378 +01:00 [Information] Microsoft.AspNetCore.Hosting.Internal.WebHost: Request starting HTTP/1.1 GET http://localhost:5000/Account/GetCurrentUserRolesAsync  
+2018-10-19 13:41:14.388 +01:00 [Information] Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationHandler: AuthenticationScheme: Identity.Application was successfully authenticated.
+2018-10-19 13:41:14.388 +01:00 [Information] Microsoft.AspNetCore.Authorization.DefaultAuthorizationService: Authorization was successful for user: sadmin.
+2018-10-19 13:41:14.398 +01:00 [Information] Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker: Executing action method AspergillosisEPR.Controllers.AccountController.GetCurrentUserRolesAsync (AspergillosisEPR) with arguments ((null)) - ModelState is Valid
+2018-10-19 13:41:14.401 +01:00 [Information] Microsoft.EntityFrameworkCore.Infrastructure: Entity Framework Core 2.1.0-rtm-30799 initialized 'ApplicationDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer' with options: RowNumberPaging 
+2018-10-19 13:41:14.404 +01:00 [Information] Microsoft.EntityFrameworkCore.Database.Command: Executed DbCommand (1ms) [Parameters=[@__get_Item_0='?' (Size = 450)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [e].[Id], [e].[AccessFailedCount], [e].[ConcurrencyStamp], [e].[Email], [e].[EmailConfirmed], [e].[FirstName], [e].[LastName], [e].[LockoutEnabled], [e].[LockoutEnd], [e].[NormalizedEmail], [e].[NormalizedUserName], [e].[PasswordHash], [e].[PhoneNumber], [e].[PhoneNumberConfirmed], [e].[SecurityStamp], [e].[TwoFactorEnabled], [e].[UserName]
+FROM [AspNetUsers] AS [e]
+WHERE [e].[Id] = @__get_Item_0
+2018-10-19 13:41:14.406 +01:00 [Information] Microsoft.EntityFrameworkCore.Database.Command: Executed DbCommand (0ms) [Parameters=[@__userId_0='?' (Size = 450)], CommandType='Text', CommandTimeout='30']
+SELECT [role].[Name]
+FROM [AspNetUserRoles] AS [userRole]
+INNER JOIN [AspNetRoles] AS [role] ON [userRole].[RoleId] = [role].[Id]
+WHERE [userRole].[UserId] = @__userId_0
+2018-10-19 13:41:14.408 +01:00 [Information] Microsoft.AspNetCore.Mvc.Formatters.Json.Internal.JsonResultExecutor: Executing JsonResult, writing value { user = ae3d1997-40b2-4607-847a-a8bc356adba0, roles = System.Collections.Generic.List`1[System.String] }.
+2018-10-19 13:41:14.410 +01:00 [Information] Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker: Executed action AspergillosisEPR.Controllers.AccountController.GetCurrentUserRolesAsync (AspergillosisEPR) in 17.9055ms
+2018-10-19 13:41:14.411 +01:00 [Information] Microsoft.AspNetCore.Hosting.Internal.WebHost: Request finished in 24.2702ms 200 application/json; charset=utf-8

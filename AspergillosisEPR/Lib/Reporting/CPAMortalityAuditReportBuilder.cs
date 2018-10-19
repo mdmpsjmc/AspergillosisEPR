@@ -91,7 +91,9 @@ namespace AspergillosisEPR.Lib.Reporting
                 "IsScleroderma",
                 "IsGPA",
                 "IsChurgStrauss",
-                "IsSLE"
+                "IsSLE",
+                "IsPolymyositis",
+                "IsMCTD"
             };
             for (int cursor = 0; cursor < headers.Count; cursor++)
             {
