@@ -1,6 +1,7 @@
 ﻿using AspergillosisEPR.Data;
 using AspergillosisEPR.Models;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
 using System;
@@ -57,17 +58,594 @@ namespace AspergillosisEPR.Lib.Reporting
             var ids = GetPatientIdentifiers();
             var patients = _context.Patients
                                    .Where(p => ids.Contains(p.RM2Number))
-                                   .OrderByDescending(p => p.LastName)
+                                   .Include(p => p.PatientDiagnoses)
+                                   .ThenInclude(p => p.DiagnosisType)
+                                   .Include(p => p.STGQuestionnaires)
+                                   .Include(p => p.PatientMRCScores)
+                                   .Include(p => p.PatientMeasurements)
+                                   .Include(p => p.PatientPulmonaryFunctionTests)
+                                   .ThenInclude(p => p.PulmonaryFunctionTest)
+                                   .Include(p => p.PatientImmunoglobulines)
+                                    .ThenInclude(p => p.ImmunoglobulinType)
+                                   .Include(p => p.PatientTestResults)
+                                    .ThenInclude(p => p.TestType)
+                                   .OrderBy(p => p.LastName)
                                    .ToList();
             BuildDemographicsTab(patients);
             BuildDiagnosesTab(patients);
+            BuildSGRQTab(patients);
+            BuildMRCTab(patients);
+            BuildWeightTab(patients);
+            BuildPFTTab(patients);
+            BuildIgGTab(patients);
+            BuildTotalIgETab(patients);
+            BuildTestResultTab(patients, "C-Reactive Protein (CRP)");
+            BuildTestResultTab(patients, "Haemoglobin");
+            BuildTestResultTab(patients, "WBC");
+            BuildTestResultTab(patients, "Lymphocytes");
             return SerializeWorkbook();
+        }
+
+        private void BuildTestResultHeaders(ISheet currentSheet, int itemCount)
+        {
+            var headersRow = currentSheet.CreateRow(0);
+            var headers = new List<string>()
+            {
+                "RM2",
+                "Forename",
+                "Surname",
+            };
+
+            var repeatItems = new List<string>()
+            {
+                "DateTaken",  "Result"
+            };
+            for (int cursor = 1; cursor < itemCount + 1; cursor++)
+            {
+                headers.Add(repeatItems[0] + cursor);
+                headers.Add(repeatItems[1] + cursor);
+            }
+
+            for (int cursor = 0; cursor < headers.Count; cursor++)
+            {
+                var header = headers[cursor];
+                var headerCell = headersRow.CreateCell(cursor);
+                headerCell.SetCellType(CellType.String);
+                ApplyBoldCellStyle(headerCell);
+                headerCell.SetCellValue(header);
+            }
+        }
+
+  
+
+        private void BuildTestResultTab(List<Patient> patients, string testName)
+        {
+            ISheet currentSheet = _outputWorkbook.CreateSheet(_outputSheetNames[8]);
+            int itemCount = patients.Select(p => p.PatientTestResults
+                                                   .Where(ig => ig.TestType.Name.Equals(testName)).Count())
+                                                   .OrderByDescending(d => d)
+                                                   .First();
+            BuildTestResultHeaders(currentSheet, itemCount);
+            for (int patientCursor = 0; patientCursor < patients.Count(); patientCursor++)
+            {
+                int cellIndex = 0;
+                var nextToHeaderRow = patientCursor + 1;
+                var currentPatient = patients.ToList()[patientCursor];
+                var currentRow = currentSheet.CreateRow(nextToHeaderRow);
+                currentRow.CreateCell(cellIndex).SetCellValue(currentPatient.RM2Number);
+                cellIndex++;
+                currentRow.CreateCell(cellIndex).SetCellValue(currentPatient.FirstName);
+                cellIndex++;
+                currentRow.CreateCell(cellIndex).SetCellValue(currentPatient.LastName);
+                cellIndex++;
+                var items = currentPatient.PatientTestResults
+                                          .Where(ig => ig.TestType.Name.Equals(testName))
+                                          .OrderByDescending(q => q.DateTaken)
+                                          .ToList();
+                if (items.Count == 0) continue;
+                for (int index = 0; index < items.Count(); index++)
+                {
+                    var currentItem = items[index];
+                    if (currentItem.DateTaken != null)
+                    {
+                        var dateTaken = currentItem.DateTaken.ToString("dd/MM/yyyy");
+                        currentRow.CreateCell(cellIndex).SetCellValue(dateTaken);
+                        cellIndex++;
+                    }
+                    else
+                    {
+                        currentRow.CreateCell(cellIndex).SetCellValue("");
+                        cellIndex++;
+                    }
+
+                    currentRow.CreateCell(cellIndex).SetCellValue(currentItem.Value.ToString());
+                    cellIndex++;
+                }
+            }
+        }       
+
+        private void BuildTotalIgETab(List<Patient> patients)
+        {
+            ISheet currentSheet = _outputWorkbook.CreateSheet(_outputSheetNames[7]);
+            int itemCount = patients.Select(p => p.PatientImmunoglobulines
+                                                   .Where(ig => ig.ImmunoglobulinType.Name.Equals("Total IgE")).Count())
+                                                   .OrderByDescending(d => d)
+                                                   .First();
+            BuildTotalIgEHeaders(currentSheet, itemCount);
+            for (int patientCursor = 0; patientCursor < patients.Count(); patientCursor++)
+            {
+                int cellIndex = 0;
+                var nextToHeaderRow = patientCursor + 1;
+                var currentPatient = patients.ToList()[patientCursor];
+                var currentRow = currentSheet.CreateRow(nextToHeaderRow);
+                currentRow.CreateCell(cellIndex).SetCellValue(currentPatient.RM2Number);
+                cellIndex++;
+                currentRow.CreateCell(cellIndex).SetCellValue(currentPatient.FirstName);
+                cellIndex++;
+                currentRow.CreateCell(cellIndex).SetCellValue(currentPatient.LastName);
+                cellIndex++;
+                var items = currentPatient.PatientImmunoglobulines
+                                          .Where(ig => ig.ImmunoglobulinType.Name.Equals("Total IgE"))
+                                          .OrderByDescending(q => q.DateTaken)
+                                          .ToList();
+                if (items.Count == 0) continue;
+                for (int index = 0; index < items.Count(); index++)
+                {
+                    var currentItem = items[index];
+                    if (currentItem.DateTaken != null)
+                    {
+                        var dateTaken = currentItem.DateTaken.ToString("dd/MM/yyyy");
+                        currentRow.CreateCell(cellIndex).SetCellValue(dateTaken);
+                        cellIndex++;
+                    }
+                    else
+                    {
+                        currentRow.CreateCell(cellIndex).SetCellValue("");
+                        cellIndex++;
+                    }
+
+                    currentRow.CreateCell(cellIndex).SetCellValue(currentItem.Value.ToString());
+                    cellIndex++;
+                    currentRow.CreateCell(cellIndex).SetCellValue(currentItem.Range.ToString());
+                    cellIndex++;
+                }
+            }
+        }
+
+        private void BuildTotalIgEHeaders(ISheet currentSheet, int itemCount)
+        {
+            var headersRow = currentSheet.CreateRow(0);
+            var headers = new List<string>()
+            {
+                "RM2",
+                "Forename",
+                "Surname",
+            };
+
+            var repeatItems = new List<string>()
+            {
+                "DateTaken",  "Result", "Range"
+            };
+            for (int cursor = 1; cursor < itemCount + 1; cursor++)
+            {
+                headers.Add(repeatItems[0] + cursor);
+                headers.Add(repeatItems[1] + cursor);
+                headers.Add(repeatItems[2] + cursor);
+            }
+
+            for (int cursor = 0; cursor < headers.Count; cursor++)
+            {
+                var header = headers[cursor];
+                var headerCell = headersRow.CreateCell(cursor);
+                headerCell.SetCellType(CellType.String);
+                ApplyBoldCellStyle(headerCell);
+                headerCell.SetCellValue(header);
+            }
+        }
+
+        private void BuildIgGTab(List<Patient> patients)
+        {
+            ISheet currentSheet = _outputWorkbook.CreateSheet(_outputSheetNames[6]);
+            int itemCount = patients.Select(p => p.PatientImmunoglobulines
+                                                   .Where(ig => ig.ImmunoglobulinType.Name.Equals("Aspergillus F IgG")).Count())
+                                                   .OrderByDescending(d => d)
+                                                   .First();
+            BuildIgGHeaders(currentSheet, itemCount);
+            for (int patientCursor = 0; patientCursor < patients.Count(); patientCursor++)
+            {
+                int cellIndex = 0;
+                var nextToHeaderRow = patientCursor + 1;
+                var currentPatient = patients.ToList()[patientCursor];
+                var currentRow = currentSheet.CreateRow(nextToHeaderRow);
+                currentRow.CreateCell(cellIndex).SetCellValue(currentPatient.RM2Number);
+                cellIndex++;
+                currentRow.CreateCell(cellIndex).SetCellValue(currentPatient.FirstName);
+                cellIndex++;
+                currentRow.CreateCell(cellIndex).SetCellValue(currentPatient.LastName);
+                cellIndex++;
+                var items = currentPatient.PatientImmunoglobulines
+                                          .Where(ig => ig.ImmunoglobulinType.Name.Equals("Aspergillus F IgG"))
+                                          .OrderByDescending(q => q.DateTaken)
+                                          .ToList();
+                if (items.Count == 0) continue;
+                for (int index = 0; index < items.Count(); index++)
+                {
+                    var currentItem = items[index];
+                    if (currentItem.DateTaken != null)
+                    {
+                        var dateTaken = currentItem.DateTaken.ToString("dd/MM/yyyy");
+                        currentRow.CreateCell(cellIndex).SetCellValue(dateTaken);
+                        cellIndex++;
+                    }
+                    else
+                    {
+                        currentRow.CreateCell(cellIndex).SetCellValue("");
+                        cellIndex++;
+                    }
+
+                    currentRow.CreateCell(cellIndex).SetCellValue(currentItem.Value.ToString());
+                    cellIndex++;                  
+                }
+            }
+        }
+
+        private void BuildIgGHeaders(ISheet currentSheet, int itemCount)
+        {
+            var headersRow = currentSheet.CreateRow(0);
+            var headers = new List<string>()
+            {
+                "RM2",
+                "Forename",
+                "Surname",
+            };
+
+            var repeatItems = new List<string>()
+            {
+                "DateTaken",  "Result"
+            };
+            for (int cursor = 1; cursor < itemCount + 1; cursor++)
+            {
+                headers.Add(repeatItems[0] + cursor);
+                headers.Add(repeatItems[1] + cursor);
+            }
+
+            for (int cursor = 0; cursor < headers.Count; cursor++)
+            {
+                var header = headers[cursor];
+                var headerCell = headersRow.CreateCell(cursor);
+                headerCell.SetCellType(CellType.String);
+                ApplyBoldCellStyle(headerCell);
+                headerCell.SetCellValue(header);
+            }
+        }
+
+        private void BuildPFTTab(List<Patient> patients)
+        {
+            ISheet currentSheet = _outputWorkbook.CreateSheet(_outputSheetNames[5]);
+            int itemCount = patients.Select(p => p.PatientPulmonaryFunctionTests.Count).OrderByDescending(d => d).First();
+            BuildPFTHeaders(currentSheet, itemCount);
+            for (int patientCursor = 0; patientCursor < patients.Count(); patientCursor++)
+            {
+                int cellIndex = 0;
+                var nextToHeaderRow = patientCursor + 1;
+                var currentPatient = patients.ToList()[patientCursor];
+                var currentRow = currentSheet.CreateRow(nextToHeaderRow);
+                currentRow.CreateCell(cellIndex).SetCellValue(currentPatient.RM2Number);
+                cellIndex++;
+                currentRow.CreateCell(cellIndex).SetCellValue(currentPatient.FirstName);
+                cellIndex++;
+                currentRow.CreateCell(cellIndex).SetCellValue(currentPatient.LastName);
+                cellIndex++;
+                var items = currentPatient.PatientPulmonaryFunctionTests.OrderByDescending(q => q.DateTaken).ToList();
+                if (items.Count == 0) continue;
+                for (int index = 0; index < items.Count(); index++)
+                {
+                    var currentItem = items[index];
+                    if (currentItem.DateTaken != null)
+                    {
+                        var dateTaken = currentItem.DateTaken.Value.ToString("dd/MM/yyyy");
+                        currentRow.CreateCell(cellIndex).SetCellValue(dateTaken);
+                        cellIndex++;
+                    } else
+                    {
+                        currentRow.CreateCell(cellIndex).SetCellValue("");
+                        cellIndex++;
+                    }
+                    
+                    currentRow.CreateCell(cellIndex).SetCellValue(currentItem.PulmonaryFunctionTest.ShortName);
+                    cellIndex++;
+                    currentRow.CreateCell(cellIndex).SetCellValue(Math.Round(currentItem.ResultValue, 2).ToString());
+                    cellIndex++;
+                    currentRow.CreateCell(cellIndex).SetCellValue(Math.Round(currentItem.PredictedValue, 0).ToString());
+                    cellIndex++;
+                }
+            }
+        }
+
+        private void BuildPFTHeaders(ISheet currentSheet, int itemCount)
+        {
+            var headersRow = currentSheet.CreateRow(0);
+            var headers = new List<string>()
+            {
+                "RM2",
+                "Forename",
+                "Surname",
+            };
+
+            var repeatItems = new List<string>()
+            {
+                "DateTaken", "Test", "Result", "Predicted"
+            };
+            for (int cursor = 1; cursor < itemCount + 1; cursor++)
+            {
+                headers.Add(repeatItems[0] + cursor);
+                headers.Add(repeatItems[1] + cursor);
+                headers.Add(repeatItems[2] + cursor);
+                headers.Add(repeatItems[3] + cursor);
+            }
+
+            for (int cursor = 0; cursor < headers.Count; cursor++)
+            {
+                var header = headers[cursor];
+                var headerCell = headersRow.CreateCell(cursor);
+                headerCell.SetCellType(CellType.String);
+                ApplyBoldCellStyle(headerCell);
+                headerCell.SetCellValue(header);
+            }
+        }
+
+        private void BuildWeightTab(List<Patient> patients)
+        {
+            ISheet currentSheet = _outputWorkbook.CreateSheet(_outputSheetNames[4]);
+            int itemCount = patients.Select(p => p.PatientMeasurements.Count).OrderByDescending(d => d).First();
+            BuildWeightHeaders(currentSheet, itemCount);
+            for (int patientCursor = 0; patientCursor < patients.Count(); patientCursor++)
+            {
+                int cellIndex = 0;
+                var nextToHeaderRow = patientCursor + 1;
+                var currentPatient = patients.ToList()[patientCursor];
+                var currentRow = currentSheet.CreateRow(nextToHeaderRow);
+                currentRow.CreateCell(cellIndex).SetCellValue(currentPatient.RM2Number);
+                cellIndex++;
+                currentRow.CreateCell(cellIndex).SetCellValue(currentPatient.FirstName);
+                cellIndex++;
+                currentRow.CreateCell(cellIndex).SetCellValue(currentPatient.LastName);
+                cellIndex++;
+                var items = currentPatient.PatientMeasurements.OrderByDescending(q => q.DateTaken).ToList();
+                if (items.Count == 0) continue;
+                for (int index = 0; index < items.Count(); index++)
+                {
+                    var currentItem = items[index];
+                    currentRow.CreateCell(cellIndex).SetCellValue(currentItem.DateTaken.ToString("dd/MM/yyyy"));
+                    cellIndex++;
+                    currentRow.CreateCell(cellIndex).SetCellValue(Math.Round(currentItem.Weight.Value, 2).ToString());
+                    cellIndex++;
+                }
+            }
+        }
+
+        private void BuildWeightHeaders(ISheet currentSheet, int itemCount)
+        {
+            var headersRow = currentSheet.CreateRow(0);
+            var headers = new List<string>()
+            {
+                "RM2",
+                "Forename",
+                "Surname",
+            };
+
+            var repeatItems = new List<string>()
+            {
+                "DateTaken", "Weight"
+            };
+            for (int cursor = 1; cursor < itemCount + 1; cursor++)
+            {
+                headers.Add(repeatItems[0] + cursor);
+                headers.Add(repeatItems[1] + cursor);
+            }
+
+            for (int cursor = 0; cursor < headers.Count; cursor++)
+            {
+                var header = headers[cursor];
+                var headerCell = headersRow.CreateCell(cursor);
+                headerCell.SetCellType(CellType.String);
+                ApplyBoldCellStyle(headerCell);
+                headerCell.SetCellValue(header);
+            }
+        }
+
+        private void BuildMRCTab(List<Patient> patients)
+        {
+            ISheet currentSheet = _outputWorkbook.CreateSheet(_outputSheetNames[3]);
+            int itemCount = patients.Select(p => p.PatientMRCScores.Count).OrderByDescending(d => d).First();
+            BuildMRCHeaders(currentSheet, itemCount);
+            for (int patientCursor = 0; patientCursor < patients.Count(); patientCursor++)
+            {
+                int cellIndex = 0;
+                var nextToHeaderRow = patientCursor + 1;
+                var currentPatient = patients.ToList()[patientCursor];
+                var currentRow = currentSheet.CreateRow(nextToHeaderRow);
+                currentRow.CreateCell(cellIndex).SetCellValue(currentPatient.RM2Number);
+                cellIndex++;
+                currentRow.CreateCell(cellIndex).SetCellValue(currentPatient.FirstName);
+                cellIndex++;
+                currentRow.CreateCell(cellIndex).SetCellValue(currentPatient.LastName);
+                cellIndex++;
+                var items = currentPatient.PatientMRCScores.OrderByDescending(q => q.DateTaken).ToList();
+                if (items.Count == 0) continue;
+                for (int index = 0; index < items.Count(); index++)
+                {
+                    var currentItem = items[index];
+                    currentRow.CreateCell(cellIndex).SetCellValue(currentItem.DateTaken.ToString("dd/MM/yyyy"));
+                    cellIndex++;
+                    currentRow.CreateCell(cellIndex).SetCellValue(currentItem.Score);
+                    cellIndex++;
+                }
+            }
+        }
+
+        private void BuildMRCHeaders(ISheet currentSheet, int itemCount)
+        {
+            var headersRow = currentSheet.CreateRow(0);
+            var headers = new List<string>()
+            {
+                "RM2",
+                "Forename",
+                "Surname",
+            };
+
+            var repeatItems = new List<string>()
+            {
+                "DateTaken", "Score", 
+            };
+            for (int cursor = 1; cursor < itemCount + 1; cursor++)
+            {
+                headers.Add(repeatItems[0] + cursor);
+                headers.Add(repeatItems[1] + cursor);
+            }
+
+            for (int cursor = 0; cursor < headers.Count; cursor++)
+            {
+                var header = headers[cursor];
+                var headerCell = headersRow.CreateCell(cursor);
+                headerCell.SetCellType(CellType.String);
+                ApplyBoldCellStyle(headerCell);
+                headerCell.SetCellValue(header);
+            }
+     
+        }
+
+        private void BuildSGRQTab(List<Patient> patients)
+        {
+            ISheet currentSheet = _outputWorkbook.CreateSheet(_outputSheetNames[2]);
+            int stgCount = patients.Select(p => p.STGQuestionnaires.Count).OrderByDescending(d => d).First();
+            BuildSGRQHeaders(currentSheet, stgCount);
+           
+            for (int patientCursor = 0; patientCursor < patients.Count(); patientCursor++)
+            {
+                int cellIndex = 0;
+                var nextToHeaderRow = patientCursor + 1;
+                var currentPatient = patients.ToList()[patientCursor];
+                var currentRow = currentSheet.CreateRow(nextToHeaderRow);
+                currentRow.CreateCell(cellIndex).SetCellValue(currentPatient.RM2Number);
+                cellIndex++;
+                currentRow.CreateCell(cellIndex).SetCellValue(currentPatient.FirstName);
+                cellIndex++;
+                currentRow.CreateCell(cellIndex).SetCellValue(currentPatient.LastName);
+                cellIndex++;
+                var allSGRQ = currentPatient.STGQuestionnaires.OrderByDescending(q => q.DateTaken).ToList();
+                if (allSGRQ.Count == 0) continue;
+                for (int index = 0; index < allSGRQ.Count(); index++)
+                {
+                    var currentSGRQ = allSGRQ[index];
+                    currentRow.CreateCell(cellIndex).SetCellValue(currentSGRQ.DateTaken.ToString("dd/MM/yyyy"));
+                    cellIndex++;
+                    currentRow.CreateCell(cellIndex).SetCellValue(Math.Round(currentSGRQ.SymptomScore, 2).ToString());
+                    cellIndex++;
+                    currentRow.CreateCell(cellIndex).SetCellValue(Math.Round(currentSGRQ.ActivityScore, 2).ToString());
+                    cellIndex++;
+                    currentRow.CreateCell(cellIndex).SetCellValue(Math.Round(currentSGRQ.ImpactScore, 2).ToString());
+                    cellIndex++;
+                    currentRow.CreateCell(cellIndex).SetCellValue(Math.Round(currentSGRQ.TotalScore, 2).ToString());
+                    cellIndex++;
+                }
+            }
+        }
+
+        private void BuildSGRQHeaders(ISheet currentSheet, int highestSTGCount)
+        {
+            var headersRow = currentSheet.CreateRow(0);
+            var headers = new List<string>()
+            {
+                "RM2",
+                "Forename",
+                "Surname",
+            };
+
+            var repeatItems = new List<string>()
+            {
+                "DateTaken", "SymptomScore", "ActivityScore", "ÏmpactScore", "TotalScore"
+            };
+            for(int cursor=1; cursor < highestSTGCount+1; cursor++)
+            {
+                headers.Add(repeatItems[0] + cursor);
+                headers.Add(repeatItems[1] + cursor);
+                headers.Add(repeatItems[2] + cursor);
+                headers.Add(repeatItems[3] + cursor);
+                headers.Add(repeatItems[4] + cursor);
+            }
+
+            for (int cursor = 0; cursor < headers.Count; cursor++)
+            {
+                var header = headers[cursor];
+                var headerCell = headersRow.CreateCell(cursor);
+                headerCell.SetCellType(CellType.String);
+                ApplyBoldCellStyle(headerCell);
+                headerCell.SetCellValue(header);
+            }
         }
 
         private void BuildDiagnosesTab(List<Patient> patients)
         {
             ISheet currentSheet = _outputWorkbook.CreateSheet(_outputSheetNames[1]);
             BuildDiagnosisHeaders(currentSheet);
+            for (int patientCursor = 0; patientCursor < patients.Count(); patientCursor++)
+            {
+                var nextToHeaderRow = patientCursor + 1;
+                var currentPatient = patients.ToList()[patientCursor];
+                var currentRow = currentSheet.CreateRow(nextToHeaderRow);
+                currentRow.CreateCell(0).SetCellValue(currentPatient.RM2Number);
+                currentRow.CreateCell(1).SetCellValue(currentPatient.FirstName);
+                currentRow.CreateCell(2).SetCellValue(currentPatient.LastName);
+                var firstDiagnosis = currentPatient.PatientDiagnoses.FirstOrDefault();
+                var diagnosesDescriptions = currentPatient.PatientDiagnoses.Select(pd => pd.Description).ToList();
+                var diagnosesShortNames = currentPatient.PatientDiagnoses.Select(pd => pd.DiagnosisType.ShortName).ToList();
+                var diagnosesNames = currentPatient.PatientDiagnoses.Select(pd => pd.DiagnosisType.Name).ToList();
+
+                var isCCPA = diagnosesShortNames.Contains("CCPA") ? "1" : "0";
+                var isCFPA = diagnosesShortNames.Contains("CFPA") ? "1" : "0";
+                var isAspergilloma = diagnosesNames.Contains("Aspergilloma") ? "1" : "0";
+                var isLungCancer = diagnosesNames.Contains("Lung Cancer") ? "1" : "0";
+                var isCancer = diagnosesNames.Contains("Cancer") ? "1" : "0";
+                var isBillateral = diagnosesDescriptions.Contains("bilateral") || diagnosesDescriptions.Contains("Bilateral")  ? "1" : "0";
+                var isRA = diagnosesShortNames.Contains("RA") ? "1" : "0";
+                var isHIV = diagnosesNames.Contains("HIV") || diagnosesShortNames.Contains("HIV") ? "1" : "0";
+                var renalFailure = diagnosesShortNames.Contains("CKD") 
+                    || diagnosesShortNames.Contains("PKD") 
+                    || diagnosesNames.Contains("Renal cyst")
+                    || diagnosesNames.Contains("Renal impairment")
+                    || diagnosesNames.Contains("Renal tumour")
+                    ? "1" : "0";
+                var isDiab = diagnosesNames.Contains("Diabetes") ? "1" : "0";
+                var isGPA = diagnosesNames.Contains("Wegener’s granulomatosis") ? "1" : "0";
+                var isCHURG = diagnosesNames.Contains("Churg-Strauss Syndrome") ? "1" : "0";
+                var isSLE = diagnosesNames.Contains("Systemic Lupus Erythematosus") ? "1" : "0";
+                var isPM = diagnosesShortNames.Contains("PM") ? "1" : "0";
+                var isMCTD = diagnosesShortNames.Contains("MCTD") ? "1" : "0";
+                var myco = diagnosesNames.Contains("Mycobacterium") ? "1" : "0";
+                var copd = diagnosesShortNames.Contains("COPD") 
+                                || diagnosesNames.Contains("Emphysema") ? "1" : "0";
+
+
+                currentRow.CreateCell(3).SetCellValue(isCCPA);
+                currentRow.CreateCell(4).SetCellValue(isCFPA);
+                currentRow.CreateCell(5).SetCellValue(isAspergilloma);
+                currentRow.CreateCell(6).SetCellValue(copd);
+                currentRow.CreateCell(7).SetCellValue(isLungCancer);
+                currentRow.CreateCell(8).SetCellValue(isCancer);
+                currentRow.CreateCell(9).SetCellValue(isBillateral);
+                currentRow.CreateCell(10).SetCellValue(isRA);
+                currentRow.CreateCell(11).SetCellValue(isHIV);
+                currentRow.CreateCell(12).SetCellValue(renalFailure);
+                currentRow.CreateCell(13).SetCellValue(isDiab);
+                currentRow.CreateCell(14).SetCellValue(isGPA);
+                currentRow.CreateCell(15).SetCellValue(isCHURG);
+                currentRow.CreateCell(16).SetCellValue(isSLE);
+                currentRow.CreateCell(17).SetCellValue(isPM);
+                currentRow.CreateCell(18).SetCellValue(isMCTD);
+                currentRow.CreateCell(19).SetCellValue(myco);
+
+            }
         }
 
         private void BuildDiagnosisHeaders(ISheet currentSheet)
@@ -78,22 +656,23 @@ namespace AspergillosisEPR.Lib.Reporting
                 "RM2",
                 "Forename",
                 "Surname",
-                "DiagnosisName",
-                "DiagnosisNote", 
-                "IsCCPA",
-                "IsCFPA",
-                "IsAspergilloma",
-                "IsBillateral",
-                "IsRheumathoidArthritis",
-                "IsHIV",
-                "IsRenalFailure",
-                "IsDiabetes",
-                "IsScleroderma",
-                "IsGPA",
-                "IsChurgStrauss",
-                "IsSLE",
-                "IsPolymyositis",
-                "IsMCTD"
+                "HasCCPA",
+                "HasCFPA",
+                "HasAspergilloma",
+                "HasCOPD",
+                "HasLungCancer",
+                "HasCancer",
+                "HasBillateralDisease",
+                "HasRheumathoidArthritis",
+                "HasHIV",
+                "HasRenalFailure",
+                "HasDiabetes",
+                "HasGPA",
+                "HasChurgStrauss",
+                "HasSLE",
+                "HasPolymyositis",
+                "HasMixedConnectiveTissueDisease",
+                "HasMycobacteriumInfection",
             };
             for (int cursor = 0; cursor < headers.Count; cursor++)
             {
@@ -209,6 +788,4 @@ namespace AspergillosisEPR.Lib.Reporting
         }
 
     }
-
-
 }
