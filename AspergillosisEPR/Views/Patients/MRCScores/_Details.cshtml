@@ -1,21 +1,34 @@
 ﻿@model AspergillosisEPR.Models.Patient;
-<h3>MRC Breathlessness Score</h3>
-<div class="table col-sm-12">
-    <table class="table table-bordered table-striped">
-        <thead>
-            <tr>
-                <th>Date</th>
-                <th>Value</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var testResult in Model.PatientMRCScores.OrderByDescending(d => d.DateTaken))
-            {
+@if (Model.PatientMRCScores != null && Model.PatientMRCScores.Any())
+{
+    <h3>MRC Breathlessness Score</h3>
+    <div class="table col-sm-12">
+        <table class="table table-bordered table-striped">
+            <thead>
                 <tr>
-                    <td>@(testResult.DateTaken.ToString("dd/MM/yyyy"))</td>
-                    <td>@(testResult.Score)</td>
+                    <th>Date</th>
+                    <th>Value</th>
                 </tr>
-            }
-        </tbody>
-    </table>
-</div>
+            </thead>
+            <tbody>
+                @foreach (var testResult in Model.PatientMRCScores.OrderByDescending(d => d.DateTaken))
+                {
+                    <tr>
+                        <td>@(testResult.DateTaken.ToString("dd/MM/yyyy"))</td>
+                        <td>@(testResult.Score)</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+else
+{
+    <div class="col-sm-12">
+        <div class="alert alert-info alert-block">
+            <h4 class="alert-heading">Info!</h4>
+            <i class="fa fa-info-circle"></i>
+            This patient does not have any recorded information about MRC scores
+        </div>
+    </div>
+}

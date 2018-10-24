@@ -1,15 +1,17 @@
 ﻿using AspergillosisEPR.Data;
 using AspergillosisEPR.Lib;
 using AspergillosisEPR.Lib.Importers.ManARTS;
+using AspergillosisEPR.Lib.PostCodes;
 using AspergillosisEPR.Lib.Search;
 using AspergillosisEPR.Models.CaseReportForms;
 using AspergillosisEPR.Models.Patients;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using RestSharp;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-
 namespace AspergillosisEPR.Models
 {
     public class Patient : ISearchable
@@ -130,23 +132,22 @@ namespace AspergillosisEPR.Models
             return FirstName.Substring(0, 1) + LastName.Substring(0, 1);
         }
 
-        public Position PatientPosition(AspergillosisContext context)
+        public Position PatientPosition(ILogger logger)
         {
             if (PostCode == null) return new Position();
-            var outcode = PostCode.Split(" ")[0];           
-            var postcode = context.UKOutwardCodes.FirstOrDefault(pc => pc.Code.Equals(outcode));
-            if (postcode == null) return new Position();
+            var apiClient = new PostCodeApi(new RestClient(PostCodeApi.ENDPOINT), logger);
+            var postcode = apiClient.RequestPosition(PostCode);
             var position = new Position();
             position.Latitude = postcode.Latitude;
             position.Longitude = postcode.Longitude;
             return position;
         }
 
-        public void SetDistanceFromWythenshawe(AspergillosisContext context)
+        public void SetDistanceFromWythenshawe(ILogger logger)
         {
              
-            var wythenshawePosition = UKOutwardCode.WythenshawePosition(context);
-            var patientPosition = PatientPosition(context);
+            var wythenshawePosition = UKOutwardCode.WythenshawePosition();
+            var patientPosition = PatientPosition(logger);
             if (patientPosition.Latitude == 0 || patientPosition.Longitude == 0) return;
 
             DistanceFromWythenshawe = new Haversine().Distance(wythenshawePosition, patientPosition, DistanceType.Miles);             

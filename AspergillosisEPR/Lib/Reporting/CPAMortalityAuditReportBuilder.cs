@@ -29,10 +29,6 @@ namespace AspergillosisEPR.Lib.Reporting
             "PFT",
             "Aspergillus F IgG",
             "Total IgE",
-            "C-Reactive Protein",
-            "Heamoglobin", 
-            "WBC",
-            "Lymphocytes"
         };
 
         public CPAMortalityAuditReportBuilder(AspergillosisContext context, 
@@ -106,21 +102,13 @@ namespace AspergillosisEPR.Lib.Reporting
                 headers.Add(repeatItems[1] + cursor);
             }
 
-            for (int cursor = 0; cursor < headers.Count; cursor++)
-            {
-                var header = headers[cursor];
-                var headerCell = headersRow.CreateCell(cursor);
-                headerCell.SetCellType(CellType.String);
-                ApplyBoldCellStyle(headerCell);
-                headerCell.SetCellValue(header);
-            }
+            MakeHeadersBold(headersRow, headers);
         }
 
-  
-
+      
         private void BuildTestResultTab(List<Patient> patients, string testName)
         {
-            ISheet currentSheet = _outputWorkbook.CreateSheet(_outputSheetNames[8]);
+            ISheet currentSheet = _outputWorkbook.CreateSheet(testName);
             int itemCount = patients.Select(p => p.PatientTestResults
                                                    .Where(ig => ig.TestType.Name.Equals(testName)).Count())
                                                    .OrderByDescending(d => d)
@@ -233,14 +221,7 @@ namespace AspergillosisEPR.Lib.Reporting
                 headers.Add(repeatItems[2] + cursor);
             }
 
-            for (int cursor = 0; cursor < headers.Count; cursor++)
-            {
-                var header = headers[cursor];
-                var headerCell = headersRow.CreateCell(cursor);
-                headerCell.SetCellType(CellType.String);
-                ApplyBoldCellStyle(headerCell);
-                headerCell.SetCellValue(header);
-            }
+            MakeHeadersBold(headersRow, headers);
         }
 
         private void BuildIgGTab(List<Patient> patients)
@@ -309,14 +290,7 @@ namespace AspergillosisEPR.Lib.Reporting
                 headers.Add(repeatItems[1] + cursor);
             }
 
-            for (int cursor = 0; cursor < headers.Count; cursor++)
-            {
-                var header = headers[cursor];
-                var headerCell = headersRow.CreateCell(cursor);
-                headerCell.SetCellType(CellType.String);
-                ApplyBoldCellStyle(headerCell);
-                headerCell.SetCellValue(header);
-            }
+            MakeHeadersBold(headersRow, headers);
         }
 
         private void BuildPFTTab(List<Patient> patients)
@@ -384,14 +358,7 @@ namespace AspergillosisEPR.Lib.Reporting
                 headers.Add(repeatItems[3] + cursor);
             }
 
-            for (int cursor = 0; cursor < headers.Count; cursor++)
-            {
-                var header = headers[cursor];
-                var headerCell = headersRow.CreateCell(cursor);
-                headerCell.SetCellType(CellType.String);
-                ApplyBoldCellStyle(headerCell);
-                headerCell.SetCellValue(header);
-            }
+            MakeHeadersBold(headersRow, headers);
         }
 
         private void BuildWeightTab(List<Patient> patients)
@@ -444,14 +411,7 @@ namespace AspergillosisEPR.Lib.Reporting
                 headers.Add(repeatItems[1] + cursor);
             }
 
-            for (int cursor = 0; cursor < headers.Count; cursor++)
-            {
-                var header = headers[cursor];
-                var headerCell = headersRow.CreateCell(cursor);
-                headerCell.SetCellType(CellType.String);
-                ApplyBoldCellStyle(headerCell);
-                headerCell.SetCellValue(header);
-            }
+            MakeHeadersBold(headersRow, headers);
         }
 
         private void BuildMRCTab(List<Patient> patients)
@@ -575,14 +535,7 @@ namespace AspergillosisEPR.Lib.Reporting
                 headers.Add(repeatItems[4] + cursor);
             }
 
-            for (int cursor = 0; cursor < headers.Count; cursor++)
-            {
-                var header = headers[cursor];
-                var headerCell = headersRow.CreateCell(cursor);
-                headerCell.SetCellType(CellType.String);
-                ApplyBoldCellStyle(headerCell);
-                headerCell.SetCellValue(header);
-            }
+            MakeHeadersBold(headersRow, headers);
         }
 
         private void BuildDiagnosesTab(List<Patient> patients)
@@ -602,29 +555,29 @@ namespace AspergillosisEPR.Lib.Reporting
                 var diagnosesShortNames = currentPatient.PatientDiagnoses.Select(pd => pd.DiagnosisType.ShortName).ToList();
                 var diagnosesNames = currentPatient.PatientDiagnoses.Select(pd => pd.DiagnosisType.Name).ToList();
 
-                var isCCPA = diagnosesShortNames.Contains("CCPA") ? "1" : "0";
-                var isCFPA = diagnosesShortNames.Contains("CFPA") ? "1" : "0";
-                var isAspergilloma = diagnosesNames.Contains("Aspergilloma") ? "1" : "0";
-                var isLungCancer = diagnosesNames.Contains("Lung Cancer") ? "1" : "0";
-                var isCancer = diagnosesNames.Contains("Cancer") ? "1" : "0";
-                var isBillateral = diagnosesDescriptions.Contains("bilateral") || diagnosesDescriptions.Contains("Bilateral")  ? "1" : "0";
-                var isRA = diagnosesShortNames.Contains("RA") ? "1" : "0";
-                var isHIV = diagnosesNames.Contains("HIV") || diagnosesShortNames.Contains("HIV") ? "1" : "0";
+                var isCCPA = diagnosesShortNames.Contains("CCPA") ? "CCPA" : "";
+                var isCFPA = diagnosesShortNames.Contains("CFPA") ? "CFPA" : "";
+                var isAspergilloma = diagnosesNames.Contains("Aspergilloma") ? "Aspergilloma" : "";
+                var isLungCancer = diagnosesNames.Contains("Lung Cancer") ? "Lung Cancer" : "";
+                var isCancer = diagnosesNames.Contains("Cancer") ? "Other cancer" : "";
+                var isBillateral = diagnosesDescriptions.Contains("bilateral") || diagnosesDescriptions.Contains("Bilateral")  ? "bilateral" : "";
+                var isRA = diagnosesShortNames.Contains("RA") ? "RA" : "";
+                var isHIV = diagnosesNames.Contains("HIV") || diagnosesShortNames.Contains("HIV") ? "HIV" : "";
                 var renalFailure = diagnosesShortNames.Contains("CKD") 
                     || diagnosesShortNames.Contains("PKD") 
                     || diagnosesNames.Contains("Renal cyst")
                     || diagnosesNames.Contains("Renal impairment")
                     || diagnosesNames.Contains("Renal tumour")
-                    ? "1" : "0";
-                var isDiab = diagnosesNames.Contains("Diabetes") ? "1" : "0";
-                var isGPA = diagnosesNames.Contains("Wegener’s granulomatosis") ? "1" : "0";
-                var isCHURG = diagnosesNames.Contains("Churg-Strauss Syndrome") ? "1" : "0";
-                var isSLE = diagnosesNames.Contains("Systemic Lupus Erythematosus") ? "1" : "0";
-                var isPM = diagnosesShortNames.Contains("PM") ? "1" : "0";
-                var isMCTD = diagnosesShortNames.Contains("MCTD") ? "1" : "0";
-                var myco = diagnosesNames.Contains("Mycobacterium") ? "1" : "0";
+                    ? "Renal failure" : "";
+                var isDiab = diagnosesNames.Contains("Diabetes") ? "Diabetes" : "";
+                var isGPA = diagnosesNames.Contains("Wegener’s granulomatosis") ? "GPA" : "";
+                var isCHURG = diagnosesNames.Contains("Churg-Strauss Syndrome") ? "Churg-Strauss Syndrome" : "";
+                var isSLE = diagnosesNames.Contains("Systemic Lupus Erythematosus") ? "Systemic Lupus Erythematosus" : "";
+                var isPM = diagnosesShortNames.Contains("PM") ? "PM" : "";
+                var isMCTD = diagnosesShortNames.Contains("MCTD") ? "MCTD" : "";
+                var myco = diagnosesNames.Contains("Mycobacterium") ? "Mycobacterium infection" : "";
                 var copd = diagnosesShortNames.Contains("COPD") 
-                                || diagnosesNames.Contains("Emphysema") ? "1" : "0";
+                                || diagnosesNames.Contains("Emphysema") ? "COPD" : "";
 
 
                 currentRow.CreateCell(3).SetCellValue(isCCPA);
@@ -674,14 +627,7 @@ namespace AspergillosisEPR.Lib.Reporting
                 "HasMixedConnectiveTissueDisease",
                 "HasMycobacteriumInfection",
             };
-            for (int cursor = 0; cursor < headers.Count; cursor++)
-            {
-                var header = headers[cursor];
-                var headerCell = headersRow.CreateCell(cursor);
-                headerCell.SetCellType(CellType.String);
-                ApplyBoldCellStyle(headerCell);
-                headerCell.SetCellValue(header);
-            }
+            MakeHeadersBold(headersRow, headers);
         }
 
         private void BuildDemographicsTab(List<Patient> patients)
@@ -736,14 +682,7 @@ namespace AspergillosisEPR.Lib.Reporting
                 "DateOfDiagnosis",
                 "DateOfDeath"
             };
-            for (int cursor = 0; cursor < headers.Count; cursor++)
-            {  
-                var header = headers[cursor];
-                var headerCell = headersRow.CreateCell(cursor);
-                headerCell.SetCellType(CellType.String);
-                ApplyBoldCellStyle(headerCell);
-                headerCell.SetCellValue(header);
-            }
+            MakeHeadersBold(headersRow, headers);
         }
 
         private List<string> GetPatientIdentifiers()
@@ -784,6 +723,18 @@ namespace AspergillosisEPR.Lib.Reporting
                 var byteArray = tempStream.ToArray();
                 ms.Write(byteArray, 0, byteArray.Length);
                 return ms.ToArray();
+            }
+        }
+
+        private void MakeHeadersBold(IRow headersRow, List<string> headers)
+        {
+            for (int cursor = 0; cursor < headers.Count; cursor++)
+            {
+                var header = headers[cursor];
+                var headerCell = headersRow.CreateCell(cursor);
+                headerCell.SetCellType(CellType.String);
+                ApplyBoldCellStyle(headerCell);
+                headerCell.SetCellValue(header);
             }
         }
 

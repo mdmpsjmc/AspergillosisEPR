@@ -20,6 +20,7 @@ using Microsoft.Extensions.Hosting;
 using AspergillosisEPR.BackgroundTasks;
 using System.Runtime.Loader;
 using System.Reflection;
+using Microsoft.Extensions.Logging;
 
 namespace AspergillosisEPR
 {
@@ -60,7 +61,7 @@ namespace AspergillosisEPR
             // Add application services.
 
             services.AddTransient<IEmailSender, EmailSender>();
-            services.AddTransient<PatientViewModel>();
+            services.AddTransient<PatientViewModel>();            
             services.AddMvc();
             services.AddRouteAnalyzer();
             services.AddMvc().AddJsonOptions(options =>

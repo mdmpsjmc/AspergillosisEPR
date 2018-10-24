@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using FluentScheduler;
 using AspergillosisEPR.Data;
 using AspergillosisEPR.BackgroundTasks.Logging;
+using NLog.Web;
 
 namespace AspergillosisEPR
 {
@@ -15,9 +16,12 @@ namespace AspergillosisEPR
         public static void Main(string[] args)
         {
             var host = BuildWebHost(args);
+          
+
             using (var scope = host.Services.CreateScope())
             {
                 var services = scope.ServiceProvider;
+                var logger = services.GetRequiredService<ILogger<Program>>();
                 try
                 {
                     var context = services.GetRequiredService<AspergillosisContext>();                  
@@ -27,9 +31,11 @@ namespace AspergillosisEPR
                     AppDbInitializer.Initialize(context2);                   
                 }
                 catch (Exception ex)
-                {
-                    var logger = services.GetRequiredService<ILogger<Program>>();
+                {                  
                     logger.LogError(ex, "An error occurred while seeding the database.");
+                }
+                finally
+                {                    
                 }
             }
            

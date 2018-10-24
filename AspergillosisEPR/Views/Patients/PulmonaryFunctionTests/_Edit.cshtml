@@ -12,7 +12,7 @@
                     <section class="col col-4">
                         <label class="select">
                             <label asp-for="@(pft.PulmonaryFunctionTestId)" class="select">
-                                @Html.DropDownList("PulmonaryFunctionTest[" + i.ToString() + "].PulmonaryFunctionTestId", (SelectList)ViewBag.PulmonaryFunctionTestsId[i], "Select PFT", new { @class = "selectize" })
+                                <select asp-items="(SelectList)ViewBag.PulmonaryFunctionTestsId[i]" class="selectize"></select>
                                 <i></i>
                                 <span asp-validation-for="@(pft.PulmonaryFunctionTestId)" class="text-danger"></span>
                             </label>
@@ -21,7 +21,7 @@
                     <section class="col col-2">
                         <label class="input" asp-for="@pft.DateTaken">
                             <i class="icon-append fa fa-calendar"></i>
-                            <input asp-for="@pft.DateTaken" name="PulmonaryFunctionTest[@(i.ToString())].DateTaken" id="PulmonaryFunctionTest_@(i.ToString())__DateTaken" placeholder="Date Taken" class="datepicker" />
+                            <input asp-for="@pft.DateTaken" name="PulmonaryFunctionTest[@(i.ToString())].DateTaken" id="PulmonaryFunctionTest_@(i.ToString())__DateTaken"  type="text" placeholder="Date Taken" class="datepicker" />
                         </label>
                     </section>
                     <section class="col col-2">
@@ -48,7 +48,7 @@
 </div>
 @if (User.IsInRole("Update Role") || User.IsInRole("Admin Role"))
 {
-    <a href="@Url.Action("EditPulmonaryFunctionTest", "Partials")" class="btn btn-success edit-pft edit-patient-partial" data-visible-row="div.pft-row:visible" data-insert-into-class="div.pft-form" style="padding: 5px">
+    <a href="@Url.Action("EditPulmonaryFunctionTest", "Partials")" class="btn btn-success edit-pft edit-patient-partial" data-visible-row="div.patient-pft:visible" data-insert-into-class="div.pft-form" style="padding: 5px">
         <i class="fa fa-plus"></i>
         <span>
             <strong>Add Patients PFT</strong>

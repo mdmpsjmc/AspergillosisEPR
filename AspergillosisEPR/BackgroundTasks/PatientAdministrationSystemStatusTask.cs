@@ -10,8 +10,8 @@ using System.Threading.Tasks;
 namespace AspergillosisEPR.BackgroundTasks
 {
     public class PatientAdministrationSystemStatusTask : ScheduledProcessor
-    {
-        protected override string Schedule => "0 22 * * *"; //Runs every day at 10pm
+    {   
+        protected override string Schedule => "5 1 * * 1"; //Run Monday at 1:05 AM
         private readonly IServiceProvider _serviceProvider;
         private readonly ILogger<PatientAdministrationSystemStatusTask> _logger;
         private int _patientAliveStatus;
@@ -34,7 +34,7 @@ namespace AspergillosisEPR.BackgroundTasks
 
                 _patientAliveStatus = context.PatientStatuses.Where(s => s.Name == "Active").FirstOrDefault().ID;
                 _patientDeceasedStatus = context.PatientStatuses.Where(s => s.Name == "Deceased").FirstOrDefault().ID;
-                var patientsWithStatus = context.Patients.Include(p => p.PatientStatus);
+                var patientsWithStatus = context.Patients.Include(p => p.PatientStatus).Where(p => p.PatientStatusId == _patientAliveStatus);
                 foreach (var row in patientsWithStatus)
                 {
 

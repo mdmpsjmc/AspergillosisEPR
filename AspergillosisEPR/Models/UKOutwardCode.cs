@@ -14,16 +14,15 @@ namespace AspergillosisEPR.Models
         public decimal Latitude { get; set; }
         public decimal Longitude { get; set; }
 
-        public const string WYTHENSHAWE_CODE = "M23";
+        public const string WYTHENSHAWE_CODE = "M239LT";
+        public const decimal WYTHENSHAWE_LATITUDE = 53.38883374741799m;
+        public const decimal WYTHENSHAWE_LONGITUDE = -2.2931749677671136m;      
 
-        public static Position WythenshawePosition(AspergillosisContext context)
+        public static Position WythenshawePosition()
         {
-            var wythenshawePostCode = context.UKOutwardCodes
-                                             .Where(p => p.Code.Equals(WYTHENSHAWE_CODE))
-                                             .FirstOrDefault();
             var position = new Position();
-            position.Latitude = wythenshawePostCode.Latitude;
-            position.Longitude = wythenshawePostCode.Longitude;
+            position.Latitude = WYTHENSHAWE_LATITUDE;
+            position.Longitude = WYTHENSHAWE_LONGITUDE;
             return position;
         }
     }
