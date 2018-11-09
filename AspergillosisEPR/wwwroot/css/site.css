@@ -114,7 +114,8 @@ div.tab-pane#mrc {
 }
 
 div.tab-pane#medical-trials,
-div.tab-pane#drug-levels {
+div.tab-pane#drug-levels,
+div.tab-pane#drug-monitoring {
     overflow-y: auto;
     min-height: 400px;
     max-height: 400px

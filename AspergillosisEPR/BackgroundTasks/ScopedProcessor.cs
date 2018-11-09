@@ -9,7 +9,6 @@ namespace AspergillosisEPR.BackgroundTasks
     public abstract class ScopedProcessor : BackgroundService
     {
         private readonly IServiceScopeFactory _serviceScopeFactory;
-
         public ScopedProcessor(IServiceScopeFactory serviceScopeFactory) : base()
         {
             _serviceScopeFactory = serviceScopeFactory;

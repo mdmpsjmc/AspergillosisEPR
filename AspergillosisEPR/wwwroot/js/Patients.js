@@ -421,7 +421,7 @@
                 }
             });
         });
-    }
+    };
 
     var onPatientStatusChange = function () {
         $(document).off("change.patient-status").on("change.patient-status", "select#PatientStatusId", function () {
@@ -541,6 +541,13 @@
         });
     };
 
+    var onPatientTabChange = function () {
+        $('a[data-toggle="tabajax"]').on('shown.bs.tab', function (e) {
+            var target = $(e.target).attr("href");
+            initPatientsDateTimePickers();
+            $("select.selectize, select.select2-search").selectize();
+        });
+    };
 
     return {
 
@@ -563,6 +570,7 @@
             initPatientsDateTimePickers();
             onExportOptionsShow();
             showLabTests();
+            onPatientTabChange();
         },
 
         bindPatientsModals: function() {
@@ -577,6 +585,7 @@
             initPatientsDateTimePickers();
             bindNewPartialOnPatientFormClick();
             onExportOptionsShow();
+            onPatientTabChange()
         },
 
         setupForm: function() {
@@ -598,6 +607,10 @@
 
         deleteDbPartialFromPopup: function () {
             deleteDbPartialFromPopup();
+        },
+
+        onPatientTabChange: function () {
+            onPatientTabChange();
         },
 
         init: function() {

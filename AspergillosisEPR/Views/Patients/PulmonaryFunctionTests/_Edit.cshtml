@@ -1,44 +1,44 @@
-﻿@model AspergillosisEPR.Models.Patient
+﻿@model AspergillosisEPR.Models.PatientViewModels.PatientWithPFTs;
 @using AspergillosisEPR.Models.Patients;
 
 <div class="col-12 row pft-form" style="margin: 0px !important">
-    @for (int i = 0; i < Model.PatientPulmonaryFunctionTests.OrderByDescending(q => q.DateTaken).ToList().Count; i++)
+    @for (int i = 0; i < Model.Patient.PatientPulmonaryFunctionTests.OrderByDescending(q => q.DateTaken).ToList().Count; i++)
     {
-        PatientPulmonaryFunctionTest pft = Model.PatientPulmonaryFunctionTests.OrderByDescending(q => q.DateTaken).ToList()[i];
-        <div class="pft-row">
+        PatientPulmonaryFunctionTest pft = Model.Patient.PatientPulmonaryFunctionTests.OrderByDescending(q => q.DateTaken).ToList()[i];
+        <div class="patient-pft">
             <input type="hidden" value="@pft.ID" name="PatientImmunoglobulines[@(i.ToString())].ID" />
             <fieldset>
                 <div class="row">
                     <section class="col col-4">
                         <label class="select">
-                            <label asp-for="@(pft.PulmonaryFunctionTestId)" class="select">
-                                <select asp-items="(SelectList)ViewBag.PulmonaryFunctionTestsId[i]" class="selectize"></select>
+                            <label asp-for="@(pft.PulmonaryFunctionTestId)" class="select">                                
+                                @Html.DropDownList("PulmonaryFunctionTest[" + i +"].PulmonaryFunctionTestsId", Model.PFTs[i], new { @class= "selectize" })
                                 <i></i>
                                 <span asp-validation-for="@(pft.PulmonaryFunctionTestId)" class="text-danger"></span>
                             </label>
                         </label>
                     </section>
-                    <section class="col col-2">
+                    <section class="col col-4">
                         <label class="input" asp-for="@pft.DateTaken">
                             <i class="icon-append fa fa-calendar"></i>
-                            <input asp-for="@pft.DateTaken" name="PulmonaryFunctionTest[@(i.ToString())].DateTaken" id="PulmonaryFunctionTest_@(i.ToString())__DateTaken"  type="text" placeholder="Date Taken" class="datepicker" />
+                            <input asp-for="@pft.DateTaken" name="PulmonaryFunctionTest[@(i.ToString())].DateTaken" id="PulmonaryFunctionTest_@(i.ToString())__DateTaken"  type="text" placeholder="Date Taken" class="date-taken" />
                         </label>
                     </section>
                     <section class="col col-2">
                         <label class="input" asp-for="@pft.ResultValue">
                             <i class="icon-append fa fa-flask"></i>
-                            <input asp-for="@pft.ResultValue" name="PulmonaryFunctionTest[@(i.ToString())].ResultValue" id="PulmonaryFunctionTest@(i.ToString())__ResultValue" placeholder="Value">
+                            <input asp-for="@pft.ResultValue" name="PulmonaryFunctionTest[@(i.ToString())].ResultValue" id="PulmonaryFunctionTest_@(i.ToString())__ResultValue" placeholder="Value">
                         </label>
                     </section>
                     <section class="col col-2">
                         <label class="input" asp-for="@pft.PredictedValue">
                             <i class="icon-append fa fa-flask"></i>
-                            <input asp-for="@pft.PredictedValue" name="PulmonaryFunctionTest[@(i.ToString())].PredictedValue" id="PulmonaryFunctionTest@(i.ToString())__PredictedValue" placeholder="Predicted Value">
+                            <input asp-for="@pft.PredictedValue" name="PulmonaryFunctionTest[@(i.ToString())].PredictedValue" id="PulmonaryFunctionTest_@(i.ToString())__PredictedValue" placeholder="Predicted Value">
                         </label>
                     </section>
                 </div>
                 <div class="row">
-                    <a href="@Url.Action("Delete", "PulmonaryFunctionTests", new { id=pft.ID})" class="btn btn-danger remove-existing-item pull-rpftht btn-lg" data-id="@(pft.ID)" data-what="Patients PFT" data-toggle="tooltip" data-title="Remove Patients PFT?" style="padding: 5px">
+                    <a href="@Url.Action("Delete", "PulmonaryFunctionTests", new { id=pft.ID})" class="btn btn-danger remove-existing-item pull-right btn-lg" data-id="@(pft.ID)" data-what="Patients PFT" data-toggle="tooltip" data-title="Remove Patients PFT?" style="padding: 5px">
                         <i class="fa fa-trash"></i>
                     </a>
                 </div>

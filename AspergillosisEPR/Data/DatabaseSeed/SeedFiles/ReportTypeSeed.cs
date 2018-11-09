@@ -57,5 +57,25 @@ namespace AspergillosisEPR.Data.DatabaseSeed.SeedFiles
                 return;
             }
         }
+
+        public static void AddIgGAndSGRQReport(AspergillosisContext context)
+        {
+            var report = context.ReportTypes.Where(rt => rt.Code == "igg-sgrq-report").FirstOrDefault();
+            if (report == null)
+            {
+                var newReport = new ReportType
+                {
+                    Name = "IgG and SGRQ Report",
+                    Discriminator = "SGRQandIgReportType",
+                    Code = "igg-sgrq-report"
+                };
+                context.ReportTypes.Add(newReport);
+                context.SaveChanges();
+            }
+            else
+            {
+                return;
+            }
+        }
     }
 }

@@ -8,6 +8,7 @@
 
             $.get(loadurl, function (data) {
                 $(targ).html(data);
+                Patients.onPatientTabChange();
             });
 
             $this.tab('show');

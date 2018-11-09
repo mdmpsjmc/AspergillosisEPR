@@ -36,8 +36,7 @@ namespace AspergillosisEPR.Data.DatabaseSeed.SeedFiles
                         UKPostCode postCode;                      
                         postCode = new UKPostCode();                      
                         postCode.Code = (string)record["Field2"];
-                        postCode.Latitude = Decimal.Parse((string)record["Field3"]);
-                        postCode.Longitude = Decimal.Parse((string)record["Field4"]);
+              
 
                         context.UKPostCodes.Add(postCode);
                     }

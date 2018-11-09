@@ -9,6 +9,7 @@ namespace AspergillosisEPR.BackgroundTasks
 {
     public abstract class BackgroundService : IHostedService
     {
+        
         private Task _executingTask;
         private readonly CancellationTokenSource _stoppingCts = new CancellationTokenSource();
 

@@ -16,6 +16,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Http;
 using System.IO;
+using Microsoft.Extensions.Logging;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -28,13 +29,17 @@ namespace AspergillosisEPR.Controllers
         private readonly DropdownListsResolver _dropdownResolver;
         private readonly AspergillosisContext _context;
         private readonly IHostingEnvironment _hostingEnvironment;
+        private readonly ILogger<ReportsController> _logger;
         private static string EXCEL_2007_CONTENT_TYPE = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
         private static string EXPORTED_REPORTS_DIRECTORY = @"\wwwroot\Files\Exported\Excel\";
 
-        public ReportsController(AspergillosisContext context, IHostingEnvironment hostingEnvironment) : base(context, hostingEnvironment)
+        public ReportsController(AspergillosisContext context, 
+                                 ILogger<ReportsController> logger,
+                                 IHostingEnvironment hostingEnvironment) : base(context, hostingEnvironment)
         {
             _dropdownResolver = new DropdownListsResolver(context, ViewBag);
             _hostingEnvironment = hostingEnvironment;
+            _logger = logger;
             _fileStoragePath = _hostingEnvironment.ContentRootPath + EXPORTED_REPORTS_DIRECTORY;
             _context = context;
         }
@@ -72,7 +77,7 @@ namespace AspergillosisEPR.Controllers
 
                 string webRootPath = _hostingEnvironment.WebRootPath;
                 Action<FileStream, IFormFile, string> readFileAction = (stream, formFile, extension) => {
-                    var reportBuilder = new CPAMortalityAuditReportBuilder(_context, stream, formFile);
+                    var reportBuilder = new CPAMortalityAuditReportBuilder(_context, stream, _logger, formFile);
                     string newPath = Path.Combine(webRootPath, "Upload");
                     string fileExtension = Path.GetExtension(file.FileName).ToLower();
                     string fullPath = Path.Combine(newPath, file.FileName);
@@ -149,7 +154,7 @@ namespace AspergillosisEPR.Controllers
             } else if (report.ReportType.Discriminator == "CPAMortalityAudit")
             {
                 var stream = System.IO.File.Open(report.InputFilePath, FileMode.Open);
-                var cPAMortalityAuditReportBuilder = new CPAMortalityAuditReportBuilder(_context, stream);
+                var cPAMortalityAuditReportBuilder = new CPAMortalityAuditReportBuilder(_context, _logger, stream);
                 return GetFileContentResult(cPAMortalityAuditReportBuilder.Build(), ".xlsx", EXCEL_2007_CONTENT_TYPE);
             }
             return null;

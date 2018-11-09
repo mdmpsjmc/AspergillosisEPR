@@ -21,6 +21,8 @@ using AspergillosisEPR.BackgroundTasks;
 using System.Runtime.Loader;
 using System.Reflection;
 using Microsoft.Extensions.Logging;
+using IApplicationLifetime = Microsoft.AspNetCore.Hosting.IApplicationLifetime;
+using System.Linq;
 
 namespace AspergillosisEPR
 {
@@ -41,6 +43,10 @@ namespace AspergillosisEPR
             var physicalProvider = HostingEnvironment.ContentRootFileProvider;
             var embeddedProvider = new EmbeddedFileProvider(Assembly.GetEntryAssembly());
             var compositeProvider = new CompositeFileProvider(physicalProvider, embeddedProvider);
+            var scopeFactory = services.BuildServiceProvider().GetServices<IServiceScopeFactory>().FirstOrDefault();
+            var serviceProv = services.BuildServiceProvider().GetServices<IServiceProvider>().FirstOrDefault();
+            var logger = services.BuildServiceProvider().GetServices<ILogger<AllEmptyPostCodesUpdateNowTask>>().FirstOrDefault();
+
             services.AddSingleton<IFileProvider>(compositeProvider);
             services.AddSingleton<IConfiguration>(Configuration);
             services.AddDbContext<AspergillosisContext>(options =>
@@ -81,10 +87,16 @@ namespace AspergillosisEPR
             ConfigurePdfService(services);
             services.AddScoped<IViewRenderService, ViewRenderService>();
             services.AddSingleton<IHostedService, PatientAdministrationSystemStatusTask>();
-        }        
+            services.AddSingleton<IHostedService, EmptyPostCodesUpdateScheduledTask>();
+            services.AddHostedService<QueuedHostedService>();
+            services.AddSingleton<IBackgroundTaskQueue, BackgroundTaskQueue>();
+        }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public async void Configure(IApplicationBuilder app, Microsoft.AspNetCore.Hosting.IHostingEnvironment env, IServiceProvider serviceProvider)
+        public async void Configure(IApplicationBuilder app, 
+                                    Microsoft.AspNetCore.Hosting.IHostingEnvironment env, 
+                                    IServiceProvider serviceProvider,
+                                    IApplicationLifetime lifetime)
         {
             if (env.IsDevelopment())
             {
@@ -110,7 +122,6 @@ namespace AspergillosisEPR
                      template: "Anonymous/Patients/{action}/{id?}"
                  );
             });
-
             await CreateRoles(app);
             await CreateAnonymousRole(app);
             await CreateReportingRole(app);

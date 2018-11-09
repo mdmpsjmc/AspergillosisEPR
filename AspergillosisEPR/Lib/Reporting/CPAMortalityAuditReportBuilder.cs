@@ -2,6 +2,7 @@
 using AspergillosisEPR.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
 using System;
@@ -19,6 +20,8 @@ namespace AspergillosisEPR.Lib.Reporting
         private XSSFWorkbook _inputWorkbook;
         private FileStream _stream;
         private IFormFile _file;
+        private ILogger _logger;
+        
         private List<string> _outputSheetNames = new List<string>()
         {
             "Demographics and dates",
@@ -33,19 +36,23 @@ namespace AspergillosisEPR.Lib.Reporting
 
         public CPAMortalityAuditReportBuilder(AspergillosisContext context, 
                                               FileStream inputFileStream,
+                                              ILogger logger, 
                                               IFormFile formFile)
         {
             _context = context;            
             _outputWorkbook = new XSSFWorkbook();
             _stream = inputFileStream;
             _file = formFile;
-        }
-
+            _logger = logger;
+        }     
+       
         public CPAMortalityAuditReportBuilder(AspergillosisContext context,
-                                            FileStream inputFileStream)
+                                             ILogger logger,
+                                             FileStream inputFileStream)
         {
             _context = context;
             _outputWorkbook = new XSSFWorkbook();
+            _logger = logger;
             _stream = inputFileStream;
         }
 
@@ -646,7 +653,7 @@ namespace AspergillosisEPR.Lib.Reporting
                 currentRow.CreateCell(3).SetCellValue(currentPatient.Age());
                 currentRow.CreateCell(4).SetCellValue(currentPatient.Gender);
                 currentRow.CreateCell(5).SetCellValue(currentPatient.PostCode);
-                currentRow.CreateCell(6).SetCellValue(Math.Round(currentPatient.DistanceFromWythenshawe,2).ToString() + "m");
+                currentRow.CreateCell(6).SetCellValue(GetDistanceFromWythenshawe(currentPatient));
                 var date = currentPatient.PatientNACDates.FirstOrDefault();
                 if (date != null)
                 {
@@ -661,6 +668,11 @@ namespace AspergillosisEPR.Lib.Reporting
                     currentRow.CreateCell(12).SetCellValue(currentPatient.DateOfDeath.Value.ToString("dd/MM/yyyy"));
                 }
             }
+        }
+
+        private string GetDistanceFromWythenshawe(Patient currentPatient)
+        {
+            return Math.Round(currentPatient.DistanceFromWythenshawe, 2).ToString() + "m";
         }
 
         private void BuildDemographicsHeaders(ISheet currentSheet)

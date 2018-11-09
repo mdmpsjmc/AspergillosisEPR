@@ -53,19 +53,27 @@
         </section>
         <div class="row">
             <section class="col col-6">
-                <label asp-for="DOB" class="input" >
+                <label asp-for="DOB" class="input">
                     <i class="icon-append fa fa-birthday-cake"></i>
                     <input asp-for="DOB" placeholder="Date of Birth">
                     <span asp-validation-for="DOB" class="text-danger"></span>
                 </label>
             </section>
-            <section class="col col-6">
+            <section class="col col-3">
                 <label asp-for="Gender" class="select">
                     <select asp-for="Gender" asp-items="new SelectList(Patient.Genders, Model.Gender)">
                         <option value="">Select Gender</option>
                     </select>
                     <span asp-validation-for="Gender" class="text-danger"></span>
                     <i class="icon-append fa fa-venus-mars"></i>
+                </label>
+            </section>
+            <section class="col col-3">
+                <label asp-for="PostCode" class="input">
+                    <i class="icon-append fa fa-building-o"></i>
+                    <input asp-for="PostCode" placeholder="Post Code">
+                    <span asp-validation-for="PostCode" class="text-danger"></span>
+                    <input type="hidden" name="InitialRM2Number" value="@(Model.PostCode)" />
                 </label>
             </section>
         </div>

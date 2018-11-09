@@ -1,5 +1,6 @@
 ﻿using AspergillosisEPR.Data;
 using AspergillosisEPR.Lib;
+using AspergillosisEPR.Lib.Geodesy;
 using AspergillosisEPR.Lib.Importers.ManARTS;
 using AspergillosisEPR.Lib.PostCodes;
 using AspergillosisEPR.Lib.Search;
@@ -46,6 +47,7 @@ namespace AspergillosisEPR.Models
         public DateTime? DateOfDeath { get; set; }
         public string NhsNumber { get; set; }
         public string GenericNote { get; set; }
+        [RegularExpression(@"^([Gg][Ii][Rr] 0[Aa]{2})|((([A-Za-z][0-9]{1,2})|(([A-Za-z][A-Ha-hJ-Yj-y][0-9]{1,2})|(([A-Za-z][0-9][A-Za-z])|([A-Za-z][A-Ha-hJ-Yj-y][0-9]?[A-Za-z])))) [0-9][A-Za-z]{2})$", ErrorMessage = "Post Code is invalid")]
         public string PostCode { get; set; }
         public double DistanceFromWythenshawe { get; set; }
 
@@ -132,25 +134,23 @@ namespace AspergillosisEPR.Models
             return FirstName.Substring(0, 1) + LastName.Substring(0, 1);
         }
 
-        public Position PatientPosition(ILogger logger)
+        public Position PatientPosition(AspergillosisContext context)
         {
             if (PostCode == null) return new Position();
-            var apiClient = new PostCodeApi(new RestClient(PostCodeApi.ENDPOINT), logger);
-            var postcode = apiClient.RequestPosition(PostCode);
+            var dbPostCode = context.UKPostCodes.Where(pc => pc.Code.Equals(PostCode)).FirstOrDefault();
+            if (dbPostCode == null) return new Position();
             var position = new Position();
-            position.Latitude = postcode.Latitude;
-            position.Longitude = postcode.Longitude;
+            position.Latitude = Math.Round(Decimal.Parse(dbPostCode.Latitude), 6);
+            position.Longitude = Math.Round(Decimal.Parse(dbPostCode.Longitude), 6);
             return position;
         }
 
-        public void SetDistanceFromWythenshawe(ILogger logger)
-        {
-             
-            var wythenshawePosition = UKOutwardCode.WythenshawePosition();
-            var patientPosition = PatientPosition(logger);
-            if (patientPosition.Latitude == 0 || patientPosition.Longitude == 0) return;
-
-            DistanceFromWythenshawe = new Haversine().Distance(wythenshawePosition, patientPosition, DistanceType.Miles);             
+        public void SetDistanceFromWythenshawe(AspergillosisContext context, ILogger logger)
+        {             
+            var patientPosition = PatientPosition(context);
+            var distanceCalculator = new GraphhopperApi(new RestClient(GraphhopperApi.ENDPOINT), logger);
+            var distance = distanceCalculator.RequestDistance(patientPosition);
+            DistanceFromWythenshawe = (double) distance;
         }
     }
 }

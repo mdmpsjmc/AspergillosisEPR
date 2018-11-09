@@ -16,7 +16,8 @@ namespace AspergillosisEPR.Models
 
         public const string WYTHENSHAWE_CODE = "M239LT";
         public const decimal WYTHENSHAWE_LATITUDE = 53.38883374741799m;
-        public const decimal WYTHENSHAWE_LONGITUDE = -2.2931749677671136m;      
+        public const decimal WYTHENSHAWE_LONGITUDE = -2.2931749677671136m;
+        public const decimal METERS_TO_MILES = 0.000621371192m;
 
         public static Position WythenshawePosition()
         {

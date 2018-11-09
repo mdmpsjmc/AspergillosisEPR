@@ -13,7 +13,7 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (var drug in Model.PatientDrugs)
+                @foreach (var drug in Model.PatientDrugs.OrderByDescending(d => d.StartDate))
                      {
                         <tr>
                             <td>@(drug.Drug.Name)</td>

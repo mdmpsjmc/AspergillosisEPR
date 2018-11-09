@@ -166,12 +166,7 @@ namespace AspergillosisEPR.Data
             modelBuilder.Entity<UKOutwardCode>()
                 .Property(p => p.Latitude)
                 .HasPrecision(9, 4);
-            modelBuilder.Entity<UKPostCode>()
-               .Property(p => p.Longitude)
-               .HasPrecision(9, 4);
-            modelBuilder.Entity<UKPostCode>()
-                .Property(p => p.Latitude)
-                .HasPrecision(9, 4);
+           
 
         }
 

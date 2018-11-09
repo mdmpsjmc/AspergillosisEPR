@@ -78,6 +78,7 @@ namespace AspergillosisEPR.Lib
         private void LogRequest(IRestRequest request, IRestResponse response, long durationMs)
         {
           
+
                 var requestToLog = new
                 {
                     resource = request.Resource,

@@ -8,6 +8,8 @@ namespace AspergillosisEPR.Lib
 {
     public class RegularExpressions
     {
+        public static string UK_POST_CODE = @"^([Gg][Ii][Rr] 0[Aa]{2})|((([A-Za-z][0-9]{1,2})|(([A-Za-z][A-Ha-hJ-Yj-y][0-9]{1,2})|(([A-Za-z][0-9][A-Za-z])|([A-Za-z][A-Ha-hJ-Yj-y][0-9]?[A-Za-z])))) [0-9][A-Za-z]{2})$";
+
         public static Regex FindWordInList(List<string> array)
         {
             return new Regex(@"\b(" + string.Join("|", array.Select(Regex.Escape).ToArray()) + @"\b)", RegexOptions.IgnoreCase);
@@ -42,5 +44,12 @@ namespace AspergillosisEPR.Lib
         {
             return new Regex(@"\bClinic date.*|Date of clinic.*|Date of Dictation.*", RegexOptions.IgnoreCase);
         }
+
+        public static Regex UkPostCode()
+        {
+            return new Regex(UK_POST_CODE);
+        }
+
+       
     }
 }
