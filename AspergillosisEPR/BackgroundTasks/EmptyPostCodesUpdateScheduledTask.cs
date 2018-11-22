@@ -30,7 +30,7 @@ namespace AspergillosisEPR.BackgroundTasks
             {
                 var context = scope.ServiceProvider.GetRequiredService<AspergillosisContext>();
                 var pasContext = scope.ServiceProvider.GetRequiredService<PASDbContext>();
-                var patientsWithoutPostCodes = context.Patients.Where(p => p.PostCode == null);
+                var patientsWithoutPostCodes = context.Patients.Where(p => p.DistanceFromWythenshawe == 0);
 
                 foreach (var patientWithoutPostCode in patientsWithoutPostCodes)
                 {

@@ -1,7 +1,7 @@
 ﻿@model AspergillosisEPR.Models.Patient
 @using AspergillosisEPR.Models.Patients;
 
-<div class="col-12 row surgery-form" style="margin: 0px !important">
+<div class="col-10 row surgery-form pull-left" style="margin: 0px !important">
     @for (int i = 0; i < Model.PatientSurgeries.OrderByDescending(q => q.SurgeryDate).ToList().Count; i++)
     {
         PatientSurgery patientSurgery = Model.PatientSurgeries.OrderByDescending(q => q.SurgeryDate).ToList()[i];

@@ -132,13 +132,89 @@
             });
         });
     };
+    
+    var initializeExternalICD10DiagnosisImport = function () {
+        $('button#external-icd-10').on('click', function (e) {
+            e.preventDefault();
+            $.ajax({
+                type: "POST",
+                url: "/Imports/ExternalDatabaseICD10Diagnosis",
+                contentType: false,
+                processData: false,
+                success: function (response) {
+                    if (response.length === 0) {
+                        LoadingIndicator.hide();
+                        alert('Some error occured while uploading');
+                    } else {
+                        $('#batch-upload-response').html("<div class='alert alert-info'><i class='fa fa-info-circle'></i> &nbsp; Processed (added or updated)" + response.result + " records from orginal file</div>");
+                        LoadingIndicator.hide();
+                    }
+                },
+                error: function (e) {
+                    LoadingIndicator.hide();
+                    $('#batch-upload-response').html(e.responseText);
+                }
+            });
+        });
+    };
 
+    var initializeExternalIgImport = function () {
+        $('button#external-ig').on('click', function (e) {
+            e.preventDefault();
+            $.ajax({
+                type: "POST",
+                url: "/ExternalImports/Ig",
+                contentType: false,
+                processData: false,
+                success: function (response) {
+                    if (response.length === 0) {
+                        LoadingIndicator.hide();
+                        alert('Some error occured while uploading');
+                    } else {
+                        $('#batch-upload-response').html("<div class='alert alert-info'><i class='fa fa-info-circle'></i> &nbsp; Processed (added or updated)" + response.result + " records from orginal file</div>");
+                        LoadingIndicator.hide();
+                    }
+                },
+                error: function (e) {
+                    LoadingIndicator.hide();
+                    $('#batch-upload-response').html(e.responseText);
+                }
+            });
+        });
+    };
+
+    var initializeExternalLabResultImport = function () {
+        $('button#external-lab').on('click', function (e) {
+            e.preventDefault();
+            $.ajax({
+                type: "POST",
+                url: "/ExternalImports/LabTests",
+                contentType: false,
+                processData: false,
+                success: function (response) {
+                    if (response.length === 0) {
+                        LoadingIndicator.hide();
+                        alert('Some error occured while uploading');
+                    } else {
+                        $('#batch-upload-response').html("<div class='alert alert-info'><i class='fa fa-info-circle'></i> &nbsp; Processed (added or updated)" + response.result + " records from orginal file</div>");
+                        LoadingIndicator.hide();
+                    }
+                },
+                error: function (e) {
+                    LoadingIndicator.hide();
+                    $('#batch-upload-response').html(e.responseText);
+                }
+            });
+        });
+    };
     return {
         init: function () {
             initializeAjaxImport();
             initializeBatchAjaxImport();
             initImportsDataTable();
             initializePdfBatchAjaxImport();
+            initializeExternalICD10DiagnosisImport();
+            initializeExternalLabResultImport();
         }
-    }
+    };
 }();

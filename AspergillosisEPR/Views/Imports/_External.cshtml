@@ -1,0 +1,32 @@
+﻿@model AspergillosisEPR.Models.AspergillosisViewModels.BatchUploadViewModel;
+<form asp-for="@Url.Action("ExternalDatabases", "Import")" method="POST" class="client-form smart-form" id="postcode-form">
+    <section id="widget-grid" class="">
+        <div class="row">
+            <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="min-height: 300px">
+                <div class="widget-body">
+                    <header>
+                        <i class="fa fa-database fa-2x"></i>&nbsp;Import data
+                    </header>
+
+                    <div class="col-12" style="margin: 0 auto; padding-top: 50px; padding-left: 20px">
+                        <button class="btn btn-lg btn-success" id="external-icd-10">
+                            <i class="fa fa-database"></i>&nbsp; Import patients ICD-10 diagnoses
+                        </button>
+                    </div>
+                    <div class="col-12" style="margin: 0 auto; padding-top: 50px; padding-left: 20px">
+                        <button class="btn btn-lg btn-success" id="external-ig">
+                            <i class="fa fa-database"></i>&nbsp; Import patients Immunoglobulines
+                        </button>
+                    </div>
+
+                    <div class="col-12" style="margin: 0 auto; padding-top: 50px; padding-left: 20px">
+                        <button class="btn btn-lg btn-success" id="external-lab">
+                            <i class="fa fa-database"></i>&nbsp; Import patients test results
+                        </button>
+                    </div>
+
+                </div>
+            </article>
+        </div>
+    </section>
+</form>

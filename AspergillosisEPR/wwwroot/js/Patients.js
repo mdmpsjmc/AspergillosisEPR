@@ -263,7 +263,7 @@
                 UI.initAjaxTab();
             });
         });
-    }
+    };
 
     var updatePatient = function () {
         $(document).off("click.update-patient").on("click.update-patient", "button.update-patient", function (e) {
@@ -546,7 +546,28 @@
             var target = $(e.target).attr("href");
             initPatientsDateTimePickers();
             $("select.selectize, select.select2-search").selectize();
+            console.log(target);
+            if (target.match("ICD") !== null) {
+                initalizeICD10Datatable();
+            }
         });
+    };
+
+    var initalizeICD10Datatable = function () {
+        SimpleDataTable.initializeWithColumnsModal("icd10DT", "table#icd10_datatable", [
+            {
+                "data": "diagnosisDate",
+                "name": "DiagnosisDate",
+                "autoWidth": true,
+                "sortable": true, 
+                "width": 100,
+                "render": function (data) {
+                    return moment.unix(data).format("DD/MM/YYYY");
+                }
+            },
+            { "data": "diagnosisCode", "name": "DiagnosisCode", "sortable": true, "width": 80 },
+            { "data": "diagnosisDescription", "name": "DiagnosisDescription", "autoWidth": true, "sortable": true }
+        ]);       
     };
 
     return {
@@ -585,7 +606,7 @@
             initPatientsDateTimePickers();
             bindNewPartialOnPatientFormClick();
             onExportOptionsShow();
-            onPatientTabChange()
+            onPatientTabChange();
         },
 
         setupForm: function() {
@@ -611,6 +632,10 @@
 
         onPatientTabChange: function () {
             onPatientTabChange();
+        },
+
+        initalizeICD10Datatable: function () {
+            return initalizeICD10Datatable();
         },
 
         init: function() {

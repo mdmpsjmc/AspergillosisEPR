@@ -688,6 +688,29 @@ namespace AspergillosisEPR.Migrations.Aspergillosis
                     b.ToTable("PatientHaematologies");
                 });
 
+            modelBuilder.Entity("AspergillosisEPR.Models.Patients.PatientICD10Diagnosis", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("DiagnosisCode");
+
+                    b.Property<DateTime>("DiagnosisDate");
+
+                    b.Property<string>("DiagnosisDescription")
+                        .HasColumnType("text");
+
+                    b.Property<long>("OriginalImportId");
+
+                    b.Property<int>("PatientId");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("PatientId");
+
+                    b.ToTable("PatientICD10Diagnoses");
+                });
+
             modelBuilder.Entity("AspergillosisEPR.Models.Patients.PatientImmunoglobulin", b =>
                 {
                     b.Property<int>("ID")
@@ -702,6 +725,8 @@ namespace AspergillosisEPR.Migrations.Aspergillosis
                     b.Property<string>("Range");
 
                     b.Property<string>("SampleId");
+
+                    b.Property<decimal?>("SourceSystemGUID");
 
                     b.Property<decimal>("Value");
 
@@ -981,6 +1006,8 @@ namespace AspergillosisEPR.Migrations.Aspergillosis
 
                     b.Property<string>("SampleId");
 
+                    b.Property<decimal>("SourceSystemGUID");
+
                     b.Property<int>("TestTypeId");
 
                     b.Property<int>("UnitOfMeasurementId");
@@ -1224,7 +1251,11 @@ namespace AspergillosisEPR.Migrations.Aspergillosis
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<string>("Code");
+
                     b.Property<string>("Name");
+
+                    b.Property<int>("UnitOfMeasurementId");
 
                     b.HasKey("ID");
 
@@ -1256,11 +1287,9 @@ namespace AspergillosisEPR.Migrations.Aspergillosis
 
                     b.Property<string>("Code");
 
-                    b.Property<decimal>("Latitude")
-                        .HasColumnType("decimal(9,4)");
+                    b.Property<string>("Latitude");
 
-                    b.Property<decimal>("Longitude")
-                        .HasColumnType("decimal(9,4)");
+                    b.Property<string>("Longitude");
 
                     b.HasKey("ID");
 
@@ -1573,6 +1602,14 @@ namespace AspergillosisEPR.Migrations.Aspergillosis
                 {
                     b.HasOne("AspergillosisEPR.Models.Patient")
                         .WithMany("PatientHaematologies")
+                        .HasForeignKey("PatientId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("AspergillosisEPR.Models.Patients.PatientICD10Diagnosis", b =>
+                {
+                    b.HasOne("AspergillosisEPR.Models.Patient")
+                        .WithMany("PatientICD10Diagnoses")
                         .HasForeignKey("PatientId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });

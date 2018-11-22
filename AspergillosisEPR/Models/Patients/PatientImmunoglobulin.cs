@@ -20,6 +20,7 @@ namespace AspergillosisEPR.Models.Patients
         public DateTime DateTaken { get; set; }
         public decimal Value { get; set;  }
         public ImmunoglobulinType ImmunoglobulinType { get; set; }
+        public decimal? SourceSystemGUID { get; set; } = 0;
 
 
         override public List<string> ExcludedProperties()
@@ -29,5 +30,23 @@ namespace AspergillosisEPR.Models.Patients
                 "PatientId", "Patient", "ImmunoglobulinType", "SampleId", "Range"
             };
         }
+
+
+        public static string IgFromCode(string code)
+        {
+            return Codes()[code];
+        }
+
+        public static Dictionary<string, string> Codes()
+        {
+            var codes = new Dictionary<string, string>();
+            codes.Add("ASPIGG", "Aspergillus F IgG");
+            codes.Add("ASPIGE", "Aspergillus F IgE");
+            codes.Add("IGEX2", "Total IgE");
+            codes.Add("WIGM", "IgM");
+            codes.Add("WIGA", "IgA");
+            return codes;
+        }
+
     }
 }

@@ -69,7 +69,8 @@ namespace AspergillosisEPR.Models
         public ICollection<PatientHaematology> PatientHaematologies { get; set;}
         public ICollection<PatientTestResult> PatientTestResults { get; set; }
         public ICollection<PatientMRCScore> PatientMRCScores { get; set; } = new List<PatientMRCScore>();
-           
+        public ICollection<PatientICD10Diagnosis> PatientICD10Diagnoses { get; set; } = new List<PatientICD10Diagnosis>();
+
         [Display(Name = "Full Name")]
         public string FullName
         {
@@ -78,25 +79,16 @@ namespace AspergillosisEPR.Models
         public static readonly List<string> Genders = new List<string>() { "male", "female" };
 
         public int Age()
-        {
-            int age = 0;
-            int endDate = 0;
-            int endDateDayOfYear = 0;
+        {            
             if (IsAlive())
             {
-                endDate = DateTime.Now.Year;
-                endDateDayOfYear = DateTime.Now.DayOfYear;
+                var ageCalculator = new DatesCalculator(DOB, DateTime.Now);
+                return ageCalculator.Years();
             } else
             {
-                endDate = DateOfDeath.Value.Year;
-                endDateDayOfYear = DateOfDeath.Value.DayOfYear;
-            }
-            age = endDate  - DOB.Year;
-            if (endDateDayOfYear < DOB.DayOfYear)
-                age = age - 1;
-            
-            return age;
-            
+                var deathCalculator = new DatesCalculator(DOB, DateOfDeath.Value);
+                return deathCalculator.Years();
+            }                       
         }
 
         public bool IsDeceased()
@@ -125,6 +117,7 @@ namespace AspergillosisEPR.Models
                 { "RM2 Number", "RM2Number" },
                 { "Date of Birth", "DOB" },
                 { "Date of Death", "DateOfDeath" },
+                { "Distance from hospital", "DistanceFromWythenshawe" },
                 { "Status", "PatientStatus.PatientStatusId.Select" }
             }; 
         }

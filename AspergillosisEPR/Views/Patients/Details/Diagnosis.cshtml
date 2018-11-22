@@ -1,7 +1,10 @@
-﻿<div class="tab-content">
-    <ul class="nav nav-tabs">
+﻿<div class="tab-content tabs-left">
+    <ul class="nav nav-tabs tabs-left">
         <li class="active">
-            <a href="#deseases" data-toggle="tab">Deseases</a>
+            <a href="#deseases" data-toggle="tab">Clinic letters</a>
+        </li>
+        <li class="">
+            <a href="/patients/@(Model.Patient.ID)/ICD10Diagnoses" data-toggle="tabajax" data-target="#icd10">ICD-10</a>
         </li>
         <li class="">
             <a href="#surgeries" data-toggle="tab">Surgeries</a>
@@ -13,6 +16,8 @@
     <div class="tab-content padding-10">
         <div class="tab-pane active in" id="deseases">
             @Html.Partial("/Views/Patients/Details/_Deseases.cshtml")
+        </div>
+        <div class="tab-pane active in pull-left" id="icd10" style="width: 575px">
         </div>
         <div class="tab-pane fade" id="surgeries">
             @Html.Partial("/Views/Patients/Details/_Surgeries.cshtml")

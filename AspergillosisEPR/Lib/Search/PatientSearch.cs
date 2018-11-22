@@ -31,8 +31,8 @@ namespace AspergillosisEPR.Search
                 { "Starts With", "StartsWith.String" },
                 { "Ends With", "EndsWith.String" },
                 { "Contains", "Contains.String" },
-                { "Greater Than", "GreaterThan.Date"},
-                { "Smaller Than", "SmallerThan.Date" }
+                { "Greater Than", "GreaterThan.Date.Distance"},
+                { "Smaller Than", "SmallerThan.Date.Distance" },
             };
         }
     }

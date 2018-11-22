@@ -162,6 +162,7 @@
             var compareSelect = $(this).parents("section").next("section");
             var index = $("div.search-criteria-row:visible").length - 1;
             var fieldType = selectedText.match(/Date/) !== null ? "Date" : "String";
+            fieldType = selectedText.match(/Distance/) !== null ? "Distance" : "String";
             var partialRequestUrl = "/Partials/SearchCriteria?index=" + index + "&fieldType=" + fieldType;
             updateSearchCriteria(this);
             $.get(partialRequestUrl, function (htmlResponse) {
@@ -171,14 +172,14 @@
                     $('input.datepicker').datetimepicker({
                         format: 'YYYY-MM-DD'
                     });
-                } else if (selectedText.match(/Date/) === null) {
+                } else if ((selectedText.match(/Date/) === null) && (selectedText.match(/Distance/) == null)) {
                     compareSelect.find("select option[value='SmallerThan']").remove();
                     compareSelect.find("select option[value='GreaterThan']").remove();
                     if (searchField.hasClass("datepicker")) {
                         searchField.removeClass("datepicker");
                         searchField.datetimepicker("destroy");
                     }
-                }
+                } 
             });
         });
     }

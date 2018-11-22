@@ -5,8 +5,8 @@
         initialize: function (referenceName, dataTableId, collection) {
             window[referenceName] = $(dataTableId).DataTable({
                 dom: "<'row'<'col-sm-3'l><'col-sm-3'f><'col-sm-6'p>>" +
-                "<'row'<'col-sm-12'tr>>" +
-                "<'row'<'col-sm-5'i><'col-sm-7'p>>",
+                    "<'row'<'col-sm-12'tr>>" +
+                    "<'row'<'col-sm-5'i><'col-sm-7'p>>",
                 "processing": true,
                 "serverSide": true,
                 "filter": true,
@@ -45,8 +45,8 @@
         initializeWithColumns: function (referenceName, dataTableId, collection, columns) {
             window[referenceName] = $(dataTableId).DataTable({
                 dom: "<'row'<'col-sm-3'l><'col-sm-3'f><'col-sm-6'p>>" +
-                "<'row'<'col-sm-12'tr>>" +
-                "<'row'<'col-sm-5'i><'col-sm-7'p>>",
+                    "<'row'<'col-sm-12'tr>>" +
+                    "<'row'<'col-sm-5'i><'col-sm-7'p>>",
                 "processing": true,
                 "serverSide": true,
                 "filter": true,
@@ -68,7 +68,37 @@
             window[referenceName].on('draw.dt', function () {
                 Users.loadDataTableWithForCurrentUserRoles();
             });
+        },
+
+        initializeWithColumnsModal: function (referenceName, dataTableId, columns) {
+            if (window[referenceName] !== undefined) window[referenceName].destroy
+            window[referenceName] = $(dataTableId).DataTable({
+                "processing": true,
+                "serverSide": true,
+                "lengthChange": false,
+                "filter": true,
+                "responsive": false,
+                "retrieve": true,
+                "orderMulti": false,
+                "pageLength": 100,
+                "order": [[0, "desc"]],
+                "ajax": {
+                    "url": $(dataTableId).data("url"),
+                    "type": "POST",
+                    "datatype": "json"
+                },
+                "language": {
+                    "search": '<i class="fa fa-search"></i>'
+                },
+                "columns": columns
+            });
+
+            window[referenceName].on('draw.dt', function () {
+            });
+            var container = window[referenceName].table().container();
+            $(container).css("css", "width: 575px");
         }
-    }
+
+    };
 
 }();

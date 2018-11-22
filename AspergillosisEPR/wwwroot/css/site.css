@@ -101,6 +101,7 @@ div#diagnosis,
 div#stg,
 div#radiology,
 div#lab-test-modal .modal-body,
+div#lab .modal-body,
 div#measurements{
     max-height: 600px;
     overflow-y: scroll;

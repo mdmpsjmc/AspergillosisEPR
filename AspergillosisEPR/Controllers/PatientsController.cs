@@ -19,6 +19,7 @@ using System.ComponentModel.DataAnnotations;
 using AspergillosisEPR.Lib.CaseReportForms;
 using AspergillosisEPR.Models.CaseReportForms;
 using AspergillosisEPR.Models.Patients;
+using AspergillosisEPR.Models.ExternalImportDb;
 
 namespace AspergillosisEPR.Controllers
 {
@@ -26,18 +27,20 @@ namespace AspergillosisEPR.Controllers
     public class PatientsController : Controller
     {
         private readonly AspergillosisContext _context;
+        private readonly ExternalImportDbContext _externalImport;
         private PatientManager _patientManager;
         private DropdownListsResolver _listResolver;
         private CaseReportFormsDropdownResolver _caseReportFormListResolver;
         private CaseReportFormManager _caseReportFormManager;
 
-        public PatientsController(AspergillosisContext context)
+        public PatientsController(AspergillosisContext context, ExternalImportDbContext externalImport)
         {
             _patientManager = new PatientManager(context, Request);
             _context = context;
             _listResolver = new DropdownListsResolver(context, ViewBag);
             _caseReportFormListResolver = new CaseReportFormsDropdownResolver(context);
             _caseReportFormManager = new CaseReportFormManager(context);
+            _externalImport = externalImport;
 
         }
 
@@ -105,6 +108,9 @@ namespace AspergillosisEPR.Controllers
                 {
                     _context.Add(patient);
                     _context.SaveChanges();
+                    _externalImport.Add(ExternalPatient.BuildFromPatient(patient));
+                    var externalPatient = new ExternalPatient();
+                    _externalImport.SaveChanges();
                     return Json(new { result = "ok" });
                 }
                 else

@@ -34,16 +34,19 @@ namespace AspergillosisEPR.Controllers
         private Importer _importer;
         private ImporterResolver _importerResolver;
         private readonly PASDbContext _pasContext;
+        private readonly ExternalImportDbContext _externalImportDbContext;
 
         public ImportsController(IHostingEnvironment hostingEnvironment, 
                                  AspergillosisContext context,
                                  PASDbContext pasContext, 
+                                 ExternalImportDbContext externalImportDbContext,
                                  IConfiguration configuration)
         {
             _hostingEnvironment = hostingEnvironment;
             _context = context;
             _pasContext = pasContext;
             _configuration = configuration;
+            _externalImportDbContext = externalImportDbContext;
             _importerResolver = new ImporterResolver(_context);
         }
 
@@ -86,6 +89,29 @@ namespace AspergillosisEPR.Controllers
             await _context.SaveChangesAsync();
             return Json(new { result = _importer.Imported.Count() });
         }
+
+        [HttpPost]
+        public async Task<IActionResult> ExternalDatabaseICD10Diagnosis()
+        {
+            var allPatients = _context.Patients;
+            foreach(var patient in allPatients)
+            {
+                var icd10Diagnoses = _externalImportDbContext.Diagnoses.Where(d => d.RM2Number.Equals("RM2" + patient.RM2Number));
+                if (!icd10Diagnoses.Any()) continue;
+                foreach(var diagnosis in icd10Diagnoses)
+                {
+                    var icd10Diagnosis = new PatientICD10Diagnosis();
+                    icd10Diagnosis.DiagnosisCode = diagnosis.DiagnosisCode;
+                    icd10Diagnosis.DiagnosisDescription = diagnosis.DiagnosisDescription;
+                    icd10Diagnosis.DiagnosisDate = diagnosis.DiagnosisDate;
+                    icd10Diagnosis.PatientId = patient.ID;
+                    icd10Diagnosis.OriginalImportId = diagnosis.ID;
+                    await _context.PatientICD10Diagnoses.AddAsync(icd10Diagnosis);                    
+                }
+            }
+            await _context.SaveChangesAsync();
+            return Ok();
+        }     
 
         private void SaveItemsInDatabase()
         {

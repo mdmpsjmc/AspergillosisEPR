@@ -350,6 +350,14 @@ namespace AspergillosisEPR.Models.PatientViewModels
                 case "StartsWith":
                     Predicate = Predicate.And(m => m.GetType().GetProperty(Field).GetValue(m, null).ToString().StartsWith(SearchValue));
                     break;
+                case "GreaterThan.Distance":
+                    string searchField = "DistanceFromWythenshawe";
+                    Predicate = Predicate.And(m => ((double) m.GetType().GetProperty(searchField).GetValue(m, null)) > double.Parse(SearchValue));
+                    break;
+                case "SmallerThan.Distance":
+                    string searchField2 = "DistanceFromWythenshawe";
+                    Predicate = Predicate.And(m => ((double) m.GetType().GetProperty(searchField2).GetValue(m, null)) < double.Parse(SearchValue));
+                    break;
             }
             return Predicate;
         }
@@ -375,6 +383,14 @@ namespace AspergillosisEPR.Models.PatientViewModels
                     break;
                 case "StartsWith":
                     Predicate = Predicate.Or(m => m.GetType().GetProperty(Field).GetValue(m, null).ToString().StartsWith(SearchValue));
+                    break;
+                case "GreaterThan.Distance":
+                    string searchField = "DistanceFromWythenshawe";
+                    Predicate = Predicate.Or(m => ((double)m.GetType().GetProperty(searchField).GetValue(m, null)) > double.Parse(SearchValue));
+                    break;
+                case "SmallerThan.Distance":
+                    string searchField2 = "DistanceFromWythenshawe";
+                    Predicate = Predicate.Or(m => ((double)m.GetType().GetProperty(searchField2).GetValue(m, null)) > double.Parse(SearchValue));
                     break;
             }
             return Predicate;

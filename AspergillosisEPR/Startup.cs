@@ -49,13 +49,7 @@ namespace AspergillosisEPR
 
             services.AddSingleton<IFileProvider>(compositeProvider);
             services.AddSingleton<IConfiguration>(Configuration);
-            services.AddDbContext<AspergillosisContext>(options =>
-                        options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"), b => b.UseRowNumberForPaging()));
-            services.AddDbContext<ApplicationDbContext>(options =>
-                       options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"), b => b.UseRowNumberForPaging()));
-            services.AddDbContext<PASDbContext>(options =>
-                       options.UseSqlServer(Configuration.GetConnectionString("PASConnection"), b => b.UseRowNumberForPaging())
-           );
+            ConfigureContexts(services);
             services.AddIdentity<ApplicationUser, ApplicationRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
@@ -67,7 +61,7 @@ namespace AspergillosisEPR
             // Add application services.
 
             services.AddTransient<IEmailSender, EmailSender>();
-            services.AddTransient<PatientViewModel>();            
+            services.AddTransient<PatientViewModel>();
             services.AddMvc();
             services.AddRouteAnalyzer();
             services.AddMvc().AddJsonOptions(options =>
@@ -87,9 +81,27 @@ namespace AspergillosisEPR
             ConfigurePdfService(services);
             services.AddScoped<IViewRenderService, ViewRenderService>();
             services.AddSingleton<IHostedService, PatientAdministrationSystemStatusTask>();
+            services.AddSingleton<IHostedService, ImmunoglobulinUpdateBackgroundTask>(); 
             services.AddSingleton<IHostedService, EmptyPostCodesUpdateScheduledTask>();
             services.AddHostedService<QueuedHostedService>();
             services.AddSingleton<IBackgroundTaskQueue, BackgroundTaskQueue>();
+        }
+
+        private void ConfigureContexts(IServiceCollection services)
+        {
+            services.AddDbContext<AspergillosisContext>(options =>
+                        options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"), 
+                                             b => b.UseRowNumberForPaging()));
+            services.AddDbContext<ApplicationDbContext>(options =>
+                       options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"), 
+                                            b => b.UseRowNumberForPaging()));
+            services.AddDbContext<PASDbContext>(options =>
+                       options.UseSqlServer(Configuration.GetConnectionString("PASConnection"), 
+                                            b => b.UseRowNumberForPaging()));
+            services.AddDbContext<ExternalImportDbContext>(options =>
+                       options.UseSqlServer(Configuration.GetConnectionString("ImportDbConnection"), 
+                                                b => b.UseRowNumberForPaging())
+           );
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
