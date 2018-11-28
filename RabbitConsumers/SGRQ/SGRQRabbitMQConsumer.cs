@@ -26,11 +26,11 @@ namespace RabbitConsumers
             var objectMessages = new List<RootObject>();
 
             for (int cursor=0; cursor < messages.Count; cursor++ )
-             {
+            {
                 var rabbitMessage = messages[cursor];
                 var objectMessage = JsonConvert.DeserializeObject<RootObject>(rabbitMessage);
                 objectMessages.Add(objectMessage);
-             }      
+            }      
 
             var manager = new SGRQMananger(objectMessages);
             manager.GetObjects();          

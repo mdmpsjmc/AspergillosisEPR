@@ -19,5 +19,6 @@ namespace AspergillosisEPR.Models.ExternalImportDb
         public string NormalRange { get; set; }
         public string AbnormalFlag { get; set; }
         public DateTime DatePerformed { get; set; }
+        public DateTime DateEntered { get; set; }
     }
 }

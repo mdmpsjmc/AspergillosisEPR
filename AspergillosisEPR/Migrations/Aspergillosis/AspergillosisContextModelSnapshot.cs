@@ -600,6 +600,8 @@ namespace AspergillosisEPR.Migrations.Aspergillosis
 
                     b.Property<decimal>("ResultValue");
 
+                    b.Property<decimal>("SourceSystemGUID");
+
                     b.Property<int>("UnitOfMeasurementId");
 
                     b.HasKey("ID");

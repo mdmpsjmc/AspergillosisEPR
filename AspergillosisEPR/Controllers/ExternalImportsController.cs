@@ -141,6 +141,60 @@ namespace AspergillosisEPR.Controllers
             }
             await _context.SaveChangesAsync();
             return Ok();
-        }     
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Vori()
+        {
+            var allPatients = _context.Patients
+                                      .Include(p => p.DrugLevels);
+
+            var drug = _context.Drugs
+                               .FirstOrDefault(d => d.Name.Equals("Voriconazole"));
+
+            var uom = _context.UnitOfMeasurements.Where(u => u.Name == "mg/L").FirstOrDefault();
+            foreach (var patient in allPatients)
+            {
+                var results = _externalImportDbContext.PathologyReports
+                                                        .Where(r => r.OrderItemCode.Equals("VORI")
+                                                                && r.RM2Number == "RM2" + patient.RM2Number);
+                if (!results.Any()) continue;
+                var existingDates = patient.DrugLevels
+                                           .Where(pi => pi.DrugId == drug.ID)
+                                           .Select(pi => pi.DateTaken.Date)
+                                           .ToList();
+
+                foreach (var result in results)
+                {
+                    if (existingDates.FindAll(d => d.Date == result.DatePerformed.Date).ToList().Count == 0)
+                    {
+                        if (result.Result == null) continue;
+                        var patientDrugLevel = new PatientDrugLevel();
+                        patientDrugLevel.PatientId = patient.ID;
+                        patientDrugLevel.DateTaken = result.DatePerformed;
+                        patientDrugLevel.DateReceived = result.DateEntered;
+                        patientDrugLevel.SourceSystemGUID = result.ObservationGUID;
+                        patientDrugLevel.UnitOfMeasurementId = uom.ID;
+                        try
+                        {
+                            patientDrugLevel.ResultValue = Decimal.Parse(result.Result
+                                                                  .Replace("<", String.Empty)
+                                                                  .Replace("*", String.Empty)
+                                                                  .Replace(">", String.Empty));
+
+                        }
+                        catch (System.FormatException e)
+                        {
+                            Console.WriteLine("VALUE::::::::::::" + result.Result);
+                            continue;
+                        }
+
+                        await _context.PatientDrugLevels.AddAsync(patientDrugLevel);
+                    }
+                }
+            }
+            await _context.SaveChangesAsync();
+            return Ok();
+        }
     }
 }

@@ -7,6 +7,7 @@ using System.Linq;
 using NLog;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using ILogger = Microsoft.Extensions.Logging.ILogger;
 
 namespace AspergillosisEPR.Lib
 {
@@ -15,7 +16,7 @@ namespace AspergillosisEPR.Lib
         protected  IRestClient _restClient;
         protected Microsoft.Extensions.Logging.ILogger _logger;
 
-        protected RestApiBase(IRestClient restClient, Microsoft.Extensions.Logging.ILogger logger)
+        protected RestApiBase(IRestClient restClient, ILogger logger)
         {
             _restClient = restClient;
             _logger = logger;
