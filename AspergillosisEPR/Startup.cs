@@ -80,10 +80,12 @@ namespace AspergillosisEPR
                 .LastUpdatedColumnName("LastUpdatedDate"));
             ConfigurePdfService(services);
             services.AddScoped<IViewRenderService, ViewRenderService>();
-            services.AddSingleton<IHostedService, PatientAdministrationSystemStatusTask>();
-            services.AddSingleton<IHostedService, ImmunoglobulinUpdateBackgroundTask>(); 
-            services.AddSingleton<IHostedService, EmptyPostCodesUpdateScheduledTask>();
-            services.AddSingleton<IHostedService, PatientTestResultBackgroundUpdateTask>();
+            services.AddSingleton<IHostedService, PatientAdministrationSystemStatusTask>(); //sunday
+            services.AddSingleton<IHostedService, PatientVoriconazoleLevelBackgruondTask>();//monday
+            services.AddSingleton<IHostedService, ImmunoglobulinUpdateBackgroundTask>(); //runs tuesday
+            services.AddSingleton<IHostedService, EmptyPostCodesUpdateScheduledTask>(); //runs wednesday
+            services.AddSingleton<IHostedService, PatientTestResultBackgroundUpdateTask>();//thursday       
+            services.AddSingleton<IHostedService, PatientRadiologyUpdateBackgroundTask>();//friday       
             services.AddHostedService<QueuedHostedService>();
             services.AddSingleton<IBackgroundTaskQueue, BackgroundTaskQueue>();
         }

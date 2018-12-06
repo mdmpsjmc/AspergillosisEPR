@@ -48,6 +48,7 @@ namespace AspergillosisEPR.Data.DatabaseSeed
             ReportTypeSeed.AddCPAMortalityAudit(context);
             ReportTypeSeed.AddIgGAndSGRQReport(context);
             AllTestTypesSeed.Seed(context);
+            RadiologyDataInitializer.OtherRadiologyTypes(context, hostingEnvironment);
             //PostcodeSeed.ReadCsvIntoDatabase(hostingEnvironment, context);
         }
     }

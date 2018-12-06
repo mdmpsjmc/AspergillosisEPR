@@ -95,6 +95,7 @@ namespace AspergillosisEPR.Data
         public DbSet<PatientTestResult> PatientTestResult { get; set; }
         public DbSet<PatientMRCScore> PatientMRCScores { get; set; }
         public DbSet<PatientICD10Diagnosis> PatientICD10Diagnoses { get; set; }
+        public DbSet<PatientRadiologyNote> PatientRadiologyNotes { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

@@ -645,28 +645,32 @@ namespace AspergillosisEPR.Lib.Reporting
             {
                 var nextToHeaderRow = patientCursor + 1;
                 var currentPatient = patients.ToList()[patientCursor];
-                var currentRow = currentSheet.CreateRow(nextToHeaderRow);
                 _context.Entry(currentPatient).Collection(p => p.PatientNACDates).Load();
+                var date = currentPatient.PatientNACDates.FirstOrDefault();
+                var currentRow = currentSheet.CreateRow(nextToHeaderRow);
                 currentRow.CreateCell(0).SetCellValue(currentPatient.RM2Number);
                 currentRow.CreateCell(1).SetCellValue(currentPatient.FirstName);
                 currentRow.CreateCell(2).SetCellValue(currentPatient.LastName);
                 currentRow.CreateCell(3).SetCellValue(currentPatient.Age());
-                currentRow.CreateCell(4).SetCellValue(currentPatient.Gender);
-                currentRow.CreateCell(5).SetCellValue(currentPatient.PostCode);
-                currentRow.CreateCell(6).SetCellValue(GetDistanceFromWythenshawe(currentPatient));
-                var date = currentPatient.PatientNACDates.FirstOrDefault();
+                if (date != null) currentRow.CreateCell(4).SetCellValue(date.AgeWhenFirstSeen());
+                currentRow.CreateCell(5).SetCellValue(currentPatient.Gender);
+                currentRow.CreateCell(6).SetCellValue(currentPatient.PostCode);
+                currentRow.CreateCell(7).SetCellValue(GetDistanceFromWythenshawe(currentPatient));
+                currentRow.CreateCell(8).SetCellValue(currentPatient.BucketDistance());
                 if (date != null)
                 {
-                    currentRow.CreateCell(7).SetCellValue(date.FirstSeenAtNAC.ToString("dd/MM/yyyy"));
-                    if (date.LastObservationPoint != null) currentRow.CreateCell(8).SetCellValue(date.LastObservationPoint.Value.ToString("dd/MM/yyyy"));
-                    if (date.ProbableStartOfDisease != null) currentRow.CreateCell(9).SetCellValue(date.ProbableStartOfDisease.Value.ToString("dd/MM/yyyy"));
-                    if (date.DefiniteStartOfDisease != null) currentRow.CreateCell(10).SetCellValue(date.DefiniteStartOfDisease.Value.ToString("dd/MM/yyyy"));
-                    if (date.DateOfDiagnosis != null) currentRow.CreateCell(11).SetCellValue(date.DateOfDiagnosis.Value.ToString("dd/MM/yyyy"));
+                    currentRow.CreateCell(9).SetCellValue(date.FirstSeenAtNAC.ToString("dd/MM/yyyy"));
+                    if (date.LastObservationPoint != null) currentRow.CreateCell(10).SetCellValue(date.LastObservationPoint.Value.ToString("dd/MM/yyyy"));
+                    if (currentPatient.DateOfDeath != null)
+                    {
+                        currentRow.CreateCell(11).SetCellValue(currentPatient.DateOfDeath.Value.ToString("dd/MM/yyyy"));
+                    }
+                    if (date.DateOfDiagnosis != null) currentRow.CreateCell(12).SetCellValue(date.DateOfDiagnosis.Value.ToString("dd/MM/yyyy"));
+                    if (date.ProbableStartOfDisease != null) currentRow.CreateCell(13).SetCellValue(date.ProbableStartOfDisease.Value.ToString("dd/MM/yyyy"));
+                    if (date.DefiniteStartOfDisease != null) currentRow.CreateCell(14).SetCellValue(date.DefiniteStartOfDisease.Value.ToString("dd/MM/yyyy"));
+
                 }
-                if (currentPatient.DateOfDeath != null)
-                {
-                    currentRow.CreateCell(12).SetCellValue(currentPatient.DateOfDeath.Value.ToString("dd/MM/yyyy"));
-                }
+           
             }
         }
 
@@ -683,16 +687,18 @@ namespace AspergillosisEPR.Lib.Reporting
                 "RM2",
                 "Forename",
                 "Surname",
-                "Age",
+                "AgeAtDeath",
+                "AgeWhenFirstSeen",
                 "Sex",
                 "Postcode",
                 "DistanceFromWythenshawe",
+                "DistanceBucket",
                 "FirstSeenAtNAC", 
                 "LastObservationPoint",
+                "DateOfDeath",
+                "DateOfDiagnosis",
                 "ProbableStartOfDisease",
                 "DefiniteStartOfDisease",
-                "DateOfDiagnosis",
-                "DateOfDeath"
             };
             MakeHeadersBold(headersRow, headers);
         }

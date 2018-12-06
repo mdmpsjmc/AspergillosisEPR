@@ -41,6 +41,7 @@ namespace AspergillosisEPR.Models.Patients
         public Patient Patient { get; set; }
         public UnitOfMeasurement UnitOfMeasurement { get; set; }
         public decimal SourceSystemGUID { get; set; }
+        public DateTime? CreatedDate { get; set; }
 
         override public List<string> ExcludedProperties()
         {

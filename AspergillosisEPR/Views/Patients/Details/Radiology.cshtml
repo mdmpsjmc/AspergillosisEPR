@@ -1,40 +1,20 @@
-﻿@model AspergillosisEPR.Models.PatientViewModels.PatientDetailsViewModel
+﻿<div class="tab-content tabs-left">
+    <ul class="nav nav-tabs tabs-left">
+        <li class="active">
+            <a href="#apperances" data-toggle="tab">Apperances</a>
+        </li>
+        <li class="">
+            <a href="/patients/@(Model.Patient.ID)/Notes" data-toggle="tabajax" data-target="#notes">Notes</a>
+        </li>
+        <li class="">
+        </li>
+    </ul>
+    <div class="tab-content padding-10">
+        <div class="tab-pane active in pull-left" id="apperances" style="width: 575px">
+            @Html.Partial("/Views/Patients/Details/_Apperances.cshtml")
+        </div>
+        <div class="tab-pane pull-left" id="notes">
 
-@if (Model.PatientRadiologyFindings != null && Model.PatientRadiologyFindings.Any())
-{
-    <div class="col-sm-12">
-       <table class="table table-bordered table-striped">
-       <tbody>
-        @foreach (var radiology in Model.PatientRadiologyFindings.OrderByDescending(ig => ig.DateTaken))
-        {
-        <tr>
-            <td>@(radiology.RadiologyType.Name)</td>
-            @if (radiology.DateTaken != null)
-            {
-                <td>@(radiology?.DateTaken.Value.ToString("dd/MM/yyyy"))</td>
-            }
-            <td>@(radiology.Appearance)</td>
-        </tr>
-                    @if (!string.IsNullOrEmpty(radiology.Note))
-                    {
-                        <tr>
-                            <td></td>
-                            <td style="font-style: italic;">@(radiology.Note)</td>
-                        </tr>
-                    }
-        }
-       </tbody>
-       </table>
-    </div>
-}
-else
-{
-    <div class="col-sm-12">
-        <div class="alert alert-info alert-block">
-            <h4 class="alert-heading">Info!</h4>
-            <i class="fa fa-info-circle"></i>
-            This patient does not currently have any radiology scans in database
         </div>
     </div>
-
-}
+</div>

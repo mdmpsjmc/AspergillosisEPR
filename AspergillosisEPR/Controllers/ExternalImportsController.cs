@@ -61,6 +61,7 @@ namespace AspergillosisEPR.Controllers
                             patientIgG.DateTaken = iggLevel.DatePerformed;
                             patientIgG.ImmunoglobulinTypeId = igType.ID;
                             patientIgG.SourceSystemGUID = iggLevel.ObservationGUID;
+                            patientIgG.CreatedDate = DateTime.Now;
                             try
                             {
                                 patientIgG.Value = Decimal.Parse(iggLevel.Result
@@ -119,6 +120,8 @@ namespace AspergillosisEPR.Controllers
                             patientTestResult.TestTypeId = testType.ID;
                             patientTestResult.SourceSystemGUID = result.ObservationGUID;
                             patientTestResult.UnitOfMeasurementId = testType.UnitOfMeasurementId;
+                            patientTestResult.CreatedDate = DateTime.Now;
+
                             try
                             {
                                 patientTestResult.Value = Decimal.Parse(result.Result
@@ -175,6 +178,9 @@ namespace AspergillosisEPR.Controllers
                         patientDrugLevel.DateReceived = result.DateEntered;
                         patientDrugLevel.SourceSystemGUID = result.ObservationGUID;
                         patientDrugLevel.UnitOfMeasurementId = uom.ID;
+                        patientDrugLevel.DrugId = drug.ID;
+                        patientDrugLevel.CreatedDate = DateTime.Now;
+
                         try
                         {
                             patientDrugLevel.ResultValue = Decimal.Parse(result.Result
@@ -190,6 +196,44 @@ namespace AspergillosisEPR.Controllers
                         }
 
                         await _context.PatientDrugLevels.AddAsync(patientDrugLevel);
+                    }
+                }
+            }
+            await _context.SaveChangesAsync();
+            return Ok();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Radiology()
+        {
+            var allPatients = _context.Patients
+                                   .Include(p => p.PatientRadiologyNotes);
+            foreach (var radiology in _context.RadiologyTypes)
+            {
+                foreach (var patient in allPatients)
+                {
+                    var results = _externalImportDbContext.RadiologyReports
+                                                            .Where(r => r.OrderItemCode.Equals(radiology.Name)
+                                                                    && r.RM2Number == "RM2" + patient.RM2Number);
+                    if (!results.Any()) continue;
+                    var existingDates = patient.PatientRadiologyNotes
+                                               .Where(pi => pi.RadiologyTypeId == radiology.ID)
+                                               .Select(pi => pi.DateTaken.Date)
+                                               .ToList();
+
+                    foreach (var result in results)
+                    {
+                        if (existingDates.FindAll(d => d.Date == result.DatePerformed.Date).ToList().Count == 0)
+                        {
+                            var patientRadiologyNote = new PatientRadiologyNote();
+                            patientRadiologyNote.PatientId = patient.ID;
+                            patientRadiologyNote.DateTaken = result.DatePerformed;
+                            patientRadiologyNote.RadiologyTypeId = radiology.ID;
+                            patientRadiologyNote.SourceSystemGUID = result.OrderGUID;
+                            patientRadiologyNote.Note = result.Report;
+                            patientRadiologyNote.CreatedDate = DateTime.Now;
+                            await _context.PatientRadiologyNotes.AddAsync(patientRadiologyNote);
+                        }
                     }
                 }
             }

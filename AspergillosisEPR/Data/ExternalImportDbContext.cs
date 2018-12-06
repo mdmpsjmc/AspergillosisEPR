@@ -14,6 +14,7 @@ namespace AspergillosisEPR.Data
         public DbSet<Diagnosis> Diagnoses { get; set; }
         public DbSet<ExternalPatient> Patients { get; set; }
         public DbSet<PathologyReport> PathologyReports { get; set; }
+        public DbSet<RadiologyReport> RadiologyReports { get; set; }
 
         public ExternalImportDbContext(DbContextOptions<ExternalImportDbContext> options) : base(options)
         {

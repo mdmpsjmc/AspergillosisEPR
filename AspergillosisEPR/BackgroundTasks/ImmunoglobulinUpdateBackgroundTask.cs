@@ -61,6 +61,7 @@ namespace AspergillosisEPR.BackgroundTasks
                                 patientIgG.DateTaken = iggLevel.DatePerformed;
                                 patientIgG.ImmunoglobulinTypeId = igType.ID;
                                 patientIgG.SourceSystemGUID = iggLevel.ObservationGUID;
+                                patientIgG.CreatedDate = DateTime.Now;
                                 try
                                 {
                                     patientIgG.Value = Decimal.Parse(iggLevel.Result
@@ -71,7 +72,7 @@ namespace AspergillosisEPR.BackgroundTasks
                                 }
                                 catch (System.FormatException e)
                                 {
-                                    Console.WriteLine("VALUE::::::::::::" + iggLevel.Result);
+                                    Console.WriteLine("IG VALUE ERROR::::::::::::" + iggLevel.Result);
                                     continue;
                                 }
                                 patientIgG.Range = iggLevel.NormalRange;

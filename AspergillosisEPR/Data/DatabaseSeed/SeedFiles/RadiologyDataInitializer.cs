@@ -1,7 +1,10 @@
 ﻿using AspergillosisEPR.Models;
 using AspergillosisEPR.Models.Radiology;
+using CsvHelper;
+using Microsoft.AspNetCore.Hosting;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -109,6 +112,53 @@ namespace AspergillosisEPR.Data.DatabaseSeed.SeedFiles
             }
 
              context.SaveChanges();
+        }
+
+        public static void OtherRadiologyTypes(AspergillosisContext context, IHostingEnvironment hostingEnvironment)
+        {
+            if (context.RadiologyTypes.Where(rt => rt.Name.Equals("CCABDC")).Any()) return;
+            var rootDirectory = hostingEnvironment.ContentRootPath;
+            var dataFile = File.OpenRead(Path.Join(rootDirectory, "Data/DatabaseSeed/radiology.csv"));
+            var files = new List<FileStream>() { dataFile };
+            for (int i = 0; i < files.Count; i++)
+            {
+                var csvFile = files[i];
+
+                TextReader textReader = new StreamReader(csvFile);
+                var csv = new CsvReader(textReader);
+                ConfigureCSVReader(csv);
+                try
+                {
+                    var records = csv.GetRecords<dynamic>().ToList();
+
+                    foreach (var r in records)
+                    {
+                        if ((records.IndexOf(r)) == 0) continue;
+                        var record = new Dictionary<string, object>(r);
+                        RadiologyType radiology;
+                        radiology = new RadiologyType();
+                        radiology.Name = (string)record["Field1"];
+                        radiology.Description = (string)record["Field2"];
+
+                        context.RadiologyTypes.Add(radiology);
+                    }
+                    context.SaveChanges();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+            }
+        }
+
+        private static void ConfigureCSVReader(CsvReader csv)
+        {
+            csv.Configuration.BadDataFound = null;
+            csv.Configuration.HasHeaderRecord = false;
+            csv.Configuration.BadDataFound = context =>
+            {
+                Console.WriteLine($"Bad data found on row '{context.RawRow}'");
+            };
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AspergillosisEPR.Lib;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -15,6 +16,20 @@ namespace AspergillosisEPR.Models.Patients
         public DateTime? LastObservationPoint { get; set; }
         public DateTime FirstSeenAtNAC { get; set; }
         public int? CPABand { get; set; }
+        public Patient Patient { get; set; }
+
+        public int AgeWhenFirstSeen()
+        {
+            if (FirstSeenAtNAC.Year != 1)
+            {
+                var calculator = new DatesCalculator(Patient.DOB, FirstSeenAtNAC);
+                return calculator.Years();
+            }
+            else
+            {
+                return 0;
+            }
+        }
 
         public Dictionary<string, string> SearchableFields()
         {

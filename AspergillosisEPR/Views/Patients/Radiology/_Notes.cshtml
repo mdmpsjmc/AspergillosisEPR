@@ -1,0 +1,26 @@
+﻿@model AspergillosisEPR.Models.Patient
+@if (Model.PatientRadiologyNotes != null && Model.PatientRadiologyNotes.Any())
+{
+    <div class="col-sm-12 col-12">
+        <div class="panel-group smart-accordion-default" id="trial-2">
+            @foreach (var radiologyNote in Model.PatientRadiologyNotes.OrderByDescending(t => t.DateTaken))
+            {
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">
+                            <a data-toggle="collapse" data-parent="#trial-2" href="note#@(radiologyNote.ID)" aria-expanded="false" class="collapsed">
+                                <i class="fa fa-lg fa-angle-down pull-right"></i> <i class="fa fa-lg fa-angle-up pull-right"></i>
+                                @radiologyNote.DateTaken.ToString("dd/MM/yyyy") - @radiologyNote.RadiologyType.Description
+                            </a>
+                        </h4>
+                    </div>
+                    <div id="@(radiologyNote.ID)" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
+                        <div class="panel-body">
+                            <pre>@radiologyNote.Note</pre>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+}

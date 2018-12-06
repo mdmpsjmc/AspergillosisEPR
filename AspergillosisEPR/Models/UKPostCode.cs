@@ -9,7 +9,7 @@ namespace AspergillosisEPR.Models
     [Table("UKPostCodes")]
     public class UKPostCode
     {
-        public int ID { get; set; }
+        public long ID { get; set; }
         public string Code { get; set; }
         public string Latitude { get; set; }
         public string Longitude { get; set; }

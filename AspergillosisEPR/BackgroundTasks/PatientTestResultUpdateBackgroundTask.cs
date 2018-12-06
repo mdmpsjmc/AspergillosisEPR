@@ -1,4 +1,5 @@
 ﻿using AspergillosisEPR.Data;
+using AspergillosisEPR.Models;
 using AspergillosisEPR.Models.Patients;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -14,73 +15,76 @@ namespace AspergillosisEPR.BackgroundTasks
     {
         protected override string Schedule => "59 23 * * 4";
         private readonly IServiceProvider _serviceProvider;
-        private readonly ILogger<ImmunoglobulinUpdateBackgroundTask> _logger;
+        private readonly ILogger<PatientTestResultBackgroundUpdateTask> _logger;
 
         public PatientTestResultBackgroundUpdateTask(IServiceScopeFactory serviceScopeFactory,
                                                     IServiceProvider serviceProvider,
-                                                    ILogger<ImmunoglobulinUpdateBackgroundTask> logger) : base(serviceScopeFactory)
+                                                    ILogger<PatientTestResultBackgroundUpdateTask> logger) : base(serviceScopeFactory)
         {
             _logger = logger;
             _serviceProvider = serviceProvider;
         }
 
         public override Task ProcessInScope(IServiceProvider serviceProvider)
-        {
-
+        {         
             using (IServiceScope scope = _serviceProvider.CreateScope())
             {
                 var context = scope.ServiceProvider.GetRequiredService<AspergillosisContext>();
                 var externalContext = scope.ServiceProvider.GetRequiredService<ExternalImportDbContext>();
 
                 var allPatients = context.Patients
-                                         .Include(p => p.DrugLevels);
+                                          .Include(p => p.PatientTestResults);
 
-                var drug = context.Drugs
-                                   .FirstOrDefault(d => d.Name.Equals("Voriconazole"));
-
-                var uom = context.UnitOfMeasurements.Where(u => u.Name == "mg/L").FirstOrDefault();
-                foreach (var patient in allPatients)
+                foreach (var code in TestType.Codes().Keys)
                 {
-                    var results = externalContext.PathologyReports
-                                                 .Where(r => r.OrderItemCode.Equals("VORI")
-                                                         && r.RM2Number == "RM2" + patient.RM2Number);
-                    if (!results.Any()) continue;
-                    var existingDates = patient.DrugLevels
-                                               .Where(pi => pi.DrugId == drug.ID)
-                                               .Select(pi => pi.DateTaken.Date)
-                                               .ToList();
 
-                    foreach (var result in results)
+                    var testType = context.TestTypes
+                                           .Where(it => it.Name == TestType.LabTestFromCode(code))
+                                           .FirstOrDefault();
+
+                    foreach (var patient in allPatients)
                     {
-                        if (existingDates.FindAll(d => d.Date == result.DatePerformed.Date).ToList().Count == 0)
+                        var results = externalContext.PathologyReports
+                                                     .Where(r => r.OrderItemCode.Equals(code) && r.RM2Number == "RM2" + patient.RM2Number);
+                        if (!results.Any()) continue;
+                        var existingDates = patient.PatientTestResults
+                                                   .Where(pi => pi.TestTypeId == testType.ID)
+                                                   .Select(pi => pi.DateTaken.Date)
+                                                   .ToList();
+
+                        foreach (var result in results)
                         {
-                            if (result.Result == null) continue;
-                            var patientDrugLevel = new PatientDrugLevel();
-                            patientDrugLevel.PatientId = patient.ID;
-                            patientDrugLevel.DateTaken = result.DatePerformed;
-                            patientDrugLevel.DateReceived = result.DateEntered;
-                            patientDrugLevel.SourceSystemGUID = result.ObservationGUID;
-                            patientDrugLevel.UnitOfMeasurementId = uom.ID;
-                            patientDrugLevel.DrugId = drug.ID;
-                            try
+                            if (existingDates.FindAll(d => d.Date == result.DatePerformed.Date).ToList().Count == 0)
                             {
-                                patientDrugLevel.ResultValue = Decimal.Parse(result.Result
-                                                                      .Replace("<", String.Empty)
-                                                                      .Replace("*", String.Empty)
-                                                                      .Replace(">", String.Empty));
+                                if (result.Result == null) continue;
+                                var patientTestResult = new PatientTestResult();
+                                patientTestResult.PatientId = patient.ID;
+                                patientTestResult.DateTaken = result.DatePerformed;
+                                patientTestResult.TestTypeId = testType.ID;
+                                patientTestResult.SourceSystemGUID = result.ObservationGUID;
+                                patientTestResult.UnitOfMeasurementId = testType.UnitOfMeasurementId;
+                                patientTestResult.CreatedDate = DateTime.Now;
 
-                            }
-                            catch (System.FormatException e)
-                            {
-                                Console.WriteLine("VALUE::::::::::::" + result.Result);
-                                continue;
-                            }
+                                try
+                                {
+                                    patientTestResult.Value = Decimal.Parse(result.Result
+                                                                         .Replace("<", String.Empty)
+                                                                         .Replace("*", String.Empty)
+                                                                         .Replace(">", String.Empty));
 
-                            context.PatientDrugLevels.Add(patientDrugLevel);
+                                }
+                                catch (System.FormatException e)
+                                {
+                                    Console.WriteLine("TEST VALUE ERROR::::::::::::" + result.Result);
+                                    continue;
+                                }
+                                patientTestResult.Range = result.NormalRange;
+                                context.PatientTestResult.Add(patientTestResult);
+                            }
                         }
                     }
                 }
-                context.SaveChangesAsync();
+               context.SaveChanges();
             }
             return Task.CompletedTask;
         }

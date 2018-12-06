@@ -21,7 +21,7 @@ namespace AspergillosisEPR.Models.Patients
         public decimal Value { get; set;  }
         public ImmunoglobulinType ImmunoglobulinType { get; set; }
         public decimal? SourceSystemGUID { get; set; } = 0;
-
+        public DateTime? CreatedDate { get; set; }
 
         override public List<string> ExcludedProperties()
         {
