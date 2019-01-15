@@ -43,8 +43,8 @@
         $("#search_results_datatable").DataTable().destroy();
         window.patientsTable = $("#search_results_datatable").DataTable({
             dom: "<'row'<'col-sm-3'l><'col-sm-3'f><'col-sm-6'p>>" +
-            "<'row'<'col-sm-12'tr>>" +
-            "B<'row'<'col-sm-5'i><'col-sm-7'p>>",
+                "<'row'<'col-sm-12'tr>>" +
+                "B<'row'<'col-sm-5'i><'col-sm-7'p>>",
             "processing": true,
             "filter": false,
             "orderMulti": false,
@@ -83,7 +83,7 @@
                     'className': 'btn btn-info btn-vis',
                     'titleAttr': 'Column visibility',
                     'text': '<i class="fa fa-eye"></i>',
-                }            
+                }
             ],
             "initComplete": function (settings, json) {
                 Patients.publicSetup()
@@ -116,11 +116,11 @@
 
         window.patientsTable.on('draw.dt', function () {
             Patients.publicSetup();
-        }); 
+        });
 
         window.patientsTable.buttons().container()
             .appendTo($('.col-sm-6:eq(0)', window.patientsTable.table().container()));
-    }
+    };
 
     var onAddSearchCriteriaClick = function () {
         $(document).off("click.add-criteria").on("click.add-criteria", "a.add-search-criteria", function (e) {
@@ -135,7 +135,7 @@
                 setupSearchFormLayout();
             });
         });
-    }
+    };
 
     var onSearchClassSelectChange = function () {
         $(document).off("change.select-searchclass").on("change.select-searchclass", "select.criteria-class", function () {
@@ -152,7 +152,7 @@
             });
         });
 
-    }
+    };
 
     var onFieldSelectChangeAddDatepicker = function () {
         $(document).off("change.select-field").on("change.select-field", "select.criteria-field", function () {
@@ -162,7 +162,7 @@
             var compareSelect = $(this).parents("section").next("section");
             var index = $("div.search-criteria-row:visible").length - 1;
             var fieldType = selectedText.match(/Date/) !== null ? "Date" : "String";
-            fieldType = selectedText.match(/Distance/) !== null ? "Distance" : "String";
+            if (fieldType === "String" && selectedText.match(/Distance/) !== null) fieldType = "Distance";
             var partialRequestUrl = "/Partials/SearchCriteria?index=" + index + "&fieldType=" + fieldType;
             updateSearchCriteria(this);
             $.get(partialRequestUrl, function (htmlResponse) {
@@ -172,17 +172,17 @@
                     $('input.datepicker').datetimepicker({
                         format: 'YYYY-MM-DD'
                     });
-                } else if ((selectedText.match(/Date/) === null) && (selectedText.match(/Distance/) == null)) {
+                } else if ((selectedText.match(/Date/) === null) && (selectedText.match(/Distance/) === null)) {
                     compareSelect.find("select option[value='SmallerThan']").remove();
                     compareSelect.find("select option[value='GreaterThan']").remove();
                     if (searchField.hasClass("datepicker")) {
                         searchField.removeClass("datepicker");
                         searchField.datetimepicker("destroy");
                     }
-                } 
+                }
             });
         });
-    }
+    };
 
     var updateSearchCriteria = function (select) {
         var selectedValue = $(select).find("option:selected").val();

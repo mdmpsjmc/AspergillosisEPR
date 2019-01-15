@@ -14,5 +14,11 @@ namespace AspergillosisEPR.Models.Patients
         public decimal ResultValue { get; set; }
         public decimal PredictedValue { get; set; }
         public PulmonaryFunctionTest PulmonaryFunctionTest { get; set; }
+
+        public Patient Patient { get; set; }
+        public DateTime? CreatedDate { get; set; }
+        public double? NormalValue { get; set; }
+        public int? Age { get; set; }
+        public int? Height { get; set; }
     }
 }

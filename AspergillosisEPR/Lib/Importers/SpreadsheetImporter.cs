@@ -7,6 +7,7 @@ using NPOI.XSSF.UserModel;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 
@@ -107,8 +108,7 @@ namespace AspergillosisEPR.Lib.Importers
                                 patient = dbPatient;
                             }
                         }
-                    }
-                   
+                    }                   
                 }
                
                 if (row == null) continue;
@@ -116,7 +116,7 @@ namespace AspergillosisEPR.Lib.Importers
                 sheetProcessingAction(patient, row, cellCount);
             }
         }
-
+        
         protected Patient ExistingPatient(string rRM2Number)
         {
             return Imported.Where(p => p.RM2Number == rRM2Number).FirstOrDefault();
