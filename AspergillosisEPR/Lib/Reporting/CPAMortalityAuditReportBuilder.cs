@@ -60,7 +60,7 @@ namespace AspergillosisEPR.Lib.Reporting
         {
             var ids = GetPatientIdentifiers();
             var patients = _context.Patients
-                                   .Where(p => ids.Contains(p.RM2Number))
+                                   .Where(p => ids.Contains(p.ID.ToString()))
                                    .Include(p => p.PatientDiagnoses)
                                    .ThenInclude(p => p.DiagnosisType)
                                    .Include(p => p.STGQuestionnaires)
@@ -86,6 +86,7 @@ namespace AspergillosisEPR.Lib.Reporting
             BuildTestResultTab(patients, "Haemoglobin");
             BuildTestResultTab(patients, "WBC");
             BuildTestResultTab(patients, "Lymphocytes");
+            BuildTestResultTab(patients, "Albumin");
             return SerializeWorkbook();
         }
 
@@ -201,7 +202,9 @@ namespace AspergillosisEPR.Lib.Reporting
 
                     currentRow.CreateCell(cellIndex).SetCellValue(currentItem.Value.ToString());
                     cellIndex++;
-                    currentRow.CreateCell(cellIndex).SetCellValue(currentItem.Range.ToString());
+                    string range = "";
+                    if (currentItem.Range != null) range = currentItem.Range.ToString();
+                    currentRow.CreateCell(cellIndex).SetCellValue(range);
                     cellIndex++;
                 }
             }
@@ -394,7 +397,59 @@ namespace AspergillosisEPR.Lib.Reporting
                     cellIndex++;
                     currentRow.CreateCell(cellIndex).SetCellValue(Math.Round(currentItem.Weight.Value, 2).ToString());
                     cellIndex++;
+                    var height = GetPatientHeight(currentPatient);
+                    
+                    if (height == 0)
+                    {
+                        currentRow.CreateCell(cellIndex).SetCellValue("");
+                    } else
+                    {
+                        currentRow.CreateCell(cellIndex).SetCellValue(height.ToString());
+                    }
+                    cellIndex++;
+                    var bmi = GetPatientBMI(currentItem.Weight, height);
+                    if (bmi == null)
+                    {
+                        currentRow.CreateCell(cellIndex).SetCellValue("");
+                    } else
+                    {
+                        currentRow.CreateCell(cellIndex).SetCellValue(bmi.ToString());
+                    }
+                    cellIndex++;
                 }
+            }
+        }
+
+        private Double? GetPatientBMI(decimal? weight, int height)
+        {
+            if (weight == null) return null;
+            if (height == 0) return null;
+            var heightInMeters = height / 100.00;
+            double square = heightInMeters * heightInMeters;
+            var bmi = Convert.ToDouble(weight) / square;
+            return Math.Round(bmi,2);
+        }
+
+        private int GetPatientHeight(Patient currentPatient)
+        {
+            var measurement = currentPatient.PatientMeasurements
+                                            .Where(pm => pm.PatientId.Equals(currentPatient.ID) && pm.Height != null)
+                                            .FirstOrDefault();
+            if (measurement == null)
+            {
+                var pft = currentPatient.PatientPulmonaryFunctionTests
+                                          .Where(pm => pm.PatientId.Equals(currentPatient) && pm.Height != null)
+                                          .FirstOrDefault();                
+                if (pft != null)
+                {
+                    return Convert.ToInt32(pft.Height);
+                } else
+                {
+                    return 0;
+                }
+            } else
+            {
+                return Convert.ToInt32(measurement.Height.Value);
             }
         }
 
@@ -410,12 +465,14 @@ namespace AspergillosisEPR.Lib.Reporting
 
             var repeatItems = new List<string>()
             {
-                "DateTaken", "Weight"
+                "DateTaken", "Weight", "Height", "BMI"
             };
             for (int cursor = 1; cursor < itemCount + 1; cursor++)
             {
                 headers.Add(repeatItems[0] + cursor);
                 headers.Add(repeatItems[1] + cursor);
+                headers.Add(repeatItems[2] + cursor);
+                headers.Add(repeatItems[3] + cursor);
             }
 
             MakeHeadersBold(headersRow, headers);

@@ -3,23 +3,28 @@
 @if (Model.Patient.PatientDiagnoses.Any())
 {
     <div class="col-sm-10">
-        <div class="table-responsive">            
-              @if (Model.HasPrimaryDiagnoses())
-              {
+        <div class="table-responsive">
+            @if (Model.HasPrimaryDiagnoses())
+            {
                 @Html.Partial("/Views/Patients/Details/_DiagnosisCollection.cshtml", Model.PrimaryDiagnoses);
-              }                         
-              @if (Model.HasUnderlyingDeases())
-              {
+            }
+            @if (Model.HasUnderlyingDeases())
+            {
                 @Html.Partial("/Views/Patients/Details/_DiagnosisCollection.cshtml", Model.UnderlyingDiseases);
-              }            
-              @if (Model.HasOtherDiagnoses())
-              {
+            }
+            @if (Model.HasOtherDiagnoses())
+            {
                 @Html.Partial("/Views/Patients/Details/_DiagnosisCollection.cshtml", Model.OtherDiagnoses);
-              }
-              @if (Model.HasPastDeseases())
-              {
+            }
+            @if (Model.HasPastDeseases())
+            {
                 @Html.Partial("/Views/Patients/Details/_DiagnosisCollection.cshtml", Model.PastDiagnoses);
-              }
+            }
+            @if (Model.HasProbableDeseases())
+            {
+                @Html.Partial("/Views/Patients/Details/_DiagnosisCollection.cshtml", Model.ProbableDiagnoses);
+            }
+
             <br />
         </div>     
     </div>

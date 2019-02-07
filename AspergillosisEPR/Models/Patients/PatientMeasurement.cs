@@ -13,6 +13,7 @@ namespace AspergillosisEPR.Models.Patients
         public decimal? Weight { get; set; } 
         public decimal? Height { get; set; }
         public DateTime DateTaken { get; set; }
+        public string SourceInfo { get; set; }
 
         override public List<string> ExcludedProperties()
         {

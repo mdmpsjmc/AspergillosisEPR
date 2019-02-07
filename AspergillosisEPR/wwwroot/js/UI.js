@@ -22,7 +22,7 @@
         }, 
 
         initAjaxTab: function () {
-            initAjaxTab();
+           return  initAjaxTab();
         }
 
     }

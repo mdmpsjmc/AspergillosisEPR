@@ -33,7 +33,7 @@ namespace AspergillosisEPR.Lib
 
         private Type GetModelTypeFromClassName()
         {
-            return Type.GetType("AspergillosisEPR.Models." + _klassName);
+            return Type.GetType("AspergillosisEPR.Models.Radiology." + _klassName);
         }
 
         private object SetModelPropertyName()

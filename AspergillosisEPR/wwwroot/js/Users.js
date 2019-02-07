@@ -61,7 +61,7 @@
                 $("div#edit-user-modal").modal("show");
                 $("select.select2").select2();
                 updateUser();
-                initAjaxTab();
+                UI.initAjaxTab();
                 replaceFormTargetOnTabClick();
             }).fail(function (data) {
                 LoadingIndicator.hide();

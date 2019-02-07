@@ -16,6 +16,7 @@ namespace AspergillosisEPR.Models.PatientViewModels
         public ICollection<PatientDiagnosis> UnderlyingDiseases { get; set; }
         public ICollection<PatientDiagnosis> OtherDiagnoses { get; set; }
         public ICollection<PatientDiagnosis> PastDiagnoses { get; set; }
+        public ICollection<PatientDiagnosis> ProbableDiagnoses { get; set; }
         public ICollection<PatientDrug> PatientDrugs { get; set; }
         public ICollection<PatientMedicalTrial> MedicalTrials { get; private set; }
         public ICollection<PatientSTGQuestionnaire> STGQuestionnaires { get; set; }
@@ -70,6 +71,7 @@ namespace AspergillosisEPR.Models.PatientViewModels
             var otherDiagnosis = context.DiagnosisCategories.Where(dc => dc.CategoryName == "Other").FirstOrDefault();
             var underlyingDiagnosis = context.DiagnosisCategories.Where(dc => dc.CategoryName == "Underlying diagnosis").FirstOrDefault();
             var pastDiagnosis = context.DiagnosisCategories.Where(dc => dc.CategoryName == "Past Diagnosis").FirstOrDefault();
+            var probable = context.DiagnosisCategories.Where(dc => dc.CategoryName == "Probable").FirstOrDefault();
 
             var patientDetailsViewModel = new PatientDetailsViewModel();
 
@@ -99,6 +101,12 @@ namespace AspergillosisEPR.Models.PatientViewModels
             {
                 patientDetailsViewModel.PastDiagnoses = patient.PatientDiagnoses.
                                                                     Where(pd => pd.DiagnosisCategoryId == pastDiagnosis.ID).
+                                                                    ToList();
+            }
+            if (probable != null)
+            {
+                patientDetailsViewModel.ProbableDiagnoses = patient.PatientDiagnoses.
+                                                                    Where(pd => pd.DiagnosisCategoryId == probable.ID).
                                                                     ToList();
             }
             patientDetailsViewModel.PatientDrugs = patient.PatientDrugs;
@@ -145,6 +153,12 @@ namespace AspergillosisEPR.Models.PatientViewModels
         public bool HasPastDeseases()
         {
             return PastDiagnoses != null && PastDiagnoses.Any();
+        }
+
+
+        public bool HasProbableDeseases()
+        {
+            return ProbableDiagnoses != null && ProbableDiagnoses.Any();
         }
 
         private static void LoadReleatedMedicalTrials(AspergillosisContext context, Patient patient)

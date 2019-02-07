@@ -756,6 +756,8 @@ namespace AspergillosisEPR.Migrations.Aspergillosis
 
                     b.Property<int>("PatientId");
 
+                    b.Property<string>("SourceInfo");
+
                     b.Property<decimal?>("Weight");
 
                     b.HasKey("ID");
@@ -826,11 +828,17 @@ namespace AspergillosisEPR.Migrations.Aspergillosis
 
                     b.Property<DateTime>("FirstSeenAtNAC");
 
+                    b.Property<string>("FollowUp3MonthsDrug");
+
+                    b.Property<string>("InitialDrug");
+
                     b.Property<DateTime?>("LastObservationPoint");
 
                     b.Property<int>("PatientId");
 
                     b.Property<DateTime?>("ProbableStartOfDisease");
+
+                    b.Property<DateTime?>("ReferralDate");
 
                     b.HasKey("ID");
 
@@ -861,6 +869,8 @@ namespace AspergillosisEPR.Migrations.Aspergillosis
                     b.Property<int>("PulmonaryFunctionTestId");
 
                     b.Property<decimal>("ResultValue");
+
+                    b.Property<string>("SourceInfo");
 
                     b.HasKey("ID");
 

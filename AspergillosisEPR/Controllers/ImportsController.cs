@@ -115,7 +115,9 @@ namespace AspergillosisEPR.Controllers
 
         private void SaveItemsInDatabase()
         {
-            foreach (var record in _importer.Imported)
+            var imported = _importer.Imported.Where(i => i != null);
+
+            foreach (var record in imported)
             {
                 if ((record.ID != 0) && (record.ID > 0))
                 {

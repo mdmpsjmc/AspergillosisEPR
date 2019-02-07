@@ -1,6 +1,7 @@
 ﻿using AspergillosisEPR.Data;
 using AspergillosisEPR.Models;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
@@ -106,6 +107,9 @@ namespace AspergillosisEPR.Lib.Importers
                             if (dbPatient != null)
                             {
                                 patient = dbPatient;
+                            } else
+                            {
+                                Console.Write("NULL" + identifierValue);
                             }
                         }
                     }                   
@@ -124,7 +128,9 @@ namespace AspergillosisEPR.Lib.Importers
 
         protected Patient FindDbPatientByRM2Number(string rM2Number)
         {
-            return _context.Patients.Where(p => p.RM2Number == rM2Number).FirstOrDefault();
+            return _context.Patients.Where(p => p.RM2Number == rM2Number)
+                                    .Include(p => p.PatientNACDates)
+                                    .FirstOrDefault();
         }
 
         protected abstract void ProcessSheet(ISheet currentSheet);

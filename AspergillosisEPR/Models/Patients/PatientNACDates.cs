@@ -17,6 +17,9 @@ namespace AspergillosisEPR.Models.Patients
         public DateTime FirstSeenAtNAC { get; set; }
         public int? CPABand { get; set; }
         public Patient Patient { get; set; }
+        public DateTime? ReferralDate { get; set; }
+        public string InitialDrug { get; set; }
+        public string FollowUp3MonthsDrug { get; set; }
 
         public int AgeWhenFirstSeen()
         {
