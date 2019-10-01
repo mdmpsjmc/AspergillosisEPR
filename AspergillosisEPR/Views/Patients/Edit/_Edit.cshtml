@@ -34,7 +34,16 @@
                             </a>
                         </li>
                         <li>
+                            <a href="/patients/@(Model.ID)/Measurements/Edit" data-toggle="tabajax" data-target="#measurements"><i class="fa fa-fw fa-lg fa-dashboard"></i> Weight</a>
+                        </li>
+                        <li>
+                            <a href="/patients/@(Model.ID)/MRCScores/Edit" data-toggle="tabajax" data-target="#scores"><i class="fa fa-fw fa-lg fa-ambulance"></i> MRC</a>
+                        </li>
+                        <li>
                             <a href="#radiology" data-toggle="tab"><i class="fa fa-fw fa-lg fa-stethoscope"></i> Radiology</a>
+                        </li>
+                        <li>
+                            <a href="/patients/@(Model.ID)/SmokingStatuses/Edit" data-toggle="tabajax" data-target="#smoking"><i class="fa fa-fw fa-lg fa-fire"></i> Smoking Status</a>
                         </li>
                         <li>
                             <a href="/patients/@(Model.ID)/PFTs/Edit" data-toggle="tabajax" data-target="#pfts">
@@ -69,10 +78,16 @@
                             <div class="tab-pane fade ig" id="ig">
                                 @{ await Html.RenderPartialAsync("/Views/Patients/Edit/_IgTab.cshtml"); }
                             </div>
-                            <div class="tab-pane fade ig" id="radiology">
+                            <div class="tab-pane fade" id="radiology">
                                 @{ await Html.RenderPartialAsync("/Views/Patients/Edit/_RadiologyTab.cshtml"); }
                             </div>
-                            <div class="tab-pane fade ig" id="pfts">                               
+                            <div class="tab-pane fade" id="measurements">
+                            </div>
+                            <div class="tab-pane fade" id="pfts">
+                            </div>
+                            <div class="tab-pane fade" id="scores">
+                            </div>
+                            <div class="tab-pane fade" id="smoking">
                             </div>
                             <div class="tab-pane fade" id="medical-trials">
                                 @{ await Html.RenderPartialAsync("/Views/Patients/Edit/_MedicalTrials.cshtml"); }

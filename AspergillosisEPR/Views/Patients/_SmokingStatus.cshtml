@@ -1,0 +1,51 @@
+﻿@model AspergillosisEPR.Models.Patients.PatientSmokingDrinkingStatus
+<div class="col-12 row smoking-status-form" style="margin: 0px !important">
+</div>
+@if (User.IsInRole("Create Role") || User.IsInRole("Admin Role"))
+{
+    <fieldset>
+        <div class="row">
+            <section class="col col-4">
+                <label class="select">
+                    <label asp-for="SmokingStatusId" class="select">
+                        @Html.DropDownListFor(m => m.SmokingStatusId, (SelectList)ViewBag.SmokingStatusId, "Select Smoking Status")
+                        <i></i>
+                        <span asp-validation-for="SmokingStatusId" class="text-danger"></span>
+                    </label>
+                </label>
+            </section>
+            <section class="col col-4">
+                <label class="input" asp-for="StartAge">
+                    <i class="icon-append fa fa-user"></i>
+                    <input asp-for="StartAge" placeholder="Start Age" type="text">
+                </label>
+            </section>
+            <section class="col col-4">
+                <label class="input" asp-for="StopAge">
+                    <i class="icon-append fa fa-user"></i>
+                    <input asp-for="StopAge" placeholder="Stop Age" type="text">
+                </label>
+            </section>
+        </div>
+        <div class="row">
+            <section class="col col-4">
+                <label class="input" asp-for="PacksPerYear">
+                    <i class="icon-append fa fa-align-justify"></i>
+                    <input asp-for="PacksPerYear" placeholder="Packs Per Year" type="text">
+                </label>
+            </section>
+            <section class="col col-4">
+                <label class="input" asp-for="CigarettesPerDay">
+                    <i class="icon-append fa fa-align-justify"></i>
+                    <input asp-for="CigarettesPerDay" placeholder="Cigarettes Per Day" type="text">
+                </label>
+            </section>
+            <section class="col col-4">
+                <label class="input" asp-for="AlcolholUnits">
+                    <i class="icon-append fa fa-glass"></i>
+                    <input asp-for="AlcolholUnits" placeholder="Alcohol Units" type="text">
+                </label>
+            </section>
+        </div>
+    </fieldset>
+}

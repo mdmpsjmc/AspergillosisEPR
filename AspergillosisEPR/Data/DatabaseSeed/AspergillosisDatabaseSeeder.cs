@@ -51,6 +51,9 @@ namespace AspergillosisEPR.Data.DatabaseSeed
             RadiologyDataInitializer.OtherRadiologyTypes(context, hostingEnvironment);
             PFTSpreadsheetImproterTypeSeed.Seed(context);
             ReferallDatesImportTypeSeed.Run(context);
+            AddHospitalAdmissionDbImportType.Seed(context);
+            DateOfDiagnosisDbImportType.Seed(context);
+            AddMortalityAuditDates.Seed(context);
             //PostcodeSeed.ReadCsvIntoDatabase(hostingEnvironment, context);
         }
     }

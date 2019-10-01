@@ -93,22 +93,26 @@ namespace AspergillosisEPR.Controllers
         [HttpPost]
         public async Task<IActionResult> ExternalDatabaseICD10Diagnosis()
         {
-            var allPatients = _context.Patients;
-            foreach(var patient in allPatients)
+            var emptyDxList = (from patient in _context.Patients
+                               where !_context.PatientICD10Diagnoses.Any(f => f.PatientId == patient.ID)
+                               select patient).ToList();
+            foreach (Patient patient in emptyDxList)
             {
                 var icd10Diagnoses = _externalImportDbContext.Diagnoses.Where(d => d.RM2Number.Equals("RM2" + patient.RM2Number));
                 if (!icd10Diagnoses.Any()) continue;
-                foreach(var diagnosis in icd10Diagnoses)
+                foreach (var diagnosis in icd10Diagnoses)
                 {
                     var icd10Diagnosis = new PatientICD10Diagnosis();
                     icd10Diagnosis.DiagnosisCode = diagnosis.DiagnosisCode;
                     icd10Diagnosis.DiagnosisDescription = diagnosis.DiagnosisDescription;
                     icd10Diagnosis.DiagnosisDate = diagnosis.DiagnosisDate;
                     icd10Diagnosis.PatientId = patient.ID;
-                    icd10Diagnosis.OriginalImportId = diagnosis.ID;
-                    await _context.PatientICD10Diagnoses.AddAsync(icd10Diagnosis);                    
+                    icd10Diagnosis.OriginalImportId = diagnosis.DGPRO_REFNO;
+                    icd10Diagnosis.CreatedDate = DateTime.Now;
+                    await _context.PatientICD10Diagnoses.AddAsync(icd10Diagnosis);
                 }
-            }
+
+            };
             await _context.SaveChangesAsync();
             return Ok();
         }     

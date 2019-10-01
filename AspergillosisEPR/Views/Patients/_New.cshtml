@@ -26,6 +26,12 @@
                             <a href="#stg" data-toggle="tab"><i class="fa fa-fw fa-lg fa-file-text"></i> SGRQ</a>
                         </li>
                         <li>
+                            <a href="#mrc" data-toggle="tab"><i class="fa fa-fw fa-lg fa-ambulance"></i> MRC</a>
+                        </li>
+                        <li>
+                            <a href="#measurement" data-toggle="tab"><i class="fa fa-fw fa-lg fa-dashboard"></i> Weight</a>
+                        </li>
+                        <li>
                             <a href="#ig" data-toggle="tab">
                                 <span class="mi-blood-transfusion-3870 tab-styled-custom">
                                     <span class="path2"></span>
@@ -40,6 +46,9 @@
                             <a href="#pfts" data-toggle="tab">
                                 <i class="fa fa-fw fa-lg fa-user-md"></i> PFTs
                             </a>
+                        </li>
+                        <li>
+                            <a href="#smoking-status" data-toggle="tab"><i class="fa fa-fw fa-lg fa-fire"></i> Smoking Status</a>
                         </li>
                         <li>
                             <a href="#medical-trials" data-toggle="tab">
@@ -66,6 +75,12 @@
                             <div class="tab-pane fade" id="stg">
                                 @{ await Html.RenderPartialAsync("/Views/Patients/_STGQuestionnaire.cshtml"); }
                             </div>
+                            <div class="tab-pane fade" id="mrc">
+                                @{ await Html.RenderPartialAsync("/Views/Patients/_MRCScore.cshtml"); }
+                            </div>
+                            <div class="tab-pane fade" id="measurement">
+                                @{ await Html.RenderPartialAsync("/Views/Patients/_Measurement.cshtml"); }
+                            </div>
                             <div class="tab-pane fade" id="ig">
                                 @{ await Html.RenderPartialAsync("/Views/Patients/_IgTab.cshtml"); }
                             </div>
@@ -74,6 +89,9 @@
                             </div>
                             <div class="tab-pane fade" id="pfts">
                                 @{ await Html.RenderPartialAsync("/Views/Patients/_PulmonaryFunctionTests.cshtml"); }
+                            </div>
+                            <div class="tab-pane fade case-report-forms" id="smoking-status">
+                                @{ await Html.RenderPartialAsync("/Views/Patients/_SmokingStatus.cshtml"); }
                             </div>
                             <div class="tab-pane fade" id="medical-trials">
                                 @{ await Html.RenderPartialAsync("/Views/Patients/_MedicalTrials.cshtml"); }

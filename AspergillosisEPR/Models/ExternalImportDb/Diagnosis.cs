@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
@@ -8,7 +9,9 @@ namespace AspergillosisEPR.Models.ExternalImportDb
 {
     public class Diagnosis
     {
-        public int ID { get; set; }
+        // public int ID { get; set; }
+        [Key]
+        public int DGPRO_REFNO { get; set; }
         public string RM2Number { get; set; }
         public DateTime DiagnosisDate { get; set; }
         public string DiagnosisCode { get; set; }

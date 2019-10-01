@@ -19,7 +19,7 @@ namespace AspergillosisEPR.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
-
+        private readonly RoleManager<ApplicationRole> _roleManager;
 
         public UsersController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {

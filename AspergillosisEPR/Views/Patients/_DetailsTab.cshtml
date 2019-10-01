@@ -1,88 +1,20 @@
 ﻿@model AspergillosisEPR.Models.Patient
 @using AspergillosisEPR.Models.Patients;
-<div asp-validation-summary="ModelOnly" class="text-danger"></div>
-<input type="hidden" value="@Html.AntiForgeryToken()" name="__RequestVerificationToken" />
-<header>Patient Details</header>
-<fieldset>
-    <div class="row">
-        <section class="col col-6">
-            <label asp-for="RM2Number" class="input">
-                <i class="icon-append fa fa-hospital-o"></i>
-                <input asp-for="RM2Number" placeholder="RM2 Number" autocomplete="off">
-                <span asp-validation-for="RM2Number" class="text-danger"></span>
-            </label>
-        </section>
-        <section class="col col-6">
-            <label asp-for="PatientStatusId" class="select">
-                <select asp-for="PatientStatusId" asp-items="(SelectList) ViewBag.PatientStatuses">
-                    <option value="">Select Status</option>
-                </select>
-                <span asp-validation-for="PatientStatusId" class="text-danger"></span>
-                <i class="icon-append fa fa-venus-mars"></i>
-            </label>
-        </section>
-        <div class="death hidden">
-            <section class="col col-6">
-                <label class="pull-right">Enter date of death:</label>
-            </section>
-            <section class="col col-6">
-                <label asp-for="DateOfDeath" class="input">
-                    <i class="icon-append fa fa-bolt"></i>
-                    <input asp-for="DateOfDeath" placeholder="Date of Death" autocomplete="off">
-                    <span asp-validation-for="DateOfDeath" class="text-danger"></span>
-                </label>
-            </section>    
+<div class="tab-content tabs-left">
+    <ul class="nav nav-tabs tabs-left">
+        <li class="active">
+            <a href="#patient-details" data-toggle="tab">Details</a>
+        </li>
+        <li class="">
+            <a href="#nac-info" data-toggle="tab">NAC Info</a>
+        </li>
+    </ul>
+    <div class="tab-content padding-10">
+        <div class="tab-pane active in" id="patient-details">
+            @Html.Partial("/Views/Patients/_PatientDetails.cshtml")
         </div>
+        <div class="tab-pane fade" id="nac-info">
+            @Html.Partial("/Views/Patients/_NacInfo.cshtml", new PatientNACDates())
+        </div>
+    </div>
 </div>
-</fieldset>
-<fieldset>
-    <div class="row">
-        <section class="col col-6">
-            <label asp-for="FirstName" class="input">
-                <i class="icon-append fa fa-user"></i>
-                <input asp-for="FirstName" placeholder="First Name" autocomplete="off">
-                <span asp-validation-for="FirstName" class="text-danger"></span>
-            </label>
-        </section>
-        <section class="col col-6">
-            <label asp-for="LastName" class="input">
-                <i class="icon-append fa fa-user"></i>
-                <input asp-for="LastName" placeholder="Last Name" autocomplete="off">
-                <span asp-validation-for="LastName" class="text-danger"></span>
-            </label>
-        </section>
-    </div>
-    <div class="row">
-        <section class="col col-6">
-            <label asp-for="DOB" class="input">
-                <i class="icon-append fa fa-birthday-cake"></i>
-                <input asp-for="DOB" placeholder="Date of Birth" class="datepicker" autocomplete="off">
-                <span asp-validation-for="DOB" class="text-danger"></span>
-            </label>
-        </section>
-        <section class="col col-3">
-            <label asp-for="Gender" class="select">
-                <select asp-for="Gender" asp-items="new SelectList(Patient.Genders)">
-                    <option value="">Select Gender</option>
-                </select>
-                <span asp-validation-for="Gender" class="text-danger"></span>
-                <i class="icon-append fa fa-venus-mars"></i>
-            </label>
-        </section>
-        <section class="col col-3">
-            <label asp-for="PostCode" class="input">
-                <i class="icon-append fa fa-hospital-o"></i>
-                <input asp-for="PostCode" placeholder="Post Code" autocomplete="off">
-                <span asp-validation-for="PostCode" class="text-danger"></span>
-            </label>
-        </section>
-    </div>
-</fieldset>
-<fieldset>
- <section class="col col-12" style="width: 100%">
-    <label asp-for="GenericNote" class="textarea">
-        <textarea asp-for="GenericNote" placeholder="Leave generic note here" rows="6" class="comment" ></textarea>
-        <i class="icon-append fa fa-comment"></i>
-    </label>
-</section>   
-</fieldset>

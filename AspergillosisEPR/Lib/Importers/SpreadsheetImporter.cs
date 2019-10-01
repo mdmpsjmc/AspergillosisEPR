@@ -129,7 +129,6 @@ namespace AspergillosisEPR.Lib.Importers
         protected Patient FindDbPatientByRM2Number(string rM2Number)
         {
             return _context.Patients.Where(p => p.RM2Number == rM2Number)
-                                    .Include(p => p.PatientNACDates)
                                     .FirstOrDefault();
         }
 

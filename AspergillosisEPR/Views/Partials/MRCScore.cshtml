@@ -1,0 +1,28 @@
+﻿@model AspergillosisEPR.Models.Patients.PatientMRCScore
+@using HtmlHelpers.BeginCollectionItemCore;
+@using (Html.BeginCollectionItem("PatientMRCScore"))
+{
+    <div class="patient-score">
+        <fieldset>
+            <div class="row">              
+                <section class="col col-6">
+                    <label asp-for="DateTaken" class="input">
+                        <i class="icon-append fa fa-calendar"></i>
+                        <input asp-for="DateTaken" placeholder="Date taken" class="datepicker" type="text">
+                    </label>
+                </section>
+                <section class="col col-3">
+                    <label asp-for="Score" class="input">
+                        <i class="icon-append fa fa-sticky-note"></i>
+                        <input asp-for="Score" placeholder="Score" type="text">
+                    </label>
+                </section>              
+            </div>
+        </fieldset>      
+        <div class="row">
+            <a href="javascript:void(0)" class="btn btn-danger remove-partial pull-right btn-lg" data-what="Patients' MRC Score" data-toggle="tooltip" data-title="Remove Patients' MRC Score?" style="padding: 5px">
+                <i class="fa fa-trash"></i>
+            </a>
+        </div>
+    </div>
+}

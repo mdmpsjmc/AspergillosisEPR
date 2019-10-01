@@ -51,6 +51,7 @@ namespace AspergillosisEPR.Controllers
             _listResolver.PopulateDiagnosisCategoriesDropDownList();
             _listResolver.PopulateDiagnosisTypeDropDownList();
             _listResolver.PopulatePatientStatusesDropdownList();
+            ViewBag.SmokingStatusId = _listResolver.PopulateSmokingStatusesDropdownList();
             ViewBag.CaseReportForms = _caseReportFormListResolver
                                             .PopulateCRFGroupedCategoriesDropdownList();
             return PartialView();
@@ -63,69 +64,89 @@ namespace AspergillosisEPR.Controllers
             return View();
         }
 
-        [Authorize(Roles = ("Admin Role, Create Role"))]
-        [Audit(EventTypeName = "Patient::Create", IncludeHeaders = true, IncludeModel = true)]
-        public IActionResult Create([Bind("LastName,FirstName,DOB,Gender, RM2Number, PatientStatusId, DateOfDeath, PostCode, GenericNote")]
+    [Authorize(Roles = ("Admin Role, Create Role"))]
+    [Audit(EventTypeName = "Patient::Create", IncludeHeaders = true, IncludeModel = true)]
+    public IActionResult Create([Bind("LastName,FirstName,DOB,Gender, RM2Number, PatientStatusId, DateOfDeath, PostCode, GenericNote")]
                                                  Patient patient,
-                                                 PatientDiagnosis[] diagnoses,
-                                                 PatientDrug[] drugs,
-                                                 PatientSTGQuestionnaire[] sTGQuestionnaires,
-                                                 PatientImmunoglobulin[] patientImmunoglobulin,
-                                                 PatientRadiologyFinding[] patientRadiologyFinding,
-                                                 PatientMedicalTrial[] patientMedicalTrial,
-                                                 PatientDrugLevel[] drugLevels,
-                                                 PatientSurgery[] surgeries,
-                                                 PatientAllergicIntoleranceItem[] allergies, 
-                                                 PatientPulmonaryFunctionTest[] patientPulmonaryFunctionTest,
-                                                 CaseReportFormResult[] caseReportFormResult)
+                                             PatientDiagnosis[] diagnoses,
+                                             PatientDrug[] drugs,
+                                             PatientSTGQuestionnaire[] sTGQuestionnaires,
+                                             PatientImmunoglobulin[] patientImmunoglobulin,
+                                             PatientRadiologyFinding[] patientRadiologyFinding,
+                                             PatientMedicalTrial[] patientMedicalTrial,
+                                             PatientDrugLevel[] drugLevels,
+                                             PatientSurgery[] surgeries,
+                                             PatientAllergicIntoleranceItem[] allergies,
+                                             PatientPulmonaryFunctionTest[] patientPulmonaryFunctionTest,
+                                             PatientNACDates patientNACDates,
+                                             PatientMeasurement[] patientMeasurement,
+                                             PatientMRCScore[] patientMRCScore,
+                                             CaseReportFormResult[] caseReportFormResult,
+                                             PatientSmokingDrinkingStatus patientSmokingDrinkingStatus)
+    {
+      var existingPatient = _context.Patients.FirstOrDefault(x => x.RM2Number == patient.RM2Number);
+      patient.CaseReportFormResults = new List<CaseReportFormResult>();
+      _patientManager.Request = Request;
+      CheckIsUnique(existingPatient);
+      if (caseReportFormResult != null && caseReportFormResult.Length > 0 && caseReportFormResult[0].Results != null)
+      {
+        var results = caseReportFormResult[0].Results.ToArray();
+        _caseReportFormManager.CreateCaseReportFormForResults(patient, results);
+        patient.CaseReportFormResults.Add(caseReportFormResult[0]);
+        _caseReportFormManager.LockForm(caseReportFormResult[0].CaseReportFormId);
+      }
+
+      _patientManager.AddCollectionsFromFormToPatients(patient,
+                                                       ref diagnoses,
+                                                       ref drugs,
+                                                       ref sTGQuestionnaires,
+                                                       patientImmunoglobulin,
+                                                       ref patientRadiologyFinding);
+      _patientManager.AddMedicalTrials(patient, patientMedicalTrial);
+      _patientManager.AddDrugLevels(patient, drugLevels);
+      _patientManager.AddPatientSurgeries(patient, surgeries);
+      _patientManager.AddPatientAllergiesIntolerances(patient, allergies);
+      _patientManager.AddPatientPFTs(patient, patientPulmonaryFunctionTest);
+      _patientManager.AddPatientMeasurements(patient, patientMeasurement);
+      _patientManager.AddMRCScores(patient, patientMRCScore);
+      _patientManager.AddPatientNACDates(patient, patientNACDates);
+      AddOrSkipSmokingStatus(patient, patientSmokingDrinkingStatus);
+      try
+      {
+        if (ModelState.IsValid)
         {
-            var existingPatient = _context.Patients.FirstOrDefault(x => x.RM2Number == patient.RM2Number);
-            patient.CaseReportFormResults = new List<CaseReportFormResult>();
-            _patientManager.Request = Request;
-            CheckIsUnique(existingPatient);
-            if (caseReportFormResult != null && caseReportFormResult.Length > 0 &&  caseReportFormResult[0].Results != null)
-            {
-                var results = caseReportFormResult[0].Results.ToArray();
-                _caseReportFormManager.CreateCaseReportFormForResults(patient, results);
-                patient.CaseReportFormResults.Add(caseReportFormResult[0]);
-                _caseReportFormManager.LockForm(caseReportFormResult[0].CaseReportFormId);
-            }
+          _context.Add(patient);
+          _context.SaveChanges();
+          _externalImport.Add(ExternalPatient.BuildFromPatient(patient));
+          var externalPatient = new ExternalPatient();
+          _externalImport.SaveChanges();
+          return Json(new { result = "ok" });
+        }
+        else
+        {
+          Hashtable errors = ModelStateHelper.Errors(ModelState);
+          return Json(new { success = false, errors });
+        }
+      }
+      catch (DbUpdateException ex)
+      {
+        return null;
+      }
+    }
 
-            _patientManager.AddCollectionsFromFormToPatients(patient, 
-                                                             ref diagnoses, 
-                                                             ref drugs,
-                                                             ref sTGQuestionnaires, 
-                                                             patientImmunoglobulin,
-                                                             ref patientRadiologyFinding);
-            _patientManager.AddMedicalTrials(patient, patientMedicalTrial);
-            _patientManager.AddDrugLevels(patient, drugLevels);
-            _patientManager.AddPatientSurgeries(patient, surgeries);
-            _patientManager.AddPatientAllergiesIntolerances(patient, allergies);
-            _patientManager.AddPatientPFTs(patient, patientPulmonaryFunctionTest);
-            try
-            {
-                if (ModelState.IsValid)
-                {
-                    _context.Add(patient);
-                    _context.SaveChanges();
-                    _externalImport.Add(ExternalPatient.BuildFromPatient(patient));
-                    var externalPatient = new ExternalPatient();
-                    _externalImport.SaveChanges();
-                    return Json(new { result = "ok" });
-                }
-                else
-                {
-                    Hashtable errors = ModelStateHelper.Errors(ModelState);
-                    return Json(new { success = false, errors });
-                }
-            }
-            catch (DbUpdateException ex)
-            {
-                return null;
-            }
-        }       
+    private void AddOrSkipSmokingStatus(Patient patient, PatientSmokingDrinkingStatus patientSmokingDrinkingStatus)
+    {
+      if (patientSmokingDrinkingStatus.SmokingStatusId == 0)
+      {
+        ModelState.Remove("SmokingStatusId");
+      }
+      else
+      {
+        _patientManager.AddPatientSmokingDrinkingStatus(patient, patientSmokingDrinkingStatus);
+      }
+    }
 
-        [Authorize(Roles = ("Admin Role, Read Role"))]
+    [Authorize(Roles = ("Admin Role, Read Role"))]
         [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
         public async Task<IActionResult> Details(int? id)
         {
@@ -188,7 +209,6 @@ namespace AspergillosisEPR.Controllers
             _listResolver.BindMedicalTrialsSelects(ViewBag, patient);
             _listResolver.BindDrugLevelSelects(ViewBag, patient);
             _listResolver.BindSurgeriesSelects(ViewBag, patient);
-            
 
             ViewBag.CaseReportForms = (List <IGrouping<string, CaseReportFormResult>>)  _caseReportFormManager
                                       .GetGroupedCaseReportFormsForPatient(patient.ID);
@@ -208,6 +228,10 @@ namespace AspergillosisEPR.Controllers
                                                               [Bind("ID, SurgeryId, PatientId, SurgeryDate, Note")] PatientSurgery[] surgeries,
                                                               [Bind("ID, AllergyIntoleranceItemType, AllergyIntoleranceItemId, IntoleranceType, Severity, Note")] PatientAllergicIntoleranceItem[] allergies,
                                                               [Bind("ID, PulmonaryFunctionTestId, Value, ResultValue, PatientId")]PatientPulmonaryFunctionTest[] pulmonaryFunctionTest,
+                                                              [Bind("ID, FirstSeenAtNAC, CPABand, ReferralDate, LastObservationPoint, InitialDrug, FollowUp3MonthsDrug, PatientId")] PatientNACDates patientNACDates,
+                                                              [Bind("ID, DateTaken, Weight, Height")] PatientMeasurement[] patientMeasurements,
+                                                              [Bind("ID, DateTaken, Score")] PatientMRCScore[] patientMRCScores,
+                                                              [Bind("ID, SmokingStatusId, PatientId, StartAge, StopAge, CigarettesPerDay, PacksPerYear, AlcolholUnits")] PatientSmokingDrinkingStatus patientSmokingDrinkingStatus,
                                                               CaseReportFormResult[] caseReportFormResult)
         {
             if (id == null)
@@ -227,9 +251,16 @@ namespace AspergillosisEPR.Controllers
             _patientManager.UpdatePatientSurgeries(surgeries, patientToUpdate);
             _patientManager.UpdatePatientAllergiesIntolerances(allergies, patientToUpdate, Request);
             _patientManager.UpdatePatientsPFTs(pulmonaryFunctionTest, patientToUpdate);
+            _patientManager.UpdateNacDates(patientNACDates, patientToUpdate);
+            _patientManager.UpdateWeightHeight(patientMeasurements, patientToUpdate);
+            _patientManager.UpdateMRCScore(patientMRCScores, patientToUpdate);
+            AddOrSkipSmokingStatus(patientToUpdate, patientSmokingDrinkingStatus);
             _caseReportFormManager.UpdateCaseReportFormsForPatient(caseReportFormResult, patientToUpdate);
 
+            
+
             _context.Entry(patientToUpdate).State = EntityState.Modified;
+            ModelState.Remove("FirstSeenAtNAC"); //TODO - FIX THIS HACK.. 
             if (await TryUpdateModelAsync<Patient>(patientToUpdate,
                "",
                p => p.FirstName, p => p.LastName, p => p.DOB, p => p.RM2Number, p => p.PostCode,

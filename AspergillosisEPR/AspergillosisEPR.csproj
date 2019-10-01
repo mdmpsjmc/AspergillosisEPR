@@ -83,6 +83,12 @@
     <Content Update="Views\Partials\ByName\_Fungi.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
+    <Content Update="Views\Partials\EditMRCScore.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
+    <Content Update="Views\Partials\EditWeightHeight.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
     <Content Update="Views\Partials\PatientAllergyIntoleranceForm.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>

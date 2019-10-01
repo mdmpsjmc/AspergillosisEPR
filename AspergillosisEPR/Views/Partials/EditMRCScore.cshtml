@@ -1,0 +1,25 @@
+﻿@model AspergillosisEPR.Models.Patients.PatientMRCScore
+<div class="patient-score">
+    <fieldset>
+        <div class="row">           
+            <section class="col col-6">
+                <label asp-for="DateTaken" class="input">
+                    <i class="icon-append fa fa-calendar"></i>
+                    <input asp-for="DateTaken" id="PatientMRCScores_@((string)ViewBag.Index)__DateTaken" name="PatientMRCScores[@((string)ViewBag.Index)].DateTaken" class="datepicker" placeholder="Date Taken" type="text">
+                </label>
+            </section>
+            <section class="col col-3">
+                <label asp-for="Score" class="input">
+                    <i class="icon-append fa fa-sticky-note"></i>
+                    <input asp-for="Score" id="PatientMRCScores_@((string)ViewBag.Index)__Score" name="PatientMRCScores[@((string)ViewBag.Index)].Score" placeholder="Score">
+                </label>
+            </section>          
+        </div>
+    </fieldset>
+    <div class="row">
+        <a href="javascript:void(0)" class="btn btn-danger remove-partial pull-right btn-lg" data-what=" patients' score " data-toggle="tooltip" data-title="Remove Patients score?" style="padding: 5px">
+            <i class="fa fa-trash"></i>
+        </a>
+    </div>
+</div>
+

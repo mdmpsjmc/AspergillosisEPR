@@ -1,0 +1,43 @@
+﻿@model AspergillosisEPR.Models.PatientViewModels.PatientWithScores;
+@using AspergillosisEPR.Models.Patients;
+
+<div class="col-12 row score-form" style="margin: 0px !important; max-height: 600px;
+    overflow: auto;">
+    @for (int i = 0; i < Model.Scores.OrderByDescending(q => q.DateTaken).ToList().Count; i++)
+    {
+        PatientMRCScore score = Model.Scores.OrderByDescending(q => q.DateTaken).ToList()[i];
+        <div class="patient-score">
+            <input type="hidden" value="@score.ID" name="PatientMRCScores[@(i.ToString())].ID" />
+            <fieldset>
+                <div class="row">
+                    <section class="col col-6">
+                        <label class="input" asp-for="@score.DateTaken">
+                            <i class="icon-append fa fa-calendar"></i>
+                            <input asp-for="@score.DateTaken" name="PatientMRCScores[@(i.ToString())].DateTaken" id="PatientMRCScores_@(i.ToString())__DateTaken" type="text" placeholder="Date Taken" class="date-taken" />
+                        </label>
+                    </section>
+                    <section class="col col-3">
+                        <label class="input" asp-for="@score.Score">
+                            <i class="icon-append fa fa-sticky-note"></i>
+                            <input asp-for="@score.Score" name="PatientMRCScores[@(i.ToString())].Score" id="PatientMRCScores_@(i.ToString())__Score" placeholder="Score">
+                        </label>
+                    </section>                 
+                </div>
+                <div class="row">
+                    <a href="/patients/@(Model.Patient.ID)/MRCScores/Delete/@(score.ID)" class="btn btn-danger remove-existing-item pull-right btn-lg" data-id="@(score.ID)" data-what="MRC Score" data-toggle="tooltip" data-title="Remove Patients score?" style="padding: 5px">
+                        <i class="fa fa-trash"></i>
+                    </a>
+                </div>
+            </fieldset>
+        </div>
+    }
+</div>
+@if (User.IsInRole("Update Role") || User.IsInRole("Admin Role"))
+{
+    <a href="@Url.Action("EditMRCScore", "Partials")" class="btn btn-success edit-score edit-patient-partial" data-visible-row="div.patient-score:visible" data-insert-into-class="div.score-form" style="padding: 5px">
+        <i class="fa fa-plus"></i>
+        <span>
+            <strong>Add MRC Score</strong>
+        </span>
+    </a>
+}

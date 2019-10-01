@@ -21,8 +21,6 @@ namespace AspergillosisEPR.Lib.Importers.Implementations
         private UnitOfMeasurement _uom;
         private int _patientAliveStatus;
         private int _patientDeceasedStatus;
-
-
         public IntraDrugLevelExcelImporter(FileStream stream, 
                                            IFormFile file, 
                                            string fileExtension, AspergillosisContext context) : base(stream, file, fileExtension, context)

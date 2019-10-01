@@ -1,0 +1,50 @@
+﻿@model AspergillosisEPR.Models.Patients.PatientSmokingDrinkingStatus
+<fieldset>
+    <div class="row">
+        @if (Model != null)
+        {
+            <input type="hidden" value="@(Model.ID)" name="PatientSmokingDrinkingStatus.ID" />
+        }
+        <section class="col col-4">
+            <label class="select">
+                <label asp-for="SmokingStatusId" class="select">
+                    @Html.DropDownList("PatientSmokingDrinkingStatus.SmokingStatusId", (SelectList)ViewBag.SmokingStatusId, "Select Smoking Status")
+                    <i></i>
+                    <span asp-validation-for="SmokingStatusId" class="text-danger"></span>
+                </label>
+            </label>
+        </section>
+        <section class="col col-4">
+            <label class="input" asp-for="StartAge">
+                <i class="icon-append fa fa-user"></i>
+                <input asp-for="StartAge" placeholder="Start Age" type="text" name="PatientSmokingDrinkingStatus.StartAge" id="PatientSmokingDrinkingStatus_StartAge">
+            </label>
+        </section>
+        <section class="col col-4">
+            <label class="input" asp-for="StopAge">
+                <i class="icon-append fa fa-user"></i>
+                <input asp-for="StopAge" placeholder="Stop Age" type="text" name="PatientSmokingDrinkingStatus.StopAge" id="PatientSmokingDrinkingStatus_StopAge">
+            </label>
+        </section>
+    </div>
+    <div class="row">
+        <section class="col col-4">
+            <label class="input" asp-for="PacksPerYear">
+                <i class="icon-append fa fa-align-justify"></i>
+                <input asp-for="PacksPerYear" placeholder="Packs Per Year" type="text"  name="PatientSmokingDrinkingStatus.PacksPerYear" id="PatientSmokingDrinkingStatus_PacksPerYear">
+            </label>
+        </section>
+        <section class="col col-4">
+            <label class="input" asp-for="CigarettesPerDay">
+                <i class="icon-append fa fa-align-justify"></i>
+                <input asp-for="CigarettesPerDay" placeholder="Cigarettes Per Day" type="text" name="PatientSmokingDrinkingStatus.CigarettesPerDay" id="PatientSmokingDrinkingStatus_CigarettesPerDay">
+            </label>
+        </section>
+        <section class="col col-4">
+            <label class="input" asp-for="AlcolholUnits">
+                <i class="icon-append fa fa-glass"></i>
+                <input asp-for="AlcolholUnits" placeholder="Alcohol Units" type="text"  name="PatientSmokingDrinkingStatus.AlcolholUnits" id="PatientSmokingDrinkingStatus_AlcolholUnits">
+            </label>
+        </section>
+    </div>
+</fieldset>

@@ -71,13 +71,16 @@ namespace AspergillosisEPR.Models
         public ICollection<PatientMRCScore> PatientMRCScores { get; set; } = new List<PatientMRCScore>();
         public ICollection<PatientICD10Diagnosis> PatientICD10Diagnoses { get; set; } = new List<PatientICD10Diagnosis>();
         public ICollection<PatientRadiologyNote> PatientRadiologyNotes { get; set; } = new List<PatientRadiologyNote>();
+        public ICollection<PatientHospitalAdmission> PatientHospitalAdmissions { get; set; } = new List<PatientHospitalAdmission>();
+        public ICollection<CauseOfDeath> CausesOfDeaths { get; set; } = new List<CauseOfDeath>();
 
-        [Display(Name = "Full Name")]
+    [Display(Name = "Full Name")]
         public string FullName
         {
             get { return LastName + ", " + FirstName; }
         }
         public static readonly List<string> Genders = new List<string>() { "male", "female" };
+        public static readonly List<string> CPABands = new List<string>() { "1", "2","3" };
 
         public int Age()
         {            

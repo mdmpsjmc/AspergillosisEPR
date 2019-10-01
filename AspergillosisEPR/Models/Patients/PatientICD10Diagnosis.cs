@@ -15,5 +15,6 @@ namespace AspergillosisEPR.Models.Patients
         [Column(TypeName = "text")]
         public string DiagnosisDescription { get; set; }
         public long OriginalImportId { get; set; }        
+        public DateTime? CreatedDate { get; set; }
     }
 }

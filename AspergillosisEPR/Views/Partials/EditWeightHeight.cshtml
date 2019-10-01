@@ -1,0 +1,31 @@
+﻿@model AspergillosisEPR.Models.Patients.PatientMeasurement
+<div class="patient-measurement">
+    <fieldset>
+        <div class="row">           
+            <section class="col col-6">
+                <label asp-for="DateTaken" class="input">
+                    <i class="icon-append fa fa-calendar"></i>
+                    <input asp-for="DateTaken" id="PatientMeasurements_@((string)ViewBag.Index)__DateTaken" name="PatientMeasurements[@((string)ViewBag.Index)].DateTaken" class="datepicker" placeholder="Date Taken" type="text">
+                </label>
+            </section>
+            <section class="col col-3">
+                <label asp-for="Weight" class="input">
+                    <i class="icon-append fa fa-dashboard"></i>
+                    <input asp-for="Weight" id="PatientMeasurements_@((string)ViewBag.Index)__Weight" name="PatientMeasurements[@((string)ViewBag.Index)].Weight" placeholder="Weight">
+                </label>
+            </section>
+            <section class="col col-3">
+                <label asp-for="Height" class="input">
+                    <i class="icon-append fa fa-text-height"></i>
+                    <input asp-for="Height" id="PatientMeasurements_@((string)ViewBag.Index)__Height" name="PatientMeasurements[@((string)ViewBag.Index)].Height" placeholder="Height">
+                </label>
+            </section>
+        </div>
+    </fieldset>
+    <div class="row">
+        <a href="javascript:void(0)" class="btn btn-danger remove-partial pull-right btn-lg" data-what=" weight and height " data-toggle="tooltip" data-title="Remove Patient measurement" style="padding: 5px">
+            <i class="fa fa-trash"></i>
+        </a>
+    </div>
+</div>
+

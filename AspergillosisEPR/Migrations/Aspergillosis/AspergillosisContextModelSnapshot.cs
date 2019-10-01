@@ -236,6 +236,28 @@ namespace AspergillosisEPR.Migrations.Aspergillosis
                     b.ToTable("CaseReportFormSections");
                 });
 
+            modelBuilder.Entity("AspergillosisEPR.Models.CauseOfDeath", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Description");
+
+                    b.Property<int?>("DiagnosisTypeId");
+
+                    b.Property<int>("NumericOrder");
+
+                    b.Property<string>("Order");
+
+                    b.Property<int>("PatientId");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("PatientId");
+
+                    b.ToTable("CauseOfDeaths");
+                });
+
             modelBuilder.Entity("AspergillosisEPR.Models.DbImport", b =>
                 {
                     b.Property<int>("ID")
@@ -692,10 +714,34 @@ namespace AspergillosisEPR.Migrations.Aspergillosis
                     b.ToTable("PatientHaematologies");
                 });
 
+            modelBuilder.Entity("AspergillosisEPR.Models.Patients.PatientHospitalAdmission", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<bool>("ICU");
+
+                    b.Property<bool>("MoreThanOneAdmission");
+
+                    b.Property<bool>("OneOrMoreAdmissions");
+
+                    b.Property<int>("PatientId");
+
+                    b.Property<bool>("PreVisit");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("PatientId");
+
+                    b.ToTable("PatientHospitalAdmissions");
+                });
+
             modelBuilder.Entity("AspergillosisEPR.Models.Patients.PatientICD10Diagnosis", b =>
                 {
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd();
+
+                    b.Property<DateTime?>("CreatedDate");
 
                     b.Property<string>("DiagnosisCode");
 
@@ -1510,6 +1556,14 @@ namespace AspergillosisEPR.Migrations.Aspergillosis
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
+            modelBuilder.Entity("AspergillosisEPR.Models.CauseOfDeath", b =>
+                {
+                    b.HasOne("AspergillosisEPR.Models.Patient")
+                        .WithMany("CausesOfDeaths")
+                        .HasForeignKey("PatientId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
             modelBuilder.Entity("AspergillosisEPR.Models.MedicalTrials.MedicalTrial", b =>
                 {
                     b.HasOne("AspergillosisEPR.Models.MedicalTrials.MedicalTrialPrincipalInvestigator", "PrincipalInvestigator")
@@ -1657,6 +1711,14 @@ namespace AspergillosisEPR.Migrations.Aspergillosis
                 {
                     b.HasOne("AspergillosisEPR.Models.Patient")
                         .WithMany("PatientHaematologies")
+                        .HasForeignKey("PatientId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("AspergillosisEPR.Models.Patients.PatientHospitalAdmission", b =>
+                {
+                    b.HasOne("AspergillosisEPR.Models.Patient")
+                        .WithMany("PatientHospitalAdmissions")
                         .HasForeignKey("PatientId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });

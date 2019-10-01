@@ -121,6 +121,77 @@ namespace AspergillosisEPR.Lib
             }
         }
 
+    internal void AddPatientSmokingDrinkingStatus(Patient patient, PatientSmokingDrinkingStatus patientSmokingDrinkingStatus)
+    {
+      if (patientSmokingDrinkingStatus.SmokingStatusId == 0) return;
+      var smokingStatus = new PatientSmokingDrinkingStatus();     
+      smokingStatus.PatientId = patient.ID;
+      patientSmokingDrinkingStatus.PatientId = patient.ID;
+      smokingStatus.AlcolholUnits = patientSmokingDrinkingStatus.AlcolholUnits;
+      smokingStatus.CigarettesPerDay = patientSmokingDrinkingStatus.CigarettesPerDay;
+      smokingStatus.PacksPerYear = patientSmokingDrinkingStatus.PacksPerYear;
+      smokingStatus.PatientId = patientSmokingDrinkingStatus.PatientId;
+      smokingStatus.StartAge = patientSmokingDrinkingStatus.StartAge;
+      smokingStatus.StopAge = patientSmokingDrinkingStatus.StopAge;
+      smokingStatus.SmokingStatusId = patientSmokingDrinkingStatus.SmokingStatusId;
+      patient.PatientSmokingDrinkingStatus = smokingStatus;
+      if (patientSmokingDrinkingStatus.ID == 0)
+      {
+        _context.PatientSmokingDrinkingStatus.Add(smokingStatus);
+      } else
+      {
+        _context.Update(patientSmokingDrinkingStatus);
+      }
+     
+    }
+
+    internal void AddMRCScores(Patient patient, PatientMRCScore[] patientMRCScores)
+    {
+      if (patientMRCScores.Length == 1 && patientMRCScores[0] == null)
+      {
+        return;
+      }
+      patient.PatientMRCScores = new List<PatientMRCScore>();
+      foreach (var score in patientMRCScores)
+      {
+        score.PatientId = patient.ID;
+        _context.PatientMRCScores.Add(score);
+        if (patient.PatientMRCScores == null) patient.PatientMRCScores = new List<PatientMRCScore>();
+        patient.PatientMRCScores.Add(score);
+      }
+    }
+
+    internal void AddPatientMeasurements(Patient patient, PatientMeasurement[] patientMeasurement)
+    {
+
+      if (patientMeasurement.Length == 1 && patientMeasurement[0] == null)
+      {
+        return;
+      }
+      patient.PatientMeasurements = new List<PatientMeasurement>();
+      foreach (var measurement in patientMeasurement)
+      {
+        measurement.PatientId = patient.ID;
+        _context.PatientMeasurements.Add(measurement);
+        if (patient.PatientMeasurements == null) patient.PatientMeasurements = new List<PatientMeasurement>();
+        patient.PatientMeasurements.Add(measurement);
+      }
+    }
+
+    internal void AddPatientNACDates(Patient patient, PatientNACDates patientNACDates)
+        {
+            if (patientNACDates == null)
+            {
+                return;
+            }
+            patient.PatientPulmonaryFunctionTests = new List<PatientPulmonaryFunctionTest>();
+
+            patientNACDates.PatientId = patient.ID;
+            _context.PatientNACDates.Add(patientNACDates);
+            patient.PatientNACDates.Add(patientNACDates);
+         
+        }
+
         internal void AddPatientPFTs(Patient patient, PatientPulmonaryFunctionTest[] patientPulmonaryFunctionTest)
         {
             if (patientPulmonaryFunctionTest.Length == 1 && patientPulmonaryFunctionTest[0] == null)
@@ -295,6 +366,69 @@ namespace AspergillosisEPR.Lib
                     drugToUpdate.DrugId = drug.DrugId;
                     _context.Update(drugToUpdate);
                 }
+            }
+        }
+
+    internal void UpdateMRCScore(PatientMRCScore[] scores, Patient patientToUpdate)
+    {
+      foreach (var score in scores)
+      {
+        if (score.ID == 0)
+        {
+          score.PatientId = patientToUpdate.ID;
+          _context.Update(score);
+        }
+        else
+        {
+          var dbScore = _context.PatientMRCScores.SingleOrDefault(s => s.ID == score.ID);
+          dbScore.Score = score.Score;
+          dbScore.DateTaken = score.DateTaken;
+          dbScore.PatientId = patientToUpdate.ID;
+          _context.Update(dbScore);
+        }
+      }
+    }
+
+    internal void UpdateWeightHeight(PatientMeasurement[] patientMeasurement, Patient patientToUpdate)
+    {
+      foreach (var measurement in patientMeasurement)
+      {
+        if (measurement.ID == 0)
+        {
+          measurement.PatientId = patientToUpdate.ID;
+          _context.Update(measurement);
+        }
+        else
+        {
+          var dbMeasurement = _context.PatientMeasurements.SingleOrDefault(s => s.ID == measurement.ID);
+          dbMeasurement.Height = measurement.Height;
+          dbMeasurement.Weight = measurement.Weight;
+          dbMeasurement.DateTaken = measurement.DateTaken;
+          dbMeasurement.PatientId = patientToUpdate.ID;
+          _context.Update(dbMeasurement);
+        }
+      }
+    }
+
+    internal void UpdateNacDates(PatientNACDates patientNACDates, Patient patientToUpdate)
+        {
+            if (patientNACDates.FirstSeenAtNAC.Year == 1)
+            {
+                patientNACDates.ID = 0;
+                patientToUpdate.PatientNACDates = null;
+                return;
+            }
+            else
+            {
+                var dbPatientNACDates = _context.PatientNACDates.SingleOrDefault(s => s.PatientId == patientToUpdate.ID);
+                if (dbPatientNACDates == null) return;
+                dbPatientNACDates.CPABand = patientNACDates.CPABand;
+                dbPatientNACDates.FirstSeenAtNAC = patientNACDates.FirstSeenAtNAC;
+                dbPatientNACDates.FollowUp3MonthsDrug = patientNACDates.FollowUp3MonthsDrug;
+                dbPatientNACDates.LastObservationPoint = patientNACDates.LastObservationPoint;
+                dbPatientNACDates.InitialDrug = patientNACDates.InitialDrug;
+                dbPatientNACDates.ReferralDate = patientNACDates.ReferralDate;
+                _context.Update(dbPatientNACDates);
             }
         }
 

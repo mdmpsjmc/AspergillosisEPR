@@ -1,0 +1,50 @@
+﻿@model AspergillosisEPR.Models.Patients.PatientNACDates;
+<header>National Aspergillosis Centre - Additional Information</header>
+<fieldset>
+    <div class="row">
+        <section class="col col-6">
+            <label asp-for="ReferralDate" class="input">
+                <i class="icon-append fa fa-calendar"></i>
+                <input asp-for="ReferralDate" placeholder="Referral Date" autocomplete="off" type="text" class="date-taken">
+                <span asp-validation-for="ReferralDate" class="text-danger"></span>
+            </label>
+        </section>
+        <section class="col col-6">
+            <label asp-for="FirstSeenAtNAC" class="input">
+                <i class="icon-append fa fa-calendar"></i>
+                <input asp-for="FirstSeenAtNAC" placeholder="First Seen At NAC" autocomplete="off" type="text" class="date-taken">
+                <span asp-validation-for="FirstSeenAtNAC" class="text-danger"></span>
+            </label>
+        </section>
+        <section class="col col-6">
+            <label asp-for="LastObservationPoint" class="input">
+                <i class="icon-append fa fa-calendar"></i>
+                <input asp-for="LastObservationPoint" placeholder="Last observation point" autocomplete="off" type="text" class="date-taken">
+                <span asp-validation-for="LastObservationPoint" class="text-danger"></span>
+            </label>
+        </section>
+        <section class="col col-6">
+            <label asp-for="CPABand" class="select">
+                <select asp-for="CPABand" asp-items='@{ new SelectList(Patient.CPABands); }'>
+                    <option value="">Select CPA Band (if applicable)</option>
+                </select>
+                <span asp-validation-for="CPABand" class="text-danger"></span>
+                <i class="icon-append fa fa-info"></i>
+            </label>
+        </section>
+        <section class="col col-6">
+            <label asp-for="InitialDrug" class="input">
+                <i class="icon-append fa fa-medkit"></i>
+                <input asp-for="InitialDrug" placeholder="Enter info about initial drug" autocomplete="off" type="text">
+                <span asp-validation-for="InitialDrug" class="text-danger"></span>
+            </label>
+        </section>
+        <section class="col col-6">
+            <label asp-for="FollowUp3MonthsDrug" class="input">
+                <i class="icon-append fa fa-medkit"></i>
+                <input asp-for="FollowUp3MonthsDrug" placeholder="Enter info about follow up drug" autocomplete="off" type="text">
+                <span asp-validation-for="FollowUp3MonthsDrug" class="text-danger"></span>
+            </label>
+        </section>
+    </div>
+</fieldset>

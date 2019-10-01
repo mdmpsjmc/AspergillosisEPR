@@ -1,0 +1,12 @@
+﻿@model AspergillosisEPR.Models.Patients.PatientRadiologyFinding
+<div class="col-12 row measurement-form" style="margin: 0px !important">
+</div>
+@if (User.IsInRole("Create Role") || User.IsInRole("Admin Role"))
+{
+    <a href="@Url.Action("WeightHeight", "Partials")" class="btn btn-success add-measurement-entry add-new-patient-partial" data-insert-into-class="div.measurement-form" style="padding: 5px">
+        <i class="fa fa-plus"></i>
+        <span>
+            <strong>Add Patients Weight and height</strong>
+        </span>
+    </a>
+}

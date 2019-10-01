@@ -85,7 +85,8 @@ namespace AspergillosisEPR
             services.AddSingleton<IHostedService, ImmunoglobulinUpdateBackgroundTask>(); //runs tuesday
             services.AddSingleton<IHostedService, EmptyPostCodesUpdateScheduledTask>(); //runs wednesday
             services.AddSingleton<IHostedService, PatientTestResultBackgroundUpdateTask>();//thursday       
-            services.AddSingleton<IHostedService, PatientRadiologyUpdateBackgroundTask>();//friday       
+            services.AddSingleton<IHostedService, PatientRadiologyUpdateBackgroundTask>();//friday      
+            services.AddSingleton<IHostedService, PatientICD10DiagnosesBackgroundTask>();//saturday      
             services.AddHostedService<QueuedHostedService>();
             services.AddSingleton<IBackgroundTaskQueue, BackgroundTaskQueue>();
         }

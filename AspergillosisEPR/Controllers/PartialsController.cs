@@ -71,12 +71,40 @@ namespace AspergillosisEPR.Controllers
             return PartialView();
         }
 
-        [Authorize(Roles = "Update Role, Admin Role")]
+        [Authorize(Roles = "Create Role, Admin Role")]
+        public IActionResult WeightHeight()
+        {
+          return PartialView();
+        }
+
+
+        [Authorize(Roles = "Create Role, Admin Role")]
+        public IActionResult MRCScore()
+        {
+          return PartialView();
+        }
+
+       [Authorize(Roles = "Update Role, Admin Role")]
+        public IActionResult EditMRCScore()
+        {
+          ViewBag.PFTIds = _listResolver.PopulatePFTsDropDownList();
+          ViewBag.Index = (string)Request.Query["index"];
+          return PartialView();
+        }
+
+    [Authorize(Roles = "Update Role, Admin Role")]
         public IActionResult EditPulmonaryFunctionTest()
         {
             ViewBag.PFTIds = _listResolver.PopulatePFTsDropDownList();
             ViewBag.Index = (string)Request.Query["index"];
             return PartialView();
+        }
+
+        [Authorize(Roles = "Update Role, Admin Role")]
+        public IActionResult EditWeightHeight()
+        {
+         ViewBag.Index = (string)Request.Query["index"];
+         return PartialView();
         }
 
         [Authorize(Roles = "Create Role, Admin Role")]

@@ -1,4 +1,5 @@
 ﻿@model AspergillosisEPR.Models.PatientViewModels.PatientDetailsViewModel
+@using AspergillosisEPR.Lib;
 <div class="row">
     <div class="col-sm-12">
         <div class="row">
@@ -68,12 +69,30 @@
 
                     @if (Model.Patient.PatientNACDates.Count() > 0)
                     {
+                        @if (Model.Patient.PatientNACDates?.FirstOrDefault()?.ReferralDate != null)
+                        {
+                            <li>
+                                <p class="text-muted">
+                                    <i class="fa fa-calendar"></i>&nbsp;&nbsp;<span class="txt-color-darken">
+                                        Referral Date:&nbsp;
+                                        @(Model.Patient.PatientNACDates?.FirstOrDefault()?.ReferralDate.Value.ToString("dd/MM/yyyy"))
+                                    </span>
+                                </p>
+                            </li>
+                        }
                         <li>
                             <p class="text-muted">
                                 <i class="fa fa-user-md"></i>&nbsp;&nbsp;<span class="txt-color-darken">
                                     First seen at NAC:&nbsp;
                                     @(Model.Patient.PatientNACDates.FirstOrDefault()?.FirstSeenAtNAC.ToString("dd/MM/yyyy"))
-                                </span>
+
+                                    @if (Model.Patient.PatientNACDates?.FirstOrDefault()?.ReferralDate != null)
+                                    {
+                                        <small>waiting time: </small>
+                                        int waitingTime = TimeDifference.InWeeks(Model.Patient.PatientNACDates.FirstOrDefault()?.FirstSeenAtNAC, Model.Patient.PatientNACDates.FirstOrDefault()?.ReferralDate);
+                                        <span class="badge badge-@(waitingTime > 8 ?  "danger":  "info")  ">@(waitingTime) weeks</span>
+                                    }
+
                             </p>
                         </li>
                         @if (Model.Patient.PatientNACDates?.FirstOrDefault()?.LastObservationPoint != null)
@@ -87,6 +106,40 @@
                                 </p>
                             </li>
                         }
+                        @if (Model.Patient.PatientNACDates?.FirstOrDefault()?.CPABand != null)
+                        {
+                            <li>
+                                <p class="text-muted">
+                                    <i class="fa fa-dashboard"></i>&nbsp;&nbsp;<span class="txt-color-darken">
+                                        CPA Band:&nbsp;
+                                        @(Model.Patient.PatientNACDates?.FirstOrDefault()?.CPABand)
+                                    </span>
+                                </p>
+                            </li>
+                        }
+                        @if (Model.Patient.PatientNACDates?.FirstOrDefault()?.InitialDrug != null)
+                        {
+                            <li>
+                                <p class="text-muted">
+                                    <i class="fa fa-medkit"></i>&nbsp;&nbsp;<span class="txt-color-darken">
+                                        Initial Drug:&nbsp;
+                                        @(Model.Patient.PatientNACDates?.FirstOrDefault()?.InitialDrug)
+                                    </span>
+                                </p>
+                            </li>
+                        }
+                        @if (Model.Patient.PatientNACDates?.FirstOrDefault()?.FollowUp3MonthsDrug != null)
+                        {
+                            <li>
+                                <p class="text-muted">
+                                    <i class="fa fa-medkit"></i>&nbsp;&nbsp;<span class="txt-color-darken">
+                                        3 months follow up drug:&nbsp;
+                                        @(Model.Patient.PatientNACDates?.FirstOrDefault()?.FollowUp3MonthsDrug)
+                                    </span>
+                                </p>
+                            </li>
+                        }
+
 
                     }
                 </ul>
