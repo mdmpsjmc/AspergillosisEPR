@@ -15,14 +15,18 @@ namespace AspergillosisEPR.Controllers
         private readonly AspergillosisContext _context;
         private readonly PASDbContext _pasContext;
         private readonly ExternalImportDbContext _externalImportDbContext;
+        private readonly SGRQContext _sqrqContext;
+        private readonly DateTime SGRQ_START_IMPORT_DATE = DateTime.Parse("2019-03-22");
 
-        public ExternalImportsController(AspergillosisContext context,
+      public ExternalImportsController(AspergillosisContext context,
                                          PASDbContext pasContext,
-                                         ExternalImportDbContext externalImportDbContext)
+                                         ExternalImportDbContext externalImportDbContext, 
+                                         SGRQContext sgrqContext)
         {
             _context = context;
             _pasContext = pasContext;
             _externalImportDbContext = externalImportDbContext;
+            _sqrqContext = sgrqContext;
         }
 
         [HttpPost]
@@ -240,5 +244,44 @@ namespace AspergillosisEPR.Controllers
             await _context.SaveChangesAsync();
             return Ok();
         }
+
+       [HttpPost]
+      public async Task<IActionResult> SGRQ()
+      {
+      var sqrqs = _sqrqContext.QuestionnaireResults
+                                    .Include(q => q.Questionnaire)
+                                      .ThenInclude(q => q.Patient)
+                                    .Where(q => q.Questionnaire.DateOfEntry > SGRQ_START_IMPORT_DATE);
+
+
+      foreach (var externalSGRQ in sqrqs)
+      {
+        var rm2Number = externalSGRQ.Questionnaire.Patient.Identifier.ToString().Replace("CPA", "");
+        var patient = _context.Patients
+                              .Include(p => p.STGQuestionnaires)
+                              .Where(p => p.RM2Number.Equals(rm2Number)).FirstOrDefault();
+
+        if (patient == null) continue;
+
+        var existingDates = patient.STGQuestionnaires.Select(pi => pi.DateTaken.Date).ToList();
+        bool dateDoesNotExist = existingDates.FindAll(d => d.Date == externalSGRQ.Questionnaire.DateOfEntry.Date).ToList().Count == 0;
+
+        if (dateDoesNotExist)
+        {
+
+          var sgrq = new PatientSTGQuestionnaire();
+          sgrq.PatientId = patient.ID;
+          sgrq.SymptomScore = (decimal) externalSGRQ.SymptomScore;
+          sgrq.ImpactScore = (decimal)externalSGRQ.ImpactScore;
+          sgrq.ActivityScore = (decimal)externalSGRQ.ActivityScore;
+          sgrq.TotalScore = (decimal)externalSGRQ.TotalScore;
+          sgrq.DateTaken = externalSGRQ.Questionnaire.DateOfEntry;
+          sgrq.OriginalImportedId = externalSGRQ.Questionnaire.ID.ToString();
+          _context.PatientSTGQuestionnaires.Add(sgrq);
+        }       
+      }
+      await _context.SaveChangesAsync();
+      return Ok();
     }
+  }
 }

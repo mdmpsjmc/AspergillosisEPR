@@ -260,16 +260,42 @@
     };
 
 
+  var initializeSGRQImport = function () {
+    $('button#external-sgrq').on('click', function (e) {
+      e.preventDefault();
+      $.ajax({
+        type: "POST",
+        url: "/ExternalImports/SGRQ",
+        contentType: false,
+        processData: false,
+        success: function (response) {
+          if (response.length === 0) {
+            LoadingIndicator.hide();
+            alert('Some error occured while uploading');
+          } else {
+            $('#batch-upload-response').html("<div class='alert alert-info'><i class='fa fa-info-circle'></i> &nbsp; Processed (added or updated)" + response.result + " records from orginal file</div>");
+            LoadingIndicator.hide();
+          }
+        },
+        error: function (e) {
+          LoadingIndicator.hide();
+          $('#batch-upload-response').html(e.responseText);
+        }
+      });
+    });
+  };
+
     return {
         init: function () {
-            initializeAjaxImport();
-            initializeBatchAjaxImport();
-            initImportsDataTable();
-            initializePdfBatchAjaxImport();
-            initializeExternalICD10DiagnosisImport();
-            initializeExternalLabResultImport();
-            initializeVoriconazoleLevelImport();
-            initializeRadiologyImport();
+          initializeAjaxImport();
+          initializeBatchAjaxImport();
+          initImportsDataTable();
+          initializePdfBatchAjaxImport();
+          initializeExternalICD10DiagnosisImport();
+          initializeExternalLabResultImport();
+          initializeVoriconazoleLevelImport();
+          initializeRadiologyImport();
+          initializeSGRQImport();
         }
     };
 }();

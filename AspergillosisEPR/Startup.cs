@@ -79,14 +79,15 @@ namespace AspergillosisEPR
                 .JsonColumnName("Data")
                 .LastUpdatedColumnName("LastUpdatedDate"));
             ConfigurePdfService(services);
-            services.AddScoped<IViewRenderService, ViewRenderService>();
-            services.AddSingleton<IHostedService, PatientAdministrationSystemStatusTask>(); //sunday
+            services.AddScoped<IViewRenderService, ViewRenderService>();            
             services.AddSingleton<IHostedService, PatientVoriconazoleLevelBackgruondTask>();//monday
             services.AddSingleton<IHostedService, ImmunoglobulinUpdateBackgroundTask>(); //runs tuesday
             services.AddSingleton<IHostedService, EmptyPostCodesUpdateScheduledTask>(); //runs wednesday
             services.AddSingleton<IHostedService, PatientTestResultBackgroundUpdateTask>();//thursday       
             services.AddSingleton<IHostedService, PatientRadiologyUpdateBackgroundTask>();//friday      
-            services.AddSingleton<IHostedService, PatientICD10DiagnosesBackgroundTask>();//saturday      
+            services.AddSingleton<IHostedService, PatientICD10DiagnosesBackgroundTask>();//saturday 
+            services.AddSingleton<IHostedService, PatientSGRQImporterBackgroundTask>();//saturday at 12:15
+            services.AddSingleton<IHostedService, PatientAdministrationSystemStatusTask>(); //sunday
             services.AddHostedService<QueuedHostedService>();
             services.AddSingleton<IBackgroundTaskQueue, BackgroundTaskQueue>();
         }
@@ -102,10 +103,13 @@ namespace AspergillosisEPR
             services.AddDbContext<PASDbContext>(options =>
                        options.UseSqlServer(Configuration.GetConnectionString("PASConnection"), 
                                             b => b.UseRowNumberForPaging()));
-            services.AddDbContext<ExternalImportDbContext>(options =>
-                       options.UseSqlServer(Configuration.GetConnectionString("ImportDbConnection"), 
-                                                b => b.UseRowNumberForPaging())
-           );
+          services.AddDbContext<ExternalImportDbContext>(options =>
+                  options.UseSqlServer(Configuration.GetConnectionString("ImportDbConnection"),
+                                    b => b.UseRowNumberForPaging()));
+          services.AddDbContext<SGRQContext>(options =>
+             options.UseSqlServer(Configuration.GetConnectionString("SGRQConnection"),
+                                      b => b.UseRowNumberForPaging())
+            );
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
