@@ -16,7 +16,6 @@ namespace AspergillosisEPR.Lib
         private AspergillosisContext _context;        
         public PatientDrugLevel PatientDrugLevel;
 
-
         public PatientDrugLevelResolver(AspergillosisContext context, Drug drug, UnitOfMeasurement uom)
         {
             _context = context;

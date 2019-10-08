@@ -54,6 +54,9 @@ namespace AspergillosisEPR.Data.DatabaseSeed
             AddHospitalAdmissionDbImportType.Seed(context);
             DateOfDiagnosisDbImportType.Seed(context);
             AddMortalityAuditDates.Seed(context);
+            AddMortalityAuditSGRQ.Seed(context);
+            AddMortalityAuditMRCScore.Seed(context);
+            AddMortalityAuditWeightAndHeight.Seed(context);
             //PostcodeSeed.ReadCsvIntoDatabase(hostingEnvironment, context);
         }
     }

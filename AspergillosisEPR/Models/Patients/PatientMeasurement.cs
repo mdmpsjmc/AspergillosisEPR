@@ -22,5 +22,17 @@ namespace AspergillosisEPR.Models.Patients
                 "PatientId", "Patient"
             };
         }
+
+        public string BMI()
+        {
+          if (Height != null && Weight != null && Height != 0 && Weight != 0)
+        {
+          var bmi = Weight / ((Height / 100) * (Height / 100));
+          return Math.Round(bmi.Value, 2).ToString();
+        }
+        else return "";
+          
+          
+        }
     }
 }

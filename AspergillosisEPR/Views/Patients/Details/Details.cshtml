@@ -90,7 +90,7 @@
                                     {
                                         <small>waiting time: </small>
                                         int waitingTime = TimeDifference.InWeeks(Model.Patient.PatientNACDates.FirstOrDefault()?.FirstSeenAtNAC, Model.Patient.PatientNACDates.FirstOrDefault()?.ReferralDate);
-                                        <span class="badge badge-@(waitingTime > 8 ?  "danger":  "info")  ">@(waitingTime) weeks</span>
+                                        <span class="badge badge-@(waitingTime > 8 ? "danger" : "info")  ">@(waitingTime) weeks</span>
                                     }
 
                             </p>
@@ -139,10 +139,21 @@
                                 </p>
                             </li>
                         }
-
-
-                    }
-                </ul>
+                       
+                            var recentBMI = Model.Patient.PatientMeasurements?.OrderByDescending(q => q.DateTaken).FirstOrDefault();
+                            if (recentBMI != null)
+                            {
+                                <li>
+                                    <p class="text-muted">
+                                        <i class="fa fa-dashboard"></i>&nbsp;&nbsp;<span class="txt-color-darken">
+                                            Last BMI @(recentBMI.DateTaken.ToString("dd/MM/yyyy")) :&nbsp;
+                                            @(recentBMI.BMI())
+                                        </span>
+                                    </p>
+                                </li>
+                            }
+                        }
+                    </ul>
                 <br>                
             </div>     
             <div class="col col-sm-2 col-md-2 col-lg-2">

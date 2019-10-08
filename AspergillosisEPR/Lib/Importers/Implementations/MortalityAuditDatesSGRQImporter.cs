@@ -6,6 +6,7 @@ using NPOI.SS.UserModel;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -27,13 +28,12 @@ namespace AspergillosisEPR.Lib.Importers.Implementations
     {
       return new Hashtable()
       {
-                  { "FirstName", "Patient.LastName" },
-                  { "LastName", "Patient.LastName"},
                   { "RM2Number", "Patient.RM2Number" },
-                  { "ReferralDate", "PatientNACDates.ReferralDate"},
-                  { "FirstSeenAtNAC", "PatientNACDates.FirstSeenAtNAC"},
-                  { "LastObservationPoint", "PatientNACDates.LastObservationPoint"},
-                  { "DateOfDeath", "PatientNACDates.DateOfDeath"}
+                  { "SymptomScore", "PatientSTGQuestionnaire.SymptomScore"},
+                  { "ImpactScore", "PatientSTGQuestionnaire.ImpactScore"},
+                  { "ActivityScore", "PatientSTGQuestionnaire.ActivityScore"},
+                  { "TotalScore", "PatientSTGQuestionnaire.TotalScore"},
+                  { "DateTaken", "PatientSTGQuestionnaire.DateTaken"},
       };
     }
 
@@ -41,39 +41,42 @@ namespace AspergillosisEPR.Lib.Importers.Implementations
     {
       Action<Patient, IRow, int> sheetProcessingAction = (patient, row, cellCount) =>
       {
-       
-        patient = ReadRowCellsIntoPatientObject(patient, row, cellCount);
-        var existingPatient = ExistingPatient(patient.RM2Number);
+        List<PatientSTGQuestionnaire> sgrqs = _context.PatientSTGQuestionnaires.Where(d => d.PatientId.Equals(patient.ID)).ToList();
+        var newSgrq = new PatientSTGQuestionnaire() { PatientId = patient.ID };
+        patient = ReadRowCellsIntoPatientObject(patient, row, cellCount, newSgrq);
+        var existingDates = sgrqs.Select(pi => pi.DateTaken.Date).ToList();        
+        bool dateDoesNotExist = existingDates.FindAll(d => d.Date == newSgrq.DateTaken.Date).ToList().Count == 0;
+        if (newSgrq.DateTaken.Year > 1 && dateDoesNotExist)
+        {
+
+          if (patient.STGQuestionnaires == null) patient.STGQuestionnaires = new List<PatientSTGQuestionnaire>();
+          patient.STGQuestionnaires.Add(newSgrq);
+
+        }
         Imported.Add(patient);
       };
       InitializeSheetProcessingForRows(HeadersDictionary(), currentSheet, sheetProcessingAction);
     }
 
-    private Patient ReadRowCellsIntoPatientObject(Patient patient, IRow row, int cellCount)
+    private Patient ReadRowCellsIntoPatientObject(Patient patient, IRow row, int cellCount, PatientSTGQuestionnaire newSgrq)
     {
-      List<PatientSTGQuestionnaire> sgrqs = _context.PatientSTGQuestionnaires.Where(d => d.PatientId.Equals(patient.ID)).ToList();
       for (int cellCursor = row.FirstCellNum; cellCursor < cellCount; cellCursor++)
       {
         if (row.GetCell(cellCursor) != null)
         {
-          ReadCell(patient, row, cellCursor, sgrqs);
+         
+          ReadCell(patient, row, cellCursor, newSgrq);      
         }
       }
 
       return patient;
     }
 
-    private void ReadCell(Patient patient, IRow row, int cellIndex, List<PatientSTGQuestionnaire> sgrqs)
+    private void ReadCell(Patient patient, IRow row, int cellIndex, PatientSTGQuestionnaire newSGRQ)
     {
-
       string header = _headers.ElementAt(cellIndex);
       string propertyValue = row.GetCell(cellIndex, MissingCellPolicy.CREATE_NULL_AS_BLANK).ToString();
-      if (sgrqs.Count == 0)
-      {
-        var nacDate = new PatientNACDates() { Patient = patient };
-        patient.PatientNACDates.Add(nacDate);
-        sgrqs = patient.STGQuestionnaires.ToList();
-      }
+   
 
       string newObjectFields = (string)_dictonary[header];
       if (newObjectFields != null)
@@ -82,25 +85,35 @@ namespace AspergillosisEPR.Lib.Importers.Implementations
         foreach (string field in fields)
         {
           var klassAndField = field.Split(".");
+          var propertyName = klassAndField[1];
           switch (klassAndField[0])
           {
-            case "Patient":
-
-              break;
-            case "PatientSTGQuestionnnaire":
+            case "PatientSTGQuestionnaire":
               try
               {
-                var date = sgrqs.FirstOrDefault();
-                string propertyName = klassAndField[1];
 
-
-                Type type = date.GetType();
+                Type type = newSGRQ.GetType();
                 PropertyInfo propertyInfo = type.GetProperty(propertyName);
-                if (propertyInfo.PropertyType == typeof(DateTime) || propertyInfo.PropertyType == typeof(DateTime?) && !string.IsNullOrEmpty(propertyValue))
+                if (propertyName == "DateTaken")
                 {
-                  propertyInfo.
-                       SetValue(date, Convert.ChangeType(propertyValue, typeof(DateTime)), null);
+                  DateTime qDate = DateTime.ParseExact(propertyValue, "dd-MMM-yyyy", CultureInfo.InvariantCulture);
+                  propertyInfo.SetValue(newSGRQ, qDate);
+                } else if (propertyName == "SymptomScore")
+                {
+                  newSGRQ.SymptomScore = Convert.ToDecimal(propertyValue);
+                } else if (propertyName == "ImpactScore")
+                {
+                  newSGRQ.ImpactScore = Convert.ToDecimal(propertyValue);
                 }
+                else if (propertyName == "ActivityScore")
+                {
+                  newSGRQ.ActivityScore = Convert.ToDecimal(propertyValue);
+                }
+                else if (propertyName == "TotalScore")
+                {
+                  newSGRQ.TotalScore = Convert.ToDecimal(propertyValue);
+                }
+
               } catch(Exception e)
               {
                 Console.WriteLine(e.Message);
