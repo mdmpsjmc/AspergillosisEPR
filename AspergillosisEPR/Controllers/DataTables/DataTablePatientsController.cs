@@ -53,10 +53,9 @@ namespace AspergillosisEPR.Controllers.DataTables
             };
             return LoadData(queriesAction);
         }
-
         private void ColumnSearch()
         {
-            for (int cursor = 0; cursor < 6; cursor++)
+            for (int cursor = 0; cursor < 7; cursor++)
             {
                 string partialSearch = Request.Form["columns[" + cursor.ToString() + "][search][value]"];
                 if (partialSearch != null && partialSearch != "")
@@ -67,18 +66,21 @@ namespace AspergillosisEPR.Controllers.DataTables
                             _list = _list.Where(p => p.RM2Number.Contains(partialSearch)).ToList();
                             break;
                         case 1:
-                            _list = _list.Where(p => p.PrimaryDiagnosis.Contains(partialSearch)).ToList();
+                            _list = _list.Where(p => p.DistrictNumber.Contains(partialSearch)).ToList();
                             break;
                         case 2:
-                            _list = _list.Where(p => p.FirstName.ToLower().Contains(partialSearch.ToLower())).ToList();
+                            _list = _list.Where(p => p.PrimaryDiagnosis.Contains(partialSearch)).ToList();
                             break;
                         case 3:
-                            _list = _list.Where(p => p.LastName.ToLower().Contains(partialSearch.ToLower())).ToList();
+                            _list = _list.Where(p => p.FirstName.ToLower().Contains(partialSearch.ToLower())).ToList();
                             break;
                         case 4:
-                            _list = _list.Where(p => p.Gender.ToString().ToLower() == partialSearch.ToLower()).ToList();
+                            _list = _list.Where(p => p.LastName.ToLower().Contains(partialSearch.ToLower())).ToList();
                             break;
                         case 5:
+                            _list = _list.Where(p => p.Gender.ToString().ToLower() == partialSearch.ToLower()).ToList();
+                            break;
+                        case 6:
                            SearchListByDate(partialSearch, "DOB");
                            break;
                     }
@@ -122,6 +124,7 @@ namespace AspergillosisEPR.Controllers.DataTables
                     {
                         ID = patient.ID,
                         RM2Number = patient.RM2Number,
+                        DistrictNumber=patient.DistrictNumber,
                         PrimaryDiagnosis = "",
                         LastName = patient.LastName,
                         FirstName = patient.FirstName,

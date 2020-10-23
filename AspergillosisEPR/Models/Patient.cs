@@ -39,6 +39,8 @@ namespace AspergillosisEPR.Models
         [Remote("HasRM2Number", "Patients", AdditionalFields = "ID, InitialRM2Number",
                 ErrorMessage = "Patient RM2 Number already exists in database")]
         public string RM2Number { get; set; }
+
+        public string DistrictNumber { get; set; }
         public int? PatientStatusId { get; set; }
 
         [DataType(DataType.Date)]

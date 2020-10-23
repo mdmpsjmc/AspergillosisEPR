@@ -3,7 +3,7 @@
   var initPatientsDataTable = function () {
     $("#patients_datatable").DataTable().destroy();
     window.patientsTable = $("#patients_datatable").DataTable({
-      dom: "<'row'<'col-sm-3'l><'col-sm-3'f><'col-sm-6'p>>" +
+        dom: "<'row'<'col-sm-3'l><'col-sm-3'f><'col-sm-3'f><'col-sm-6'p>>" +
         "<'row'<'col-sm-12'tr>>" +
         "<'row'<'col-sm-5'i><'col-sm-7'p>>",
       "processing": true,
@@ -61,7 +61,8 @@
         }
       ],
       "columns": [
-        { "data": "rM2Number", "name": "RM2Number", "autoWidth": true },
+          { "data": "rM2Number", "name": "RM2Number", "autoWidth": true },
+          { "data": "districtNumber", "name":"DistrictNumber","autoWidth":true},
         { "data": "primaryDiagnosis", "name": "Primary Diagnosis", "autoWidth": true, "sortable": false },
         { "data": "firstName", "name": "FirstName", "autoWidth": true },
         { "data": "lastName", "name": "LastName", "autoWidth": true },

@@ -8,6 +8,7 @@ namespace AspergillosisEPR.Models.PatientViewModels
         public int ID {get; set;}
         public string PrimaryDiagnosis { get; set; }
         public string RM2Number { get; set; }
+        public string DistrictNumber { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Gender { get; set; }
