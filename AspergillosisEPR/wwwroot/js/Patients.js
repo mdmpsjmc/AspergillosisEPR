@@ -445,13 +445,11 @@
 
   var initPatientsDateTimePickers = function () {
     $('input[type="date"]').attr('type', 'text');
-    $('input#DOB, input#DateOfDeath, input.datepicker').datetimepicker({
-      format: 'YYYY-MM-DD'
-    });
-    $('input.date-taken').datetimepicker({
+      $('input#DOB, input#DateOfDeath, input.datepicker, input.date-taken input.datetaken').datetimepicker({
       format: 'DD/MM/YYYY'
     });
-    $("input#DOB, input.datepicker, input#DateOfDeath").on("click", function () {
+   
+    $("input#DOB, input.datepicker, input.date-taken, input#DateOfDeath").on("click", function () {
       $(this).datetimepicker("show");
     });
   }

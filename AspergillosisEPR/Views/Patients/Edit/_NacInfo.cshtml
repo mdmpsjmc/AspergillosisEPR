@@ -5,27 +5,27 @@
         <section class="col col-6">
             <label asp-for="ReferralDate" class="input">
                 <i class="icon-append fa fa-calendar"></i>
-                <input asp-for="ReferralDate" placeholder="Referral Date" autocomplete="off" type="text" class="date-taken">
+                <input asp-for="ReferralDate" placeholder="Referral Date" autocomplete="off" type="text" class="datepicker">
                 <span asp-validation-for="ReferralDate" class="text-danger"></span>
             </label>
         </section>
         <section class="col col-6">
             <label asp-for="FirstSeenAtNAC" class="input">
                 <i class="icon-append fa fa-calendar"></i>
-                <input asp-for="FirstSeenAtNAC" placeholder="First Seen At NAC" autocomplete="off" type="text" class="date-taken">
+                <input asp-for="FirstSeenAtNAC"  placeholder="First Seen At NAC" type="text" class="datepicker">
                 <span asp-validation-for="FirstSeenAtNAC" class="text-danger"></span>
             </label>
         </section>
         <section class="col col-6">
             <label asp-for="LastObservationPoint" class="input">
                 <i class="icon-append fa fa-calendar"></i>
-                <input asp-for="LastObservationPoint" placeholder="Last observation point" autocomplete="off" type="text" class="date-taken">
+                <input asp-for="LastObservationPoint" placeholder="Last observation point" autocomplete="off" type="text" class="datepicker">
                 <span asp-validation-for="LastObservationPoint" class="text-danger"></span>
             </label>
         </section>
         <section class="col col-6">
             <label asp-for="CPABand" class="select">
-                <select asp-for="CPABand" asp-items='@{ new SelectList(Patient.CPABands); }'>
+                <select asp-for="CPABand" asp-items="new SelectList(Patient.CPABands)">
                     <option value="">Select CPA Band (if applicable)</option>
                 </select>
                 <span asp-validation-for="CPABand" class="text-danger"></span>

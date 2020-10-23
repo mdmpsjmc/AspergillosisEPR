@@ -21,21 +21,21 @@
                     <section class="col col-4">
                         <label class="input" asp-for="@ig.DateTaken">
                             <i class="icon-append fa fa-calendar"></i>
-                            <input asp-for="@ig.DateTaken" name="PatientImmunoglobulines[@(i.ToString())].DateTaken" id="PatientImmunoglobulines_@(i.ToString())__DateTaken" placeholder="Date Taken" class="datepicker" />
+                            <input asp-for="@ig.DateTaken" name="PatientImmunoglobulines[@(i.ToString())].DateTaken" id="PatientImmunoglobulines_@(i.ToString())__DateTaken" placeholder="Date Taken" type="text" class="form-control datepicker" />
                         </label>
                     </section>
                     <section class="col col-3">
                         <label class="input" asp-for="@ig.Value">
                             <input asp-for="@ig.Value" name="PatientImmunoglobulines[@(i.ToString())].Value" id="PatientImmunoglobulines_@(i.ToString())__Value" placeholder="Value">
                         </label>
-                    </section>                  
+                    </section>
                 </div>
                 <div class="row">
                     <a href="@Url.Action("Delete", "PatientsImmunoglobulines", new { id=ig.ID})" class="btn btn-danger remove-existing-item pull-right btn-lg" data-id="@(ig.ID)" data-what="Patients immuglobuline entry" data-toggle="tooltip" data-title="Remove Patients Immuglobuline Entry?" style="padding: 5px">
                         <i class="fa fa-trash"></i>
                     </a>
                 </div>
-            </fieldset>         
+            </fieldset>
         </div>
     }
 </div>

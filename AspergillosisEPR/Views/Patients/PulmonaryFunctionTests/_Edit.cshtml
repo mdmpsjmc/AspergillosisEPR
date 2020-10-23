@@ -21,7 +21,7 @@
                     <section class="col col-4">
                         <label class="input" asp-for="@pft.DateTaken">
                             <i class="icon-append fa fa-calendar"></i>
-                            <input asp-for="@pft.DateTaken" name="PulmonaryFunctionTest[@(i.ToString())].DateTaken" id="PulmonaryFunctionTest_@(i.ToString())__DateTaken"  type="text" placeholder="Date Taken" class="date-taken" />
+                            <input asp-for="@pft.DateTaken" type="text" class="datepicker" name="PulmonaryFunctionTest[@(i.ToString())].DateTaken" id="PulmonaryFunctionTest_@(i.ToString())__DateTaken"   placeholder="Date Taken"  />
                         </label>
                     </section>
                     <section class="col col-2">
