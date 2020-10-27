@@ -61,8 +61,8 @@
         }
       ],
       "columns": [
-          { "data": "rM2Number", "name": "RM2Number", "autoWidth": true },
-          { "data": "districtNumber", "name":"DistrictNumber","autoWidth":true},
+        { "data": "rM2Number", "name": "RM2Number", "autoWidth": true },
+        { "data": "districtNumber", "name":"DistrictNumber","autoWidth":true},
         { "data": "primaryDiagnosis", "name": "Primary Diagnosis", "autoWidth": true, "sortable": false },
         { "data": "firstName", "name": "FirstName", "autoWidth": true },
         { "data": "lastName", "name": "LastName", "autoWidth": true },

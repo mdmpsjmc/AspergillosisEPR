@@ -66,7 +66,7 @@ namespace AspergillosisEPR.Controllers.DataTables
                             _list = _list.Where(p => p.RM2Number.Contains(partialSearch)).ToList();
                             break;
                         case 1:
-                            _list = _list.Where(p => p.DistrictNumber.Contains(partialSearch)).ToList();
+                            _list = _list.Where(p => p.DistrictNumber !=null && p.DistrictNumber.Contains(partialSearch)).ToList();
                             break;
                         case 2:
                             _list = _list.Where(p => p.PrimaryDiagnosis.Contains(partialSearch)).ToList();

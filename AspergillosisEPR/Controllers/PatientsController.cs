@@ -66,7 +66,7 @@ namespace AspergillosisEPR.Controllers
 
     [Authorize(Roles = ("Admin Role, Create Role"))]
     [Audit(EventTypeName = "Patient::Create", IncludeHeaders = true, IncludeModel = true)]
-    public IActionResult Create([Bind("LastName,FirstName,DOB,Gender, RM2Number, PatientStatusId, DateOfDeath, PostCode, GenericNote")]
+    public IActionResult Create([Bind("LastName,FirstName,DOB,Gender, RM2Number, DistrictNumber, PatientStatusId, DateOfDeath, PostCode, GenericNote")]
                                                  Patient patient,
                                              PatientDiagnosis[] diagnoses,
                                              PatientDrug[] drugs,
@@ -263,7 +263,7 @@ namespace AspergillosisEPR.Controllers
             ModelState.Remove("FirstSeenAtNAC"); //TODO - FIX THIS HACK.. 
             if (await TryUpdateModelAsync<Patient>(patientToUpdate,
                "",
-               p => p.FirstName, p => p.LastName, p => p.DOB, p => p.RM2Number, p => p.PostCode,
+               p => p.FirstName, p => p.LastName, p => p.DOB, p => p.RM2Number, p => p.DistrictNumber, p => p.PostCode,
                p => p.Gender, p => p.PatientStatusId, p => p.DateOfDeath, p => p.GenericNote))               
             {
                 try
