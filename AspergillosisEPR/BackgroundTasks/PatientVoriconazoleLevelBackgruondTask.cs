@@ -12,7 +12,7 @@ namespace AspergillosisEPR.BackgroundTasks
 {
     public class PatientVoriconazoleLevelBackgruondTask : ScheduledProcessor
     {
-        protected override string Schedule => "0 2 * * 1"; //every monday at 2am
+        protected override string Schedule => "0 02 * * 1"; //every monday at 2am
         private readonly IServiceProvider _serviceProvider;
         private readonly ILogger<PatientVoriconazoleLevelBackgruondTask> _logger;
 
@@ -43,7 +43,7 @@ namespace AspergillosisEPR.BackgroundTasks
                 {
                     var results = externalContext.PathologyReports
                                                  .Where(r => r.OrderItemCode.Equals("VORI")
-                                                         && r.RM2Number == "RM2" + patient.RM2Number);
+                                                         && r.RM2Number ==  patient.DistrictNumber);
                     if (!results.Any()) continue;
                     var existingDates = patient.DrugLevels
                                                .Where(pi => pi.DrugId == drug.ID)

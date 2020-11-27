@@ -13,7 +13,7 @@ namespace AspergillosisEPR.BackgroundTasks
 {
     public class PatientTestResultBackgroundUpdateTask : ScheduledProcessor
     {
-        protected override string Schedule => "59 23 * * 4";
+        protected override string Schedule => "0 02 * * 4";  //Thursday 2am
         private readonly IServiceProvider _serviceProvider;
         private readonly ILogger<PatientTestResultBackgroundUpdateTask> _logger;
 
@@ -45,7 +45,7 @@ namespace AspergillosisEPR.BackgroundTasks
                     foreach (var patient in allPatients)
                     {
                         var results = externalContext.PathologyReports
-                                                     .Where(r => r.OrderItemCode.Equals(code) && r.RM2Number == "RM2" + patient.RM2Number);
+                                                     .Where(r => r.OrderItemCode.Equals(code) && r.RM2Number == patient.DistrictNumber);
                         if (!results.Any()) continue;
                         var existingDates = patient.PatientTestResults
                                                    .Where(pi => pi.TestTypeId == testType.ID)

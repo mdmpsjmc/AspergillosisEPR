@@ -24,12 +24,10 @@ namespace AspergillosisEPR.Models.PatientAdministrationSystem
         [Key]
         public Guid ROWID { get; set; }
 
-        public string RM2Number()
+        public string DistrictNumber()
         {
             return FACIL_ID.ToString()
-                           .Replace("RM2", String.Empty)
-                           .Replace("rm2", String.Empty)
-                           .Trim();
+                              .Trim();
         }
 
         public string FirstName()

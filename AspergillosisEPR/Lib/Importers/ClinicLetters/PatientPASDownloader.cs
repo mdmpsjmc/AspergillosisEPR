@@ -38,14 +38,14 @@ namespace AspergillosisEPR.Lib.Importers.ClinicLetters
 
             foreach (var lpiPatient in lpiData)
             {
-                var patient = GetPatient(lpiPatient.RM2Number());
-                Console.WriteLine("RM2 " + lpiPatient.RM2Number());
+                var patient = GetPatient(lpiPatient.DistrictNumber());
+                Console.WriteLine(lpiPatient.DistrictNumber());
                 patient.FirstName = lpiPatient.FirstName();
                 patient.LastName = lpiPatient.SURNAME;
                 patient.DOB = lpiPatient.DateOfBirth();
                 patient.Gender = lpiPatient.Gender();
                 patient.NhsNumber = lpiPatient.NHS_NUMBER;
-                patient.RM2Number = lpiPatient.RM2Number();
+                patient.DistrictNumber = lpiPatient.DistrictNumber();
                 patient.PatientStatusId = lpiPatient.PatientStatusId(_context, _patientDeceasedStatus, _patientAliveStatus);
                 if (!string.IsNullOrEmpty(lpiPatient.DEATH_TIME)) patient.DateOfDeath = DateTime.ParseExact(lpiPatient.DEATH_TIME, "yyyyMMdd", CultureInfo.InvariantCulture);
                 importedPatients.Add(patient);

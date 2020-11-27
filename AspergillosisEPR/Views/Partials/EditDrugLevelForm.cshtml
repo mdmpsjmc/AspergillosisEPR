@@ -14,13 +14,13 @@
     <section class="col col-6">
         <label class="input">
             <i class="icon-append fa fa-calendar"></i>
-            <input asp-for="@Model.DateReceived" placeholder="Date Received" class="date-taken" type="text" name="DrugLevels[@((string)ViewBag.Index)].DateReceived" id="DrugLevels_@((string)ViewBag.Index)__DateReceived">
+            <input asp-for="@Model.DateReceived" placeholder="Date Received" class="datepicker" type="text" name="DrugLevels[@((string)ViewBag.Index)].DateReceived" id="DrugLevels_@((string)ViewBag.Index)__DateReceived">
         </label>
     </section>
     <section class="col col-6">
         <label class="input">
             <i class="icon-append fa fa-calendar"></i>
-            <input asp-for="@Model.DateTaken" placeholder="Date Taken" class="date-taken" type="text" name="DrugLevels[@((string)ViewBag.Index)].DateTaken" id="DrugLevels_@((string)ViewBag.Index)__DateTaken">
+            <input asp-for="@Model.DateTaken" placeholder="Date Taken" class="datepicker" type="text" name="DrugLevels[@((string)ViewBag.Index)].DateTaken" id="DrugLevels_@((string)ViewBag.Index)__DateTaken">
         </label>
     </section>
     <div class="row">

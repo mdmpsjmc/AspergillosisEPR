@@ -12,7 +12,7 @@ namespace AspergillosisEPR.BackgroundTasks
 {
     public class ImmunoglobulinUpdateBackgroundTask : ScheduledProcessor
     {
-        protected override string Schedule => "59 23 * * 2";
+        protected override string Schedule => "0 02 * * 2"; //every Tuesday at 2am
         private readonly IServiceProvider _serviceProvider;
         private readonly ILogger<ImmunoglobulinUpdateBackgroundTask> _logger;
 
@@ -43,7 +43,7 @@ namespace AspergillosisEPR.BackgroundTasks
                     foreach (var patient in allPatients)
                     {
                         var igLevels = externalContext.PathologyReports.Where(r => r.OrderItemCode.Equals(code)
-                                                                        && r.RM2Number == "RM2" + patient.RM2Number);
+                                                                        && r.RM2Number == patient.DistrictNumber);
                         if (!igLevels.Any()) continue;
                         var existingDates = patient.PatientImmunoglobulines
                                                    .Where(pi => pi.ImmunoglobulinTypeId == igType.ID)

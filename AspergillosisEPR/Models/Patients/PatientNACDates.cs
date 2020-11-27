@@ -18,7 +18,7 @@ namespace AspergillosisEPR.Models.Patients
         public DateTime? LastObservationPoint { get; set; }
 
         [DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString = "{dd-MM-yyyy}")]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
         public DateTime FirstSeenAtNAC { get; set; }
         public int? CPABand { get; set; }
         public Patient Patient { get; set; }

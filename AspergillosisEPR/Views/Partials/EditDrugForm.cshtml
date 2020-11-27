@@ -13,8 +13,8 @@
     </fieldset>
     <section class="col col-6">
         <label asp-for="StartDate" class="input">
-            <i class="icon-append fa fa-calendar"></i>
-            <input asp-for="StartDate" id="Drugs_@((string)ViewBag.Index)__StartDate" name="Drugs[@((string)ViewBag.Index)].StartDate" placeholder="Start Date" class="datepicker" />
+            <i class="icon-append fa fa-apple"></i>
+            <input asp-for="StartDate" id="Drugs_@((string)ViewBag.Index)__StartDate" name="Drugs[@((string)ViewBag.Index)].StartDate" placeholder="Start Date" class="form-control datepicker" type="text"/>
             <span asp-validation-for="StartDate" class="text-danger"></span>
         </label>
     </section>

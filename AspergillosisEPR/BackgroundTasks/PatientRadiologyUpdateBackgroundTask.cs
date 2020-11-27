@@ -12,7 +12,7 @@ namespace AspergillosisEPR.BackgroundTasks
 {
     public class PatientRadiologyUpdateBackgroundTask : ScheduledProcessor
     {
-        protected override string Schedule => "0 5 * * 1"; //every friday at 2am
+        protected override string Schedule => "35 18 * * 5"; //every friday at 2am
         private readonly IServiceProvider _serviceProvider;
         private readonly ILogger<PatientRadiologyUpdateBackgroundTask> _logger;
 
@@ -41,7 +41,7 @@ namespace AspergillosisEPR.BackgroundTasks
                     {
                         var results = externalContext.RadiologyReports
                                                      .Where(r => r.OrderItemCode.Equals(radiology.Name)
-                                                                 && r.RM2Number == "RM2" + patient.RM2Number);
+                                                                 && r.RM2Number == patient.DistrictNumber);
                         if (!results.Any()) continue;
                         var existingDates = patient.PatientRadiologyNotes
                                                    .Where(pi => pi.RadiologyTypeId == radiology.ID)

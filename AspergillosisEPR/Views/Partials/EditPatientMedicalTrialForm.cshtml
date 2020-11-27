@@ -28,7 +28,7 @@
         <section class="col col-4">
             <label asp-for="@Model.ConsentedDate" class="input">
                 <i class="icon-append fa fa-calendar"></i>
-                <input asp-for="@Model.ConsentedDate" placeholder="Consented date" class="date-taken" type="text"  name="PatientMedicalTrial[@((string)ViewBag.Index)].ConsentedDate" id="PatientMedicalTrial_@((string)ViewBag.Index)__ConsentedDate">
+                <input asp-for="@Model.ConsentedDate" placeholder="Consented date" class="datepicker" type="text"  name="PatientMedicalTrial[@((string)ViewBag.Index)].ConsentedDate" id="PatientMedicalTrial_@((string)ViewBag.Index)__ConsentedDate">
             </label>
         </section>
     </fieldset>
@@ -37,13 +37,13 @@
             <section class="col col-6">
                 <label asp-for="@Model.IdentifiedDate" class="input">
                     <i class="icon-append fa fa-calendar"></i>
-                    <input asp-for="@Model.IdentifiedDate" placeholder="Identified date" class="date-taken" type="text"  name="PatientMedicalTrial[@((string)ViewBag.Index)].IdentifiedDate" id="PatientMedicalTrial_@((string)ViewBag.Index)__IdentifiedDate">
+                    <input asp-for="@Model.IdentifiedDate" placeholder="Identified date" class="datepicker" type="text"  name="PatientMedicalTrial[@((string)ViewBag.Index)].IdentifiedDate" id="PatientMedicalTrial_@((string)ViewBag.Index)__IdentifiedDate">
                 </label>
             </section>
             <section class="col col-6">
                 <label asp-for="@Model.RecruitedDate" class="input">
                     <i class="icon-append fa fa-calendar"></i>
-                    <input asp-for="@Model.RecruitedDate" placeholder="Recruited date" class="date-taken" type="text" name="PatientMedicalTrial[@((string)ViewBag.Index)].RecruitedDate" id="PatientMedicalTrial_@((string)ViewBag.Index)__RecruitedDate">
+                    <input asp-for="@Model.RecruitedDate" placeholder="Recruited date" class="datepicker" type="text" name="PatientMedicalTrial[@((string)ViewBag.Index)].RecruitedDate" id="PatientMedicalTrial_@((string)ViewBag.Index)__RecruitedDate">
                 </label>
             </section>
             <section class="col col-4"></section>

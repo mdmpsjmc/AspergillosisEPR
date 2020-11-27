@@ -33,7 +33,7 @@
         <section class="col col-4">
             <label asp-for="ConsentedDate" class="input">
                 <i class="icon-append fa fa-calendar"></i>
-                <input asp-for="ConsentedDate" placeholder="Consented date"  class="datepicker" type="text">
+                <input asp-for="@Model.ConsentedDate" placeholder="Consented date"  class="datepicker" type="text">
             </label>
         </section>
     </fieldset>
@@ -42,13 +42,13 @@
             <section class="col col-6">
                 <label asp-for="IdentifiedDate" class="input">
                     <i class="icon-append fa fa-calendar"></i>
-                    <input asp-for="IdentifiedDate" placeholder="Identified date" class="datepicker" type="text">
+                    <input asp-for="@Model.IdentifiedDate" placeholder="Identified date" class="datepicker" type="text" data-val="true">
                 </label>
             </section>         
             <section class="col col-6">
                 <label asp-for="RecruitedDate" class="input">
                     <i class="icon-append fa fa-calendar"></i>
-                    <input asp-for="RecruitedDate" placeholder="Recruited date" class="datepicker" type="text">
+                    <input asp-for="@Model.RecruitedDate" placeholder="Recruited date" class="datepicker" type="text">
                 </label>
             </section>
             <section class="col col-4">

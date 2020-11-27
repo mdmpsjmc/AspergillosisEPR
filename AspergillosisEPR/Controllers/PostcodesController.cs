@@ -38,16 +38,22 @@ namespace AspergillosisEPR.Controllers
         {
             var patientsWithoutPostCodes = _context.Patients; //.Where(p => p.PostCode == null);
 
-            foreach(var patientWithoutPostCode in patientsWithoutPostCodes)
+            _logger.LogInformation(
+                   "PostCodes has started.");
+
+            foreach (var patientWithoutPostCode in patientsWithoutPostCodes)
             {
-                var lpiPatientData = _pasDbContext.LpiPatientData.FirstOrDefault(p => p.RM2Number() == patientWithoutPostCode.RM2Number);
+                var lpiPatientData = _pasDbContext.LpiPatientData.FirstOrDefault(p => p.DistrictNumber() == patientWithoutPostCode.DistrictNumber);
                 if (lpiPatientData == null || lpiPatientData.POSTCODE == null) continue;                
                 patientWithoutPostCode.PostCode = lpiPatientData.POSTCODE;
                 patientWithoutPostCode.SetDistanceFromWythenshawe(_context, _logger);
                 _context.Update(patientWithoutPostCode);
             }
             _context.SaveChanges();
-        
+
+            _logger.LogInformation(
+                  "PostCodes has finished.");
+
             return RedirectToAction("New", "Imports");
         }
 
@@ -59,9 +65,12 @@ namespace AspergillosisEPR.Controllers
 
                 var patientsWithoutPostCodes = _context.Patients; //.Where(p => p.PostCode == null);
 
-                foreach (var patientWithoutPostCode in patientsWithoutPostCodes)
+                _logger.LogInformation(
+                   $"Queued Background Task {guid} has started.");
+
+            foreach (var patientWithoutPostCode in patientsWithoutPostCodes)
                 {
-                    var lpiPatientData = _pasDbContext.LpiPatientData.FirstOrDefault(p => p.RM2Number() == patientWithoutPostCode.RM2Number);
+                    var lpiPatientData = _pasDbContext.LpiPatientData.FirstOrDefault(p => p.DistrictNumber() == patientWithoutPostCode.DistrictNumber);
                     if (lpiPatientData == null || lpiPatientData.POSTCODE == null) continue;
                     patientWithoutPostCode.PostCode = lpiPatientData.POSTCODE;
                     patientWithoutPostCode.SetDistanceFromWythenshawe(_context, _logger);

@@ -14,9 +14,9 @@ namespace AspergillosisEPR.Models.Patients
         public decimal SymptomScore { get; set;  }
         public decimal ActivityScore { get; set; }
         public decimal TotalScore { get; set;  }
-        [DataType(DataType.Date)]
         [Display(Name = "Date Taken")]
-        [DisplayFormat(DataFormatString = "{dd-MM-yyyy}")]
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
         public DateTime DateTaken { get; set;  }
         public string OriginalImportedId { get; set; }
 

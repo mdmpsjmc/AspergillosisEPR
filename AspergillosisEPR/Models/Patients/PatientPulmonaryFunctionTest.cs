@@ -1,7 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations;
+using DataType = System.ComponentModel.DataAnnotations.DataType;
 
 namespace AspergillosisEPR.Models.Patients
 {
@@ -10,6 +9,8 @@ namespace AspergillosisEPR.Models.Patients
         public int ID { get; set; }
         public int PatientId { get; set; }
         public int PulmonaryFunctionTestId { get; set; }
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
         public DateTime? DateTaken { get; set; }
         public decimal ResultValue { get; set; }
         public decimal PredictedValue { get; set; }

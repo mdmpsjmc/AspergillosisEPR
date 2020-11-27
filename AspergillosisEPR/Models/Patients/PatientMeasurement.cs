@@ -1,8 +1,10 @@
 ﻿using AspergillosisEPR.Lib.Exporters;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
+using DataType = System.ComponentModel.DataAnnotations.DataType;
 
 namespace AspergillosisEPR.Models.Patients
 {
@@ -12,6 +14,8 @@ namespace AspergillosisEPR.Models.Patients
         public int PatientId { get; set; }
         public decimal? Weight { get; set; } 
         public decimal? Height { get; set; }
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
         public DateTime DateTaken { get; set; }
         public string SourceInfo { get; set; }
 

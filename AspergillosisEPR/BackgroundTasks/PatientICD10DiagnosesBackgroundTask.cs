@@ -13,7 +13,7 @@ namespace AspergillosisEPR.BackgroundTasks
 {
     public class PatientICD10DiagnosesBackgroundTask : ScheduledProcessor
     {
-        protected override string Schedule => "0 6 * * 1"; //every friday at 2am
+        protected override string Schedule => "00 18 * * 5"; //every friday at 2am
         private readonly IServiceProvider _serviceProvider;
         private readonly ILogger<PatientICD10DiagnosesBackgroundTask> _logger;
 
@@ -39,7 +39,7 @@ namespace AspergillosisEPR.BackgroundTasks
                                    select patient).ToList();
                 foreach (Patient patient in emptyDxList)
                 {
-                    var icd10Diagnoses = externalContext.Diagnoses.Where(d => d.RM2Number.Equals("RM2" + patient.RM2Number));
+                    var icd10Diagnoses = externalContext.Diagnoses.Where(d => d.RM2Number.Equals( patient.DistrictNumber));
                     if (!icd10Diagnoses.Any()) continue;
                     foreach (var diagnosis in icd10Diagnoses)
                     {

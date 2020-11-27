@@ -14,9 +14,9 @@ namespace AspergillosisEPR.Models.Patients
         public int ImmunoglobulinTypeId { get; set; }
         public string SampleId { get; set; }
         public string Range { get; set; }
-        [DataType(DataType.Date)]
         [Display(Name = "Date Taken")]
-        [DisplayFormat(DataFormatString = "{dd-MM-yyyy}")]
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
         public DateTime DateTaken { get; set; }
         public decimal Value { get; set;  }
         public ImmunoglobulinType ImmunoglobulinType { get; set; }

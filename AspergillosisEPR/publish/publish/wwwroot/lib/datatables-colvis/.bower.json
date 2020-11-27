@@ -1,0 +1,14 @@
+{
+  "name": "datatables-colvis",
+  "homepage": "https://github.com/DataTables/ColVis",
+  "_release": "RELEASE_1_0_8",
+  "_resolution": {
+    "type": "tag",
+    "tag": "RELEASE_1_0_8",
+    "commit": "b2f7c83db1a7064de1021fd72f3e6443c0c1c989"
+  },
+  "_source": "https://github.com/DataTables/ColVis.git",
+  "_target": "RELEASE_1_0_8",
+  "_originalSource": "datatables-colvis",
+  "_direct": true
+}

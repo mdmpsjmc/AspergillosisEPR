@@ -21,9 +21,9 @@ namespace AspergillosisEPR.Models.Patients
         [Display(Name = "Unit")]
         public int UnitOfMeasurementId { get; set; }
 
-        [DataType(DataType.Date)]
         [Display(Name = "Date Taken")]
-        [DisplayFormat(DataFormatString = "{dd-MM-yyyy}")]
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
         public DateTime DateTaken { get; set; }
 
         [DataType(DataType.Date)]

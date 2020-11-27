@@ -35,7 +35,7 @@
                 <section class="col col-4">
                     <label asp-for="@trial.ConsentedDate" class="input">
                         <i class="icon-append fa fa-calendar"></i>
-                        <input asp-for="@trial.ConsentedDate" placeholder="Consented date" class="date-taken" type="text" name="PatientMedicalTrial[@(i.ToString())].ConsentedDate"  id="PatientMedicalTrial_@(i.ToString())__ConsentedDate">
+                        <input asp-for="@trial.ConsentedDate" placeholder="Consented date" class="datepicker" type="text" name="PatientMedicalTrial[@(i.ToString())].ConsentedDate"  id="PatientMedicalTrial_@(i.ToString())__ConsentedDate">
                     </label>
                 </section>
             </fieldset>
@@ -44,13 +44,13 @@
                     <section class="col col-6">
                         <label asp-for="@trial.IdentifiedDate" class="input">
                             <i class="icon-append fa fa-calendar"></i>
-                            <input asp-for="@trial.IdentifiedDate" placeholder="Identified date" class="date-taken"  type="text" value="@trial.IdentifiedDate.ToString("dd-MM-yyyy")" name="PatientMedicalTrial[@(i.ToString())].IdentifiedDate"  id="PatientMedicalTrial_@(i.ToString())__IdentifiedDate">
+                            <input asp-for="@trial.IdentifiedDate" placeholder="Identified date" class="datepicker"  type="text" value="@trial.IdentifiedDate.ToString("dd-MM-yyyy")" name="PatientMedicalTrial[@(i.ToString())].IdentifiedDate"  id="PatientMedicalTrial_@(i.ToString())__IdentifiedDate">
                         </label>
                     </section>
                     <section class="col col-6">
                         <label asp-for="@trial.RecruitedDate" class="input">
                             <i class="icon-append fa fa-calendar"></i>
-                            <input asp-for="@trial.RecruitedDate" placeholder="Recruited date" class="date-taken"  type="text"  name="PatientMedicalTrial[@(i.ToString())].RecruitedDate"  id="PatientMedicalTrial_@(i.ToString())__RecruitedDate" >
+                            <input asp-for="@trial.RecruitedDate" placeholder="Recruited date" class="datepicker"  type="text"  name="PatientMedicalTrial[@(i.ToString())].RecruitedDate"  id="PatientMedicalTrial_@(i.ToString())__RecruitedDate" >
                         </label>
                     </section>
                     <section class="col col-4"></section>

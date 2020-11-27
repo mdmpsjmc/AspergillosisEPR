@@ -38,10 +38,10 @@ namespace AspergillosisEPR.BackgroundTasks
                 foreach (var row in patientsWithStatus)
                 {
 
-                    var pasPatient = pasContext.LpiPatientData.FirstOrDefault(p => p.RM2Number() == row.RM2Number);
+                    var pasPatient = pasContext.LpiPatientData.FirstOrDefault(p => p.DistrictNumber() == row.DistrictNumber);
                     if (pasPatient == null)
                     {
-                        _logger.LogWarning($"No database entry in PAS for patient with ID: " + row.RM2Number);
+                        _logger.LogWarning($"No database entry in PAS for patient with ID: " + row.DistrictNumber);
                         continue;    
                     } else
                     {

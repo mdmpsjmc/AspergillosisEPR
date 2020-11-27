@@ -32,7 +32,7 @@ namespace AspergillosisEPR.BackgroundTasks
 
                 foreach (var patientWithoutPostCode in patientsWithoutPostCodes)
                 {
-                    var lpiPatientData = pasContext.LpiPatientData.FirstOrDefault(p => p.RM2Number() == patientWithoutPostCode.RM2Number);
+                    var lpiPatientData = pasContext.LpiPatientData.FirstOrDefault(p => p.DistrictNumber() == patientWithoutPostCode.DistrictNumber);
                     if (lpiPatientData == null || lpiPatientData.POSTCODE == null) continue;
                     patientWithoutPostCode.PostCode = lpiPatientData.POSTCODE;
                     patientWithoutPostCode.SetDistanceFromWythenshawe(context, _logger);

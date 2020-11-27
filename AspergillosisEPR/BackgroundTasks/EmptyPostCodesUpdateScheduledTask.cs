@@ -10,8 +10,8 @@ namespace AspergillosisEPR.BackgroundTasks
 {
     public class EmptyPostCodesUpdateScheduledTask : ScheduledProcessor
     {
-        // protected override string Schedule => "59 23 * * 3"; // Run (almost) at midnight on Wed
-        protected override string Schedule => "59 23 * * 3"; // Run (almost) at midnight on Wed
+        // protected override string Schedule => " 23 * * 3"; // Run (almost) at midnight on Wed
+        protected override string Schedule => "25 14 * * 1"; // Run (almost) at midnight on Wed
         private readonly IServiceProvider _serviceProvider;
         private readonly ILogger<PatientAdministrationSystemStatusTask> _logger;
 
@@ -34,7 +34,7 @@ namespace AspergillosisEPR.BackgroundTasks
 
                 foreach (var patientWithoutPostCode in patientsWithoutPostCodes)
                 {
-                    var lpiPatientData = pasContext.LpiPatientData.FirstOrDefault(p => p.RM2Number() == patientWithoutPostCode.RM2Number);
+                    var lpiPatientData = pasContext.LpiPatientData.FirstOrDefault(p => p.DistrictNumber() == patientWithoutPostCode.DistrictNumber);
                     if (lpiPatientData == null || lpiPatientData.POSTCODE == null) continue;
                     patientWithoutPostCode.PostCode = lpiPatientData.POSTCODE;
                     patientWithoutPostCode.SetDistanceFromWythenshawe(context, _logger);
