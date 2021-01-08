@@ -2,6 +2,8 @@
 AspergillosisEPR/appsetings.json
 AspergillosisEPR/bin/*
 AspergillosisEPR/obj/*
+AspergillosisEPR/publish/*
+Aspergillosis/Logs/*
 AspergillosisEPR/appsettings.json
 AspergillosisEPR/wwwroot/Upload/*
 AspergillosisEPR/wwwroot/Files/*
