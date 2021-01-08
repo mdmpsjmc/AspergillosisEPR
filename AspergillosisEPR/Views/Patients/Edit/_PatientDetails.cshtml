@@ -5,23 +5,26 @@
 <fieldset>
     <div class="row">
         <section class="col col-4">
-            <label asp-for="RM2Number" class="input">
+            <label asp-for="RM2Number" class="txt-color-blueDark input-sm">
+                RM2 Number
                 <i class="icon-append fa fa-hospital-o"></i>
-                <input asp-for="RM2Number" placeholder="RM2 Number">
+                <input asp-for="RM2Number" placeholder="RM2 Number" class="form-control input-sm">
                 <span asp-validation-for="RM2Number" class="text-danger"></span>
                 <input type="hidden" name="InitialRM2Number" value="@(Model.RM2Number)" />
             </label>
         </section>
         <section class="col col-4">
-            <label asp-for="DistrictNumber" class="input">
+            <label asp-for="DistrictNumber" class="txt-color-blueDark input-sm">
+                District Number
                 <i class="icon-append fa fa-hospital-o"></i>
-                <input asp-for="DistrictNumber" placeholder="Dist Number">
+                <input asp-for="DistrictNumber" placeholder="Dist Number" class="form-control input-sm">
                 <span asp-validation-for="DistrictNumber" class="text-danger"></span>
                 @*<input type="hidden" name="InitialRM2Number" value="@(Model.RM2Number)" />*@
             </label>
         </section>
         <section class="col col-4">
-            <label asp-for="PatientStatusId" class="select">
+            <label asp-for="PatientStatusId" class="select txt-color-blueDark input-sm">
+                Patient Status
                 <select asp-for="PatientStatusId" asp-items="(SelectList) ViewBag.PatientStatuses">
                     <option value="">Select Status</option>
                 </select>
