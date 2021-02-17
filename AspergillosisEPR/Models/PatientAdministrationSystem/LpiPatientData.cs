@@ -26,8 +26,7 @@ namespace AspergillosisEPR.Models.PatientAdministrationSystem
 
         public string DistrictNumber()
         {
-            return FACIL_ID.ToString()
-                              .Trim();
+            return FACIL_ID.ToString();
         }
 
         public string FirstName()

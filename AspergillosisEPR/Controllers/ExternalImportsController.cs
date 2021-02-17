@@ -256,10 +256,10 @@ namespace AspergillosisEPR.Controllers
 
       foreach (var externalSGRQ in sqrqs)
       {
-        var rm2Number = externalSGRQ.Questionnaire.Patient.Identifier.ToString().Replace("CPA", "");
+        var districtNumber = externalSGRQ.Questionnaire.Patient.Identifier.ToString();
         var patient = _context.Patients
                               .Include(p => p.STGQuestionnaires)
-                              .Where(p => p.RM2Number.Equals(rm2Number)).FirstOrDefault();
+                              .Where(p => p.DistrictNumber.Equals(districtNumber)).FirstOrDefault();
 
         if (patient == null) continue;
 

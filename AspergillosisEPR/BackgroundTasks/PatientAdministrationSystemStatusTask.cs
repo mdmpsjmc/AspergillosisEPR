@@ -11,7 +11,7 @@ namespace AspergillosisEPR.BackgroundTasks
 {
     public class PatientAdministrationSystemStatusTask : ScheduledProcessor
     {   
-        protected override string Schedule => "5 1 * * 1"; //Run Monday at 1:05 AM
+        protected override string Schedule => "30 15 * * 2"; //Run Monday at 1:05 AM
         private readonly IServiceProvider _serviceProvider;
         private readonly ILogger<PatientAdministrationSystemStatusTask> _logger;
         private int _patientAliveStatus;
