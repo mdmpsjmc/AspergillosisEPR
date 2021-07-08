@@ -23,7 +23,7 @@ namespace AspergillosisEPR.Models.Patients
         public int? CPABand { get; set; }
         public Patient Patient { get; set; }
 
-        [Required]
+        //[Required]
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
         public DateTime? ReferralDate { get; set; }

@@ -45,9 +45,9 @@ namespace AspergillosisEPR.BackgroundTasks
                         continue;    
                     } else
                     {
-                        _logger.LogWarning($"Running update for patient with ID: " + row.RM2Number);
+                        _logger.LogWarning($"Running update for patient with ID: " + row.DistrictNumber);
                         int newStatusId = pasPatient.PatientStatusId(context, _patientDeceasedStatus, _patientAliveStatus);
-                        _logger.LogWarning($"Updating status for patient with ID: " + row.RM2Number);
+                        _logger.LogWarning($"Updating status for patient with ID: " + row.DistrictNumber);
                         row.PatientStatusId = newStatusId;
                         try
                         {

@@ -447,8 +447,16 @@
   var initPatientsDateTimePickers = function () {
     $('input[type="date"]').attr('type', 'text');
       $('input#DOB, input#DateOfDeath, input.datepicker, input.date-taken input.datetaken').datetimepicker({
-      format: 'DD/MM/YYYY'
-    });
+          format: 'DD/MM/YYYY',
+          showTodayButton: true,
+          showClear: true,
+          showClose: true,
+          useCurrent: false,
+          widgetPositioning: {
+              horizontal: "left",
+              vertical:"auto"
+          }
+       });
    
     $("input#DOB, input.datepicker, input.date-taken, input#DateOfDeath").on("click", function () {
       $(this).datetimepicker("show");

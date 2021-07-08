@@ -103,8 +103,8 @@ div#radiology,
 div#lab-test-modal .modal-body,
 div#lab .modal-body,
 div#measurements{
-    max-height: 600px;
-    overflow-y: scroll;
+   /* max-height: 600px;*/
+    overflow-y: auto;
 }
 
 div.tab-pane#ig,
@@ -184,7 +184,6 @@ label.side-effects {
     background: #fff;
     font: 13px/16px 'Open Sans',Helvetica,Arial,sans-serif;
     color: #404040;
-    appearance: normal;
     -moz-appearance: none;
     -webkit-appearance: none;
 
@@ -241,11 +240,12 @@ input[type="date"]::-webkit-input-placeholder {
 }
 
 body.modal-open .datepicker {
-    z-index: 1200 !important;
+    z-index: 9999 !important;
 }
 
 .bootstrap-datetimepicker-widget {
     opacity: 1 !important;
+    z-index:9999 !important;
 }
 
 .dropdown-menu {
